@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, Search } from "lucide-react";
@@ -13,7 +13,7 @@ import {
   type Blog,
 } from "@/store/api/blogApi";
 
-export default function BlogsPage() {
+function BlogsPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -301,4 +301,8 @@ export default function BlogsPage() {
       <Footer variant="simple" />
     </div>
   );
+}
+
+export default function BlogsPage() {
+  return <Suspense fallback={<div className="min-h-screen" />}><BlogsPageContent /></Suspense>;
 }

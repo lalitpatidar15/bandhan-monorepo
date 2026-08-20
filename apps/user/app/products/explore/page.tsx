@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import ExploreSidebar from "@/components/userDashboard/explore/ExploreSidebar";
 import { ExploreGrid, type ExploreItem, type ExploreType } from "@/components/userDashboard/explore/ExploreGrid";
@@ -118,7 +118,7 @@ const normalizeType = (value: string | null): ExploreType => {
   return "services";
 };
 
-export default function ExplorePage() {
+function ExplorePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialSearch = searchParams.get("q") || "";
@@ -215,4 +215,8 @@ export default function ExplorePage() {
       />
     </div>
   );
+}
+
+export default function ExplorePage() {
+  return <Suspense fallback={<div className="min-h-screen" />}><ExplorePageContent /></Suspense>;
 }

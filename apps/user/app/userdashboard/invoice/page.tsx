@@ -38,7 +38,9 @@ export default function InvoicesPage() {
                     </div>
                     <div>
                       <p className="text-sm font-semibold">{inv.invoiceNo}</p>
-                      <p className="text-xs text-gray-500 mt-0.5">{new Date(inv.createdAt).toLocaleDateString()}</p>
+                      <p className="text-xs text-gray-500 mt-0.5">
+                        {inv.createdAt ? new Date(inv.createdAt).toLocaleDateString() : "Date unavailable"}
+                      </p>
                       <p className="text-sm font-bold text-[#1C1A16] mt-1">₹{Number(inv.total).toLocaleString()}</p>
                     </div>
                   </div>

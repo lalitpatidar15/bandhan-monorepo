@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { EmptyState, Spinner } from "@bandhan/ui";
 import { SearchX } from "lucide-react";
@@ -261,7 +261,7 @@ onSecondary={() => {
   );
 }
 
-export default function ExplorePage() {
+function ExplorePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialSearch = searchParams.get("q") || "";
@@ -375,4 +375,8 @@ export default function ExplorePage() {
       <Footer />
     </>
   );
+}
+
+export default function ExplorePage() {
+  return <Suspense fallback={<div className="min-h-screen" />}><ExplorePageContent /></Suspense>;
 }

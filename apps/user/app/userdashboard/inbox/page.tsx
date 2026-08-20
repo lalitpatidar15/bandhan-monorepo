@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { Suspense, useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
@@ -16,7 +16,7 @@ import { MessageSquare, Search, Send, Loader, Bell, ExternalLink } from "lucide-
 import { useAppSelector } from "@/hooks/useAppSelector";
 import { getSocket } from "@/lib/socket";
 
-export default function InboxPage() {
+function InboxPageContent() {
   const [activeConv, setActiveConv] = useState<string | null>(null);
   const [newMessage, setNewMessage] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -505,4 +505,8 @@ export default function InboxPage() {
       </div>
     </div>
   );
+}
+
+export default function InboxPage() {
+  return <Suspense fallback={<div className="min-h-screen" />}><InboxPageContent /></Suspense>;
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import DashboardLayout from '@/components/userDashboard/Dashboardlayout';
 import { Button } from '@/components/ui/Button';
@@ -16,7 +16,7 @@ const getErrorMessage = (error: unknown) => {
   return typeof payload.message === 'string' ? payload.message : 'Failed to submit booking. Please try again.';
 };
 
-export default function ServiceBookingPage() {
+function ServiceBookingPageContent() {
   const params = useSearchParams();
   const router = useRouter();
   const { isAuthed } = useRequireAuth();
@@ -180,4 +180,8 @@ export default function ServiceBookingPage() {
       </div>
     </DashboardLayout>
   );
+}
+
+export default function ServiceBookingPage() {
+  return <Suspense fallback={<div className="min-h-screen" />}><ServiceBookingPageContent /></Suspense>;
 }

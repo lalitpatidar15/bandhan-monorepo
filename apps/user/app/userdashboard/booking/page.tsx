@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import DashboardLayout from '@/components/userDashboard/Dashboardlayout';
 import { Button } from '@/components/ui/Button';
@@ -8,7 +8,7 @@ import Input from '@/components/ui/Input';
 import { useRequireAuth } from '@/lib/auth';
 import { useCreateBookingMutation } from '@/store/api/bookingApi';
 
-export default function BookingPage() {
+function BookingPageContent() {
   const params = useSearchParams();
   const router = useRouter();
   const { isAuthed } = useRequireAuth();
@@ -115,4 +115,8 @@ export default function BookingPage() {
       </div>
     </DashboardLayout>
   );
+}
+
+export default function BookingPage() {
+  return <Suspense fallback={<div className="min-h-screen" />}><BookingPageContent /></Suspense>;
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import {
   Search,
   Bell,
@@ -40,7 +40,7 @@ const normalizeListingType = (value: string | null) => {
   return normalized || "service";
 };
 
-export default function RequestQuotePage() {
+function RequestQuotePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [createQuote, { isLoading: isSubmitting }] = useCreateQuoteMutation();
@@ -620,4 +620,8 @@ export default function RequestQuotePage() {
       </footer>
     </div>
   );
+}
+
+export default function RequestQuotePage() {
+  return <Suspense fallback={<div className="min-h-screen" />}><RequestQuotePageContent /></Suspense>;
 }

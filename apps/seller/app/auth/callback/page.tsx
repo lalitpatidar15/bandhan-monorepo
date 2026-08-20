@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { apiPost } from "@/lib/api";
 
-export default function SellerSsoCallbackPage() {
+function SellerSsoCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [message, setMessage] = useState("Completing secure sign-in…");
@@ -32,4 +32,12 @@ export default function SellerSsoCallbackPage() {
   }, [router, searchParams]);
 
   return <main className="flex min-h-screen items-center justify-center bg-[#F7F1EB] p-6 text-center text-[#3A2B22]"><p>{message}</p></main>;
+}
+
+export default function SellerSsoCallbackPage() {
+  return (
+    <Suspense fallback={<main className="flex min-h-screen items-center justify-center bg-[#F7F1EB] p-6 text-center text-[#3A2B22]"><p>Completing secure sign-in…</p></main>}>
+      <SellerSsoCallbackContent />
+    </Suspense>
+  );
 }

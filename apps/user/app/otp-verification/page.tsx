@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useVerifyOtpMutation, useSendOtpMutation } from '@/store/api/authApi';
 import { Button } from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import AuthLayout from '@/components/Auth/Authlayout';
 
-export default function OtpVerificationPage() {
+function OtpVerificationPageContent() {
   const router = useRouter();
   const params = useSearchParams();
   const mobile = params.get('mobile') || '';
@@ -74,4 +74,8 @@ export default function OtpVerificationPage() {
       </div>
     </AuthLayout>
   );
+}
+
+export default function OtpVerificationPage() {
+  return <Suspense fallback={<div className="min-h-screen" />}><OtpVerificationPageContent /></Suspense>;
 }
