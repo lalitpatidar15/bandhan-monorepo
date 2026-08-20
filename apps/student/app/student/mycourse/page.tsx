@@ -312,11 +312,11 @@ export default function MyCoursesPage() {
                                 <div className="bg-[var(--bhn-brand-700)] text-white p-5 sm:p-4 rounded-xl">
 
                                     <h3 className="text-xl font-semibold leading-snug">
-                                        Master Classes <br /> Now Live
+                                        Build new skills <br /> at your pace
                                     </h3>
 
                                     <p className="text-sm mt-3 opacity-90">
-                                        Join industry experts in weekly live sessions.
+                                        Continue structured courses whenever it suits you.
                                     </p>
 
                                     <button

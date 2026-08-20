@@ -1358,11 +1358,6 @@ exports.getStudentPageResources = async (req, res) => {
         interests: ["UI/UX Design", "Development", "Marketing", "Data Science", "AI/ML", "Creative Writing"],
         cardTypes: [{ label: "Visa", value: "Visa" }, { label: "Mastercard", value: "Mastercard" }, { label: "Amex", value: "Amex" }],
         upiApps: ["Google Pay", "PhonePe", "Paytm", "Amazon Pay"],
-        liveClasses: [
-          { title: "Event Design Systems: Live Critique", instructor: "Prof. Elena Rostova", time: "Today, 6:00 PM", learners: "1.8k enrolled" },
-          { title: "React Interview Sprint", instructor: "Dr. Marcus Thorne", time: "Tomorrow, 8:00 PM", learners: "2.4k enrolled" },
-          { title: "Growth Funnel Breakdown", instructor: "Sarah Jenkins", time: "Sun, 11:00 AM", learners: "940 enrolled" },
-        ],
         practiceSets: [
           { title: "UI/UX Aptitude Test", questions: 40, duration: "45 min", level: "Beginner" },
           { title: "Frontend Coding Drill", questions: 25, duration: "60 min", level: "Intermediate" },

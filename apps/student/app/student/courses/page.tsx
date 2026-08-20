@@ -9,19 +9,16 @@ import { useRouter } from "next/navigation";
 import {
   Award,
   BookOpen,
-  CalendarDays,
   CheckCircle2,
   Clock3,
   Flame,
   GraduationCap,
   MessageCircle,
-  PlayCircle,
   Search,
   Sparkles,
   Star,
   Target,
   Trophy,
-  Users,
 } from "lucide-react";
 
 export default function CoursesPage() {
@@ -30,9 +27,6 @@ export default function CoursesPage() {
   const [activeLevel, setActiveLevel] = useState("All Levels");
   const [search, setSearch] = useState("");
   const [categories, setCategories] = useState<string[]>(["All Topics"]);
-  const [liveClasses, setLiveClasses] = useState<Array<{title:string;instructor:string;time:string;learners:string}>>([]);
-  const [practiceSets, setPracticeSets] = useState<Array<{title:string;questions:number;duration:string;level:string}>>([]);
-  const [learningTracks, setLearningTracks] = useState<string[]>([]);
 
   // Fetch courses from API
   const { data: coursesData, isLoading, error } = useGetCoursesQuery({});
@@ -50,9 +44,6 @@ export default function CoursesPage() {
       .then(json => {
         if (json?.success && json?.data) {
           setCategories(json.data.categories || ["All Topics"]);
-          setLiveClasses(json.data.liveClasses || []);
-          setPracticeSets(json.data.practiceSets || []);
-          setLearningTracks(json.data.learningTracks || []);
         }
       })
       .catch(() => {});
@@ -133,7 +124,7 @@ export default function CoursesPage() {
         {/* PAGE HEADER */}
         <PageHeader
           title="Student Dashboard"
-          subtitle="Crack your next skill goal with live classes, tests, and guided courses."
+          subtitle="Build your next skill with focused tests and guided courses."
           actions={
             <Button
               variant="outline"
@@ -177,10 +168,10 @@ export default function CoursesPage() {
               Personalized learning dashboard
             </p>
             <h1 className="mt-4 max-w-3xl text-2xl font-semibold leading-tight sm:text-2xl">
-              Crack your next skill goal with live classes, tests, and guided courses.
+              Build your next skill with focused tests and guided courses.
             </h1>
             <p className="mt-4 max-w-2xl text-sm leading-6 text-[#E8DAD0] sm:text-base">
-              Learn from expert mentors, continue your saved courses, join upcoming live sessions, and practice with focused tests from one place.
+              Learn from expert mentors, continue your saved courses, and practice with focused tests from one place.
             </p>
 
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
@@ -200,14 +191,6 @@ export default function CoursesPage() {
                 size="lg"
               >
                 Explore Courses
-              </Button>
-              <Button
-                onClick={() => document.getElementById("live-classes")?.scrollIntoView({ behavior: "smooth" })}
-                variant="outline"
-                size="lg"
-                className="border-white/30 text-white hover:bg-[var(--bhn-surface)]/10"
-              >
-                Join Live Class
               </Button>
             </div>
 
@@ -269,7 +252,6 @@ export default function CoursesPage() {
         {/* QUICK ACTIONS */}
         <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {[
-            { title: "Live Classes", text: "Join upcoming mentor-led sessions", icon: PlayCircle, target: "live-classes" },
             { title: "Practice Tests", text: "Attempt timed quizzes and drills", icon: Target, target: "practice-tests" },
             { title: "Doubt Support", text: "Ask questions and track answers", icon: MessageCircle, target: "recommended-courses" },
             { title: "Learning Paths", text: "Follow role-based roadmaps", icon: Trophy, target: "learning-paths" },
@@ -290,42 +272,6 @@ export default function CoursesPage() {
               </button>
             );
           })}
-        </div>
-
-        {/* LIVE CLASSES + PRACTICE */}
-        <div className="mt-6 grid gap-4 xl:grid-cols-[minmax(0,1fr)_420px]">
-          <section id="live-classes" className="rounded-3xl border border-[var(--bhn-border)] dark:border-[#374151] bg-[var(--bhn-surface)] p-5 shadow-sm sm:p-4">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--bhn-brand-700)] dark:text-[#c9a882]">Live learning</p>
-                <h2 className="mt-1 text-2xl font-semibold">Upcoming Live Classes</h2>
-              </div>
-              <Button variant="outline" onClick={() => router.push("/student/mycourse")}>
-                View Schedule
-              </Button>
-            </div>
-
-            <div className="mt-5 grid gap-4 lg:grid-cols-3">
-              {liveClasses.map((item) => (
-                <article key={item.title} className="rounded-2xl bg-[var(--bhn-surface-2)] dark:bg-[#171717] p-4">
-                  <div className="flex items-center gap-2 text-sm font-semibold text-[var(--bhn-brand-700)] dark:text-[#c9a882]">
-                    <CalendarDays size={16} />
-                    {item.time}
-                  </div>
-                  <h3 className="mt-3 font-semibold leading-6">{item.title}</h3>
-                  <p className="mt-2 text-sm text-[var(--bhn-text-muted)] dark:text-[#b89b7d]">{item.instructor}</p>
-                  <p className="mt-3 flex items-center gap-2 text-sm text-[var(--bhn-text-muted)] dark:text-[#b89b7d]">
-                    <Users size={15} />
-                    {item.learners}
-                  </p>
-                  <Button className="mt-4 w-full" onClick={() => router.push("/student/mycourse")}>
-                    Remind Me
-                  </Button>
-                </article>
-              ))}
-            </div>
-          </section>
-
         </div>
 
         <section id="recommended-courses" className="mt-6 grid gap-4 xl:grid-cols-[280px_minmax(0,1fr)]">

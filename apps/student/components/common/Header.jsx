@@ -8,7 +8,6 @@ import AcademyLogo from "@/components/common/AcademyLogo";
 
 const tabs = [
   { name: "Home", path: "/student/courses" },
-  // { name: "Live Classes", path: "/student/courses#live-classes" },
   // { name: "Practice", path: "/student/courses#practice-tests" },
   { name: "My Courses", path: "/student/mycourse" },
   { name: "Wishlist", path: "/student/wishlist" },
