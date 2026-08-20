@@ -15,6 +15,16 @@ export function Spinner({ size = "md", center = false, className = "", ...rest }
   );
 }
 
+export function LoadingState({ label = "Loading", className = "" }: { label?: string; className?: string }) {
+  return (
+    <div className={["bhn-loading-state", className].filter(Boolean).join(" ")} role="status" aria-live="polite">
+      <Spinner size="md" />
+      <span>{label}</span>
+      <span className="sr-only">Please wait.</span>
+    </div>
+  );
+}
+
 export interface SkeletonProps extends HTMLAttributes<HTMLDivElement> {
   height?: string | number;
   width?: string | number;

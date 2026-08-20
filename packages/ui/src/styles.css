@@ -587,6 +587,17 @@
   padding: var(--bhn-space-12);
   color: var(--bhn-brand-500);
 }
+.bhn-loading-state {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--bhn-space-3);
+  min-height: 4.5rem;
+  width: 100%;
+  color: var(--bhn-text-muted);
+  font-size: var(--bhn-text-sm);
+  font-weight: 600;
+}
 @keyframes bhn-spin {
   to {
     transform: rotate(360deg);

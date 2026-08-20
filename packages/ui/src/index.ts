@@ -12,7 +12,7 @@ export { StatCard } from "./StatCard";
 export { PageHeader } from "./PageHeader";
 export { EmptyState } from "./EmptyState";
 export { Avatar } from "./Avatar";
-export { Spinner } from "./Spinner";
+export { Spinner, LoadingState } from "./Spinner";
 export { Skeleton } from "./Spinner";
 export { Logo } from "./Logo";
 export { Alert } from "./Alert";
