@@ -13,6 +13,18 @@ const initialState: AuthState = {
   isInitialized: false,
 };
 
+function isValidStoredToken(token: string) {
+  try {
+    const encoded = token.split(".")[1];
+    if (!encoded) return false;
+    const padded = encoded.replace(/-/g, "+").replace(/_/g, "/").padEnd(Math.ceil(encoded.length / 4) * 4, "=");
+    const payload = JSON.parse(atob(padded));
+    return !payload.exp || payload.exp * 1000 > Date.now();
+  } catch {
+    return false;
+  }
+}
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -42,7 +54,7 @@ const authSlice = createSlice({
       if (typeof window !== 'undefined') {
         const token = localStorage.getItem('auth_token');
         const user = localStorage.getItem('auth_user');
-        if (token && user) {
+        if (token && user && isValidStoredToken(token)) {
           try {
             state.token = token;
             state.user = JSON.parse(user);
@@ -52,6 +64,9 @@ const authSlice = createSlice({
             localStorage.removeItem('auth_token');
             localStorage.removeItem('auth_user');
           }
+        } else {
+          localStorage.removeItem('auth_token');
+          localStorage.removeItem('auth_user');
         }
       }
       state.isInitialized = true;

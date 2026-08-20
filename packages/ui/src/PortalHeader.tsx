@@ -14,6 +14,7 @@ export interface PortalHeaderAction {
   onClick?: () => void;
   label: string;
   badge?: number;
+  showLabel?: boolean;
 }
 
 export interface PortalHeaderDropdownItem {
@@ -169,12 +170,13 @@ export function PortalHeader({
                 }
               }}
               aria-label={action.label}
-              className="relative flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-[var(--bhn-surface)]"
+              className={`relative flex h-10 items-center justify-center rounded-full transition hover:bg-[var(--bhn-surface)] ${action.showLabel ? 'gap-2 px-3 text-sm font-semibold' : 'w-10'}`}
               style={{ color: 'var(--bhn-text-muted)' }}
               target={action.href?.startsWith('http') ? '_blank' : undefined}
               rel={action.href?.startsWith('http') ? 'noopener noreferrer' : undefined}
             >
               {action.icon}
+              {action.showLabel && <span>{action.label}</span>}
               {action.badge != null && action.badge > 0 && (
                 <span
                   className="absolute -right-0.5 -top-0.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full px-1 text-[10px] font-bold text-white"

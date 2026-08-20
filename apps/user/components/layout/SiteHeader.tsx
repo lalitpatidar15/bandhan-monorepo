@@ -2,19 +2,13 @@
 
 import { PortalHeader } from '@bandhan/ui';
 import { useRouter } from 'next/navigation';
-import { Bell } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { Bell, LogIn, UserRoundPlus } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function SiteHeader() {
   const router = useRouter();
-  const [userName, setUserName] = useState('');
-
-  useEffect(() => {
-    const frame = window.requestAnimationFrame(() => {
-      setUserName(localStorage.getItem('userName') || '');
-    });
-    return () => window.cancelAnimationFrame(frame);
-  }, []);
+  const { user, isAuthenticated, isInitialized, logout } = useAuth();
+  const signedIn = isInitialized && isAuthenticated;
 
   const navItems = [
     { label: 'Home', href: '/' },
@@ -28,11 +22,14 @@ export default function SiteHeader() {
     { label: 'Contact', href: '/contact' },
   ];
 
-  const actions = [
-    { icon: <Bell size={19} />, label: 'Notifications', href: '/userdashboard/notification' },
-  ];
+  const actions = signedIn
+    ? [{ icon: <Bell size={19} />, label: 'Notifications', href: '/userdashboard/notification' }]
+    : [
+        { icon: <LogIn size={17} />, label: 'Login', href: '/login', showLabel: true },
+        { icon: <UserRoundPlus size={17} />, label: 'Create account', href: '/signup', showLabel: true },
+      ];
 
-  const dropdownItems = [
+  const dropdownItems = signedIn ? [
     { label: 'My Account', href: '/userdashboard/profile' },
     { label: 'Orders', href: '/userdashboard/orders' },
     { label: 'Bookings', href: '/userdashboard/booking' },
@@ -43,8 +40,8 @@ export default function SiteHeader() {
     { label: 'Student Portal', href: `${process.env.NEXT_PUBLIC_STUDENT_PORTAL_URL || 'http://localhost:3002'}/login`, external: true },
     { label: 'Careers Portal', href: `${process.env.NEXT_PUBLIC_JOB_PORTAL_URL || 'http://localhost:3003'}/login`, external: true },
     { divider: true },
-    { label: 'Logout', onClick: () => { localStorage.removeItem('token'); router.replace('/login'); }, destructive: true },
-  ];
+    { label: 'Logout', onClick: () => { logout(); router.replace('/'); }, destructive: true },
+  ] : [];
 
   const activeNav = typeof window !== 'undefined' ? window.location.pathname : '/';
 
@@ -53,7 +50,7 @@ export default function SiteHeader() {
       portalName="Weddings & Beyond"
       navItems={navItems}
       actions={actions}
-      userName={userName}
+      userName={signedIn ? user?.name : undefined}
       dropdownItems={dropdownItems}
       onLogoClick={() => router.push('/')}
       activeNav={activeNav}

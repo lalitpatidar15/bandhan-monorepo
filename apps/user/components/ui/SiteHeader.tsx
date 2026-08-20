@@ -8,6 +8,7 @@ import { MdOutlineShoppingCart } from "react-icons/md";
 import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { STUDENT_PORTAL_URL } from "@/lib/externalLinks";
+import { useAuth } from "@/hooks/useAuth";
 
 const NAV_LINKS = [
   { label: "Venues", href: "/explore?type=venues" },
@@ -21,6 +22,8 @@ export default function SiteHeader() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { getTotalItems } = useCart();
+  const { isAuthenticated, isInitialized } = useAuth();
+  const signedIn = isInitialized && isAuthenticated;
   const totalItems = getTotalItems();
   const [query, setQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -75,9 +78,11 @@ export default function SiteHeader() {
           </nav>
 
           <div className="flex items-center gap-3 text-[#6B625A]">
-            <Link href="/userdashboard/notification" aria-label="Notifications">
-              <Bell size={20} className="cursor-pointer hover:text-[#C2652A]" />
-            </Link>
+            {signedIn && (
+              <Link href="/userdashboard/notification" aria-label="Notifications">
+                <Bell size={20} className="cursor-pointer hover:text-[#C2652A]" />
+              </Link>
+            )}
             <Link href="/userdashboard/cart" className="relative" aria-label="Cart">
               <MdOutlineShoppingCart size={20} className="cursor-pointer hover:text-[#C2652A]" />
               {totalItems > 0 && (
@@ -86,9 +91,16 @@ export default function SiteHeader() {
                 </span>
               )}
             </Link>
-            <Link href="/userdashboard/dashboard" className="flex h-8 w-8 items-center justify-center rounded-full border" aria-label="Profile">
-              <User size={16} />
-            </Link>
+            {signedIn ? (
+              <Link href="/userdashboard/dashboard" className="flex h-8 w-8 items-center justify-center rounded-full border" aria-label="Profile">
+                <User size={16} />
+              </Link>
+            ) : (
+              <div className="hidden items-center gap-3 text-xs sm:flex">
+                <Link href="/login" className="text-[#6B625A] hover:text-[#C2652A]">Login</Link>
+                <Link href="/signup" className="font-semibold text-[#924C2B] hover:underline">Sign up</Link>
+              </div>
+            )}
           </div>
 
           {/* Mobile hamburger */}
