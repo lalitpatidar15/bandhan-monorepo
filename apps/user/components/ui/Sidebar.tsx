@@ -11,6 +11,7 @@ import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { logout } from '@/store/slices/authSlice';
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { useGetConversationsQuery } from '@/store/api/chatApi';
+import { JOB_PORTAL_URL, SELLER_PORTAL_URL, STUDENT_PORTAL_URL } from '@/lib/externalLinks';
 
 interface SidebarProps {
   variant?: 'userdashboard' | 'vendor';
@@ -122,9 +123,9 @@ export function Sidebar({ variant = 'userdashboard', className = '', onItemClick
       profile={{ name: userName, email: currentUser?.email || 'Signed in', verified: true }}
       onLogout={handleLogout}
       portalLinks={[
-        { label: 'Seller Portal', href: `${process.env.NEXT_PUBLIC_SELLER_PORTAL_URL || 'http://localhost:3001'}/login`, external: true, icon: <ShoppingBag size={14} /> },
-        { label: 'Student Portal', href: `${process.env.NEXT_PUBLIC_STUDENT_PORTAL_URL || 'http://localhost:3002'}/login`, external: true, icon: <GraduationCap size={14} /> },
-        { label: 'Careers Portal', href: `${process.env.NEXT_PUBLIC_JOB_PORTAL_URL || 'http://localhost:3003'}/login`, external: true, icon: <Briefcase size={14} /> },
+        { label: 'Seller Portal', href: `${SELLER_PORTAL_URL}/login`, external: true, icon: <ShoppingBag size={14} /> },
+        { label: 'Student Portal', href: `${STUDENT_PORTAL_URL}/login`, external: true, icon: <GraduationCap size={14} /> },
+        { label: 'Careers Portal', href: `${JOB_PORTAL_URL}/login`, external: true, icon: <Briefcase size={14} /> },
       ]}
       className={className}
     />

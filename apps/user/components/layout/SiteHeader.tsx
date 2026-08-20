@@ -4,6 +4,7 @@ import { PortalHeader } from '@bandhan/ui';
 import { useRouter } from 'next/navigation';
 import { Bell, LogIn, UserRoundPlus } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
+import { JOB_PORTAL_URL, SELLER_PORTAL_URL, STUDENT_PORTAL_URL } from '@/lib/externalLinks';
 
 export default function SiteHeader() {
   const router = useRouter();
@@ -36,9 +37,9 @@ export default function SiteHeader() {
     { label: 'Wishlist', href: '/userdashboard/wishlist' },
     { label: 'Notifications', href: '/userdashboard/notification' },
     { divider: true },
-    { label: 'Seller Portal', href: `${process.env.NEXT_PUBLIC_SELLER_PORTAL_URL || 'http://localhost:3001'}/login`, external: true },
-    { label: 'Student Portal', href: `${process.env.NEXT_PUBLIC_STUDENT_PORTAL_URL || 'http://localhost:3002'}/login`, external: true },
-    { label: 'Careers Portal', href: `${process.env.NEXT_PUBLIC_JOB_PORTAL_URL || 'http://localhost:3003'}/login`, external: true },
+    { label: 'Seller Portal', href: `${SELLER_PORTAL_URL}/login`, external: true },
+    { label: 'Student Portal', href: `${STUDENT_PORTAL_URL}/login`, external: true },
+    { label: 'Careers Portal', href: `${JOB_PORTAL_URL}/login`, external: true },
     { divider: true },
     { label: 'Logout', onClick: () => { logout(); router.replace('/'); }, destructive: true },
   ] : [];
