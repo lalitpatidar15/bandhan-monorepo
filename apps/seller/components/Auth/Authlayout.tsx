@@ -7,7 +7,7 @@ export default function AuthLayout({
   image,
   position = "left",
   title = "",
-  logo = "/Group.png",
+  logo = "/Group1.png",
 }: {
   children: React.ReactNode;
   image: string;

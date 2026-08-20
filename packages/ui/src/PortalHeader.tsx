@@ -108,25 +108,12 @@ export function PortalHeader({
           onClick={onLogoClick}
           className="flex items-center gap-2.5 shrink-0"
         >
-          <span
-            className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold text-white"
-            style={{ background: 'var(--bhn-brand-600)' }}
-          >
-            B
-          </span>
-          <span className="flex flex-col">
-            <span
-              className="text-lg font-bold leading-tight text-[var(--bhn-text)]"
-              style={{ fontFamily: 'var(--bhn-font-display)' }}
-            >
-              Bandhan
+          <img src="/Group1.png" alt="Bandhan Events Hub" className="h-9 w-auto brightness-0" />
+          {portalName && (
+            <span className="hidden border-l border-[var(--bhn-border)] pl-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--bhn-text-muted)] sm:inline">
+              {portalName}
             </span>
-            {portalName && (
-              <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--bhn-text-muted)]">
-                {portalName}
-              </span>
-            )}
-          </span>
+          )}
         </button>
 
         {/* Desktop nav */}

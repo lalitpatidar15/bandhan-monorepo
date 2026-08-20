@@ -89,7 +89,7 @@ export default function ForgotPasswordPage() {
   return (
     <AuthLayout image="/login.png" position="right" title="Reset your password" logo="/Group1.png">
       <form onSubmit={(e) => e.preventDefault()} className="w-full max-w-md mx-auto flex flex-col gap-3">
-        <Image src="/Group.png" alt="Bandhan Logo" width={224} height={56} className="w-56 h-14 mx-auto object-contain" priority />
+        <Image src="/Group1.png" alt="Bandhan Events Hub" width={433} height={96} className="w-56 h-14 mx-auto object-contain brightness-0" priority />
 
         <div className="text-center space-y-1">
           <h1 className="text-xl font-bold">Forgot Password</h1>

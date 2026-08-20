@@ -795,11 +795,11 @@ export default function SignupForm({
       {/* LOGO */}
       <div className="text-center">
         <Image
-          src="/Group.png"
-          alt="Bandhan Logo"
-          width={240}
-          height={56}
-          className="mx-auto mb-4 h-14 w-60 object-contain"
+          src="/Group1.png"
+          alt="Bandhan Events Hub"
+          width={433}
+          height={96}
+          className="mx-auto mb-4 h-14 w-60 object-contain brightness-0"
         />
       </div>
 

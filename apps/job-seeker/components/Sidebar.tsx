@@ -1,5 +1,6 @@
 // components/Sidebar.tsx
 import Link from "next/link";
+import Image from "next/image";
 
 const items = [
   { label: "Dashboard", icon: "🏠", href: "/Jobseeker/dashboard" },
@@ -15,7 +16,7 @@ export function Sidebar({ active = "Jobs" }) {
   return (
     <div className="w-full lg:w-80 bg-[#FFF6F1] dark:bg-[#1a1a1a] rounded-3xl p-4 border border-[#E8DDD5] dark:border-[#374151] shadow-sm sticky top-6 h-fit">
       <div className="mb-6 flex items-center justify-between rounded-2xl bg-[#FAE8DE] dark:bg-[#2a2018] px-4 py-3 text-sm font-semibold text-[#7A3F23] dark:text-[#c9a882]">
-        <span>Bandhan</span>
+        <Image src="/Group1.png" alt="Bandhan Careers" width={433} height={96} className="h-6 w-auto brightness-0" />
         <span className="text-xs uppercase tracking-widest text-[#AF8B71] dark:text-[#8b7060] font-medium">Jobs</span>
       </div>
 

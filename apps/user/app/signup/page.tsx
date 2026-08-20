@@ -7,7 +7,7 @@ export default function SignupRolePage() {
     <main className="min-h-screen bg-[var(--bhn-bg)] px-4 py-12 sm:py-16">
       <section className="mx-auto max-w-4xl">
         <div className="mb-8 text-center">
-          <Image src="/Group.png" alt="Bandhan" width={192} height={48} className="mx-auto h-12 w-auto" priority />
+          <Image src="/Group1.png" alt="Bandhan Events Hub" width={433} height={96} className="mx-auto h-12 w-auto brightness-0" priority />
           <h1 className="mt-6 text-3xl font-bold text-[var(--bhn-text)]">How will you use Bandhan?</h1>
           <p className="mt-2 text-[var(--bhn-text-muted)]">Choose a role to create the right account. Admin accounts are managed separately.</p>
         </div>

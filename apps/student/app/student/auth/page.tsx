@@ -7,6 +7,7 @@ import Input from "@/components/form/Input";
 import PasswordInput from "@/components/form/PasswordInput";
 import Button from "@/components/common/Button";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { Eye, EyeOff } from "lucide-react";
 import { useLoginMutation, useRegisterMutation } from "@/app/redux/services/authApi";
 import { setAcademySession } from "@/lib/session";
@@ -178,13 +179,7 @@ export default function AuthPage() {
 
                     {/* LOGO */}
                     <div className="flex justify-center mb-6">
-                        <span className="bhn-logo">
-                            <span className="bhn-logo-mark">B</span>
-                            <span>
-                                <span className="bhn-logo-text">Bandhan</span>
-                                <span className="bhn-logo-text-sub">Learning Academy</span>
-                            </span>
-                        </span>
+                        <Image src="/Group1.png" alt="Bandhan Learning Academy" width={433} height={96} className="h-10 w-auto brightness-0" priority />
                     </div>
 
                     <div className="bhn-card bhn-card-pad-lg">

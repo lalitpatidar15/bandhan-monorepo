@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Search, Bell, Settings2, Menu, X } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -72,9 +73,7 @@ export function Header({
 
           {/* Left */}
           <div className="flex items-center gap-6">
-            <h1 className="text-lg md:text-xl font-semibold text-[#5E2D18]">
-              Bandhan Careers
-            </h1>
+            <CareersLogo />
 
             {/* Desktop Nav */}
             <nav className="hidden lg:flex items-center gap-5 text-sm">
@@ -152,9 +151,7 @@ export function Header({
 
           {/* Left */}
           <div className="flex items-center gap-6">
-            <h1 className="text-lg md:text-xl font-semibold text-[#5E2D18]">
-              Bandhan Careers
-            </h1>
+            <CareersLogo />
 
             {/* Desktop Nav */}
             <nav className="hidden lg:flex items-center gap-5 text-sm">
@@ -227,9 +224,7 @@ export function Header({
 
     return (
       <header className="w-full bg-white border-b border-[#E8D7CB] px-4 md:px-6 py-4 flex justify-between items-center">
-        <h1 className="text-lg font-semibold text-[#5E2D18]">
-          Bandhan Careers
-        </h1>
+        <CareersLogo />
 
         <div className="hidden md:flex items-center gap-6 text-sm">
           {detailNav.map((item) => (
@@ -264,9 +259,7 @@ export function Header({
   /* ================= DEFAULT HEADER ================= */
   return (
     <header className="bg-white px-4 md:px-6 py-4 border-b border-[#E8D7CB] flex justify-between items-center">
-      <div className="font-semibold text-[#7A3F23]">
-        Bandhan Careers
-      </div>
+      <CareersLogo />
 
       <div className="flex items-center gap-3">
         {stepLabel && (
@@ -279,6 +272,10 @@ export function Header({
       </div>
     </header>
   );
+}
+
+function CareersLogo() {
+  return <Image src="/Group1.png" alt="Bandhan Careers" width={433} height={96} className="h-8 w-auto brightness-0" priority />;
 }
 
 function UserMenu({ variant }: { variant: "jobs" | "jobposter" | "default" }) {

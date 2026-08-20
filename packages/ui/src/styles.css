@@ -616,9 +616,17 @@
 .bhn-logo {
   display: inline-flex;
   align-items: center;
-  gap: var(--bhn-space-2);
   text-decoration: none;
 }
+.bhn-logo-image {
+  display: block;
+  width: auto;
+  height: 2.25rem;
+  filter: brightness(0) saturate(100%) invert(14%) sepia(18%) saturate(1394%) hue-rotate(335deg) brightness(88%) contrast(93%);
+}
+.bhn-logo-sm .bhn-logo-image { height: 1.75rem; }
+.bhn-logo-lg .bhn-logo-image { height: 2.75rem; }
+.bhn-logo-onbrand .bhn-logo-image { filter: none; }
 .bhn-logo-mark {
   display: inline-flex;
   align-items: center;

@@ -5,16 +5,10 @@ export interface LogoProps {
   mark?: string;
 }
 
-export function Logo({ size = "md", onDark = false, href, mark = "B" }: LogoProps) {
+export function Logo({ size = "md", onDark = false, href }: LogoProps) {
   const sizeClass = { sm: "bhn-logo-sm", md: "", lg: "bhn-logo-lg" }[size];
   const inner = (
-    <>
-      <span className="bhn-logo-mark">{mark}</span>
-      <span>
-        <span className="bhn-logo-text">Bandhan</span>
-        <span className="bhn-logo-text-sub">Weddings &amp; Beyond</span>
-      </span>
-    </>
+    <img src="/Group1.png" alt="Bandhan Events Hub" className="bhn-logo-image" />
   );
   if (href) {
     return (

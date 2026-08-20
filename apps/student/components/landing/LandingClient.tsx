@@ -120,7 +120,7 @@ export default function LandingClient() {
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <Image src="/bandhan.png" alt="Bandhan Academy" width={140} height={56} className="h-8 w-auto" />
+            <Image src="/Group1.png" alt="Bandhan Academy" width={433} height={96} className="h-8 w-auto brightness-0" />
           </Link>
           <nav className="hidden md:flex items-center gap-6">
             <Link href="/student/courses" className="text-sm text-gray-700 hover:text-[#924C2B] dark:hover:text-[#b86a3a] font-medium transition">Courses</Link>
@@ -777,7 +777,7 @@ export default function LandingClient() {
         <div className="max-w-7xl mx-auto px-4 py-10">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <div>
-              <Image src="/bandhan.png" alt="Bandhan Academy" width={140} height={56} className="h-7 w-auto invert mb-3" />
+            <Image src="/Group1.png" alt="Bandhan Academy" width={433} height={96} className="h-7 w-auto mb-3" />
               <p className="text-xs leading-relaxed max-w-xs">India's premier online platform for event management and celebration industry education.</p>
               <div className="flex gap-3 mt-4">
                 <a href="#" className="h-8 w-8 rounded-lg bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition"><Globe size={14} /></a>

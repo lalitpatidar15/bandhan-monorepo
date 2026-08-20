@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Image from "next/image";
 import { useInstructorLoginMutation, useInstructorRegisterMutation } from "@/app/redux/instructor-services/authApi";
 import { setAcademySession } from "@/lib/session";
 
@@ -101,13 +102,7 @@ function InstructorAuthContent() {
 
                     {/* LOGO */}
                     <div className="flex justify-center mb-6">
-                        <span className="bhn-logo">
-                            <span className="bhn-logo-mark">B</span>
-                            <span>
-                                <span className="bhn-logo-text">Bandhan</span>
-                                <span className="bhn-logo-text-sub">Instructor Gateway</span>
-                            </span>
-                        </span>
+                        <Image src="/Group1.png" alt="Bandhan Instructor Gateway" width={433} height={96} className="h-10 w-auto brightness-0" priority />
                     </div>
 
                     <div className="bhn-card bhn-card-pad-lg">

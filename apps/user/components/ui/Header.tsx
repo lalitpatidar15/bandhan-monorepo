@@ -88,7 +88,7 @@ export default function Header({
         <div className="flex items-center justify-between px-3 sm:px-4 py-1.5 w-full gap-2">
           {/* Logo */}
           <Link href="/" aria-label="Bandhan home">
-            <Image src="/Group.png" alt="Bandhan" width={180} height={42} className="h-6 w-auto" />
+            <Image src="/Group1.png" alt="Bandhan Events Hub" width={433} height={96} className="h-6 w-auto brightness-0" />
           </Link>
 
           {/* Desktop Links */}
@@ -188,7 +188,7 @@ if (variant === "main1") {
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-1.5 flex flex-col sm:flex-row items-center justify-between gap-1.5 sm:gap-0">
           {/* LEFT: LOGO */}
           <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-start">
-            <Link href="/" aria-label="Bandhan home"><Image src="/Group.png" alt="Bandhan" width={180} height={42} className="h-7 w-auto" /></Link>
+            <Link href="/" aria-label="Bandhan home"><Image src="/Group1.png" alt="Bandhan Events Hub" width={433} height={96} className="h-7 w-auto brightness-0" /></Link>
           </div>
           {/* CENTER: SEARCH */}
           <div className="flex-1 flex justify-center w-full sm:w-auto mt-3 sm:mt-0">
@@ -253,7 +253,7 @@ if (variant === "main1") {
         <div className="max-w-7xl mx-auto px-3 py-2 flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center gap-2">
-          <Image src="/Group.png" alt="Bandhan" width={180} height={42}
+          <Image src="/Group1.png" alt="Bandhan Events Hub" width={433} height={96}
           className="h-7 w-auto" />
         
         </div>
@@ -345,7 +345,7 @@ if (variant === "main1") {
         {/* Left: Logo + Nav */}
         <div className="flex min-w-0 items-center gap-2 lg:gap-3">
           <Link href="/" className="flex items-center gap-2 text-sm font-semibold text-[#C2652A]">
-            <Image src="/Group.png" alt="Bandhan" width={180} height={42} className="h-6 w-auto" />
+            <Image src="/Group1.png" alt="Bandhan Events Hub" width={433} height={96} className="h-6 w-auto brightness-0" />
             <span className="hidden sm:inline">Bandhan</span>
           </Link>
 
