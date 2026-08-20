@@ -82,6 +82,14 @@ const DEFAULT_SETTINGS = {
     productModes: ["buy", "rent"],
     venueTypes: [],
     serviceTypes: [],
+    jobIndustries: [],
+    companySizes: [],
+    courseLevels: [],
+    eventTypes: [],
+    jobCategories: [],
+    jobTypes: [],
+    experienceLevels: [],
+    courseCategories: [],
     ratingSteps: [3, 4, 4.5],
   },
 };
@@ -1233,6 +1241,9 @@ exports.createCategory = async (req, res) => {
       subcategories: Array.isArray(req.body.subcategories)
         ? req.body.subcategories.map((item) => String(item).trim()).filter(Boolean)
         : [],
+      scopes: Array.isArray(req.body.scopes) && req.body.scopes.length
+        ? req.body.scopes.filter((scope) => ["products", "services", "venues", "courses", "jobs"].includes(scope))
+        : ["products"],
       isActive: req.body.isActive !== false,
     });
 
@@ -1253,6 +1264,9 @@ exports.updateCategory = async (req, res) => {
     if (req.body.name) updates.name = String(req.body.name).trim();
     if (Array.isArray(req.body.subcategories)) {
       updates.subcategories = req.body.subcategories.map((item) => String(item).trim()).filter(Boolean);
+    }
+    if (Array.isArray(req.body.scopes)) {
+      updates.scopes = req.body.scopes.filter((scope) => ["products", "services", "venues", "courses", "jobs"].includes(scope));
     }
     if (typeof req.body.isActive === "boolean") updates.isActive = req.body.isActive;
 

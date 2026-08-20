@@ -14,14 +14,6 @@ export default function AdminHeader({ title }: { title?: string }) {
     setUserName(name);
   }, []);
 
-  const navItems = [
-    { label: 'Dashboard', href: '/admin/dashboard' },
-    { label: 'Users', href: '/admin/dashboard' },
-    { label: 'Marketplace', href: '/admin/dashboard' },
-    { label: 'Finance', href: '/admin/dashboard' },
-    { label: 'Support', href: '/admin/dashboard' },
-  ];
-
   const actions = [
     { icon: <Bell size={19} />, label: 'Notifications', href: '/admin/dashboard' },
     { icon: <Settings size={19} />, label: 'Settings', href: '/admin/dashboard' },
@@ -36,7 +28,6 @@ export default function AdminHeader({ title }: { title?: string }) {
   return (
     <PortalHeader
       portalName="Control Center"
-      navItems={navItems}
       actions={actions}
       userName={userName}
       dropdownItems={dropdownItems}

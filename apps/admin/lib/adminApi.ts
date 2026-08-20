@@ -264,6 +264,7 @@ export type AdminCategory = {
   id: string;
   name: string;
   subcategories: string[];
+  scopes?: string[];
   isActive: boolean;
 };
 
@@ -1490,7 +1491,7 @@ export const adminApi = createApi({
       transformResponse: (response: unknown) => normalizeCategories(response),
       providesTags: ['AdminCategories'],
     }),
-    createCategory: builder.mutation<unknown, { name: string; subcategories?: string[]; isActive?: boolean }>({
+    createCategory: builder.mutation<unknown, { name: string; subcategories?: string[]; scopes?: string[]; isActive?: boolean }>({
       query: (body) => ({
         url: '/admin/categories',
         method: 'POST',
@@ -1498,7 +1499,7 @@ export const adminApi = createApi({
       }),
       invalidatesTags: ['AdminCategories'],
     }),
-    updateCategory: builder.mutation<unknown, { id: string; name?: string; subcategories?: string[]; isActive?: boolean }>({
+    updateCategory: builder.mutation<unknown, { id: string; name?: string; subcategories?: string[]; scopes?: string[]; isActive?: boolean }>({
       query: ({ id, ...body }) => ({
         url: `/admin/categories/${id}`,
         method: 'PUT',

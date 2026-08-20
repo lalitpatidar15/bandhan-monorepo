@@ -69,15 +69,24 @@ exports.getCatalogConfig = async (_req, res) => {
     );
 
     const jobCategories = Array.from(
-      new Set(jobs.map((item) => String(item.jobCategory || "").trim()).filter(Boolean))
+      new Set([
+        ...(configuredFilters.jobCategories || []),
+        ...jobs.map((item) => String(item.jobCategory || "").trim()),
+      ].filter(Boolean))
     );
 
     const jobTypes = Array.from(
-      new Set(jobs.map((item) => String(item.jobType || "").trim()).filter(Boolean))
+      new Set([
+        ...(configuredFilters.jobTypes || []),
+        ...jobs.map((item) => String(item.jobType || "").trim()),
+      ].filter(Boolean))
     );
 
     const experienceLevels = Array.from(
-      new Set(jobs.map((item) => String(item.experienceLevel || "").trim()).filter(Boolean))
+      new Set([
+        ...(configuredFilters.experienceLevels || []),
+        ...jobs.map((item) => String(item.experienceLevel || "").trim()),
+      ].filter(Boolean))
     );
 
     const jobLocations = Array.from(

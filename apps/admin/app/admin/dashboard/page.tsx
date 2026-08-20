@@ -44,7 +44,7 @@ export default function AdminDashboardPage() {
   const renderPage = () => {
     switch (currentPage) {
       case 'dashboard':
-        return <Dashboard />;
+        return <Dashboard onNavigate={setCurrentPage} />;
 
       case 'users':
         return <Users />;
@@ -140,7 +140,7 @@ export default function AdminDashboardPage() {
         return <Applications />;
 
       default:
-        return <Dashboard />;
+        return <Dashboard onNavigate={setCurrentPage} />;
     }
   };
 

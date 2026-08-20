@@ -7,7 +7,7 @@ import { useGetCategoriesQuery, useCreateCategoryMutation, useUpdateCategoryMuta
 export default function Categories() {
   const [showForm, setShowForm] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
-  const [form, setForm] = useState({ name: '', subcategories: '', isActive: true });
+  const [form, setForm] = useState({ name: '', subcategories: '', scopes: ['products'], isActive: true });
 
   const { data: categories = [], isLoading } = useGetCategoriesQuery();
   const [createCategory, { isLoading: isCreating }] = useCreateCategoryMutation();
@@ -15,13 +15,13 @@ export default function Categories() {
   const [deleteCategory] = useDeleteCategoryMutation();
 
   const reset = () => {
-    setForm({ name: '', subcategories: '', isActive: true });
+    setForm({ name: '', subcategories: '', scopes: ['products'], isActive: true });
     setEditId(null);
     setShowForm(false);
   };
 
   const handleEdit = (cat: typeof categories[0]) => {
-    setForm({ name: cat.name, subcategories: cat.subcategories.join(', '), isActive: cat.isActive });
+    setForm({ name: cat.name, subcategories: cat.subcategories.join(', '), scopes: cat.scopes?.length ? cat.scopes : ['products'], isActive: cat.isActive });
     setEditId(cat.id);
     setShowForm(true);
   };
@@ -31,9 +31,9 @@ export default function Categories() {
     const subs = form.subcategories.split(',').map((s) => s.trim()).filter(Boolean);
     try {
       if (editId) {
-        await updateCategory({ id: editId, name: form.name.trim(), subcategories: subs, isActive: form.isActive }).unwrap();
+        await updateCategory({ id: editId, name: form.name.trim(), subcategories: subs, scopes: form.scopes, isActive: form.isActive }).unwrap();
       } else {
-        await createCategory({ name: form.name.trim(), subcategories: subs, isActive: form.isActive }).unwrap();
+        await createCategory({ name: form.name.trim(), subcategories: subs, scopes: form.scopes, isActive: form.isActive }).unwrap();
       }
       reset();
     } catch (e) { console.error(e); }
@@ -62,6 +62,10 @@ export default function Categories() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Category Name" className="admin-input" />
             <input value={form.subcategories} onChange={(e) => setForm({ ...form, subcategories: e.target.value })} placeholder="Subcategories (comma-separated)" className="admin-input" />
+            <fieldset className="rounded-lg border border-gray-200 px-3 py-2">
+              <legend className="px-1 text-xs font-medium text-gray-700">Use in listing types</legend>
+              <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-gray-700">{['products', 'services', 'venues', 'courses', 'jobs'].map((scope) => <label key={scope} className="flex items-center gap-1"><input type="checkbox" checked={form.scopes.includes(scope)} onChange={() => setForm({ ...form, scopes: form.scopes.includes(scope) ? form.scopes.filter((item) => item !== scope) : [...form.scopes, scope] })} />{scope}</label>)}</div>
+            </fieldset>
             <select value={String(form.isActive)} onChange={(e) => setForm({ ...form, isActive: e.target.value === 'true' })} className="admin-input">
               <option value="true">Active</option>
               <option value="false">Inactive</option>
@@ -84,6 +88,7 @@ export default function Categories() {
               <tr>
                 <th>Name</th>
                 <th>Subcategories</th>
+                <th>Used in</th>
                 <th>Status</th>
                 <th className="text-right">Actions</th>
               </tr>
@@ -95,6 +100,7 @@ export default function Categories() {
                   <td className="text-xs text-gray-600">
                     {cat.subcategories.length > 0 ? cat.subcategories.join(', ') : '—'}
                   </td>
+                  <td className="text-xs text-gray-600">{cat.scopes?.join(', ') || 'products'}</td>
                   <td><span className={`admin-badge ${cat.isActive ? 'admin-badge-active' : 'admin-badge-inactive'}`}>{cat.isActive ? 'Active' : 'Inactive'}</span></td>
                   <td className="text-right">
                     <div className="flex justify-end gap-1">

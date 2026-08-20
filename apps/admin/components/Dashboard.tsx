@@ -1,11 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Users, Package, ShoppingCart, TrendingUp, AlertCircle, ExternalLink } from 'lucide-react';
+import { Users, Package, ShoppingCart, TrendingUp, AlertCircle, ArrowRight, BookOpen, BriefcaseBusiness, Handshake, Tags, SlidersHorizontal } from 'lucide-react';
 import { useGetDashboardStatsQuery } from '@/lib/adminApi';
 import { StatCard, PageHeader, Card } from '@bandhan/ui';
 
-export default function Dashboard() {
+type DashboardProps = { onNavigate: (page: 'users' | 'products' | 'services' | 'courses' | 'jobs' | 'venues' | 'categories' | 'settings') => void };
+
+export default function Dashboard({ onNavigate }: DashboardProps) {
   const { data, isLoading, isError } = useGetDashboardStatsQuery();
   const stats = data?.data || {
     totalUsers: 0,
@@ -48,25 +50,22 @@ export default function Dashboard() {
     },
   ];
 
-  const portals = [
+  const quickActions: Array<{ title: string; description: string; page: DashboardProps['onNavigate'] extends (page: infer P) => void ? P : never; icon: typeof Users }> = [
     {
-      title: 'Student Panel',
-      dot: 'var(--bhn-info-500)',
-      desc: 'Learning & course platform',
-      href: 'http://localhost:3000',
+      title: 'Onboard a user',
+      description: 'Create buyer, seller, learner, event owner or job seeker accounts.',
+      page: 'users', icon: Users,
     },
     {
-      title: 'User Panel',
-      dot: 'var(--bhn-brand-500)',
-      desc: 'Marketplace & event owners',
-      href: 'http://localhost:3001',
+      title: 'Add a product', description: 'Create and moderate marketplace products and rentals.', page: 'products', icon: Package,
     },
     {
-      title: 'Job Seeker Panel',
-      dot: 'var(--bhn-success-500)',
-      desc: 'Jobs & recruitment platform',
-      href: 'http://localhost:3002',
+      title: 'Add a service', description: 'Create services for event vendors and providers.', page: 'services', icon: Handshake,
     },
+    { title: 'Add a course', description: 'Create courses and manage instructor content.', page: 'courses', icon: BookOpen },
+    { title: 'Post a job', description: 'Add jobs and manage recruitment listings.', page: 'jobs', icon: BriefcaseBusiness },
+    { title: 'Set categories', description: 'Create categories and subcategories used in listings.', page: 'categories', icon: Tags },
+    { title: 'Configure dropdowns', description: 'Control portal form choices from one place.', page: 'settings', icon: SlidersHorizontal },
   ];
 
   return (
@@ -91,31 +90,22 @@ export default function Dashboard() {
         })}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {portals.map((portal) => (
-          <Card key={portal.title}>
-            <div className="mb-2 flex items-center gap-2">
-              <span
-                className="inline-block h-3 w-3 rounded-full"
-                style={{ background: portal.dot }}
-              />
-              <h3 className="bhn-card-title">{portal.title}</h3>
-            </div>
-            <p className="mb-3 text-xs" style={{ color: 'var(--bhn-text-muted)' }}>
-              {portal.desc}
-            </p>
-            <a
-              href={portal.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bhn-btn bhn-btn-primary bhn-btn-sm"
-            >
-              Open Panel
-              <ExternalLink size={14} />
-            </a>
-          </Card>
-        ))}
-      </div>
+      <section className="mb-4">
+        <div className="mb-3">
+          <h2 className="text-lg font-semibold" style={{ color: 'var(--bhn-text)' }}>Control centre</h2>
+          <p className="text-sm" style={{ color: 'var(--bhn-text-muted)' }}>Start the work an admin needs to do most often.</p>
+        </div>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {quickActions.map((action) => {
+            const Icon = action.icon;
+            return <button key={action.title} type="button" onClick={() => onNavigate(action.page)} className="group rounded-xl border p-4 text-left transition hover:-translate-y-0.5 hover:shadow-md" style={{ borderColor: 'var(--bhn-border)', background: 'var(--bhn-surface)' }}>
+              <div className="mb-3 flex items-center justify-between"><span className="flex h-9 w-9 items-center justify-center rounded-lg" style={{ background: 'var(--bhn-brand-50)', color: 'var(--bhn-brand-700)' }}><Icon size={18} /></span><ArrowRight size={17} className="transition group-hover:translate-x-0.5" style={{ color: 'var(--bhn-text-muted)' }} /></div>
+              <h3 className="font-semibold" style={{ color: 'var(--bhn-text)' }}>{action.title}</h3>
+              <p className="mt-1 text-sm" style={{ color: 'var(--bhn-text-muted)' }}>{action.description}</p>
+            </button>;
+          })}
+        </div>
+      </section>
 
       <Card className="mt-4">
         <div className="mb-3 flex items-center gap-2">
