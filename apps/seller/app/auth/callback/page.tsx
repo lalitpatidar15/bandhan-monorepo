@@ -7,12 +7,12 @@ import { apiPost } from "@/lib/api";
 function SellerSsoCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [message, setMessage] = useState("Completing secure sign-in…");
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const code = searchParams.get("sso");
     if (!code) {
-      setMessage("This sign-in link is missing or invalid.");
+      setError("This sign-in link is missing or invalid.");
       return;
     }
 
@@ -28,15 +28,16 @@ function SellerSsoCallbackContent() {
         localStorage.setItem("userName", result.user?.fullName || result.user?.name || "Seller");
         router.replace("/sellerDashboard");
       })
-      .catch(() => setMessage("This sign-in link has expired. Please return to the central login page and try again."));
+      .catch(() => setError("This sign-in link has expired. Please return to the central login page and try again."));
   }, [router, searchParams]);
 
-  return <main className="flex min-h-screen items-center justify-center bg-[#F7F1EB] p-6 text-center text-[#3A2B22]"><p>{message}</p></main>;
+  if (!error) return null;
+  return <main className="flex min-h-screen items-center justify-center bg-[#F7F1EB] p-6 text-center text-[#3A2B22]"><p>{error}</p></main>;
 }
 
 export default function SellerSsoCallbackPage() {
   return (
-    <Suspense fallback={<main className="flex min-h-screen items-center justify-center bg-[#F7F1EB] p-6 text-center text-[#3A2B22]"><p>Completing secure sign-in…</p></main>}>
+    <Suspense fallback={null}>
       <SellerSsoCallbackContent />
     </Suspense>
   );

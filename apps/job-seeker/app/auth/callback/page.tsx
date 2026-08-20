@@ -12,13 +12,13 @@ const apiUrl = () => {
 export default function JobSsoCallbackPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [message, setMessage] = useState("Completing secure sign-in…");
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const code = searchParams.get("sso");
     const role = searchParams.get("role");
     if (!code || (role !== "jobseeker" && role !== "recruiter")) {
-      setMessage("This sign-in link is missing or invalid.");
+      setError("This sign-in link is missing or invalid.");
       return;
     }
 
@@ -32,8 +32,9 @@ export default function JobSsoCallbackPage() {
         setJobPortalSession(result.token, role);
         router.replace(role === "recruiter" ? "/jobposter/dashboard" : "/Jobseeker/dashboard");
       })
-      .catch(() => setMessage("This sign-in link has expired. Please return to the central login page and try again."));
+      .catch(() => setError("This sign-in link has expired. Please return to the central login page and try again."));
   }, [router, searchParams]);
 
-  return <main className="flex min-h-screen items-center justify-center bg-[#FEF1E7] p-6 text-center text-[#2D1F16]"><p>{message}</p></main>;
+  if (!error) return null;
+  return <main className="flex min-h-screen items-center justify-center bg-[#FEF1E7] p-6 text-center text-[#2D1F16]"><p>{error}</p></main>;
 }

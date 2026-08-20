@@ -12,13 +12,13 @@ const apiUrl = () => {
 export default function AcademySsoCallbackPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [message, setMessage] = useState("Completing secure sign-in…");
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const code = searchParams.get("sso");
     const role = searchParams.get("role");
     if (!code || (role !== "student" && role !== "instructor")) {
-      setMessage("This sign-in link is missing or invalid.");
+      setError("This sign-in link is missing or invalid.");
       return;
     }
 
@@ -33,8 +33,9 @@ export default function AcademySsoCallbackPage() {
         localStorage.setItem(role === "instructor" ? "instructor" : "user", JSON.stringify(result.user));
         router.replace(role === "instructor" ? "/instructor/dashboard" : "/student/courses");
       })
-      .catch(() => setMessage("This sign-in link has expired. Please return to the central login page and try again."));
+      .catch(() => setError("This sign-in link has expired. Please return to the central login page and try again."));
   }, [router, searchParams]);
 
-  return <main className="flex min-h-screen items-center justify-center bg-[#F8F5F2] p-6 text-center text-[#2D201B]"><p>{message}</p></main>;
+  if (!error) return null;
+  return <main className="flex min-h-screen items-center justify-center bg-[#F8F5F2] p-6 text-center text-[#2D201B]"><p>{error}</p></main>;
 }
