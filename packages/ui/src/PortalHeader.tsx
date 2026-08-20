@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, type ReactNode } from 'react';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ArrowUpRight, ChevronRight, LogOut } from 'lucide-react';
 
 export interface PortalHeaderNav {
   label: string;
@@ -182,7 +182,7 @@ export function PortalHeader({
                 type="button"
                 onClick={() => setDropdownOpen((o) => !o)}
                 aria-label="Account"
-                className="flex h-10 w-10 items-center justify-center rounded-full border transition-all hover:shadow-sm"
+                className="flex h-10 w-10 items-center justify-center rounded-full border transition-all hover:scale-[1.03] hover:shadow-md"
                 style={{
                   borderColor: dropdownOpen ? 'var(--bhn-brand-400)' : 'var(--bhn-border-strong)',
                   background: dropdownOpen ? 'var(--bhn-brand-50)' : 'var(--bhn-surface)',
@@ -190,9 +190,9 @@ export function PortalHeader({
                 }}
               >
                 {userAvatar ? (
-                  <img src={userAvatar} alt={userName || 'User'} className="h-7 w-7 rounded-full object-cover" />
+                  <img src={userAvatar} alt={userName || 'User'} className="h-8 w-8 rounded-full object-cover" />
                 ) : (
-                  <span className="text-sm font-semibold">{userName?.charAt(0)?.toUpperCase() || 'U'}</span>
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-white" style={{ background: 'linear-gradient(135deg, var(--bhn-brand-500), var(--bhn-brand-700))' }}>{userName?.charAt(0)?.toUpperCase() || 'U'}</span>
                 )}
               </button>
 
@@ -200,23 +200,34 @@ export function PortalHeader({
                 <>
                   <div className="fixed inset-0 z-10" onClick={() => setDropdownOpen(false)} />
                   <div
-                    className="absolute right-0 z-30 mt-2 w-56 overflow-hidden rounded-xl border py-1.5 shadow-xl"
+                    className="absolute right-0 z-30 mt-3 w-80 overflow-hidden rounded-2xl border p-2 shadow-2xl"
                     style={{ background: 'var(--bhn-surface)', borderColor: 'var(--bhn-border)' }}
                   >
                     {userName && (
-                      <div className="border-b px-4 py-3" style={{ borderColor: 'var(--bhn-border)' }}>
-                        <p className="text-xs font-semibold text-[var(--bhn-text)]">{userName}</p>
-                        <p className="mt-0.5 text-[11px] text-[var(--bhn-text-muted)]">{portalName || 'Bandhan'}</p>
+                      <div className="mb-2 flex items-center gap-3 rounded-xl px-3 py-3" style={{ background: 'var(--bhn-brand-50)' }}>
+                        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-base font-bold text-white" style={{ background: 'linear-gradient(135deg, var(--bhn-brand-500), var(--bhn-brand-700))' }}>
+                          {userName.charAt(0).toUpperCase()}
+                        </span>
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-bold text-[var(--bhn-text)]">{userName}</p>
+                          <p className="mt-0.5 text-[11px] font-medium text-[var(--bhn-text-muted)]">Signed in to {portalName || 'Bandhan'}</p>
+                        </div>
                       </div>
                     )}
-                    {dropdownItems.map((item, i) => {
+                    {(() => {
+                      let dividerIndex = 0;
+                      return dropdownItems.map((item, i) => {
                       if (item.divider) {
-                        return <div key={i} className="my-1 border-t" style={{ borderColor: 'var(--bhn-border)' }} />;
+                        dividerIndex += 1;
+                        return <div key={i} className="mb-1 mt-2 border-t px-2 pt-2" style={{ borderColor: 'var(--bhn-border)' }}><p className="text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--bhn-text-muted)]">{dividerIndex === 1 ? 'Explore other portals' : 'Session'}</p></div>;
                       }
                       const content = (
-                        <span className={`flex items-center gap-2 px-4 py-2.5 text-sm transition hover:bg-[var(--bhn-surface-2)] ${item.destructive ? 'text-red-600' : ''}`} style={{ color: item.destructive ? undefined : 'var(--bhn-text-muted)' }}>
-                          {item.icon}
-                          {item.label}
+                        <span className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${item.destructive ? 'text-red-600 hover:bg-red-50' : 'hover:bg-[var(--bhn-surface-2)]'}`} style={{ color: item.destructive ? undefined : 'var(--bhn-text-muted)' }}>
+                          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg" style={{ background: item.destructive ? 'rgb(254 242 242)' : 'var(--bhn-surface-2)', color: item.destructive ? 'rgb(220 38 38)' : 'var(--bhn-brand-700)' }}>
+                            {item.icon || (item.destructive ? <LogOut size={15} /> : item.external ? <ArrowUpRight size={15} /> : <ChevronRight size={15} />)}
+                          </span>
+                          <span className="flex-1">{item.label}</span>
+                          {item.external && <ArrowUpRight size={14} className="opacity-50" />}
                         </span>
                       );
                       return item.href ? (
@@ -234,7 +245,7 @@ export function PortalHeader({
                           {content}
                         </button>
                       );
-                    })}
+                    })})()}
                   </div>
                 </>
               )}

@@ -2,7 +2,7 @@
 
 import { PortalHeader } from '@bandhan/ui';
 import { useRouter } from 'next/navigation';
-import { Bell, LogIn, UserRoundPlus } from 'lucide-react';
+import { Bell, BriefcaseBusiness, CalendarCheck, Heart, LogIn, Package, Store, UserRound, UserRoundPlus } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { JOB_PORTAL_URL, SELLER_PORTAL_URL, STUDENT_PORTAL_URL } from '@/lib/externalLinks';
 
@@ -31,15 +31,15 @@ export default function SiteHeader() {
       ];
 
   const dropdownItems = signedIn ? [
-    { label: 'My Account', href: '/userdashboard/profile' },
-    { label: 'Orders', href: '/userdashboard/orders' },
-    { label: 'Bookings', href: '/userdashboard/booking' },
-    { label: 'Wishlist', href: '/userdashboard/wishlist' },
-    { label: 'Notifications', href: '/userdashboard/notification' },
+    { label: 'My Account', href: '/userdashboard/profile', icon: <UserRound size={16} /> },
+    { label: 'Orders', href: '/userdashboard/orders', icon: <Package size={16} /> },
+    { label: 'Bookings', href: '/userdashboard/booking', icon: <CalendarCheck size={16} /> },
+    { label: 'Wishlist', href: '/userdashboard/wishlist', icon: <Heart size={16} /> },
+    { label: 'Notifications', href: '/userdashboard/notification', icon: <Bell size={16} /> },
     { divider: true },
-    { label: 'Seller Portal', href: `${SELLER_PORTAL_URL}/login`, external: true },
-    { label: 'Student Portal', href: `${STUDENT_PORTAL_URL}/login`, external: true },
-    { label: 'Careers Portal', href: `${JOB_PORTAL_URL}/login`, external: true },
+    { label: 'Seller Portal', href: `${SELLER_PORTAL_URL}/login`, external: true, icon: <Store size={16} /> },
+    { label: 'Student Portal', href: `${STUDENT_PORTAL_URL}/login`, external: true, icon: <UserRound size={16} /> },
+    { label: 'Careers Portal', href: `${JOB_PORTAL_URL}/login`, external: true, icon: <BriefcaseBusiness size={16} /> },
     { divider: true },
     { label: 'Logout', onClick: () => { logout(); router.replace('/'); }, destructive: true },
   ] : [];
