@@ -3,16 +3,19 @@ import { NextRequest, NextResponse } from "next/server";
 const studentPublicRoutes = new Set(["/student", "/student/auth", "/student/login", "/student/courses"]);
 const instructorPublicRoutes = new Set(["/instructor", "/instructor/login"]);
 
-function centralLoginUrl() {
+function centralAuthUrl(path: string) {
   const centralOrigin = process.env.NEXT_PUBLIC_CENTRAL_LOGIN_URL
     || (process.env.VERCEL ? "https://bandhan-user.vercel.app" : "http://localhost:3000");
-  return new URL("/login", centralOrigin);
+  return new URL(path, centralOrigin);
 }
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   if (["/student/auth", "/student/login", "/instructor/login"].includes(pathname)) {
-    return NextResponse.redirect(centralLoginUrl());
+    return NextResponse.redirect(centralAuthUrl("/login"));
+  }
+  if (pathname === "/signup") {
+    return NextResponse.redirect(centralAuthUrl("/signup/student"));
   }
   let role: "student" | "instructor" | null = null;
 
@@ -34,5 +37,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/student/:path*", "/instructor/:path*", "/course-player/:path*", "/live-session/:path*", "/my-courses/:path*"],
+  matcher: ["/signup", "/student/:path*", "/instructor/:path*", "/course-player/:path*", "/live-session/:path*", "/my-courses/:path*"],
 };
