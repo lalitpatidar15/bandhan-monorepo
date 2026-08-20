@@ -45,7 +45,6 @@ export default function SettingsPage() {
     const [phone, setPhone] = useState("");
     const [emailNotification, setEmailNotification] = useState(true);
     const [courseReminder, setCourseReminder] = useState(true);
-    const [darkMode, setDarkMode] = useState(false);
     const router = useRouter();
 
     const { data: profileData, isLoading: isProfileLoading } = useGetProfileQuery(undefined);
@@ -64,24 +63,9 @@ export default function SettingsPage() {
             setSelectedInterests(profileData.profile.interests || []);
             setEmailNotification(profileData.profile.emailNotifications ?? true);
             setCourseReminder(profileData.profile.courseReminders ?? true);
-            setDarkMode(profileData.profile.darkMode ?? false);
             setPaymentMethods(profileData.profile.paymentMethods || []);
         }
     }, [profileData]);
-
-    useEffect(() => {
-        if (darkMode) {
-            document.documentElement.classList.add("dark");
-        } else {
-            document.documentElement.classList.remove("dark");
-        }
-    }, [darkMode]);
-
-    useEffect(() => {
-        if (profileData?.profile) {
-            saveProfile({ darkMode }).catch(() => {});
-        }
-    }, [darkMode]);
 
     useEffect(() => {
         if (profileData?.profile) {
@@ -450,7 +434,7 @@ export default function SettingsPage() {
 
                                         </div>
 
-                                        {/* DARK MODE */}
+                                        {/* THEME */}
                                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 py-6">
 
                                             <div className="flex items-start gap-4 sm:gap-5">
@@ -462,34 +446,19 @@ export default function SettingsPage() {
 
                                                 <div>
 
-                                                    <h3 className="text-xl sm:text-2xl font-semibold text-[#2D201B] dark:text-[#ededed]">
-                                                        Dark Mode
+                                                    <h3 className="text-xl sm:text-2xl font-semibold text-[#2D201B]">
+                                                        Light theme
                                                     </h3>
 
-                                                    <p className="text-[#8A7A71] dark:text-[#7a6a5a] text-sm sm:text-base lg:text-[18px] mt-1">
-                                                        Switch to a low-light interface for late night study sessions.
+                                                    <p className="text-[#8A7A71] text-sm sm:text-base lg:text-[18px] mt-1">
+                                                        A consistent, high-contrast theme is active across the learning portal.
                                                     </p>
 
                                                 </div>
 
                                             </div>
 
-                                            <button
-                                                onClick={() =>
-                                                    setDarkMode(!darkMode)
-                                                }
-                                                className={`w-[65px] h-[33px] rounded-full flex items-center px-1 transition-all duration-300 ${darkMode
-                                                    ? "bg-[#8B4A28] dark:bg-[#b86a3a]"
-                                                    : "bg-[#E5E0DC]"
-                                                    }`}
-                                            >
-
-                                                <div
-                                                    className={`w-[25px] h-[25px] rounded-full bg-white transition-all duration-300 ${darkMode ? "ml-auto" : "ml-0"
-                                                        }`}
-                                                />
-
-                                            </button>
+                                            <span className="rounded-full bg-[#F2ECE8] px-4 py-2 text-xs font-semibold text-[#6D5E56]">Active</span>
 
                                         </div>
 

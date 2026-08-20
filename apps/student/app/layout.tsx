@@ -5,6 +5,7 @@ import "./globals.css";
 import ReduxProvider from "@/app/redux/provider";
 import RouteGuard from "@/components/auth/RouteGuard";
 import { Toaster } from "react-hot-toast";
+import ThemeLock from "@/components/ThemeLock";
 
 const manrope = Manrope({
   variable: "--bhn-font-sans",
@@ -35,6 +36,7 @@ export default function RootLayout({
         className="min-h-full flex flex-col bg-[var(--bhn-bg)] text-[var(--bhn-text)] font-[var(--bhn-font-sans)]"
         suppressHydrationWarning
       >
+        <ThemeLock />
         <ReduxProvider>
           <RouteGuard>{children}</RouteGuard>
         </ReduxProvider>
