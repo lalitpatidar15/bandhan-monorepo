@@ -310,6 +310,18 @@ app.use((error, _req, res, _next) => {
   });
 });
 
+let dbPromise;
+function ensureDB() {
+  if (!dbPromise) {
+    const connectDB = require("./config/db");
+    dbPromise = connectDB();
+  }
+  return dbPromise;
+}
+ensureDB().catch((err) => {
+  console.error("Mongo init failed:", err.message);
+});
+
 if (require.main === module) {
   const http = require("http");
   const connectDB = require("./config/db");
