@@ -2,9 +2,19 @@
 import type { Socket } from "socket.io-client";
 
 let socket: Socket | null = null;
+let socketDisabled = false;
+
+const isVercelServerlessUrl = (url: string) => {
+  try {
+    return new URL(url).hostname.endsWith(".vercel.app");
+  } catch {
+    return false;
+  }
+};
 
 export async function getSocket() {
   if (socket) return socket;
+  if (socketDisabled) return null;
 
   if (typeof window === "undefined") return null;
 
@@ -16,6 +26,14 @@ export async function getSocket() {
       process.env.NEXT_PUBLIC_SOCKET_URL ||
       process.env.NEXT_PUBLIC_API_URL ||
       "http://localhost:5000";
+
+    // Vercel serverless functions cannot host a persistent Socket.IO server.
+    // Keep the HTTP experience usable and avoid repeated failed WebSocket calls.
+    if (isVercelServerlessUrl(url)) {
+      socketDisabled = true;
+      console.info("Real-time updates are unavailable on the Vercel API; using HTTP refresh.");
+      return null;
+    }
 
     const token = localStorage.getItem("auth_token");
 
