@@ -2,11 +2,20 @@ import { NextRequest, NextResponse } from "next/server";
 
 const publicPaths = new Set(["/", "/Jobseeker", "/Jobseeker/login", "/Jobseeker/signup", "/jobposter", "/jobposter/login", "/jobposter/register", "/jobposter/forgot-password", "/jobposter/privacy-policy", "/jobposter/terms-of-service", "/jobposter/cookie-policy", "/jobposter/contact-support"]);
 
+function centralLoginUrl() {
+  const centralOrigin = process.env.NEXT_PUBLIC_CENTRAL_LOGIN_URL
+    || (process.env.VERCEL ? "https://bandhan-user.vercel.app" : "http://localhost:3000");
+  return new URL("/login", centralOrigin);
+}
+
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const normalized = pathname.replace(/\/$/, "") || "/";
 
   if (request.nextUrl.searchParams.has("_rsc")) return NextResponse.next();
+  if (normalized === "/Jobseeker/login" || normalized === "/jobposter/login") {
+    return NextResponse.redirect(centralLoginUrl());
+  }
   if (publicPaths.has(normalized)) return NextResponse.next();
 
   const isJobseekerRoute = normalized.startsWith("/Jobseeker/");

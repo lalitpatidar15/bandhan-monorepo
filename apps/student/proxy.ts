@@ -3,8 +3,17 @@ import { NextRequest, NextResponse } from "next/server";
 const studentPublicRoutes = new Set(["/student", "/student/auth", "/student/login", "/student/courses"]);
 const instructorPublicRoutes = new Set(["/instructor", "/instructor/login"]);
 
+function centralLoginUrl() {
+  const centralOrigin = process.env.NEXT_PUBLIC_CENTRAL_LOGIN_URL
+    || (process.env.VERCEL ? "https://bandhan-user.vercel.app" : "http://localhost:3000");
+  return new URL("/login", centralOrigin);
+}
+
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  if (["/student/auth", "/student/login", "/instructor/login"].includes(pathname)) {
+    return NextResponse.redirect(centralLoginUrl());
+  }
   let role: "student" | "instructor" | null = null;
 
   const publicCourseDetails = pathname.startsWith("/student/view_details/");
