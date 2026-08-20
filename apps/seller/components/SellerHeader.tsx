@@ -9,11 +9,20 @@ export default function SellerHeader() {
   const router = useRouter();
   const pathname = usePathname();
   const [userName, setUserName] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const name = localStorage.getItem('userName') || 'Seller';
-    setUserName(name);
-  }, []);
+    const token = localStorage.getItem('sellerToken') || localStorage.getItem('authToken') || localStorage.getItem('token');
+    try {
+      const payload = token ? JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/').padEnd(Math.ceil(token.split('.')[1].length / 4) * 4, '='))) : null;
+      const valid = Boolean(payload && payload.role === 'seller' && (!payload.exp || payload.exp * 1000 > Date.now()));
+      setIsAuthenticated(valid);
+      setUserName(valid ? (localStorage.getItem('userName') || 'Seller') : '');
+    } catch {
+      setIsAuthenticated(false);
+      setUserName('');
+    }
+  }, [pathname]);
 
   const navItems = [
     { label: 'Dashboard', href: '/sellerDashboard' },
@@ -25,12 +34,12 @@ export default function SellerHeader() {
     { label: 'Reviews', href: '/reviews' },
   ];
 
-  const actions = [
+  const actions = isAuthenticated ? [
     { icon: <Bell size={19} />, label: 'Notifications', href: '/chat' },
     { icon: <Settings size={19} />, label: 'Settings', href: '/settings' },
-  ];
+  ] : [];
 
-  const dropdownItems = [
+  const dropdownItems = isAuthenticated ? [
     { label: userName || 'Seller' },
     { divider: true },
     { label: 'My Account', href: '/settings' },
@@ -39,6 +48,9 @@ export default function SellerHeader() {
     { label: 'Earnings', href: '/earnings' },
     { divider: true },
     { label: 'Logout', onClick: () => { localStorage.removeItem('token'); router.replace('/login'); }, destructive: true },
+  ] : [
+    { label: 'Login', href: '/login' },
+    { label: 'Create account', href: '/signup' },
   ];
 
   return (
@@ -46,7 +58,7 @@ export default function SellerHeader() {
       portalName="Seller Portal"
       navItems={navItems}
       actions={actions}
-      userName={userName}
+      userName={isAuthenticated ? userName : undefined}
       dropdownItems={dropdownItems}
       onLogoClick={() => router.push('/sellerDashboard')}
       activeNav={pathname}

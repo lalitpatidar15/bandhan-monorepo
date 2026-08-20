@@ -4,7 +4,7 @@ import { PortalHeader } from '@bandhan/ui';
 import { useRouter, usePathname } from 'next/navigation';
 import { Bell } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { clearJobPortalSession } from '@/lib/session';
+import { clearJobPortalSession, readTokenRole } from '@/lib/session';
 
 interface CareersHeaderProps {
   variant?: 'jobs' | 'jobposter';
@@ -16,11 +16,15 @@ export function CareersHeader({ variant = 'jobs', activeTab }: CareersHeaderProp
   const router = useRouter();
   const pathname = usePathname();
   const [userName, setUserName] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const name = localStorage.getItem('userName') || localStorage.getItem('companyName') || '';
-    setUserName(name);
-  }, []);
+    const token = localStorage.getItem('token');
+    const role = token ? readTokenRole(token) : null;
+    const valid = Boolean(role && (variant === 'jobs' ? role === 'jobseeker' : role === 'recruiter'));
+    setIsAuthenticated(valid);
+    setUserName(valid ? (localStorage.getItem('userName') || localStorage.getItem('companyName') || '') : '');
+  }, [pathname, variant]);
 
   const isJobseeker = variant === 'jobs';
 
@@ -40,11 +44,11 @@ export function CareersHeader({ variant = 'jobs', activeTab }: CareersHeaderProp
         { label: 'Payments', href: '/jobposter/payments' },
       ];
 
-  const actions = [
+  const actions = isAuthenticated ? [
     { icon: <Bell size={19} />, label: 'Notifications', href: isJobseeker ? '/Jobseeker/notifications' : '/jobposter/notifications' },
-  ];
+  ] : [];
 
-  const dropdownItems = [
+  const dropdownItems = isAuthenticated ? [
     { label: userName || (isJobseeker ? 'Job Seeker' : 'Employer') },
     { divider: true },
     { label: 'Profile', href: isJobseeker ? '/Jobseeker/profile' : '/jobposter/profileview' },
@@ -52,6 +56,9 @@ export function CareersHeader({ variant = 'jobs', activeTab }: CareersHeaderProp
     { label: 'Messages', href: isJobseeker ? '/Jobseeker/messages' : '/jobposter/messages' },
     { divider: true },
     { label: 'Logout', onClick: () => { clearJobPortalSession(); router.replace('/login'); }, destructive: true },
+  ] : [
+    { label: 'Login', href: isJobseeker ? '/Jobseeker/login' : '/jobposter/login' },
+    { label: 'Create account', href: isJobseeker ? '/Jobseeker/signup' : '/jobposter/register' },
   ];
 
   const activeNav = activeTab || pathname;
@@ -61,7 +68,7 @@ export function CareersHeader({ variant = 'jobs', activeTab }: CareersHeaderProp
       portalName={isJobseeker ? 'Careers — Job Seeker' : 'Careers — Employer'}
       navItems={navItems}
       actions={actions}
-      userName={userName}
+      userName={isAuthenticated ? userName : undefined}
       dropdownItems={dropdownItems}
       onLogoClick={() => router.push(isJobseeker ? '/Jobseeker/dashboard' : '/jobposter/dashboard')}
       activeNav={activeNav}
