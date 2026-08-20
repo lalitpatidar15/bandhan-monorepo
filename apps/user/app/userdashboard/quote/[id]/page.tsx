@@ -1,0 +1,13 @@
+"use client";
+
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import DashboardLayout from "@/components/userDashboard/Dashboardlayout";
+import { useGetQuoteQuery } from "@/store/api/quoteApi";
+
+export default function QuoteDetailPage() {
+  const params = useParams<{ id: string }>();
+  const { data, isLoading, isError } = useGetQuoteQuery(params.id, { skip: !params.id });
+  const quote = data?.data;
+  return <DashboardLayout><div className="mx-auto max-w-3xl space-y-5"><Link href="/userdashboard/quote" className="text-sm font-semibold text-[#924C2B]">← Back to quotations</Link>{isLoading ? <div className="rounded-xl bg-white p-5">Loading quotation…</div> : null}{isError || !quote ? <div className="rounded-xl border border-red-200 bg-red-50 p-5 text-red-700">Quotation not found.</div> : <section className="rounded-xl border border-[#E7E1D8] bg-white p-6"><div className="flex items-start justify-between gap-3"><div><p className="text-sm text-[#6B625A]">Quote request</p><h1 className="mt-1 text-2xl font-bold">{quote.title || quote.serviceId?.title || quote.venueId?.name || quote.venueId?.title || quote.productId?.name || quote.productId?.title || "Custom event request"}</h1></div><span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold capitalize text-amber-800">{quote.status}</span></div><dl className="mt-6 grid gap-5 sm:grid-cols-2 text-sm"><div><dt className="text-[#6B625A]">Event</dt><dd className="mt-1 font-medium">{quote.eventType}</dd></div><div><dt className="text-[#6B625A]">Date</dt><dd className="mt-1 font-medium">{quote.eventDate}</dd></div><div><dt className="text-[#6B625A]">Location</dt><dd className="mt-1 font-medium">{quote.location}</dd></div><div><dt className="text-[#6B625A]">Guests</dt><dd className="mt-1 font-medium">{quote.guestRange}</dd></div><div><dt className="text-[#6B625A]">Budget</dt><dd className="mt-1 font-medium">₹{Number(quote.budget || 0).toLocaleString("en-IN")}</dd></div><div><dt className="text-[#6B625A]">Services</dt><dd className="mt-1 font-medium">{quote.services?.join(", ") || "—"}</dd></div></dl>{quote.note ? <div className="mt-6 border-t pt-5"><p className="text-sm text-[#6B625A]">Requirements</p><p className="mt-1 whitespace-pre-wrap">{quote.note}</p></div> : null}<div className="mt-6 border-t pt-5">{quote.conversationId ? <Link href={`/userdashboard/inbox?conversationId=${quote.conversationId}`} className="inline-flex rounded-lg bg-[#924C2B] px-4 py-2.5 text-sm font-semibold text-white">Open Inbox{quote.conversationSellerName ? ` · ${quote.conversationSellerName}` : ""}</Link> : <p className="text-sm text-[#6B625A]">Your provider will appear in Inbox when the request is assigned.</p>}</div></section>}</div></DashboardLayout>;
+}

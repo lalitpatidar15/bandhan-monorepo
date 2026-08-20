@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+:root {
+  --background: var(--bhn-bg);
+  --foreground: var(--bhn-text);
+  --surface: var(--bhn-surface);
+  --border: var(--bhn-border);
+  --muted: var(--bhn-text-muted);
+  --card-bg: var(--bhn-surface);
+  --input-bg: var(--bhn-surface);
+  --input-border: var(--bhn-border-strong);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--bhn-font-sans);
+  --font-display: var(--bhn-font-display);
+}
+
+html {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--bhn-font-sans);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+img, video, canvas {
+  max-width: 100%;
+}
+
+input, select, textarea, button {
+  min-width: 0;
+}

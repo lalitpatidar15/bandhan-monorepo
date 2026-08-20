@@ -1,0 +1,9 @@
+[33mcommit d3248247e859819aaaf273ca8541be782ce9f765[m
+Author: symetricsplustech <symetricsplustech@gmail.com>
+Date:   Sat Aug 1 18:23:27 2026 +0530
+
+    fix: align student wishlist API routes
+
+ controllers/Student/courseController.js | 27 [32m+++++++++++++++++++++++[m[31m----[m
+ routes/student/courseRoutes.js          | 15 [32m+++++++++[m[31m------[m
+ 2 files changed, 32 insertions(+), 10 deletions(-)

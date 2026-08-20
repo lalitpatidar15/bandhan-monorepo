@@ -1,0 +1,41 @@
+import type { Metadata } from "next";
+import { Space_Grotesk, Manrope } from "next/font/google";
+import "@bandhan/ui/styles.css";
+import "./globals.css";
+import { Providers } from "./providers";
+import { Toaster } from "react-hot-toast";
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--bhn-font-sans",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--bhn-font-display",
+});
+
+export const metadata: Metadata = {
+  title: "Bandhan Product Seller",
+  description: "Product seller portal for Bandhan marketplace",
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html
+      lang="en"
+      className={`${manrope.variable} ${spaceGrotesk.variable} h-full antialiased`}
+    >
+      <body className="min-h-screen bg-[var(--bhn-bg)] text-[var(--bhn-text)] font-[var(--bhn-font-sans)]" suppressHydrationWarning>
+        <Providers>
+          {children}
+        </Providers>
+        <Toaster position="top-right" />
+      </body>
+    </html>
+  );
+}

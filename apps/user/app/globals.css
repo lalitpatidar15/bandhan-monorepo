@@ -1,0 +1,206 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brand-50: var(--bhn-brand-50);
+  --brand-100: var(--bhn-brand-100);
+  --brand-200: var(--bhn-brand-200);
+  --brand-300: var(--bhn-brand-300);
+  --brand-400: var(--bhn-brand-400);
+  --brand-500: var(--bhn-brand-500);
+  --brand-600: var(--bhn-brand-600);
+  --brand-700: var(--bhn-brand-700);
+  --brand-800: var(--bhn-brand-800);
+  --brand-900: var(--bhn-brand-900);
+
+  --bg: var(--bhn-bg);
+  --bg-card: var(--bhn-surface);
+  --bg-subtle: var(--bhn-surface-2);
+  --border: var(--bhn-border);
+  --border-strong: var(--bhn-border-strong);
+
+  --text: var(--bhn-text);
+  --text-muted: var(--bhn-text-muted);
+  --text-soft: var(--bhn-text-soft);
+
+  --radius-sm: var(--bhn-radius-sm);
+  --radius: var(--bhn-radius);
+  --radius-lg: var(--bhn-radius-lg);
+  --radius-xl: var(--bhn-radius-xl);
+
+  --shadow-sm: var(--bhn-shadow-sm);
+  --shadow: var(--bhn-shadow);
+  --shadow-md: var(--bhn-shadow-md);
+}
+
+@layer components {
+  .surface {
+    @apply rounded-xl border bg-white border-[#ece4da] shadow-sm;
+  }
+  .btn-brand {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-white transition;
+    background: linear-gradient(180deg, var(--bhn-brand-500), var(--bhn-brand-600));
+  }
+  .btn-brand:hover {
+    background: linear-gradient(180deg, var(--bhn-brand-600), var(--bhn-brand-700));
+  }
+  .btn-brand-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm font-semibold transition;
+    border-color: var(--bhn-brand-600);
+    color: var(--bhn-brand-700);
+  }
+  .btn-brand-outline:hover {
+    background: var(--bhn-brand-50);
+  }
+  .chip {
+    @apply inline-flex items-center rounded-full px-3 py-1 text-xs;
+    background: var(--bhn-surface-3);
+    color: var(--bhn-text-muted);
+  }
+}
+
+html {
+  color-scheme: light;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--bhn-bg);
+  color: var(--bhn-text);
+  font-family: var(--bhn-font-sans);
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+.bhn-pageheader-title {
+  font-family: var(--bhn-font-display);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+img, video, canvas {
+  max-width: 100%;
+}
+
+input, select, textarea, button {
+  min-width: 0;
+  font-family: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.bhn-home-hero {
+  width: min(1280px, calc(100% - 32px));
+  margin-inline: auto;
+  padding: clamp(3.5rem, 7vw, 6.5rem) 0 clamp(2.5rem, 5vw, 4.5rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(420px, .95fr);
+  align-items: center;
+  gap: clamp(2.5rem, 6vw, 5.5rem);
+}
+.bhn-home-kicker {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  margin: 0;
+  padding: .45rem .75rem;
+  border: 1px solid var(--bhn-brand-200);
+  border-radius: var(--bhn-radius-full);
+  color: var(--bhn-brand-800);
+  background: rgba(255,255,255,.55);
+  font-size: .75rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.bhn-home-hero h1 {
+  max-width: 780px;
+  margin: 1.5rem 0 0;
+  color: var(--bhn-text);
+  font-size: clamp(3.15rem, 6vw, 5.4rem);
+  font-weight: 650;
+  letter-spacing: -.055em;
+  line-height: .98;
+}
+.bhn-home-hero h1 em { color: var(--bhn-brand-800); font-weight: 500; }
+.bhn-home-lead {
+  max-width: 650px;
+  margin: 1.75rem 0 0;
+  color: var(--bhn-text-muted);
+  font-size: clamp(1.05rem, 1.8vw, 1.2rem);
+  line-height: 1.7;
+}
+.bhn-home-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+.bhn-home-primary,
+.bhn-home-secondary {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .6rem;
+  padding: .75rem 1.15rem;
+  border-radius: var(--bhn-radius);
+  font-weight: 750;
+  transition: transform var(--bhn-transition), background var(--bhn-transition), box-shadow var(--bhn-transition);
+}
+.bhn-home-primary { color: #fff; background: var(--bhn-brand-700); box-shadow: var(--bhn-shadow); }
+.bhn-home-primary:hover { background: var(--bhn-brand-800); box-shadow: var(--bhn-shadow-md); transform: translateY(-1px); }
+.bhn-home-secondary { background: var(--bhn-surface); border: 1px solid var(--bhn-border-strong); }
+.bhn-home-secondary:hover { border-color: var(--bhn-brand-300); background: var(--bhn-brand-50); }
+.bhn-home-discovery { display: flex; flex-wrap: wrap; gap: .6rem 1rem; margin-top: 2rem; color: var(--bhn-text-muted); font-size: .875rem; }
+.bhn-home-discovery span { color: var(--bhn-text-soft); }
+.bhn-home-discovery a { font-weight: 700; text-decoration: underline; text-decoration-color: var(--bhn-brand-200); text-underline-offset: 4px; }
+.bhn-home-discovery a:hover { color: var(--bhn-brand-700); }
+.bhn-home-collage {
+  min-height: 510px;
+  display: grid;
+  grid-template-columns: .8fr 1.2fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 1rem;
+}
+.bhn-home-photo { position: relative; margin: 0; overflow: hidden; border-radius: var(--bhn-radius-xl); background: var(--bhn-surface-3); }
+.bhn-home-photo img { object-fit: cover; transition: transform 700ms cubic-bezier(.2,.7,.2,1); }
+.bhn-home-photo:hover img { transform: scale(1.025); }
+.bhn-home-photo-main { grid-row: 1 / 3; grid-column: 2; }
+.bhn-home-photo-main figcaption {
+  position: absolute;
+  inset: auto 1rem 1rem;
+  padding: .75rem .9rem;
+  border: 1px solid rgba(255,255,255,.35);
+  border-radius: var(--bhn-radius);
+  color: #fff;
+  background: rgba(25,15,10,.55);
+  backdrop-filter: blur(12px);
+  font-size: .8rem;
+  font-weight: 700;
+}
+.bhn-home-journey-wrap { padding-bottom: clamp(2.5rem, 5vw, 4.5rem); }
+@media (max-width: 900px) {
+  .bhn-home-hero { grid-template-columns: 1fr; }
+  .bhn-home-collage { min-height: 390px; }
+}
+@media (max-width: 560px) {
+  .bhn-home-hero { width: min(100% - 24px, 1280px); padding-top: 2.5rem; }
+  .bhn-home-hero h1 { font-size: clamp(2.75rem, 14vw, 4rem); }
+  .bhn-home-actions > a { width: 100%; }
+  .bhn-home-collage { min-height: 300px; gap: .65rem; }
+  .bhn-home-photo { border-radius: var(--bhn-radius-lg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bhn-home-photo img,
+  .bhn-home-primary,
+  .bhn-home-secondary { transition: none; }
+}

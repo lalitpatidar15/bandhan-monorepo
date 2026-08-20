@@ -1,0 +1,45 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --surface: #ffffff;
+  --border: #e5e7eb;
+  --muted: #6b7280;
+  --card-bg: #ffffff;
+  --input-bg: #ffffff;
+  --input-border: #d1d5db;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--bhn-font-sans);
+  --font-display: var(--bhn-font-display);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  color-scheme: light;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--bhn-font-sans);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+img, video, canvas {
+  max-width: 100%;
+}
+
+input, select, textarea, button {
+  min-width: 0;
+}
