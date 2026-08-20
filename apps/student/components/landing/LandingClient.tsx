@@ -120,7 +120,7 @@ export default function LandingClient() {
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <Image src="/Group1.png" alt="Bandhan Academy" width={433} height={96} className="h-8 w-auto brightness-0" />
+            <Image src="/Group1.png" alt="Bandhan Academy" width={433} height={96} className="h-8 w-auto rounded-md bg-[#2A1C16] px-2 py-1" />
           </Link>
           <nav className="hidden md:flex items-center gap-6">
             <Link href="/student/courses" className="text-sm text-gray-700 hover:text-[#924C2B] dark:hover:text-[#b86a3a] font-medium transition">Courses</Link>

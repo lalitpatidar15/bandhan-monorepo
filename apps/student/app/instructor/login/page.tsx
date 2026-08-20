@@ -102,7 +102,7 @@ function InstructorAuthContent() {
 
                     {/* LOGO */}
                     <div className="flex justify-center mb-6">
-                        <Image src="/Group1.png" alt="Bandhan Instructor Gateway" width={433} height={96} className="h-10 w-auto brightness-0" priority />
+                        <Image src="/Group1.png" alt="Bandhan Instructor Gateway" width={433} height={96} className="h-10 w-auto rounded-lg bg-[#2A1C16] px-3 py-1.5" priority />
                     </div>
 
                     <div className="bhn-card bhn-card-pad-lg">

@@ -48,7 +48,7 @@ export default function SiteHeader() {
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-3 py-2 sm:px-4">
         {/* Logo */}
         <Link href="/" aria-label="Bandhan home" className="shrink-0">
-          <Image src="/Group1.png" alt="Bandhan Events Hub" width={433} height={96} className="h-7 w-auto brightness-0" />
+          <Image src="/Group1.png" alt="Bandhan Events Hub" width={433} height={96} className="h-7 w-auto rounded-md bg-[#2A1C16] px-2 py-1" />
         </Link>
 
         {/* Center: Search */}

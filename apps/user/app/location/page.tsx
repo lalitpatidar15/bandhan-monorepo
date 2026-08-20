@@ -102,7 +102,7 @@ export default function LocationPage() {
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#FAF5EE] to-[#F1E6DA] px-4">
       <div className="w-full max-w-md rounded-2xl border border-[#E7E1D8] bg-white p-6 shadow-sm">
         <div className="mb-5 flex flex-col items-center text-center">
-          <Image src="/Group1.png" alt="Bandhan Events Hub" width={433} height={96} className="h-12 w-auto brightness-0" priority />
+          <Image src="/Group1.png" alt="Bandhan Events Hub" width={433} height={96} className="h-12 w-auto rounded-lg bg-[#2A1C16] px-3 py-1.5" priority />
           <h1 className="mt-3 text-xl font-bold text-[#1C1A16]">Select your location</h1>
           <p className="mt-1 text-sm text-gray-500">
             We&apos;ll show products, services and venues near you.

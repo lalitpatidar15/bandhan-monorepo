@@ -275,7 +275,7 @@ export function Header({
 }
 
 function CareersLogo() {
-  return <Image src="/Group1.png" alt="Bandhan Careers" width={433} height={96} className="h-8 w-auto brightness-0" priority />;
+  return <Image src="/Group1.png" alt="Bandhan Careers" width={433} height={96} className="h-8 w-auto rounded-md bg-[#2A1C16] px-2 py-1" priority />;
 }
 
 function UserMenu({ variant }: { variant: "jobs" | "jobposter" | "default" }) {

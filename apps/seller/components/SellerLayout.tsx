@@ -22,7 +22,7 @@ export default function SellerLayout({ children }: { children: ReactNode }) {
       <header className="border-b border-[var(--bhn-border)] bg-[var(--bhn-surface-2)]">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <Link href="/sellerDashboard" className="shrink-0" aria-label="Bandhan Seller home">
-            <Image src="/Group1.png" alt="Bandhan Seller" width={433} height={96} className="h-8 w-auto brightness-0" priority />
+            <Image src="/Group1.png" alt="Bandhan Seller" width={433} height={96} className="h-8 w-auto rounded-md bg-[#2A1C16] px-2 py-1" priority />
           </Link>
           <div className="flex items-center gap-1 text-sm text-[var(--bhn-text-muted)] sm:gap-2">
             <Link href="/chat" aria-label="Seller messages" className="relative rounded-full p-2 transition hover:bg-[var(--bhn-brand-50)] hover:text-[var(--bhn-brand-700)]">

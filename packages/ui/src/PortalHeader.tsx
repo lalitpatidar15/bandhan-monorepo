@@ -108,7 +108,7 @@ export function PortalHeader({
           onClick={onLogoClick}
           className="flex items-center gap-2.5 shrink-0"
         >
-          <img src="/Group1.png" alt="Bandhan Events Hub" className="h-9 w-auto brightness-0" />
+          <img src="/Group1.png" alt="Bandhan Events Hub" className="h-9 w-auto rounded-lg bg-[#2A1C16] px-2 py-1" />
           {portalName && (
             <span className="hidden border-l border-[var(--bhn-border)] pl-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--bhn-text-muted)] sm:inline">
               {portalName}

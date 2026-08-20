@@ -799,7 +799,7 @@ export default function SignupForm({
           alt="Bandhan Events Hub"
           width={433}
           height={96}
-          className="mx-auto mb-4 h-14 w-60 object-contain brightness-0"
+          className="mx-auto mb-4 h-14 w-60 rounded-lg bg-[#2A1C16] object-contain px-3 py-1.5"
         />
       </div>
 

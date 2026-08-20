@@ -11,7 +11,7 @@ export default function AcademyLogo({
       alt="Bandhan Academy"
       width={433}
       height={96}
-      className={`${className} brightness-0`}
+      className={`${className} rounded-md bg-[#2A1C16] px-2 py-1`}
     />
   );
 }
