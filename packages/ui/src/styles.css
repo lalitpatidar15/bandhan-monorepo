@@ -190,6 +190,47 @@
   background: var(--bhn-brand-100);
 }
 
+/* Secure SSO handoff */
+.bhn-sso-screen {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  min-height: 100dvh;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 1.5rem;
+  background: radial-gradient(circle at 50% 0%, var(--bhn-brand-50), var(--bhn-bg) 58%);
+}
+.bhn-sso-orb { position: absolute; z-index: -1; width: 26rem; aspect-ratio: 1; border-radius: 999px; filter: blur(4px); opacity: .52; animation: bhn-sso-float 8s ease-in-out infinite; }
+.bhn-sso-orb-one { top: -13rem; right: -7rem; background: var(--bhn-brand-200); }
+.bhn-sso-orb-two { bottom: -15rem; left: -9rem; background: var(--bhn-brand-100); animation-delay: -3s; }
+.bhn-sso-card { width: min(100%, 28rem); padding: 2.75rem 2.25rem 2.25rem; border: 1px solid color-mix(in srgb, var(--bhn-border) 80%, white); border-radius: 1.5rem; text-align: center; background: color-mix(in srgb, var(--bhn-surface) 91%, transparent); box-shadow: 0 24px 64px rgba(54, 35, 22, .15), inset 0 1px rgba(255,255,255,.8); backdrop-filter: blur(18px); animation: bhn-sso-enter .55s cubic-bezier(.2,.8,.2,1) both; }
+.bhn-sso-mark { position: relative; display: grid; width: 5.5rem; height: 5.5rem; margin: 0 auto; place-items: center; }
+.bhn-sso-shield { z-index: 1; display: grid; width: 3.6rem; height: 3.6rem; place-items: center; border-radius: 1.2rem; color: var(--bhn-text-on-brand); background: linear-gradient(145deg, var(--bhn-brand-500), var(--bhn-brand-700)); box-shadow: 0 10px 22px color-mix(in srgb, var(--bhn-brand-700) 32%, transparent); animation: bhn-sso-pulse 2.2s ease-in-out infinite; }
+.bhn-sso-ring { position: absolute; inset: .25rem; border: 1px solid var(--bhn-brand-300); border-radius: 50%; animation: bhn-sso-spin 6s linear infinite; }
+.bhn-sso-ring::after { position: absolute; top: -.25rem; left: 50%; width: .5rem; height: .5rem; border-radius: 50%; background: var(--bhn-brand-500); content: ""; }
+.bhn-sso-ring-two { inset: .65rem; border-style: dashed; opacity: .7; animation-direction: reverse; animation-duration: 8s; }
+.bhn-sso-steps { display: flex; align-items: center; justify-content: center; gap: .42rem; margin-top: 1.75rem; }
+.bhn-sso-steps span { display: grid; width: 1.2rem; height: 1.2rem; place-items: center; border: 1px solid var(--bhn-brand-300); border-radius: 50%; color: var(--bhn-brand-700); background: var(--bhn-brand-50); }
+.bhn-sso-steps i { width: 2.25rem; height: 1px; background: var(--bhn-brand-200); }
+.bhn-sso-steps .bhn-sso-step-active { border-color: var(--bhn-brand-600); background: var(--bhn-brand-600); box-shadow: 0 0 0 4px color-mix(in srgb, var(--bhn-brand-200) 55%, transparent); animation: bhn-sso-step 1.4s ease-in-out infinite; }
+.bhn-sso-card h1 { margin: 1.2rem 0 0; color: var(--bhn-text); font-family: var(--bhn-font-display); font-size: 1.45rem; line-height: 1.2; }
+.bhn-sso-card p { margin: .7rem auto 0; max-width: 22rem; color: var(--bhn-text-muted); font-size: .92rem; line-height: 1.6; }
+.bhn-sso-progress { height: .32rem; margin-top: 1.75rem; overflow: hidden; border-radius: 999px; background: var(--bhn-surface-3); }
+.bhn-sso-progress span { display: block; width: 42%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--bhn-brand-400), var(--bhn-brand-700), var(--bhn-brand-400)); animation: bhn-sso-progress 1.55s ease-in-out infinite; }
+.bhn-sso-dots { display: flex; justify-content: center; gap: .35rem; margin-top: 1rem; }
+.bhn-sso-dots i { width: .35rem; height: .35rem; border-radius: 50%; background: var(--bhn-brand-500); animation: bhn-sso-dot .9s ease-in-out infinite; }
+.bhn-sso-dots i:nth-child(2) { animation-delay: .12s; }.bhn-sso-dots i:nth-child(3) { animation-delay: .24s; }
+@keyframes bhn-sso-enter { from { opacity: 0; transform: translateY(14px) scale(.98); } to { opacity: 1; transform: none; } }
+@keyframes bhn-sso-float { 50% { transform: translate3d(1.5rem, 1rem, 0) scale(1.06); } }
+@keyframes bhn-sso-spin { to { transform: rotate(360deg); } }
+@keyframes bhn-sso-pulse { 50% { transform: translateY(-2px) scale(1.03); } }
+@keyframes bhn-sso-step { 50% { transform: scale(1.16); } }
+@keyframes bhn-sso-progress { 0% { transform: translateX(-120%); } 100% { transform: translateX(330%); } }
+@keyframes bhn-sso-dot { 50% { transform: translateY(-4px); opacity: .55; } }
+@media (prefers-reduced-motion: reduce) { .bhn-sso-orb, .bhn-sso-card, .bhn-sso-shield, .bhn-sso-ring, .bhn-sso-steps .bhn-sso-step-active, .bhn-sso-progress span, .bhn-sso-dots i { animation: none; } }
+
 .bhn-badge {
   display: inline-flex;
   align-items: center;
