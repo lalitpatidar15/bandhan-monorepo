@@ -1462,9 +1462,6 @@ exports.getCheckout = async (req, res) => {
     });
 
   } catch (error) {
-    // console.error("Error in controllers/Student/courseController.js:", error);
-
-
     res.status(500).json({
 
       success: false,
@@ -1611,14 +1608,13 @@ exports.createOrder = async (req, res) => {
     });
 
   } catch (error) {
-    // console.error("Error in controllers/Student/courseController.js:", error);
-
+    console.error("Course Razorpay order creation failed:", error?.error?.description || error?.message || error);
 
     res.status(500).json({
 
       success: false,
 
-      message: "Server error"
+      message: "Unable to create the Razorpay order. Please try again shortly."
 
     });
 
