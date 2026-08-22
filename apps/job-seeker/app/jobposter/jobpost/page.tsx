@@ -50,9 +50,9 @@ function CreateJobPageContent() {
   const [publishJob] = usePublishJobMutation();
   const isAnySaving = isSaving || isSavingDraft;
   const jobIdFromUrl = searchParams?.get("jobId") ?? null;
-  const jobCategories = catalogOptions?.data?.jobCategories || [];
-  const jobTypes = catalogOptions?.data?.jobTypes || [];
-  const experienceLevels = catalogOptions?.data?.experienceLevels || [];
+  const jobCategories = catalogOptions?.data?.jobCategories || ["Software Development", "Design & Creative", "Marketing", "Sales", "Finance", "Human Resources", "Customer Support", "Education", "Healthcare", "Engineering", "Other"];
+  const jobTypes = catalogOptions?.data?.jobTypes || ["Full-time", "Part-time", "Contract", "Internship", "Freelance"];
+  const experienceLevels = catalogOptions?.data?.experienceLevels || ["Junior", "Mid-Level", "Senior", "Lead/Executive"];
 
   useEffect(() => {
     if (jobIdFromUrl) {
@@ -157,6 +157,14 @@ function CreateJobPageContent() {
   };
 
   const saveAndContinue = async () => {
+    if (!job.title.trim() || !job.category || !job.type || !job.level) {
+      const message = "Enter a job title and select the job category, job type, and experience level.";
+      setStatusType("error");
+      setStatusMessage(message);
+      alert(message);
+      return false;
+    }
+
     try {
       const payload = buildPayload();
       if (jobId) {
@@ -585,6 +593,7 @@ function Input({ className = "", ...props }: any) {
 function Select({ options, ...props }: any) {
   return (
     <select {...props} className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:border-[#6B3E2E] dark:focus:border-[#c9a882] outline-none bg-white dark:bg-[#171717]">
+      <option value="">Select an option</option>
       {(options || []).map((option: string) => (
         <option key={option} value={option}>
           {option}

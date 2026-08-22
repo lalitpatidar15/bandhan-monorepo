@@ -1400,7 +1400,7 @@ exports.getCheckout = async (req, res) => {
     const subtotal =
       course.pricing?.finalPrice || course.price || 0;
 
-    const platformFee = await getSetting("platformFee");
+    const platformFee = subtotal > 0 ? await getSetting("platformFee") : 0;
 
     const gst = Math.round(subtotal * await getSetting("gstRate"));
 
@@ -1502,7 +1502,7 @@ exports.createOrder = async (req, res) => {
     const subtotal =
       course.pricing?.finalPrice || course.price || 0;
 
-    const platformFee = await getSetting("platformFee");
+    const platformFee = subtotal > 0 ? await getSetting("platformFee") : 0;
 
     const gst = Math.round(subtotal * await getSetting("gstRate"));
 
@@ -1519,6 +1519,13 @@ exports.createOrder = async (req, res) => {
     };
 
     if (paymentMethod === "emi") {
+
+      if (!course.emi?.enabled || !Array.isArray(course.emi.plans) || course.emi.plans.length === 0) {
+        return res.status(400).json({
+          success: false,
+          message: "EMI is not available for this course. Please choose card or UPI."
+        });
+      }
 
       const selectedPlan = course.emi.plans.find(
         (item) => item.months == emiMonths
@@ -1749,7 +1756,8 @@ exports.verifyPayment = async (req, res) => {
       courseId: payment.courseId
     });
 
-    if (!enrollment) {
+    const createdEnrollment = !enrollment;
+    if (createdEnrollment) {
 
       // First Module
       const firstModule =
@@ -1797,26 +1805,17 @@ exports.verifyPayment = async (req, res) => {
 
     }
 
-    // Student
-    await Student.findByIdAndUpdate(
-      payment.studentId,
-      {
-        $addToSet: {
-          enrolledCourses:
-            payment.courseId
-        }
-      }
-    );
+    if (createdEnrollment) {
+      await Student.findByIdAndUpdate(
+        payment.studentId,
+        { $addToSet: { enrolledCourses: payment.courseId } }
+      );
 
-    // Course Student Count
-    await Course.findByIdAndUpdate(
-      payment.courseId,
-      {
-        $inc: {
-          totalStudents: 1
-        }
-      }
-    );
+      await Course.findByIdAndUpdate(
+        payment.courseId,
+        { $inc: { totalStudents: 1 } }
+      );
+    }
 
     res.status(200).json({
 
@@ -2237,6 +2236,14 @@ exports.enrollCourse = async (req, res) => {
       });
     }
 
+    const coursePrice = Number(course.pricing?.finalPrice ?? course.price ?? 0);
+    if (coursePrice > 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Complete payment before enrolling in this paid course."
+      });
+    }
+
     const existing =
       await Enrollment.findOne({
         studentId: req.user.id,
@@ -2256,6 +2263,11 @@ exports.enrollCourse = async (req, res) => {
         courseId: req.params.courseId,
         unlockedModules: [course.modules?.[0]?._id].filter(Boolean)
       });
+
+    await Promise.all([
+      Student.findByIdAndUpdate(req.user.id, { $addToSet: { enrolledCourses: course._id } }),
+      Course.findByIdAndUpdate(course._id, { $inc: { totalStudents: 1 } })
+    ]);
 
     const data =
       await Enrollment.findById(

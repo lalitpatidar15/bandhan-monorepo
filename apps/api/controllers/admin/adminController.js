@@ -425,6 +425,8 @@ exports.createProduct = async (req, res) => {
 
     const product = await Product.create({
       sellerId,
+      sellerEmail: seller.email,
+      sellerName: seller.fullName || seller.email,
       title,
       name: String(req.body.name || title),
       category,
@@ -433,6 +435,10 @@ exports.createProduct = async (req, res) => {
       price,
       stock: Number(req.body.stock || 0),
       status: normalizedStatus,
+      // Items created by an administrator are already moderated and should be
+      // visible in both Admin and the public catalogue immediately.
+      isApproved: normalizedStatus === "active",
+      isPublished: normalizedStatus === "active",
       stockStatus: req.body.stockStatus || "in_stock",
       productType: normalizeAvailability(req.body.productType || req.body.type),
       priceUnit: req.body.priceUnit || "fixed",

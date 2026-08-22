@@ -18,42 +18,16 @@ const jobSchema = new mongoose.Schema({
 
     jobCategory:{
         type:String,
-        enum:[
-            "Software Development",
-            "Design & Creative",
-            "Marketing",
-            "Sales",
-            "Finance",
-            "Human Resources",
-            "Customer Support",
-            "Education",
-            "Healthcare",
-            "Engineering",
-            "Other"
-        ],
         default:"Other"
     },
 
     jobType:{
         type:String,
-        enum:[
-            "Full-time",
-            "Part-time",
-            "Contract",
-            "Internship",
-            "Freelance"
-        ],
         default:"Full-time"
     },
 
     experienceLevel:{
         type:String,
-        enum:[
-            "Junior",
-            "Mid-Level",
-            "Senior",
-            "Lead/Executive"
-        ],
         default:"Junior"
     },
 

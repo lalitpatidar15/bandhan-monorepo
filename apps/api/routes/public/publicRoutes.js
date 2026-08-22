@@ -13,6 +13,7 @@ const newsletterLimiter = rateLimit({
 
 router.get("/jobs", publicController.getPublicJobs);
 router.get("/landing-catalog", publicController.getLandingCatalogue);
+router.get("/catalog-options", publicController.getCatalogOptions);
 router.get("/marketplace-search", publicController.searchMarketplace);
 router.post("/newsletter", express.json({ limit: "10kb" }), newsletterLimiter, publicController.subscribeNewsletter);
 router.get("/catalog/:type/:id", publicController.getPublicCatalogueDetail);

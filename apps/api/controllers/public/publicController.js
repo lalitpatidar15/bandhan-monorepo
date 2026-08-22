@@ -4,8 +4,32 @@ const Product = require("../../models/shared/Product.js");
 const Service = require("../../models/shared/Service.js");
 const Venue = require("../../models/shared/Venue.js");
 const NewsletterSubscriber = require("../../models/shared/NewsletterSubscriber.js");
+const AdminSetting = require("../../models/admin/AdminSetting.js");
 
 const catalogueTypes = new Set(["jobs", "courses", "products", "services", "venues"]);
+
+const DEFAULT_CATALOG_OPTIONS = {
+  jobIndustries: [],
+  companySizes: [],
+  jobCategories: ["Software Development", "Design & Creative", "Marketing", "Sales", "Finance", "Human Resources", "Customer Support", "Education", "Healthcare", "Engineering", "Other"],
+  jobTypes: ["Full-time", "Part-time", "Contract", "Internship", "Freelance"],
+  experienceLevels: ["Junior", "Mid-Level", "Senior", "Lead/Executive"],
+};
+
+exports.getCatalogOptions = async (_req, res) => {
+  try {
+    const settings = await AdminSetting.findOne({ key: "platform" }).lean();
+    const configured = settings?.catalogFilters || {};
+    const data = Object.fromEntries(Object.entries(DEFAULT_CATALOG_OPTIONS).map(([key, fallback]) => [
+      key,
+      Array.isArray(configured[key]) && configured[key].length ? configured[key] : fallback,
+    ]));
+    return res.json({ success: true, data });
+  } catch (error) {
+    console.error("getCatalogOptions error:", error);
+    return res.status(500).json({ success: false, message: "Unable to load catalogue options." });
+  }
+};
 
 const imageFrom = (...values) => values.flat().find((value) => typeof value === "string" && value.trim()) || "";
 

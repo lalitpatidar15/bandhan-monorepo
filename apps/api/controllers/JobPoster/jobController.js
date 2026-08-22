@@ -534,10 +534,17 @@ exports.createJob = async (req, res) => {
 
         } = req.body;
 
-        if (!jobTitle) {
+        if (!jobTitle?.trim()) {
             return res.status(400).json({
                 success: false,
                 message: "Job title is required"
+            });
+        }
+
+        if (!jobCategory?.trim() || !jobType?.trim() || !experienceLevel?.trim()) {
+            return res.status(400).json({
+                success: false,
+                message: "Select a job category, job type, and experience level before continuing."
             });
         }
 
@@ -570,13 +577,13 @@ exports.createJob = async (req, res) => {
 
         }
 
-        job.jobTitle = jobTitle;
+        job.jobTitle = jobTitle.trim();
 
-        job.jobCategory = jobCategory;
+        job.jobCategory = jobCategory.trim();
 
-        job.jobType = jobType;
+        job.jobType = jobType.trim();
 
-        job.experienceLevel = experienceLevel;
+        job.experienceLevel = experienceLevel.trim();
 
         job.salaryMin = salaryMin;
 

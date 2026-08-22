@@ -10,7 +10,7 @@ import {
     Landmark,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useGetEnrollCourseDetailsQuery, useVerifyPaymentMutation, useCreateOrderMutation } from "@/app/redux/services/courseApi";
+import { useGetEnrollCourseDetailsQuery, useVerifyPaymentMutation, useCreateOrderMutation, useEnrollFreeCourseMutation } from "@/app/redux/services/courseApi";
 
 export default function CheckoutPage() {
 
@@ -18,6 +18,7 @@ export default function CheckoutPage() {
     const params = useParams();
     const [verifyPayment, { isLoading: isVerifying }] = useVerifyPaymentMutation();
     const [createOrder, { isLoading: isCreating }] = useCreateOrderMutation();
+    const [enrollFreeCourse] = useEnrollFreeCourseMutation();
     const [cardTypes, setCardTypes] = useState<Array<{ label: string; value: string }>>([]);
     const [upiApps, setUpiApps] = useState<string[]>([]);
 
@@ -53,7 +54,7 @@ export default function CheckoutPage() {
         plans: [],
     };
 
-    const [method, setMethod] = useState<string>("emi");
+    const [method, setMethod] = useState<string>("card");
     const [emi, setEmi] = useState("3");
     const [isProcessing, setIsProcessing] = useState(false);
     const [cardName, setCardName] = useState("");
@@ -91,20 +92,15 @@ export default function CheckoutPage() {
     const courseImage = course.thumbnail || course.image || "/course.png";
     const instructorName = instructor.fullName || "Instructor";
 
-    const emiPlans: EmiPlan[] = Array.isArray(emiInfo.plans) && emiInfo.plans.length > 0
+    const emiEnabled = emiInfo.enabled === true && Array.isArray(emiInfo.plans) && emiInfo.plans.length > 0;
+    const emiPlans: EmiPlan[] = emiEnabled
         ? emiInfo.plans.map((plan: { months?: number | string; monthlyAmount?: number | string }) => ({
             month: String(plan.months || ""),
             price: typeof plan.monthlyAmount === "number"
                 ? plan.monthlyAmount
                 : Number(String(plan.monthlyAmount || 0).replace(/[^0-9]/g, "")),
         }))
-        : [
-            { month: "3", price: Math.round(total / 3) },
-            { month: "6", price: Math.round(total / 6) },
-            { month: "12", price: Math.round(total / 12) },
-        ];
-
-    const selectedEmiPlan: EmiPlan = emiPlans.find((item: EmiPlan) => item.month === emi) || emiPlans[0];
+        : [];
 
     return (
 
@@ -638,7 +634,7 @@ export default function CheckoutPage() {
                             )}
 
                             {/* EMI */}
-                            <div
+                            {emiEnabled && <div
                                 onClick={() =>
                                     setMethod("emi")
                                 }
@@ -806,7 +802,7 @@ export default function CheckoutPage() {
 
                                 </div>
 
-                            </div>
+                            </div>}
 
                             {/* BUTTON */}
                             <button
@@ -816,8 +812,19 @@ export default function CheckoutPage() {
                                         return;
                                     }
 
+                                    if (!method) {
+                                        alert("Select a payment method to continue.");
+                                        return;
+                                    }
+
                                     setIsProcessing(true);
                                     try {
+                                        if (total === 0) {
+                                            await enrollFreeCourse(id).unwrap();
+                                            router.push("/student");
+                                            return;
+                                        }
+
                                         const createRes = await createOrder({
                                             courseId: id,
                                             paymentMethod: method,
@@ -879,14 +886,17 @@ export default function CheckoutPage() {
                                         };
 
                                         const rzp = new (window as any).Razorpay(options);
-                                        rzp.on("payment.failed", function () {
-                                            alert("Payment failed. Please try again.");
+                                        rzp.on("payment.failed", function (response: { error?: { description?: string } }) {
+                                            alert(response?.error?.description || "Payment was declined by the payment provider. Please use another method or try again.");
                                             setIsProcessing(false);
                                         });
                                         rzp.open();
                                     } catch (err) {
                                         console.error("Payment failed", err);
-                                        alert("Payment failed. Please try again.");
+                                        const message = (err as { data?: { message?: string }; message?: string })?.data?.message
+                                            || (err as { message?: string })?.message
+                                            || "We could not start your payment. Please try again.";
+                                        alert(message);
                                         setIsProcessing(false);
                                     }
                                 }}
@@ -908,7 +918,7 @@ export default function CheckoutPage() {
                                     disabled:cursor-not-allowed
                                 "
                             >
-                                {isProcessing ? "Processing..." : `Confirm & Pay ₹${total}`}
+                                {isProcessing ? "Processing..." : total === 0 ? "Enroll for free" : `Confirm & Pay ₹${total}`}
                             </button>
 
                             {/* FOOTER */}
