@@ -422,6 +422,9 @@ exports.createProduct = async (req, res) => {
     }
 
     const normalizedStatus = req.body.status === "inactive" ? "draft" : (req.body.status || "active");
+    const isActive = normalizedStatus === "active";
+    const isApproved = isActive && req.body.isApproved !== false;
+    const isPublished = isApproved && req.body.isPublished !== false;
 
     const product = await Product.create({
       sellerId,
@@ -437,8 +440,9 @@ exports.createProduct = async (req, res) => {
       status: normalizedStatus,
       // Items created by an administrator are already moderated and should be
       // visible in both Admin and the public catalogue immediately.
-      isApproved: normalizedStatus === "active",
-      isPublished: normalizedStatus === "active",
+      isApproved,
+      isPublished,
+      publishedAt: isPublished ? new Date() : null,
       stockStatus: req.body.stockStatus || "in_stock",
       productType: normalizeAvailability(req.body.productType || req.body.type),
       priceUnit: req.body.priceUnit || "fixed",
@@ -463,14 +467,25 @@ exports.updateProduct = async (req, res) => {
       updates.status = "draft";
     }
 
-    // Admin saves are moderation decisions. Keep the public-catalogue flags in
-    // sync with the active/draft choice so an active item does not remain
-    // invisible after it has been created or edited in the Admin portal.
+    // Draft products cannot be approved or published. Active products keep any
+    // explicit moderation choices sent by the Admin UI.
     if (updates.status !== undefined) {
       const isActive = updates.status === "active";
-      updates.isApproved = isActive;
-      updates.isPublished = isActive;
-      updates.publishedAt = isActive ? new Date() : null;
+      if (!isActive) {
+        updates.isApproved = false;
+        updates.isPublished = false;
+        updates.publishedAt = null;
+      } else {
+        if (updates.isApproved === undefined) updates.isApproved = true;
+        if (updates.isPublished === undefined) updates.isPublished = true;
+      }
+    }
+
+    if (updates.isApproved === false) {
+      updates.isPublished = false;
+    }
+    if (updates.isPublished !== undefined) {
+      updates.publishedAt = updates.isPublished ? new Date() : null;
     }
 
     if (updates.productType !== undefined || updates.type !== undefined) {

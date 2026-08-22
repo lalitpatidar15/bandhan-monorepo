@@ -1,247 +1,58 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { Plus, Edit, Trash2, Search, Star } from 'lucide-react';
-import { useCreateProductMutation, useDeleteProductMutation, useGetProductsQuery, useGetUsersQuery, useUpdateProductMutation, useGetCategoriesQuery } from '@/lib/adminApi';
+import { CheckCircle2, Edit3, Eye, EyeOff, PackageCheck, Plus, Search, ShieldCheck, Trash2, X } from 'lucide-react';
+import { useCreateProductMutation, useDeleteProductMutation, useGetCategoriesQuery, useGetProductsQuery, useGetUsersQuery, useUpdateProductMutation } from '@/lib/adminApi';
 
 type Product = import('@/lib/adminApi').AdminProduct;
+
+const blankForm = (vendorId = '') => ({ title: '', category: '', price: '', vendorId, status: 'active' as Product['status'], isApproved: true, isPublished: true, description: '', shippingRequired: false, freeShipping: false, shippingCost: '', shippingWeight: '', length: '', width: '', height: '', images: '' });
 
 export default function Products() {
   const [searchTerm, setSearchTerm] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [editingProductId, setEditingProductId] = useState<string | null>(null);
-  const [form, setForm] = useState({
-    title: '',
-    category: '',
-    price: '',
-    vendorId: '',
-    status: 'active' as Product['status'],
-    description: '',
-    shippingRequired: true,
-    freeShipping: false,
-    shippingCost: '',
-    shippingWeight: '',
-    length: '',
-    width: '',
-    height: '',
-    images: '',
-  });
-
+  const [form, setForm] = useState(blankForm());
   const { data: products = [] } = useGetProductsQuery({ limit: 100 });
   const { data: users = [] } = useGetUsersQuery();
   const { data: categories = [] } = useGetCategoriesQuery();
   const [createProduct, { isLoading: isCreating }] = useCreateProductMutation();
   const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
   const [deleteProduct] = useDeleteProductMutation();
-
   const vendors = useMemo(() => users.map((user) => ({ id: user.id, name: user.name, email: user.email })), [users]);
-
-  const filteredProducts = products.filter((p) =>
-    p.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const resetForm = () => {
-    setForm({ title: '', category: '', price: '', vendorId: vendors[0]?.id || '', status: 'active', description: '', shippingRequired: true, freeShipping: false, shippingCost: '', shippingWeight: '', length: '', width: '', height: '', images: '' });
-    setEditingProductId(null);
-    setShowForm(false);
-  };
-
+  const filteredProducts = products.filter((product) => product.title.toLowerCase().includes(searchTerm.toLowerCase()));
+  const saving = isCreating || isUpdating;
+  const closeForm = () => { setForm(blankForm(vendors[0]?.id || '')); setEditingProductId(null); setShowForm(false); };
+  const openNew = () => { setForm(blankForm(vendors[0]?.id || '')); setEditingProductId(null); setShowForm(true); };
+  const setModeration = (next: Partial<Pick<typeof form, 'isApproved' | 'isPublished' | 'status'>>) => setForm((current) => {
+    const updated = { ...current, ...next };
+    if (updated.status === 'inactive') { updated.isApproved = false; updated.isPublished = false; }
+    if (updated.isPublished) updated.isApproved = true;
+    if (!updated.isApproved) updated.isPublished = false;
+    return updated;
+  });
   const handleEdit = (product: Product) => {
-    setForm({
-      title: product.title,
-      category: product.category,
-      price: String(product.price),
-      vendorId: product.vendorId || vendors[0]?.id || '',
-      status: product.status,
-      description: '',
-      shippingRequired: product.shippingRequired,
-      freeShipping: product.freeShipping,
-      shippingCost: String(product.shippingCost || ''),
-      shippingWeight: String(product.shippingWeight || ''),
-      length: String(product.dimensions?.length || ''),
-      width: String(product.dimensions?.width || ''),
-      height: String(product.dimensions?.height || ''),
-      images: Array.isArray((product as any).images) ? (product as any).images.join(', ') : '',
-    });
-    setEditingProductId(product.id);
-    setShowForm(true);
+    setForm({ title: product.title, category: product.category, price: String(product.price), vendorId: product.vendorId || vendors[0]?.id || '', status: product.status, isApproved: product.isApproved, isPublished: product.isPublished, description: product.description || '', shippingRequired: product.shippingRequired, freeShipping: product.freeShipping, shippingCost: String(product.shippingCost || ''), shippingWeight: String(product.shippingWeight || ''), length: String(product.dimensions?.length || ''), width: String(product.dimensions?.width || ''), height: String(product.dimensions?.height || ''), images: product.images?.join(', ') || '' });
+    setEditingProductId(product.id); setShowForm(true);
   };
-
   const handleSubmit = async () => {
-    if (!form.title.trim() || !form.category.trim() || !form.price || !form.vendorId) {
-      alert('Title, category, price, and vendor are required.');
-      return;
-    }
+    if (!form.title.trim() || !form.category.trim() || !form.price || !form.vendorId) { alert('Title, category, price, and vendor are required.'); return; }
     const images = form.images.split(',').map((image) => image.trim()).filter(Boolean);
-    if (images.length < 4) { alert('At least four image URLs are required.'); return; }
-    if (form.shippingRequired && (!form.shippingWeight || !form.length || !form.width || !form.height)) {
-      alert('Enter shipping weight and all package dimensions.');
-      return;
-    }
-    const shipping = {
-      shippingRequired: form.shippingRequired,
-      freeShipping: form.freeShipping,
-      shippingCost: form.freeShipping ? 0 : Number(form.shippingCost || 0),
-      shippingWeight: form.shippingRequired ? Number(form.shippingWeight) : undefined,
-      dimensions: form.shippingRequired ? { length: Number(form.length), width: Number(form.width), height: Number(form.height) } : undefined,
-    };
-    try {
-      const isEditing = Boolean(editingProductId);
-      if (editingProductId) {
-        await updateProduct({
-          id: editingProductId,
-          title: form.title.trim(),
-          name: form.title.trim(),
-          category: form.category.trim(),
-          price: Number(form.price),
-          sellerId: form.vendorId,
-          userId: form.vendorId,
-          status: form.status,
-          description: form.description.trim(),
-          images,
-          ...shipping,
-        }).unwrap();
-      } else {
-        await createProduct({
-          title: form.title.trim(),
-          name: form.title.trim(),
-          category: form.category.trim(),
-          price: Number(form.price),
-          sellerId: form.vendorId,
-          userId: form.vendorId,
-          status: form.status,
-          description: form.description.trim(),
-          images,
-          ...shipping,
-        }).unwrap();
-      }
-      resetForm();
-      alert(isEditing ? 'Product updated and catalogue visibility refreshed.' : 'Product created and published to the catalogue.');
-    } catch (error: unknown) {
-      console.error('Error saving product:', error);
-      const message = typeof error === 'object' && error && 'data' in error
-        && typeof (error as { data?: { message?: string } }).data?.message === 'string'
-        ? (error as { data: { message: string } }).data.message
-        : 'Product could not be saved. Please try again.';
-      alert(message);
-    }
+    const body = { title: form.title.trim(), name: form.title.trim(), category: form.category.trim(), price: Number(form.price), sellerId: form.vendorId, userId: form.vendorId, status: form.status, isApproved: form.isApproved, isPublished: form.isPublished, description: form.description.trim(), images, shippingRequired: form.shippingRequired, freeShipping: form.freeShipping, shippingCost: form.freeShipping ? 0 : Number(form.shippingCost || 0), shippingWeight: form.shippingWeight ? Number(form.shippingWeight) : undefined, dimensions: form.length || form.width || form.height ? { length: Number(form.length || 0), width: Number(form.width || 0), height: Number(form.height || 0) } : undefined };
+    try { if (editingProductId) await updateProduct({ id: editingProductId, ...body }).unwrap(); else await createProduct(body).unwrap(); closeForm(); }
+    catch (error: unknown) { console.error('Error saving product:', error); alert(typeof error === 'object' && error && 'data' in error && typeof (error as { data?: { message?: string } }).data?.message === 'string' ? (error as { data: { message: string } }).data.message : 'Product could not be saved. Please try again.'); }
   };
+  const handlePublish = async (product: Product) => { try { await updateProduct({ id: product.id, status: 'active', isApproved: true, isPublished: true }).unwrap(); } catch { alert('Could not publish this product. Please try again.'); } };
+  const handleDelete = async (id: string) => { if (confirm('Delete this product?')) { try { await deleteProduct(id).unwrap(); } catch { alert('Could not delete this product.'); } } };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure?')) return;
-    try { await deleteProduct(id).unwrap(); } catch (error) { console.error('Error deleting product:', error); }
-  };
-
-  return (
-    <div>
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="admin-page-heading">Products & Services</h1>
-        <button onClick={() => setShowForm(true)} className="admin-btn admin-btn-primary">
-          <Plus className="w-3.5 h-3.5" /> Add Product
-        </button>
-      </div>
-
-      {showForm && (
-        <div className="card mb-4 space-y-3">
-          <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold">{editingProductId ? 'Edit Product' : 'Add Product'}</h2>
-            <button onClick={resetForm} className="admin-btn admin-btn-secondary">Cancel</button>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Title" className="admin-input" />
-            <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="admin-input">
-              <option value="">Select category</option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.name}>{cat.name}</option>
-              ))}
-            </select>
-            <input value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} placeholder="Price" type="number" className="admin-input" />
-            <select value={form.vendorId} onChange={(e) => setForm({ ...form, vendorId: e.target.value })} className="admin-input">
-              <option value="">Select vendor</option>
-              {vendors.map((vendor) => (
-                <option key={vendor.id} value={vendor.id}>{vendor.name} ({vendor.email})</option>
-              ))}
-            </select>
-            <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value as Product['status'] })} className="admin-input">
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-            </select>
-            <input value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Short description" className="admin-input" />
-            <input value={form.images} onChange={(e) => setForm({ ...form, images: e.target.value })} placeholder="At least 4 image URLs (comma-separated)" className="admin-input md:col-span-2" />
-          </div>
-          <fieldset className="rounded border border-gray-200 p-3 space-y-3">
-            <legend className="px-1 text-sm font-medium text-gray-700">Shiprocket package details</legend>
-            <div className="flex flex-wrap gap-4 text-sm text-gray-700">
-              <label className="flex items-center gap-2"><input type="checkbox" checked={form.shippingRequired} onChange={(e) => setForm({ ...form, shippingRequired: e.target.checked })} /> Requires shipping</label>
-              <label className="flex items-center gap-2"><input type="checkbox" checked={form.freeShipping} onChange={(e) => setForm({ ...form, freeShipping: e.target.checked })} disabled={!form.shippingRequired} /> Free shipping</label>
-            </div>
-            {form.shippingRequired && <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-              <input value={form.shippingWeight} onChange={(e) => setForm({ ...form, shippingWeight: e.target.value })} placeholder="Weight (kg) *" min="0.1" step="0.1" type="number" className="admin-input" />
-              <input value={form.length} onChange={(e) => setForm({ ...form, length: e.target.value })} placeholder="Length (cm) *" min="1" type="number" className="admin-input" />
-              <input value={form.width} onChange={(e) => setForm({ ...form, width: e.target.value })} placeholder="Width (cm) *" min="1" type="number" className="admin-input" />
-              <input value={form.height} onChange={(e) => setForm({ ...form, height: e.target.value })} placeholder="Height (cm) *" min="1" type="number" className="admin-input" />
-              {!form.freeShipping && <input value={form.shippingCost} onChange={(e) => setForm({ ...form, shippingCost: e.target.value })} placeholder="Shipping charge (₹)" min="0" type="number" className="admin-input md:col-span-2" />}
-            </div>}
-            <p className="text-xs text-gray-500">Weight and dimensions are required so Shiprocket can select an eligible courier and generate an AWB.</p>
-          </fieldset>
-          <button onClick={handleSubmit} disabled={isCreating || isUpdating} className="admin-btn admin-btn-primary">
-            {isCreating || isUpdating ? 'Saving...' : editingProductId ? 'Save Changes' : 'Create Product'}
-          </button>
-        </div>
-      )}
-
-      <div className="card mb-4">
-        <div className="flex items-center">
-          <Search className="w-4 h-4 text-gray-400 mr-2" />
-          <input type="text" placeholder="Search products..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="flex-1 outline-none text-sm text-gray-700" />
-        </div>
-      </div>
-
-      <div className="card overflow-x-auto">
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Category</th>
-              <th>Price</th>
-              <th>Vendor</th>
-              <th>Rating</th>
-              <th>Orders</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredProducts.map((product) => (
-              <tr key={product.id}>
-                <td className="font-medium">{product.title}</td>
-                <td>{product.category}</td>
-                <td>₹{product.price.toLocaleString()}</td>
-                <td>{product.vendor}</td>
-                <td>
-                  <div className="flex items-center gap-1">
-                    <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
-                    <span className="text-xs font-medium">{product.rating || '—'}</span>
-                    <span className="text-[10px] text-gray-400">({product.reviewCount})</span>
-                  </div>
-                </td>
-                <td className="text-xs">{product.totalOrders}</td>
-                <td>
-                  <span className={`admin-badge ${product.status === 'active' ? 'admin-badge-active' : 'admin-badge-inactive'}`}>
-                    {product.status}
-                  </span>
-                </td>
-                <td>
-                  <div className="flex gap-1">
-                    <button onClick={() => handleEdit(product)} className="admin-btn admin-btn-secondary"><Edit className="w-3 h-3" /></button>
-                    <button onClick={() => handleDelete(product.id)} className="admin-btn admin-btn-danger"><Trash2 className="w-3 h-3" /></button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
+  return <div className="space-y-5">
+    <section className="flex flex-col gap-4 rounded-2xl border border-stone-200 bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-orange-600">Catalogue management</p><h1 className="mt-1 text-2xl font-bold text-slate-900">Products</h1><p className="mt-1 text-sm text-slate-500">Create, review, approve and publish every product from one place.</p></div><button onClick={openNew} className="admin-btn admin-btn-primary"><Plus className="h-4 w-4" /> Add product</button></section>
+    <div className="card flex items-center gap-2"><Search className="h-4 w-4 text-gray-400" /><input type="search" placeholder="Search products or categories" value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} className="min-w-0 flex-1 bg-transparent text-sm text-gray-700 outline-none" /></div>
+    <div className="card overflow-x-auto p-0"><table className="admin-table min-w-[980px]"><thead><tr><th>Product</th><th>Vendor</th><th>Price</th><th>State</th><th>Approval</th><th>Catalogue</th><th className="text-right">Actions</th></tr></thead><tbody>{filteredProducts.map((product) => <tr key={product.id}><td><p className="font-semibold text-slate-800">{product.title}</p><p className="mt-0.5 text-xs text-slate-500">{product.category}</p></td><td className="text-sm">{product.vendor}</td><td className="font-medium">₹{product.price.toLocaleString()}</td><td><span className={`admin-badge ${product.status === 'active' ? 'admin-badge-active' : 'admin-badge-inactive'}`}>{product.status}</span></td><td>{product.isApproved ? <span className="inline-flex items-center gap-1 text-xs font-medium text-emerald-700"><ShieldCheck className="h-4 w-4" />Approved</span> : <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-700"><ShieldCheck className="h-4 w-4" />Needs review</span>}</td><td>{product.isPublished ? <span className="inline-flex items-center gap-1 text-xs font-medium text-emerald-700"><Eye className="h-4 w-4" />Live</span> : <span className="inline-flex items-center gap-1 text-xs font-medium text-slate-500"><EyeOff className="h-4 w-4" />Hidden</span>}</td><td><div className="flex justify-end gap-2"><button title="Edit product" onClick={() => handleEdit(product)} className="admin-btn admin-btn-secondary"><Edit3 className="h-4 w-4" /></button>{(!product.isApproved || !product.isPublished) && <button onClick={() => handlePublish(product)} className="admin-btn admin-btn-primary whitespace-nowrap"><PackageCheck className="h-4 w-4" /> Publish</button>}<button title="Delete product" onClick={() => handleDelete(product.id)} className="admin-btn admin-btn-danger"><Trash2 className="h-4 w-4" /></button></div></td></tr>)}</tbody></table>{filteredProducts.length === 0 && <div className="p-10 text-center text-sm text-slate-500">No products match this search.</div>}</div>
+    {showForm && <div className="fixed inset-0 z-[80] flex items-end bg-slate-950/45 p-0 backdrop-blur-sm sm:items-center sm:justify-center sm:p-6" role="dialog" aria-modal="true" aria-labelledby="product-modal-title"><div className="max-h-[94vh] w-full overflow-y-auto rounded-t-3xl bg-white shadow-2xl sm:max-w-5xl sm:rounded-3xl"><div className="sticky top-0 z-10 flex items-start justify-between border-b border-stone-200 bg-white px-5 py-4 sm:px-7"><div><p className="text-xs font-semibold uppercase tracking-[0.16em] text-orange-600">Admin catalogue</p><h2 id="product-modal-title" className="mt-1 text-xl font-bold text-slate-900">{editingProductId ? 'Edit product' : 'Add a product'}</h2></div><button onClick={closeForm} aria-label="Close product editor" className="rounded-full p-2 text-slate-500 hover:bg-stone-100"><X className="h-5 w-5" /></button></div><div className="space-y-6 px-5 py-6 sm:px-7">
+      <section><h3 className="font-semibold text-slate-900">Product information</h3><p className="mt-1 text-sm text-slate-500">Only title, category, price and vendor are required to save.</p><div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2"><input value={form.title} onChange={(event) => setForm({ ...form, title: event.target.value })} placeholder="Product title *" className="admin-input" /><select value={form.category} onChange={(event) => setForm({ ...form, category: event.target.value })} className="admin-input"><option value="">Select category *</option>{categories.map((category) => <option key={category.id} value={category.name}>{category.name}</option>)}</select><input value={form.price} onChange={(event) => setForm({ ...form, price: event.target.value })} placeholder="Price (₹) *" type="number" min="0" className="admin-input" /><select value={form.vendorId} onChange={(event) => setForm({ ...form, vendorId: event.target.value })} className="admin-input"><option value="">Select vendor *</option>{vendors.map((vendor) => <option key={vendor.id} value={vendor.id}>{vendor.name} ({vendor.email})</option>)}</select><input value={form.description} onChange={(event) => setForm({ ...form, description: event.target.value })} placeholder="Short description (optional)" className="admin-input md:col-span-2" /><input value={form.images} onChange={(event) => setForm({ ...form, images: event.target.value })} placeholder="Image URLs, comma-separated (optional)" className="admin-input md:col-span-2" /></div></section>
+      <section className="rounded-2xl border border-orange-100 bg-orange-50/50 p-4"><div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center"><div><h3 className="flex items-center gap-2 font-semibold text-slate-900"><ShieldCheck className="h-5 w-5 text-orange-600" />Visibility & moderation</h3><p className="mt-1 text-sm text-slate-600">A product appears in the customer catalogue only when it is active, approved and published.</p></div><select value={form.status} onChange={(event) => setModeration({ status: event.target.value as Product['status'] })} className="admin-input w-full sm:w-40"><option value="active">Active</option><option value="inactive">Draft / inactive</option></select></div><div className="mt-4 grid gap-3 sm:grid-cols-2"><label className="flex cursor-pointer items-start gap-3 rounded-xl border border-stone-200 bg-white p-3"><input type="checkbox" checked={form.isApproved} disabled={form.status === 'inactive'} onChange={(event) => setModeration({ isApproved: event.target.checked })} className="mt-1 h-4 w-4 accent-orange-600" /><span><span className="block font-medium text-slate-800">Approved</span><span className="text-xs text-slate-500">The product has passed admin review.</span></span></label><label className="flex cursor-pointer items-start gap-3 rounded-xl border border-stone-200 bg-white p-3"><input type="checkbox" checked={form.isPublished} disabled={form.status === 'inactive' || !form.isApproved} onChange={(event) => setModeration({ isPublished: event.target.checked })} className="mt-1 h-4 w-4 accent-orange-600" /><span><span className="block font-medium text-slate-800">Published to catalogue</span><span className="text-xs text-slate-500">Customers can now find and buy this product.</span></span></label></div></section>
+      <section className="rounded-2xl border border-stone-200 p-4"><div className="flex flex-wrap gap-4 text-sm text-slate-700"><label className="flex items-center gap-2"><input type="checkbox" checked={form.shippingRequired} onChange={(event) => setForm({ ...form, shippingRequired: event.target.checked })} className="h-4 w-4 accent-orange-600" /> Requires shipping</label><label className="flex items-center gap-2"><input type="checkbox" checked={form.freeShipping} disabled={!form.shippingRequired} onChange={(event) => setForm({ ...form, freeShipping: event.target.checked })} className="h-4 w-4 accent-orange-600" /> Free shipping</label></div>{form.shippingRequired && <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-4"><input value={form.shippingWeight} onChange={(event) => setForm({ ...form, shippingWeight: event.target.value })} placeholder="Weight (kg)" min="0" step="0.1" type="number" className="admin-input" /><input value={form.length} onChange={(event) => setForm({ ...form, length: event.target.value })} placeholder="Length (cm)" min="0" type="number" className="admin-input" /><input value={form.width} onChange={(event) => setForm({ ...form, width: event.target.value })} placeholder="Width (cm)" min="0" type="number" className="admin-input" /><input value={form.height} onChange={(event) => setForm({ ...form, height: event.target.value })} placeholder="Height (cm)" min="0" type="number" className="admin-input" />{!form.freeShipping && <input value={form.shippingCost} onChange={(event) => setForm({ ...form, shippingCost: event.target.value })} placeholder="Shipping charge (₹)" min="0" type="number" className="admin-input md:col-span-2" />}</div>}</section>
+    </div><div className="sticky bottom-0 flex flex-col-reverse gap-3 border-t border-stone-200 bg-white px-5 py-4 sm:flex-row sm:justify-end sm:px-7"><button onClick={closeForm} className="admin-btn admin-btn-secondary">Cancel</button><button onClick={handleSubmit} disabled={saving} className="admin-btn admin-btn-primary">{saving ? 'Saving…' : <><CheckCircle2 className="h-4 w-4" />{editingProductId ? 'Save changes' : 'Create product'}</>}</button></div></div></div>}
+  </div>;
 }

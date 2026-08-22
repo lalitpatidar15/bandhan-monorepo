@@ -108,9 +108,12 @@ export type AdminProduct = {
   id: string;
   title: string;
   images?: string[];
+  description?: string;
   category: string;
   price: number;
   status: 'active' | 'inactive';
+  isApproved: boolean;
+  isPublished: boolean;
   vendor: string;
   vendorId?: string;
   rating: number;
@@ -573,9 +576,13 @@ const normalizeProducts = (payload: unknown): AdminProduct[] => {
     return {
       id: String(product._id || product.id || ''),
       title: String(product.title || product.name || 'Untitled Product'),
+      images: Array.isArray(product.images) ? product.images.filter((image): image is string => typeof image === 'string') : [],
+      description: String(product.description || ''),
       category: String(product.category || 'Uncategorized'),
       price: Number(product.price || 0),
       status: product.status === 'draft' || product.status === 'inactive' ? 'inactive' : 'active',
+      isApproved: Boolean(product.isApproved),
+      isPublished: Boolean(product.isPublished),
       vendor: String(vendorObject?.fullName || product.vendor || 'Unknown Vendor'),
       vendorId: String(vendorObject?._id || product.sellerId || product.userId || ''),
       rating: Number(product.rating || 0),
@@ -1287,11 +1294,11 @@ export const adminApi = createApi({
       transformResponse: (response: unknown) => normalizeProducts(response),
       providesTags: ['AdminProducts'],
     }),
-    createProduct: builder.mutation<unknown, { title: string; name: string; category: string; price: number; sellerId: string; userId: string; status: string; description?: string; images: string[]; shippingRequired: boolean; freeShipping: boolean; shippingCost: number; shippingWeight?: number; dimensions?: { length?: number; width?: number; height?: number } }>({
+    createProduct: builder.mutation<unknown, { title: string; name: string; category: string; price: number; sellerId: string; userId: string; status: string; isApproved: boolean; isPublished: boolean; description?: string; images: string[]; shippingRequired: boolean; freeShipping: boolean; shippingCost: number; shippingWeight?: number; dimensions?: { length?: number; width?: number; height?: number } }>({
       query: (body) => ({ url: '/admin/products', method: 'POST', body }),
       invalidatesTags: ['AdminProducts', 'AdminDashboard'],
     }),
-    updateProduct: builder.mutation<unknown, { id: string; title: string; name: string; category: string; price: number; sellerId?: string; userId?: string; status: string; description?: string; images: string[]; shippingRequired: boolean; freeShipping: boolean; shippingCost: number; shippingWeight?: number; dimensions?: { length?: number; width?: number; height?: number } }>({
+    updateProduct: builder.mutation<unknown, { id: string; title?: string; name?: string; category?: string; price?: number; sellerId?: string; userId?: string; status?: string; isApproved?: boolean; isPublished?: boolean; description?: string; images?: string[]; shippingRequired?: boolean; freeShipping?: boolean; shippingCost?: number; shippingWeight?: number; dimensions?: { length?: number; width?: number; height?: number } }>({
       query: ({ id, ...body }) => ({ url: `/admin/products/${id}`, method: 'PUT', body }),
       invalidatesTags: ['AdminProducts', 'AdminDashboard'],
     }),
