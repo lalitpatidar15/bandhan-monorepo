@@ -76,7 +76,8 @@ export default function Sidebar({ currentPage, setCurrentPage }: SidebarProps) {
 
   return (
     <PortalSidebar
-      portalName="Control Center"
+      portalName="Bandhan Admin"
+      className="admin-desktop-sidebar"
       sections={sections}
       activeItem={labels[currentPage]}
       onNavigate={(label) => {

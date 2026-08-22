@@ -27,7 +27,7 @@ export default function AdminHeader({ title }: { title?: string }) {
 
   return (
     <PortalHeader
-      portalName="Control Center"
+      portalName="Bandhan Admin"
       actions={actions}
       userName={userName}
       dropdownItems={dropdownItems}
