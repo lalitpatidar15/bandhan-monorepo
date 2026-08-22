@@ -145,6 +145,19 @@ const seekerRoutes = require("./routes/jobSeeker/seekerRoutes");
 const jobMessageRoutes = require("./routes/jobSeeker/jobMessageRoutes");
 
 const app = express();
+const connectDB = require("./config/db");
+
+let dbPromise;
+function ensureDB() {
+  if (!dbPromise) {
+    dbPromise = connectDB().catch((error) => {
+      // A failed cold-start connection must be retryable on the next request.
+      dbPromise = null;
+      throw error;
+    });
+  }
+  return dbPromise;
+}
 
 app.disable("x-powered-by");
 app.set("trust proxy", 1);
@@ -164,6 +177,20 @@ morgan.token("timestamp", () => new Date().toISOString());
 morgan.format("timestamped-combined", ':timestamp :remote-addr - :remote-user ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"');
 morgan.format("timestamped-dev", ":timestamp :method :url :status :response-time ms");
 app.use(morgan(process.env.NODE_ENV === "production" ? "timestamped-combined" : "timestamped-dev"));
+
+app.use(async (req, res, next) => {
+  if (req.path === "/health") return next();
+
+  try {
+    await ensureDB();
+    return next();
+  } catch (_error) {
+    return res.status(503).json({
+      success: false,
+      message: "Database connection is temporarily unavailable. Please try again shortly.",
+    });
+  }
+});
 
 // ============= public / landing page =========
 app.use("/api/public", require("./routes/public/publicRoutes"));
@@ -310,21 +337,12 @@ app.use((error, _req, res, _next) => {
   });
 });
 
-let dbPromise;
-function ensureDB() {
-  if (!dbPromise) {
-    const connectDB = require("./config/db");
-    dbPromise = connectDB();
-  }
-  return dbPromise;
-}
 ensureDB().catch((err) => {
   console.error("Mongo init failed:", err.message);
 });
 
 if (require.main === module) {
   const http = require("http");
-  const connectDB = require("./config/db");
   const validateEnv = require("./utils/validateEnv");
 
   const PORT = process.env.PORT || 5000;
@@ -345,4 +363,3 @@ if (require.main === module) {
 } else {
   module.exports = app;
 }
-
