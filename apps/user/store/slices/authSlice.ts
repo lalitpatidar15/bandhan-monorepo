@@ -25,6 +25,18 @@ function isValidStoredToken(token: string) {
   }
 }
 
+function userFromToken(token: string): AuthUser | null {
+  try {
+    const encoded = token.split(".")[1];
+    if (!encoded) return null;
+    const padded = encoded.replace(/-/g, "+").replace(/_/g, "/").padEnd(Math.ceil(encoded.length / 4) * 4, "=");
+    const payload = JSON.parse(atob(padded));
+    const id = payload.id || payload._id || payload.userId || payload.sub;
+    if (!id) return null;
+    return { id: String(id), name: String(payload.name || payload.fullName || payload.email || 'Bandhan user'), email: payload.email ? String(payload.email) : undefined, role: payload.role ? String(payload.role) : 'user' };
+  } catch { return null; }
+}
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -54,10 +66,12 @@ const authSlice = createSlice({
       if (typeof window !== 'undefined') {
         const token = localStorage.getItem('auth_token');
         const user = localStorage.getItem('auth_user');
-        if (token && user && isValidStoredToken(token)) {
+        if (token && isValidStoredToken(token)) {
           try {
             state.token = token;
-            state.user = JSON.parse(user);
+            state.user = user ? JSON.parse(user) : userFromToken(token);
+            if (!state.user) throw new Error('Session is missing user information');
+            localStorage.setItem('auth_user', JSON.stringify(state.user));
             const secure = window.location.protocol === 'https:' ? '; Secure' : '';
             document.cookie = `bandhan_user_token=${encodeURIComponent(token)}; Path=/; Max-Age=${7 * 24 * 60 * 60}; SameSite=Lax${secure}`;
           } catch {

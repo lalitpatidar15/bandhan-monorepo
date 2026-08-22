@@ -20,7 +20,10 @@ export function useRequireAuth() {
   const user = useAppSelector((state) => state.auth.user);
   const token = useAppSelector((state) => state.auth.token);
 
-  const isAuthed = Boolean(user && token);
+  // A valid bearer token is sufficient for API access. User information is
+  // restored asynchronously after an SSO handoff, so do not bounce a signed-in
+  // customer back to login while that profile cache is being rebuilt.
+  const isAuthed = Boolean(token);
 
   const gate = useCallback(
     (action?: () => void) => {

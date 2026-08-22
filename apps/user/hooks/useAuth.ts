@@ -6,7 +6,7 @@ export const useAuth = () => {
   const dispatch = useAppDispatch();
   const { user, token, isInitialized } = useAppSelector((state) => state.auth);
 
-  const isAuthenticated = !!token && !!user;
+  const isAuthenticated = !!token;
 
   const handleLogout = () => {
     dispatch(logout());
