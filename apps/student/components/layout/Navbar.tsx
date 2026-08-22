@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { clearAcademySession } from "@/lib/session";
+import { centralLoginUrl, clearAcademySession } from "@/lib/session";
 
 type NavbarProps = {
   title?: string;
@@ -51,7 +51,7 @@ export default function Navbar({
             <button
               onClick={() => {
                 clearAcademySession();
-                router.replace("/student/auth");
+                window.location.assign(centralLoginUrl());
               }}
               className="w-full text-left px-4 py-2 hover:bg-[var(--bhn-error-50)] text-[var(--bhn-error-600)] text-sm"
             >

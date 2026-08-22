@@ -17,6 +17,10 @@ export function clearJobPortalSession() {
   document.cookie = "bandhan_job_role=; Path=/; Max-Age=0; SameSite=Lax";
 }
 
+export function centralLoginUrl() {
+  return process.env.NEXT_PUBLIC_CENTRAL_LOGIN_URL || (process.env.NODE_ENV === "production" ? "https://bandhan-user.vercel.app/login" : "http://localhost:3000/login");
+}
+
 export function readTokenRole(token: string): JobPortalRole | null {
   try {
     const encoded = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");

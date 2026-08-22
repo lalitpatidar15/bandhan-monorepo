@@ -4,7 +4,7 @@ import { PortalHeader } from '@bandhan/ui';
 import { useRouter, usePathname } from 'next/navigation';
 import { Bell } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { clearJobPortalSession, readTokenRole } from '@/lib/session';
+import { centralLoginUrl, clearJobPortalSession, readTokenRole } from '@/lib/session';
 
 interface CareersHeaderProps {
   variant?: 'jobs' | 'jobposter';
@@ -55,7 +55,7 @@ export function CareersHeader({ variant = 'jobs', activeTab }: CareersHeaderProp
     { label: isJobseeker ? 'My Applications' : 'My Jobs', href: isJobseeker ? '/Jobseeker/applications' : '/jobposter/jobpost' },
     { label: 'Messages', href: isJobseeker ? '/Jobseeker/messages' : '/jobposter/messages' },
     { divider: true },
-    { label: 'Logout', onClick: () => { clearJobPortalSession(); router.replace('/login'); }, destructive: true },
+    { label: 'Logout', onClick: () => { clearJobPortalSession(); window.location.assign(centralLoginUrl()); }, destructive: true },
   ] : [
     { label: 'Login', href: isJobseeker ? '/Jobseeker/login' : '/jobposter/login' },
     { label: 'Create account', href: isJobseeker ? '/Jobseeker/signup' : '/jobposter/register' },

@@ -3,7 +3,7 @@
 import { Bell, User, Menu, X, LogOut } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { clearAcademySession, readTokenRole } from "@/lib/session";
+import { centralLoginUrl, clearAcademySession, readTokenRole } from "@/lib/session";
 import AcademyLogo from "@/components/common/AcademyLogo";
 
 const tabs = [
@@ -101,7 +101,7 @@ return (
           <button
             onClick={() => {
               clearAcademySession();
-              router.replace("/student/auth");
+              window.location.assign(centralLoginUrl());
             }}
             className="hover:text-[var(--bhn-brand-700)]"
             aria-label="Logout"
@@ -200,7 +200,7 @@ return (
               onClick={() => {
                 clearAcademySession();
                 setMobileMenu(false);
-                router.replace("/student/auth");
+                window.location.assign(centralLoginUrl());
               }}
               className="flex items-center gap-2 text-[var(--bhn-error-600)]"
             >

@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { clearAcademySession, readTokenRole, type AcademyRole } from "@/lib/session";
+import { usePathname } from "next/navigation";
+import { centralLoginUrl, clearAcademySession, readTokenRole, type AcademyRole } from "@/lib/session";
 
 const studentPublicRoutes = new Set(["/student", "/student/auth", "/student/login", "/student/courses"]);
 const instructorPublicRoutes = new Set(["/instructor", "/instructor/login"]);
@@ -17,7 +17,6 @@ function requiredRole(pathname: string): AcademyRole | null {
 
 export default function RouteGuard({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const router = useRouter();
   const [authorizedPath, setAuthorizedPath] = useState<string | null>(null);
 
   useEffect(() => {
@@ -35,9 +34,8 @@ export default function RouteGuard({ children }: { children: React.ReactNode }) 
 
     clearAcademySession();
     setAuthorizedPath(null);
-    const loginPath = role === "instructor" ? "/instructor/login" : "/student/auth";
-    router.replace(`${loginPath}?next=${encodeURIComponent(`${pathname}${window.location.search}`)}`);
-  }, [pathname, router]);
+    window.location.assign(centralLoginUrl());
+  }, [pathname]);
 
   if (authorizedPath !== pathname) {
     return <div className="min-h-screen bg-[#F8F5F2] dark:bg-[#171717]" aria-label="Checking authentication" />;

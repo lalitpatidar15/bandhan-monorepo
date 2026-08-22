@@ -7,7 +7,7 @@ import { Search, Bell, Settings2, Menu, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useGetProfileQuery } from "@/app/Jobseeker/redux/services/ProfileApi";
 import { useGetCompanyProfileQuery } from "@/app/jobposter/redux/services/RecruiterProfileApi";
-import { clearJobPortalSession } from "@/lib/session";
+import { centralLoginUrl, clearJobPortalSession } from "@/lib/session";
 
 function useUnreadCount(variant: "jobs" | "jobposter" | "default") {
   if (variant === "jobposter") {
@@ -298,7 +298,6 @@ function UserMenu({ variant }: { variant: "jobs" | "jobposter" | "default" }) {
     : seekerProfile?.fullName?.[0]?.toUpperCase() || "U";
 
   const updatePath = variant === "jobposter" ? "/jobposter/profilesetup" : "/Jobseeker/profile";
-  const loginPath = variant === "jobposter" ? "/jobposter/login" : "/Jobseeker/login";
   const updateLabel = variant === "jobposter" ? "Update company profile" : "Update profile";
 
   useEffect(() => {
@@ -315,7 +314,7 @@ function UserMenu({ variant }: { variant: "jobs" | "jobposter" | "default" }) {
   const handleLogout = () => {
     clearJobPortalSession();
     setMenuOpen(false);
-    router.push(loginPath);
+    window.location.assign(centralLoginUrl());
   };
 
   const handleUpdate = () => {

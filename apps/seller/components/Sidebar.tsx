@@ -4,6 +4,7 @@ import { PortalSidebar, type PortalSidebarSection } from '@bandhan/ui';
 import { useRouter, usePathname } from 'next/navigation';
 import { LayoutDashboard, Package, RotateCcw, ShoppingCart, Handshake, MapPin, MessageSquare, Star, Wallet } from 'lucide-react';
 import { useGetSellerQuotesQuery } from '@/lib/store/api/chatApi';
+import { centralLoginUrl, clearSellerSession } from '@/lib/session';
 
 export default function Sidebar() {
   const router = useRouter();
@@ -35,13 +36,8 @@ export default function Sidebar() {
   ];
 
   const handleLogout = () => {
-    localStorage.removeItem('userName');
-    localStorage.removeItem('sellerVerified');
-    localStorage.removeItem('merchantSettings');
-    localStorage.removeItem('token');
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('sellerToken');
-    router.replace('/login');
+    clearSellerSession();
+    window.location.assign(centralLoginUrl());
   };
 
   const userName = typeof window !== 'undefined' ? localStorage.getItem('userName') || 'Seller' : 'Seller';

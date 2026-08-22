@@ -2,8 +2,10 @@ import { createApi, fetchBaseQuery, BaseQueryFn, FetchArgs, FetchBaseQueryError 
 
 function logout() {
   localStorage.removeItem('auth_token');
+  localStorage.removeItem('auth_user');
   localStorage.removeItem('user');
   if (typeof window !== 'undefined') {
+    document.cookie = 'bandhan_user_token=; Path=/; Max-Age=0; SameSite=Lax';
     const returnTo = `${window.location.pathname}${window.location.search}`;
     const isOnAuthPage = window.location.pathname === '/login' || window.location.pathname === '/signup';
     window.location.href = isOnAuthPage ? '/login' : `/login?next=${encodeURIComponent(returnTo)}`;

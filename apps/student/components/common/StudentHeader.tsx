@@ -4,7 +4,7 @@ import { PortalHeader } from '@bandhan/ui';
 import { useRouter, usePathname } from 'next/navigation';
 import { Bell, LogOut } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { clearAcademySession, readTokenRole } from '@/lib/session';
+import { centralLoginUrl, clearAcademySession, readTokenRole } from '@/lib/session';
 
 export default function StudentHeader() {
   const router = useRouter();
@@ -41,7 +41,7 @@ export default function StudentHeader() {
         { label: 'Wishlist', href: '/student/wishlist' },
         { label: 'Notifications', href: '/student/notification' },
         { divider: true },
-        { label: 'Logout', onClick: () => { clearAcademySession(); router.replace('/login'); }, destructive: true },
+        { label: 'Logout', onClick: () => { clearAcademySession(); window.location.assign(centralLoginUrl()); }, destructive: true },
       ]
     : [
         { label: 'Login', href: '/login' },

@@ -4,6 +4,7 @@ import { PortalHeader } from '@bandhan/ui';
 import { useRouter, usePathname } from 'next/navigation';
 import { Bell, Settings, LogOut } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { centralLoginUrl, clearSellerSession } from '@/lib/session';
 
 export default function SellerHeader() {
   const router = useRouter();
@@ -47,7 +48,7 @@ export default function SellerHeader() {
     { label: 'Inventory', href: '/inventory' },
     { label: 'Earnings', href: '/earnings' },
     { divider: true },
-    { label: 'Logout', onClick: () => { localStorage.removeItem('token'); router.replace('/login'); }, destructive: true },
+    { label: 'Logout', onClick: () => { clearSellerSession(); window.location.assign(centralLoginUrl()); }, destructive: true },
   ] : [
     { label: 'Login', href: '/login' },
     { label: 'Create account', href: '/signup' },

@@ -13,6 +13,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { apiGet, apiPost } from "@/lib/api";
+import { centralLoginUrl, clearSellerSession } from "@/lib/session";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -99,10 +100,8 @@ export default function SettingsPage() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("userName");
-    localStorage.removeItem("sellerVerified");
-    localStorage.removeItem("merchantSettings");
-    router.replace("/login");
+    clearSellerSession();
+    window.location.assign(centralLoginUrl());
   };
 
   const [newCategory, setNewCategory] = useState("");

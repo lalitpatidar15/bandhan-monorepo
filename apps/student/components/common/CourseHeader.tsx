@@ -12,7 +12,7 @@ import {
     X,
     LogOut,
 } from "lucide-react";
-import { clearAcademySession } from "@/lib/session";
+import { centralLoginUrl, clearAcademySession } from "@/lib/session";
 import AcademyLogo from "@/components/common/AcademyLogo";
 
 export default function InstructorHeader() {
@@ -117,7 +117,7 @@ return (
                     <button
                         onClick={() => {
                             clearAcademySession();
-                            router.replace("/instructor/login");
+                            window.location.assign(centralLoginUrl());
                         }}
                         className="text-[var(--bhn-text-muted)] hover:text-[var(--bhn-error-600)] transition"
                         aria-label="Logout"
