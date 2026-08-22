@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { setAcademySession } from "@/lib/session";
+import { SsoLoadingScreen } from "@bandhan/ui";
 
 const apiUrl = () => {
   const raw = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
@@ -36,6 +37,6 @@ export default function AcademySsoCallbackPage() {
       .catch(() => setError("This sign-in link has expired. Please return to the central login page and try again."));
   }, [router, searchParams]);
 
-  if (!error) return null;
+  if (!error) return <SsoLoadingScreen portalName="your learning portal" />;
   return <main className="flex min-h-screen items-center justify-center bg-[#F8F5F2] p-6 text-center text-[#2D201B]"><p>{error}</p></main>;
 }

@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { apiPost } from "@/lib/api";
+import { SsoLoadingScreen } from "@bandhan/ui";
 
 function SellerSsoCallbackContent() {
   const router = useRouter();
@@ -31,13 +32,13 @@ function SellerSsoCallbackContent() {
       .catch(() => setError("This sign-in link has expired. Please return to the central login page and try again."));
   }, [router, searchParams]);
 
-  if (!error) return null;
+  if (!error) return <SsoLoadingScreen portalName="your seller portal" />;
   return <main className="flex min-h-screen items-center justify-center bg-[#F7F1EB] p-6 text-center text-[#3A2B22]"><p>{error}</p></main>;
 }
 
 export default function SellerSsoCallbackPage() {
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<SsoLoadingScreen portalName="your seller portal" />}>
       <SellerSsoCallbackContent />
     </Suspense>
   );

@@ -23,3 +23,5 @@ export { PortalHeader } from "./PortalHeader";
 export type { PortalHeaderProps, PortalHeaderNav, PortalHeaderAction, PortalHeaderDropdownItem } from "./PortalHeader";
 export { PortalSidebar } from "./PortalSidebar";
 export type { PortalSidebarProps, PortalSidebarNavItem, PortalSidebarSection, PortalSidebarProfile } from "./PortalSidebar";
+export { SsoLoadingScreen } from "./SsoLoadingScreen";
+export type { SsoLoadingScreenProps } from "./SsoLoadingScreen";
