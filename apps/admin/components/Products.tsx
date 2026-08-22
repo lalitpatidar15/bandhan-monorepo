@@ -68,10 +68,16 @@ export default function Products() {
   };
 
   const handleSubmit = async () => {
-    if (!form.title.trim() || !form.category.trim() || !form.price || !form.vendorId) return;
+    if (!form.title.trim() || !form.category.trim() || !form.price || !form.vendorId) {
+      alert('Title, category, price, and vendor are required.');
+      return;
+    }
     const images = form.images.split(',').map((image) => image.trim()).filter(Boolean);
     if (images.length < 4) { alert('At least four image URLs are required.'); return; }
-    if (form.shippingRequired && (!form.shippingWeight || !form.length || !form.width || !form.height)) return;
+    if (form.shippingRequired && (!form.shippingWeight || !form.length || !form.width || !form.height)) {
+      alert('Enter shipping weight and all package dimensions.');
+      return;
+    }
     const shipping = {
       shippingRequired: form.shippingRequired,
       freeShipping: form.freeShipping,
@@ -80,6 +86,7 @@ export default function Products() {
       dimensions: form.shippingRequired ? { length: Number(form.length), width: Number(form.width), height: Number(form.height) } : undefined,
     };
     try {
+      const isEditing = Boolean(editingProductId);
       if (editingProductId) {
         await updateProduct({
           id: editingProductId,
@@ -109,8 +116,14 @@ export default function Products() {
         }).unwrap();
       }
       resetForm();
-    } catch (error) {
+      alert(isEditing ? 'Product updated and catalogue visibility refreshed.' : 'Product created and published to the catalogue.');
+    } catch (error: unknown) {
       console.error('Error saving product:', error);
+      const message = typeof error === 'object' && error && 'data' in error
+        && typeof (error as { data?: { message?: string } }).data?.message === 'string'
+        ? (error as { data: { message: string } }).data.message
+        : 'Product could not be saved. Please try again.';
+      alert(message);
     }
   };
 

@@ -463,6 +463,16 @@ exports.updateProduct = async (req, res) => {
       updates.status = "draft";
     }
 
+    // Admin saves are moderation decisions. Keep the public-catalogue flags in
+    // sync with the active/draft choice so an active item does not remain
+    // invisible after it has been created or edited in the Admin portal.
+    if (updates.status !== undefined) {
+      const isActive = updates.status === "active";
+      updates.isApproved = isActive;
+      updates.isPublished = isActive;
+      updates.publishedAt = isActive ? new Date() : null;
+    }
+
     if (updates.productType !== undefined || updates.type !== undefined) {
       const availability = normalizeAvailability(updates.productType || updates.type);
       updates.productType = availability;
