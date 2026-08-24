@@ -278,7 +278,14 @@ export interface DraftResponse {
 export interface SubmitApplicationResponse {
   success: boolean;
   message?: string;
-  data?: unknown;
+  data?: {
+    applicationId?: string;
+    jobId?: string;
+    recruiterId?: string;
+    seekerId?: string;
+    status?: string;
+    submittedAt?: string;
+  } | null;
 }
 
 export interface ConversationItem {

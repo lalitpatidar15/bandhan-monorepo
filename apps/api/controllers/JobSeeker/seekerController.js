@@ -1367,7 +1367,14 @@ exports.saveDraft = async (req, res) => {
         return res.status(200).json({
             success: true,
             message: "Application saved as draft",
-            data: application
+            data: {
+                applicationId: application._id,
+                jobId: application.jobId,
+                recruiterId: application.recruiterId,
+                seekerId: application.seekerId,
+                status: application.status,
+                submittedAt: application.submittedAt
+            }
         });
 
     } catch (error) {

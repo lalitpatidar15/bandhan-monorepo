@@ -91,6 +91,7 @@ router.put("/job-posters/:id", adminController.updateJobPoster);
 router.delete("/job-posters/:id", adminController.deleteJobPoster);
 router.get("/jobs/moderation", adminController.getJobModerationQueue);
 router.put("/jobs/moderation/:id", adminController.updateJobModeration);
+router.get("/applications", adminController.getApplications);
 router.get("/moderation/products", adminController.getProductModerationQueue);
 router.put("/moderation/products/:id", adminController.updateProductModeration);
 router.get("/moderation/content", adminController.getContentModerationQueue);

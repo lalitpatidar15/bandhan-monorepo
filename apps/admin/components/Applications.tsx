@@ -10,7 +10,7 @@ export default function Applications() {
   const { data: applications = [], isLoading } = useGetApplicationsQuery();
   const filtered = applications.filter((a) => {
     const matchSearch = !search || a.applicantName.toLowerCase().includes(search.toLowerCase()) || a.jobTitle.toLowerCase().includes(search.toLowerCase());
-    const matchStatus = !statusFilter || a.status === statusFilter;
+    const matchStatus = !statusFilter || a.status.toLowerCase() === statusFilter;
     return matchSearch && matchStatus;
   });
 
@@ -18,7 +18,7 @@ export default function Applications() {
     switch (status) {
       case 'accepted': case 'hired': return 'admin-badge-active';
       case 'rejected': return 'admin-badge-inactive';
-      case 'reviewed': case 'shortlisted': return 'admin-badge-pending';
+      case 'submitted': case 'reviewed': case 'shortlisted': return 'admin-badge-pending';
       default: return 'bg-gray-100 text-gray-600';
     }
   };
@@ -30,7 +30,7 @@ export default function Applications() {
         <div className="flex gap-2">
           <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="admin-input w-auto">
             <option value="">All Status</option>
-            <option value="pending">Pending</option>
+            <option value="submitted">Submitted</option>
             <option value="reviewed">Reviewed</option>
             <option value="shortlisted">Shortlisted</option>
             <option value="accepted">Accepted</option>

@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { CareersHeader } from "@/components/CareersHeader";
 import { Footer } from "../../../components/ui/Footer";
 import { Card } from "../../../components/ui/card";
@@ -60,6 +60,7 @@ const showFeedback = (setFeedbackMessage: (message: string | null) => void, mess
 };
 
 function ApplyPageContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const jobId = searchParams?.get("jobId") || "";
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -265,7 +266,9 @@ function ApplyPageContent() {
       const result = await submitApplication({ jobId, payload }).unwrap();
 
       setApplicationState("submitted");
+      const applicationId = result?.data?.applicationId;
       showFeedback(setFeedbackMessage, result?.message || "Application submitted successfully.");
+      router.replace(applicationId ? `/Jobseeker/applications/${applicationId}` : "/Jobseeker/applications");
     } catch (errorResponse: unknown) {
       console.error("submitApplication error:", errorResponse);
       showFeedback(

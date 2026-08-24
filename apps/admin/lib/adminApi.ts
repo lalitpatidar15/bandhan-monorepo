@@ -1216,7 +1216,7 @@ const normalizeApplications = (payload: unknown): AdminApplication[] => {
       applicantEmail: String(seeker.email || a.applicantEmail || ''),
       status: String(a.status || 'pending'),
       appliedAt: String(a.createdAt || a.appliedAt || ''),
-      resumeUrl: String(a.resumeUrl || ''),
+      resumeUrl: String(a.resumeUrl || a.resume || ''),
     };
   });
 };

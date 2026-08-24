@@ -1029,6 +1029,24 @@ exports.getJobPosters = async (_req, res) => {
   }
 };
 
+// Job applications are a cross-portal administrative record.  Keep this
+// endpoint populated so the admin view has the same source of truth as the
+// recruiter applicant list.
+exports.getApplications = async (_req, res) => {
+  try {
+    const applications = await Application.find({ isDraft: false })
+      .populate("jobId", "jobTitle")
+      .populate("seekerId", "fullName email")
+      .sort({ submittedAt: -1, createdAt: -1 })
+      .lean();
+
+    return res.status(200).json({ success: true, data: applications });
+  } catch (error) {
+    console.error("Error loading admin job applications:", error);
+    return res.status(500).json({ success: false, message: "Unable to load job applications" });
+  }
+};
+
 exports.updateJobPoster = async (req, res) => {
   try {
     const poster = await Recruiter.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
