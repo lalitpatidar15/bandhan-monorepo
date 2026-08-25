@@ -34,6 +34,8 @@ router.delete("/:courseId",auth, requireRole("student"),courseController.removeF
 
 router.get("/wishlist",auth, requireRole("student"),courseController.getWishlist);
 
+router.get("/wishlist/:courseId",auth, requireRole("student"),courseController.getWishlistStatus);
+
 // =========== enroll =========
 router.post("/:courseId/enroll",auth, requireRole("student"),courseController.enrollCourse);
 

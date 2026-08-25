@@ -1481,6 +1481,9 @@ exports.createOrder = async (req, res) => {
     const { courseId } = req.params;
 
     const { paymentMethod, emiMonths } = req.body;
+    const storedPaymentMethod = ["card", "upi", "wallet", "netbanking", "emi"].includes(paymentMethod)
+      ? paymentMethod
+      : "pending";
 
     const course = await Course.findById(courseId);
 
@@ -1569,6 +1572,8 @@ exports.createOrder = async (req, res) => {
 
       courseId,
 
+      paymentFor: "course",
+
       subtotal,
 
       platformFee,
@@ -1577,7 +1582,7 @@ exports.createOrder = async (req, res) => {
 
       totalAmount,
 
-      paymentMethod,
+      paymentMethod: storedPaymentMethod,
 
       emi: emiData,
 
@@ -2079,6 +2084,24 @@ message: "Server error"
 });
 
 }
+};
+
+// STATUS
+exports.getWishlistStatus = async (req, res) => {
+  try {
+    const wishlistItem = await Wishlist.findOne({
+      studentId: req.user.id,
+      courseId: req.params.courseId,
+    }).select("_id");
+
+    return res.status(200).json({
+      success: true,
+      isWishlisted: Boolean(wishlistItem),
+      wishlistId: wishlistItem?._id || null,
+    });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: "Unable to check wishlist status" });
+  }
 };
 
 // GET
