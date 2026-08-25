@@ -7,7 +7,9 @@ import { SkillsInput } from "@/components/ui/SkillsInput";
 import { CareersHeader } from "@/components/CareersHeader";
 import { Stepper } from "@/components/ui/Stepper";
 import { Footer } from "@/components/ui/Footer";
-import { saveProfileWithFallback, useGetProfileQuery } from "../redux/services/ProfileApi";
+import { saveProfileWithFallback, useGetCatalogOptionsQuery, useGetProfileQuery } from "../redux/services/ProfileApi";
+
+const EMPTY_OPTIONS: string[] = [];
 
 interface FormDataType {
   fullName: string;
@@ -29,19 +31,22 @@ export default function ProfileSetupPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [profileFile, setProfileFile] = useState<File | null>(null);
   const { data: profileData, isLoading: isProfileLoading, isError: isProfileError } = useGetProfileQuery();
+  const { data: catalogOptions } = useGetCatalogOptionsQuery();
+  const jobTypes = catalogOptions?.data?.jobTypes ?? EMPTY_OPTIONS;
+  const experienceLevels = catalogOptions?.data?.experienceLevels ?? EMPTY_OPTIONS;
 
   const [formData, setFormData] = useState<FormDataType>({
     fullName: "",
     location: "",
     phoneNumber: "",
     jobTitle: "",
-    experienceLevel: "Fresher",
+    experienceLevel: "",
     degree: "",
     college: "",
     graduationYear: "",
     profileImage: null,
     skills: [],
-    jobTypes: ["full"],
+    jobTypes: [],
     salaryExpectation: "",
   });
 
@@ -64,6 +69,13 @@ export default function ProfileSetupPage() {
       profileImage: prev.profileImage,
     }));
   }, [profileData]);
+
+  useEffect(() => {
+    setFormData((previous) => ({
+      ...previous,
+      experienceLevel: previous.experienceLevel || experienceLevels[0] || "",
+    }));
+  }, [experienceLevels]);
 
   const handleInputChange = (field: keyof FormDataType, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -91,7 +103,7 @@ export default function ProfileSetupPage() {
       fd.append("location", formData.location || "");
       fd.append("phone", formData.phoneNumber || "");
       fd.append("currentRole", formData.jobTitle || "");
-      fd.append("experienceLevel", formData.experienceLevel || "Fresher");
+      fd.append("experienceLevel", formData.experienceLevel || "");
       fd.append("degree", formData.degree || "");
       fd.append("college", formData.college || "");
       fd.append("graduationYear", String(formData.graduationYear || ""));
@@ -211,12 +223,10 @@ export default function ProfileSetupPage() {
                     <Select
                       value={formData.experienceLevel}
                       onChange={(e) => handleInputChange("experienceLevel", e.target.value)}
+                      disabled={!experienceLevels.length}
                     >
-                      <option value="Fresher">Fresher</option>
-                      <option value="0-1 Years">0-1 Years</option>
-                      <option value="1-3 Years">1-3 Years</option>
-                      <option value="3-5 Years">3-5 Years</option>
-                      <option value="5+ Years">5+ Years</option>
+                      <option value="">{experienceLevels.length ? "Select experience" : "Experience levels unavailable"}</option>
+                      {experienceLevels.map((value) => <option key={value} value={value}>{value}</option>)}
                     </Select>
                   </Field>
                 </div>
@@ -255,9 +265,7 @@ export default function ProfileSetupPage() {
                       onChange={(e) => handleInputChange("graduationYear", e.target.value)}
                     >
                       <option value="">Select...</option>
-                      <option value="2024">2024</option>
-                      <option value="2025">2025</option>
-                      <option value="2026">2026</option>
+                      {Array.from({ length: 8 }, (_, index) => String(new Date().getFullYear() - index)).map((year) => <option key={year} value={year}>{year}</option>)}
                     </Select>
                   </Field>
                 </div>
@@ -278,31 +286,27 @@ export default function ProfileSetupPage() {
 
                     <div className="flex flex-wrap gap-2">
 
-                      {[
-                        { value: "full", label: "Full-time" },
-                        { value: "remote", label: "Remote" },
-                        { value: "contract", label: "Contract" },
-                      ].map((item) => (
+                      {jobTypes.map((item) => (
                         <button
-                          key={item.value}
+                          key={item}
                           type="button"
                           onClick={() => {
-                            const isChecked = formData.jobTypes.includes(item.value);
+                            const isChecked = formData.jobTypes.includes(item);
                             if (isChecked) {
                               handleArrayChange(
                                 "jobTypes",
-                                formData.jobTypes.filter((x) => x !== item.value)
+                                formData.jobTypes.filter((x) => x !== item)
                               );
                             } else {
                               handleArrayChange("jobTypes", [
                                 ...formData.jobTypes,
-                                item.value,
+                                item,
                               ]);
                             }
                           }}
-                          className={["bhn-chip", formData.jobTypes.includes(item.value) ? "bhn-chip-active" : ""].filter(Boolean).join(" ")}
+                          className={["bhn-chip", formData.jobTypes.includes(item) ? "bhn-chip-active" : ""].filter(Boolean).join(" ")}
                         >
-                          {item.label}
+                          {item}
                         </button>
                       ))}
                     </div>

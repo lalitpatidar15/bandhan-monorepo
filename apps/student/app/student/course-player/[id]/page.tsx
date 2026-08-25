@@ -30,7 +30,8 @@ function CoursePlayerContent() {
         stats: raw.stats || raw.course?.stats,
     } as any;
 
-    const isEnrolled = course?.enrollment?.isEnrolled ?? true;
+    // Never grant lesson access because an API response omitted enrollment data.
+    const isEnrolled = course?.enrollment?.isEnrolled === true;
     const lessons = useMemo(
         () => course?.modules?.flatMap((module: any) => module.lessons ?? []) ?? [],
         [course]

@@ -1,17 +1,32 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Plus, Search, MapPin, Users } from 'lucide-react';
-import { useCreateJobMutation, useGetAllJobsQuery, useGetJobPostersQuery } from '@/lib/adminApi';
+import { useCreateJobMutation, useGetAllJobsQuery, useGetJobPostersQuery, useGetSettingsQuery } from '@/lib/adminApi';
+
+const EMPTY_OPTIONS: string[] = [];
 
 export default function Jobs() {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({ recruiterId: '', jobTitle: '', jobCategory: 'Other', jobType: 'Full-time', experienceLevel: 'Junior', salaryMin: '', salaryMax: '', location: '', openings: '1', aboutRole: '', status: 'active' });
+  const [form, setForm] = useState({ recruiterId: '', jobTitle: '', jobCategory: '', jobType: '', experienceLevel: '', salaryMin: '', salaryMax: '', location: '', openings: '1', aboutRole: '', status: 'active' });
   const { data: jobs = [], isLoading } = useGetAllJobsQuery();
   const { data: jobPosters = [] } = useGetJobPostersQuery();
+  const { data: settingsResponse } = useGetSettingsQuery();
   const [createJob, { isLoading: isCreating }] = useCreateJobMutation();
+  const jobCategories = settingsResponse?.data.catalogFilters?.jobCategories ?? EMPTY_OPTIONS;
+  const jobTypes = settingsResponse?.data.catalogFilters?.jobTypes ?? EMPTY_OPTIONS;
+  const experienceLevels = settingsResponse?.data.catalogFilters?.experienceLevels ?? EMPTY_OPTIONS;
+
+  useEffect(() => {
+    setForm((current) => ({
+      ...current,
+      jobCategory: current.jobCategory || jobCategories[0] || '',
+      jobType: current.jobType || jobTypes[0] || '',
+      experienceLevel: current.experienceLevel || experienceLevels[0] || '',
+    }));
+  }, [jobCategories, jobTypes, experienceLevels]);
   const filtered = jobs.filter((j) => {
     const matchSearch = !search || j.jobTitle.toLowerCase().includes(search.toLowerCase()) || j.companyName.toLowerCase().includes(search.toLowerCase());
     const matchStatus = !statusFilter || j.status === statusFilter;
@@ -27,10 +42,10 @@ export default function Jobs() {
     }
   };
   const submit = async () => {
-    if (!form.recruiterId || !form.jobTitle.trim()) return;
+    if (!form.recruiterId || !form.jobTitle.trim() || !form.jobCategory || !form.jobType || !form.experienceLevel) return;
     try {
       await createJob({ ...form, jobTitle: form.jobTitle.trim(), salaryMin: Number(form.salaryMin) || 0, salaryMax: Number(form.salaryMax) || 0, openings: Number(form.openings) || 1 }).unwrap();
-      setShowForm(false); setForm({ recruiterId: '', jobTitle: '', jobCategory: 'Other', jobType: 'Full-time', experienceLevel: 'Junior', salaryMin: '', salaryMax: '', location: '', openings: '1', aboutRole: '', status: 'active' });
+      setShowForm(false); setForm({ recruiterId: '', jobTitle: '', jobCategory: jobCategories[0] || '', jobType: jobTypes[0] || '', experienceLevel: experienceLevels[0] || '', salaryMin: '', salaryMax: '', location: '', openings: '1', aboutRole: '', status: 'active' });
     } catch (error) { console.error(error); }
   };
 
@@ -58,12 +73,13 @@ export default function Jobs() {
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           <select className="admin-input" value={form.recruiterId} onChange={(e) => setForm({ ...form, recruiterId: e.target.value })}><option value="">Select job poster *</option>{jobPosters.map((poster) => <option key={poster.id} value={poster.id}>{poster.companyName} ({poster.companyEmail})</option>)}</select>
           <input className="admin-input" placeholder="Job title *" value={form.jobTitle} onChange={(e) => setForm({ ...form, jobTitle: e.target.value })}/>
-          <select className="admin-input" value={form.jobCategory} onChange={(e) => setForm({ ...form, jobCategory: e.target.value })}>{['Software Development','Design & Creative','Marketing','Sales','Finance','Human Resources','Customer Support','Education','Healthcare','Engineering','Other'].map((value) => <option key={value}>{value}</option>)}</select>
-          <select className="admin-input" value={form.jobType} onChange={(e) => setForm({ ...form, jobType: e.target.value })}>{['Full-time','Part-time','Contract','Internship','Freelance'].map((value) => <option key={value}>{value}</option>)}</select>
+          <select className="admin-input admin-select" value={form.jobCategory} onChange={(e) => setForm({ ...form, jobCategory: e.target.value })} disabled={!jobCategories.length}><option value="">{jobCategories.length ? 'Select job category *' : 'Add job categories in Settings'}</option>{jobCategories.map((value) => <option key={value} value={value}>{value}</option>)}</select>
+          <select className="admin-input admin-select" value={form.jobType} onChange={(e) => setForm({ ...form, jobType: e.target.value })} disabled={!jobTypes.length}><option value="">{jobTypes.length ? 'Select job type *' : 'Add job types in Settings'}</option>{jobTypes.map((value) => <option key={value} value={value}>{value}</option>)}</select>
+          <select className="admin-input admin-select" value={form.experienceLevel} onChange={(e) => setForm({ ...form, experienceLevel: e.target.value })} disabled={!experienceLevels.length}><option value="">{experienceLevels.length ? 'Select experience level *' : 'Add experience levels in Settings'}</option>{experienceLevels.map((value) => <option key={value} value={value}>{value}</option>)}</select>
           <input className="admin-input" type="number" placeholder="Minimum salary" value={form.salaryMin} onChange={(e) => setForm({ ...form, salaryMin: e.target.value })}/><input className="admin-input" type="number" placeholder="Maximum salary" value={form.salaryMax} onChange={(e) => setForm({ ...form, salaryMax: e.target.value })}/>
           <input className="admin-input" placeholder="Location" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })}/><input className="admin-input" type="number" placeholder="Openings" value={form.openings} onChange={(e) => setForm({ ...form, openings: e.target.value })}/>
           <input className="admin-input md:col-span-2" placeholder="Role summary" value={form.aboutRole} onChange={(e) => setForm({ ...form, aboutRole: e.target.value })}/>
-        </div><button disabled={isCreating} onClick={submit} className="admin-btn admin-btn-primary">{isCreating ? 'Creating...' : 'Create Job'}</button>
+        </div>{(!jobCategories.length || !jobTypes.length || !experienceLevels.length) && <p className="text-xs text-amber-700">Add the missing job options in Settings before publishing a job.</p>}<button disabled={isCreating || !jobCategories.length || !jobTypes.length || !experienceLevels.length} onClick={submit} className="admin-btn admin-btn-primary">{isCreating ? 'Creating...' : 'Create Job'}</button>
       </div>}
 
       {isLoading ? (

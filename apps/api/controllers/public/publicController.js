@@ -14,6 +14,12 @@ const DEFAULT_CATALOG_OPTIONS = {
   jobCategories: ["Software Development", "Design & Creative", "Marketing", "Sales", "Finance", "Human Resources", "Customer Support", "Education", "Healthcare", "Engineering", "Other"],
   jobTypes: ["Full-time", "Part-time", "Contract", "Internship", "Freelance"],
   experienceLevels: ["Junior", "Mid-Level", "Senior", "Lead/Executive"],
+  courseCategories: [],
+  courseLevels: [],
+  serviceTypes: [],
+  venueTypes: [],
+  eventTypes: [],
+  productModes: ["buy", "rent"],
 };
 
 exports.getCatalogOptions = async (_req, res) => {

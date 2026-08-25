@@ -27,3 +27,13 @@ test("portal client fallbacks use the current production API", () => {
     assert.doesNotMatch(source, /bandhan-backend-gykw\.onrender\.com/);
   }
 });
+
+test("course player fails closed when enrollment is missing", () => {
+  const source = fs.readFileSync(
+    path.join(__dirname, "../../student/app/student/course-player/[id]/page.tsx"),
+    "utf8",
+  );
+
+  assert.match(source, /course\?\.enrollment\?\.isEnrolled === true/);
+  assert.doesNotMatch(source, /course\?\.enrollment\?\.isEnrolled \?\? true/);
+});

@@ -42,7 +42,7 @@ export default function Settings() {
     setSettings({ ...settings, [field]: value });
   };
 
-  const updateOptionList = (field: "jobIndustries" | "companySizes" | "courseLevels" | "eventTypes" | "jobCategories" | "jobTypes" | "experienceLevels" | "courseCategories" | "serviceTypes" | "venueTypes", raw: string) => {
+  const updateOptionList = (field: "jobIndustries" | "companySizes" | "courseLevels" | "eventTypes" | "jobCategories" | "jobTypes" | "experienceLevels" | "courseCategories" | "serviceTypes" | "venueTypes" | "productModes", raw: string) => {
     const values = raw.split("\n").map((item) => item.trim()).filter(Boolean);
     handleChange("catalogFilters", { ...(settings.catalogFilters || {}), [field]: values });
   };
@@ -186,7 +186,7 @@ export default function Settings() {
           <h3 className="font-semibold text-lg mb-2">Portal dropdown options</h3>
           <p className="mb-4 text-sm text-gray-600">One option per line. These values are versioned with the rest of the admin settings and are served to portal forms from the API.</p>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            {([['eventTypes', 'Event types'], ['jobCategories', 'Job categories'], ['jobTypes', 'Job types'], ['experienceLevels', 'Experience levels'], ['courseCategories', 'Course categories'], ['courseLevels', 'Course levels'], ['serviceTypes', 'Service categories'], ['venueTypes', 'Venue types'], ['companySizes', 'Company sizes']] as const).map(([field, label]) => (
+            {([['eventTypes', 'Event types'], ['productModes', 'Product availability modes'], ['jobCategories', 'Job categories'], ['jobTypes', 'Job types'], ['jobIndustries', 'Job industries'], ['experienceLevels', 'Experience levels'], ['courseCategories', 'Course categories'], ['courseLevels', 'Course levels'], ['serviceTypes', 'Service categories'], ['venueTypes', 'Venue types'], ['companySizes', 'Company sizes']] as const).map(([field, label]) => (
               <label key={field} className="block text-sm font-medium text-gray-700">{label}
                 <textarea rows={7} value={(settings.catalogFilters?.[field] || []).join('\n')} onChange={(event) => updateOptionList(field, event.target.value)} className="mt-2 w-full admin-input" />
               </label>

@@ -63,6 +63,14 @@ export interface DeleteResumeResponse {
   message: string;
 }
 
+export interface CatalogOptionsResponse {
+  success: boolean;
+  data?: {
+    jobTypes?: string[];
+    experienceLevels?: string[];
+  };
+}
+
 const PROFILE_ENDPOINTS = [
   { url: "seeker/profile", method: "PUT" as const },
 ];
@@ -153,6 +161,9 @@ export const profileApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    getCatalogOptions: build.query<CatalogOptionsResponse, void>({
+      query: () => ({ url: "public/catalog-options", method: "GET" }),
+    }),
     updateProfile: build.mutation<UpdateProfileResponse, FormData>({
       query: (body) => ({
         url: "seeker/profile",
@@ -192,6 +203,7 @@ export const profileApi = baseApi.injectEndpoints({
 
 export const {
   useGetProfileQuery,
+  useGetCatalogOptionsQuery,
   useUpdateProfileMutation,
   useUploadResumeMutation,
   useGetResumeQuery,

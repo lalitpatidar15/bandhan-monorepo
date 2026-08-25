@@ -50,9 +50,9 @@ function CreateJobPageContent() {
   const [publishJob] = usePublishJobMutation();
   const isAnySaving = isSaving || isSavingDraft;
   const jobIdFromUrl = searchParams?.get("jobId") ?? null;
-  const jobCategories = catalogOptions?.data?.jobCategories || ["Software Development", "Design & Creative", "Marketing", "Sales", "Finance", "Human Resources", "Customer Support", "Education", "Healthcare", "Engineering", "Other"];
-  const jobTypes = catalogOptions?.data?.jobTypes || ["Full-time", "Part-time", "Contract", "Internship", "Freelance"];
-  const experienceLevels = catalogOptions?.data?.experienceLevels || ["Junior", "Mid-Level", "Senior", "Lead/Executive"];
+  const jobCategories = catalogOptions?.data?.jobCategories || [];
+  const jobTypes = catalogOptions?.data?.jobTypes || [];
+  const experienceLevels = catalogOptions?.data?.experienceLevels || [];
 
   useEffect(() => {
     if (jobIdFromUrl) {

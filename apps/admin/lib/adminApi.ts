@@ -512,7 +512,7 @@ export type AdminService = {
   sellerId: string;
   sellerEmail: string;
   title: string;
-  category: 'venue' | 'catering' | 'decor';
+  category: string;
   price: number;
   description: string;
   location: string;
