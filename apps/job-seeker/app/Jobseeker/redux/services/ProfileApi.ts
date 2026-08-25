@@ -80,7 +80,7 @@ const cloneFormData = (source: FormData) => {
 };
 
 export async function saveProfileWithFallback(body: FormData): Promise<UpdateProfileResponse> {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_NGROK_API || "https://bandhan-backend-gykw.onrender.com/api";
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_NGROK_API || "https://bandhan-api.vercel.app/api";
   const baseUrl = API_URL.replace(/\/$/, "");
   const token = typeof window !== "undefined" ? window.localStorage.getItem("token") : null;
   const rawBaseQuery = fetchBaseQuery({

@@ -1,0 +1,29 @@
+const test = require("node:test");
+const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
+
+test("rental catalogue continuation keeps the selected listing path", () => {
+  const source = fs.readFileSync(
+    path.join(__dirname, "../../user/components/catalog/PublicCatalogueDetail.tsx"),
+    "utf8",
+  );
+
+  assert.match(source, /router\.push\(`\/listings\/product\/\$\{encodeURIComponent\(id\)\}`\)/);
+  assert.doesNotMatch(source, /type=products\/\$\{encodeURIComponent\(id\)\}/);
+});
+
+test("portal client fallbacks use the current production API", () => {
+  const portalFiles = [
+    "../../user/store/api/baseApi.ts",
+    "../../student/app/redux/services/baseApi.ts",
+    "../../job-seeker/components/upgrade.tsx",
+    "../../admin/lib/adminApi.ts",
+  ];
+
+  for (const relativePath of portalFiles) {
+    const source = fs.readFileSync(path.join(__dirname, relativePath), "utf8");
+    assert.match(source, /https:\/\/bandhan-api\.vercel\.app/);
+    assert.doesNotMatch(source, /bandhan-backend-gykw\.onrender\.com/);
+  }
+});

@@ -152,7 +152,10 @@ export default function PublicCatalogueDetail({ kind, id }: { kind: PublicDiscov
   }, { skip: !id });
 
   const handleRentalAction = () => {
-    gate(() => router.push(`/explore?type=products/${encodeURIComponent(id)}`));
+    // Keep the selected listing ID in the path. The previous query string
+    // (`type=products/<id>`) was not a valid explore filter and stranded a
+    // signed-in customer on the catalogue instead of opening the rental item.
+    gate(() => router.push(`/listings/product/${encodeURIComponent(id)}`));
   };
 
   if (isLoading) {

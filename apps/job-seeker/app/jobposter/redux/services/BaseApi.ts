@@ -15,7 +15,7 @@ const localApiUrl = typeof window !== "undefined" && (window.location.hostname =
   ? "http://localhost:5000/api"
   : undefined;
 const rawBaseQuery = fetchBaseQuery({
-  baseUrl: process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_NGROK_API || localApiUrl || "https://bandhan-backend-gykw.onrender.com/api",
+  baseUrl: process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_NGROK_API || localApiUrl || "https://bandhan-api.vercel.app/api",
 
   prepareHeaders: (headers) => {
     headers.set("ngrok-skip-browser-warning", "true");

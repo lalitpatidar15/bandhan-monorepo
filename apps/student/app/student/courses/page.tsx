@@ -38,7 +38,7 @@ export default function CoursesPage() {
   const heroGoal = dashStats?.completionRate ?? 0;
 
   useEffect(() => {
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || "https://bandhan-backend-gykw.onrender.com/api";
+    const apiBase = process.env.NEXT_PUBLIC_API_URL || "https://bandhan-api.vercel.app/api";
     fetch(`${apiBase}/student/page-resources`)
       .then(res => res.json())
       .then(json => {

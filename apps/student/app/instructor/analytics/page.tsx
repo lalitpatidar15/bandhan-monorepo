@@ -22,7 +22,7 @@ export default function AnalyticsPage() {
     const [pageData, setPageData] = useState<any>({});
 
     useEffect(() => {
-        const apiBase = process.env.NEXT_PUBLIC_API_URL || "https://bandhan-backend-gykw.onrender.com/api";
+        const apiBase = process.env.NEXT_PUBLIC_API_URL || "https://bandhan-api.vercel.app/api";
         fetch(`${apiBase}/instructor/page-resources`)
             .then(res => res.json())
             .then(json => { if (json?.success && json?.data) setPageData(json.data); })

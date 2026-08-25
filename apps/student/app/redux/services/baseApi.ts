@@ -9,7 +9,7 @@ function logout() {
 }
 
 const rawBaseUrl =
-  process.env.NEXT_PUBLIC_API_URL || "https://bandhan-backend-gykw.onrender.com/api";
+  process.env.NEXT_PUBLIC_API_URL || "https://bandhan-api.vercel.app/api";
 
 const normalizedBaseUrl = rawBaseUrl.endsWith("/api")
   ? rawBaseUrl

@@ -54,7 +54,7 @@ export default function LandingClient() {
   const [catalogueLoading, setCatalogueLoading] = useState(true);
 
   useEffect(() => {
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || "https://bandhan-backend-gykw.onrender.com/api";
+    const apiBase = process.env.NEXT_PUBLIC_API_URL || "https://bandhan-api.vercel.app/api";
     fetch(`${apiBase}/student/courses`)
       .then((response) => response.ok ? response.json() : Promise.reject(new Error("Course catalogue unavailable")))
       .then((response) => {
