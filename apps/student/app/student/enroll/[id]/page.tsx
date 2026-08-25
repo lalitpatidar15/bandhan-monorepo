@@ -32,14 +32,14 @@ export default function CheckoutPage() {
     if (!id) return;
     setError('');
     try {
-      if (total === 0) { await enrollFreeCourse(id).unwrap(); router.replace('/student'); return; }
+      if (total === 0) { await enrollFreeCourse(id).unwrap(); router.replace('/student/mycourse'); return; }
       const created = await createOrder({ courseId: id, paymentMethod: 'razorpay' }).unwrap();
       const order = created?.data;
       if (!order?.orderId || !order?.razorpayKey) throw new Error('Razorpay test checkout is not configured.');
       await loadRazorpay();
       if (!window.Razorpay) throw new Error('Razorpay checkout is unavailable.');
       const checkout = new window.Razorpay({ key: order.razorpayKey, amount: order.amount, currency: order.currency || 'INR', name: 'Bandhan', description: `Enrollment: ${course?.title || 'Course'}`, order_id: order.orderId, theme: { color: '#c65b22' }, handler: async (response: { razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string }) => {
-        try { await verifyPayment({ courseId: id, orderId: response.razorpay_order_id, paymentId: response.razorpay_payment_id, signature: response.razorpay_signature }).unwrap(); router.replace('/student'); }
+        try { await verifyPayment({ courseId: id, orderId: response.razorpay_order_id, paymentId: response.razorpay_payment_id, signature: response.razorpay_signature }).unwrap(); router.replace('/student/mycourse'); }
         catch { setError('Payment was received but could not be verified. Please contact support with your payment ID.'); }
       }, modal: { ondismiss: () => setError('Payment cancelled. Your enrollment was not created.') } });
       checkout.on('payment.failed', (response) => setError(response.error?.description || 'Razorpay test payment failed. Please try again.'));
