@@ -37,3 +37,14 @@ test("course player fails closed when enrollment is missing", () => {
   assert.match(source, /course\?\.enrollment\?\.isEnrolled === true/);
   assert.doesNotMatch(source, /course\?\.enrollment\?\.isEnrolled \?\? true/);
 });
+
+test("course player returns the authenticated student's enrollment", () => {
+  const source = fs.readFileSync(
+    path.join(__dirname, "../controllers/Student/courseController.js"),
+    "utf8",
+  );
+
+  const playerSource = source.slice(source.indexOf("exports.getCoursePlayer"), source.indexOf("exports.completeLesson"));
+  assert.match(playerSource, /Enrollment\.findOne\(\{\s*studentId: req\.user\.id,/);
+  assert.match(playerSource, /enrollment:\s*\{\s*isEnrolled: true,/);
+});

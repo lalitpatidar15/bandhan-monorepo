@@ -3051,6 +3051,20 @@ exports.getCoursePlayer = async (req, res) => {
 
     }
 
+    // The course player must return the student's enrollment explicitly.
+    // The web client uses this value to guard paid lesson access.
+    const enrollment = await Enrollment.findOne({
+      studentId: req.user.id,
+      courseId: course._id
+    });
+
+    if (!enrollment) {
+      return res.status(403).json({
+        success: false,
+        message: "Enroll in this course before accessing its lessons"
+      });
+    }
+
     // ============================
     // TOTALS
     // ============================
@@ -3225,6 +3239,18 @@ exports.getCoursePlayer = async (req, res) => {
       success:true,
 
       data:{
+
+        enrollment: {
+          isEnrolled: true,
+          enrollmentId: enrollment._id,
+          status: enrollment.status,
+          progressPercentage: enrollment.progressPercentage,
+          currentModuleId: enrollment.currentModuleId,
+          currentLessonId: enrollment.currentLessonId,
+          unlockedModules: enrollment.unlockedModules || [],
+          completedLessons: enrollment.completedLessons || [],
+          lastAccessedAt: enrollment.lastAccessedAt
+        },
 
         course:{
 
