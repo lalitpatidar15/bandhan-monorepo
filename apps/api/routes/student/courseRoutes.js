@@ -69,7 +69,7 @@ router.get("/course-player/:courseId/lesson/:lessonId/resources",auth, requireRo
 
 router.post("/create",courseController.createQuiz);
 
-router.get("/lesson/:lessonId",courseController.getQuizForStudent);
+router.get("/lesson/:lessonId",auth, requireRole("student"),courseController.getQuizForStudent);
 
 router.post("/:quizId/submit", auth, requireRole("student"), courseController.submitQuiz);
 

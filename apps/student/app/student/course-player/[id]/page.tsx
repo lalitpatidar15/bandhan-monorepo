@@ -15,7 +15,7 @@ function CoursePlayerContent() {
     const [openModule, setOpenModule] = useState<string | null>(null);
 
     const courseId = String(id || "");
-    const { data: courseResponse, isLoading, error } = useGetCoursePlayerQuery(courseId, {
+    const { data: courseResponse, isLoading, error, refetch } = useGetCoursePlayerQuery(courseId, {
         skip: !courseId,
         refetchOnMountOrArgChange: true,
     });
@@ -37,7 +37,6 @@ function CoursePlayerContent() {
         [course]
     );
     const modules = course?.modules || [];
-    const quizId = String(course?.courseId || course?.id || courseId || "");
 
     const [completeLesson, { isLoading: isCompleting }] = useCompleteLessonMutation();
 
@@ -116,6 +115,7 @@ function CoursePlayerContent() {
     }
 
     const lesson = lessons[selectedLesson] || lessons[0] || null;
+    const hasQuiz = Boolean(lesson?.quiz?._id || lesson?.quizId || lesson?.mcqData?.questions?.length);
     const resources: Array<{ fileUrl?: string; fileName?: string; name?: string; fileType?: string }> = lesson?.resources || [];
     const courseLessonCount = lessons.length;
     const courseTitle = course?.title || "Course Player";
@@ -289,6 +289,7 @@ function CoursePlayerContent() {
                                     try {
                                         if (!courseId || !lesson?._id) return;
                                         await completeLesson({ courseId, lessonId: String(lesson._id) }).unwrap();
+                                        await refetch();
                                         // advance to next lesson if available
                                         setSelectedLesson((s) => (s + 1 < lessons.length ? s + 1 : s));
                                     } catch (err) {
@@ -374,19 +375,16 @@ function CoursePlayerContent() {
                                     </div>
 
                                     {/* QUIZ BUTTON */}
-                                    <div className="mt-6 flex justify-end">
+                                    {hasQuiz && <div className="mt-6 flex justify-end">
                                         <button
                                             onClick={() => {
-                                                // Use quiz ID if available, otherwise use lesson ID
-                                                const quizIdToUse = lesson?.quizId || lesson?.quiz?._id || lesson?._id || id;
-                                                console.log("Navigating to quiz with ID:", quizIdToUse, "Lesson data:", lesson);
-                                                router.push(`/student/quiz/${quizIdToUse}`);
+                                                router.push(`/student/quiz/${lesson._id}`);
                                             }}
                                             className="bhn-btn bhn-btn-primary"
                                         >
                                             Take Quiz →
                                         </button>
-                                    </div>
+                                    </div>}
                                 </>
                             )}
 

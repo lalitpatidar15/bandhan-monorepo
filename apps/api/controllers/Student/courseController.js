@@ -3065,6 +3065,13 @@ exports.getCoursePlayer = async (req, res) => {
       });
     }
 
+    const completedLessonIds = new Set(
+      (enrollment.completedLessons || []).map((item) => String(item.lessonId))
+    );
+    const unlockedModuleIds = new Set(
+      (enrollment.unlockedModules || []).map((moduleId) => String(moduleId))
+    );
+
     // ============================
     // TOTALS
     // ============================
@@ -3122,9 +3129,9 @@ exports.getCoursePlayer = async (req, res) => {
           order:
             module.order,
 
-          completed:false,
+          completed: (module.lessons || []).every((lesson) => completedLessonIds.has(String(lesson._id))),
 
-          locked:false,
+          locked: unlockedModuleIds.size > 0 && !unlockedModuleIds.has(String(module._id)),
 
           totalLessons:
             module.lessons.length,
@@ -3171,17 +3178,23 @@ exports.getCoursePlayer = async (req, res) => {
                 pdfUrl:
                   lesson.pdfUrl || "",
 
+                mcqData:
+                  lesson.mcqData || null,
+
+                quiz:
+                  lesson.quiz || null,
+
                 preview:
                   lesson.isPreview,
 
-                completed:false,
+                completed: completedLessonIds.has(String(lesson._id)),
 
                 current:
                   firstLesson &&
                   lesson._id.toString() ===
                   firstLesson._id.toString(),
 
-                locked:false
+                locked: unlockedModuleIds.size > 0 && !unlockedModuleIds.has(String(module._id))
 
               })
 
@@ -3320,7 +3333,7 @@ exports.getCoursePlayer = async (req, res) => {
 
           totalLessons,
 
-          percentage:0
+          percentage: enrollment.progressPercentage
 
         },
 
@@ -4146,15 +4159,56 @@ exports.createQuiz = async (req, res) => {
 exports.getQuizForStudent = async (req, res) => {
   try {
 
-    const quiz = await Quiz.findOne({
+    let quiz = await Quiz.findOne({
       lessonId: req.params.lessonId
     });
 
     if (!quiz) {
-      return res.status(404).json({
-        success: false,
-        message: "Quiz not found"
-      });
+      const course = await Course.findOne({ "modules.lessons._id": req.params.lessonId });
+      if (!course) return res.status(404).json({ success: false, message: "Quiz not found" });
+
+      const enrollment = await Enrollment.findOne({ studentId: req.user.id, courseId: course._id });
+      if (!enrollment) {
+        return res.status(403).json({ success: false, message: "Enroll in this course before taking its quiz" });
+      }
+
+      const module = course.modules.find((item) => item.lessons.some((lesson) => String(lesson._id) === String(req.params.lessonId)));
+      const lesson = module?.lessons.find((item) => String(item._id) === String(req.params.lessonId));
+      const questions = (lesson?.mcqData?.questions || [])
+        .filter((question) => question?.question && Array.isArray(question.options) && question.options.length >= 4)
+        .map((question) => ({
+          question: question.question,
+          hint: question.hint || "",
+          options: question.options.map((option, index) => ({
+            text: typeof option === "string" ? option : option?.text || "",
+            isCorrect: index === Number(question.correctOption)
+          }))
+        }));
+
+      if (!questions.length) {
+        return res.status(404).json({ success: false, message: "No quiz has been added to this lesson yet" });
+      }
+
+      try {
+        quiz = await Quiz.create({
+          courseId: course._id,
+          moduleId: module._id,
+          lessonId: lesson._id,
+          title: lesson.title || "Lesson quiz",
+          description: lesson.description || "",
+          passingMarks: Number(lesson.mcqData?.passingScore) || 40,
+          totalQuestions: questions.length,
+          questions
+        });
+      } catch (createError) {
+        if (createError?.code !== 11000) throw createError;
+        quiz = await Quiz.findOne({ lessonId: req.params.lessonId });
+      }
+    } else {
+      const enrollment = await Enrollment.findOne({ studentId: req.user.id, courseId: quiz.courseId });
+      if (!enrollment) {
+        return res.status(403).json({ success: false, message: "Enroll in this course before taking its quiz" });
+      }
     }
 
     res.status(200).json({

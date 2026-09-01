@@ -48,3 +48,27 @@ test("course player returns the authenticated student's enrollment", () => {
   assert.match(playerSource, /Enrollment\.findOne\(\{\s*studentId: req\.user\.id,/);
   assert.match(playerSource, /enrollment:\s*\{\s*isEnrolled: true,/);
 });
+
+test("course player exposes progress and embedded quiz data for enrolled students", () => {
+  const source = fs.readFileSync(
+    path.join(__dirname, "../controllers/Student/courseController.js"),
+    "utf8",
+  );
+  const playerSource = source.slice(source.indexOf("exports.getCoursePlayer"), source.indexOf("exports.completeLesson"));
+
+  assert.match(playerSource, /mcqData:\s*lesson\.mcqData \|\| null/);
+  assert.match(playerSource, /percentage:\s*enrollment\.progressPercentage/);
+  assert.match(playerSource, /completed: completedLessonIds\.has\(String\(lesson\._id\)\)/);
+});
+
+test("embedded instructor MCQs can be loaded as an enrolled student quiz", () => {
+  const source = fs.readFileSync(
+    path.join(__dirname, "../controllers/Student/courseController.js"),
+    "utf8",
+  );
+  const quizSource = source.slice(source.indexOf("exports.getQuizForStudent"), source.indexOf("exports.submitQuiz"));
+
+  assert.match(quizSource, /"modules\.lessons\._id": req\.params\.lessonId/);
+  assert.match(quizSource, /Quiz\.create\(/);
+  assert.match(quizSource, /studentId: req\.user\.id/);
+});
