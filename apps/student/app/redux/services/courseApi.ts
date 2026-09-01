@@ -13,17 +13,20 @@ export const courseApi = baseApi.injectEndpoints({
 
     getCoursePlayer: builder.query({
       query: (courseId: string) => `/student/course-player/${courseId}`,
+      providesTags: (_result, _error, courseId) => [{ type: 'CoursePlayer', id: courseId }],
     }),
 
-    completeLesson: builder.mutation({
+completeLesson: builder.mutation({
       query: ({ courseId, lessonId }: { courseId: string; lessonId: string }) => ({
         url: `/student/course-player/${courseId}/lesson/${lessonId}/complete`,
         method: "PUT",
       }),
+      invalidatesTags: (_result, _error, { courseId }) => [{ type: 'CoursePlayer', id: courseId }],
     }),
 
     getQuizByLesson: builder.query({
       query: (lessonId: string) => `/student/lesson/${lessonId}`,
+      providesTags: (_result, _error, lessonId) => [{ type: 'Quiz', id: lessonId }],
     }),
 
     addToWishlist: builder.mutation({
@@ -59,6 +62,11 @@ export const courseApi = baseApi.injectEndpoints({
         method: "POST",
         body: { orderId, paymentId, signature },
       }),
+      invalidatesTags: (_result, _error, { courseId }) => [
+        { type: 'CoursePlayer', id: courseId },
+        { type: 'CoursePlayer', id: 'LIST' },
+        { type: 'Quiz', id: 'LIST' }
+      ],
     }),
 
     createOrder: builder.mutation({
@@ -73,11 +81,16 @@ export const courseApi = baseApi.injectEndpoints({
       query: () => `/student/enrollments`,
     }),
 
-    enrollFreeCourse: builder.mutation({
+enrollFreeCourse: builder.mutation({
       query: (courseId: string) => ({
         url: `/student/${courseId}/enroll`,
         method: "POST",
       }),
+      invalidatesTags: (_result, _error, courseId) => [
+        { type: 'CoursePlayer', id: courseId },
+        { type: 'CoursePlayer', id: 'LIST' },
+        { type: 'Quiz', id: 'LIST' }
+      ],
     }),
 
     getEnrollment: builder.query({

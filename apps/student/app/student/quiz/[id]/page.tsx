@@ -161,21 +161,21 @@ export default function QuizPage() {
 
     if (isLoading) {
         return (
-            <div className="bg-[#F7F3EF] dark:bg-[#171717] min-h-screen flex items-center justify-center">
-                <Loader size={24} className="animate-spin text-[#8B4A28] dark:text-[#c9a882]" />
+            <div className="bg-[var(--bhn-bg)] dark:bg-[#171717] min-h-screen flex items-center justify-center">
+                <Loader size={24} className="animate-spin text-[var(--bhn-brand-500)] dark:text-[var(--bhn-brand-400)]" />
             </div>
         );
     }
 
     if (isError || !quiz) {
         return (
-            <div className="bg-[#F7F3EF] dark:bg-[#171717] min-h-screen flex items-center justify-center px-4">
-                <div className="max-w-md text-center bg-white rounded-3xl border border-[#E8DDD5] dark:border-[#374151] p-5 shadow-sm">
-                    <p className="text-xl font-semibold text-[#4A3A33] dark:text-[#a89080] mb-3">Unable to load quiz</p>
-                    <p className="text-sm text-[#7B6A62] dark:text-[#b89b7d] mb-6">There was a problem fetching the quiz data. Please try again or contact support.</p>
+            <div className="bg-[var(--bhn-bg)] dark:bg-[#171717] min-h-screen flex items-center justify-center px-4">
+                <div className="max-w-md text-center bg-white rounded-3xl border border-[var(--bhn-border)] dark:border-[#374151] p-5 shadow-sm">
+                    <p className="text-xl font-semibold text-[var(--bhn-text)] dark:text-[#a89080] mb-3">Unable to load quiz</p>
+                    <p className="text-sm text-[var(--bhn-text-muted)] dark:text-[#b89b7d] mb-6">There was a problem fetching the quiz data. Please try again or contact support.</p>
                     <button
                         onClick={() => router.back()}
-                        className="px-5 py-3 rounded-lg bg-[#8B4A28] dark:bg-[#b86a3a] text-white text-sm font-medium hover:bg-[#744024] dark:hover:bg-[#a05a30] transition"
+                        className="bhn-btn bhn-btn-primary"
                     >
                         Go back
                     </button>
@@ -185,24 +185,24 @@ export default function QuizPage() {
     }
 
     return (
-        <div className="min-h-screen bg-[#F7F3EF] dark:bg-[#171717] flex flex-col">
+        <div className="min-h-screen bg-[var(--bhn-bg)] dark:bg-[#171717] flex flex-col">
 
             {/* HEADER */}
-            <div className="min-h-[72px] border-b border-[#E7DDD6] dark:border-[#374151] bg-[#F7F3EF] dark:bg-[#171717] px-4 sm:px-6 lg:px-5 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="min-h-[72px] border-b border-[var(--bhn-border)] dark:border-[#374151] bg-[var(--bhn-bg)] dark:bg-[#171717] px-4 sm:px-6 lg:px-5 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
 
                 {/* LEFT */}
                 <div className="flex flex-wrap items-center gap-4 sm:gap-5 lg:gap-4">
 
                     <AcademyLogo className="h-7 sm:h-8 w-auto object-contain" />
 
-                    <button onClick={() => router.back()} className="text-sm text-[#3E2C24] dark:text-[#ededed] border-b-2 border-[#8B4A28] dark:border-[#c9a882] pb-1 cursor-pointer">
+                    <button onClick={() => router.back()} className="text-sm text-[var(--bhn-text)] dark:text-[#ededed] border-b-2 border-[var(--bhn-brand-500)] dark:border-[var(--bhn-brand-400)] pb-1 cursor-pointer">
                         Exit Quiz
                     </button>
 
                 </div>
 
                 {/* RIGHT */}
-                <div className="flex items-center gap-4 sm:gap-5 text-[#7B6A62] dark:text-[#b89b7d]">
+                <div className="flex items-center gap-4 sm:gap-5 text-[var(--bhn-text-muted)] dark:text-[#b89b7d]">
 
                     <button onClick={() => alert('Notifications')} className="cursor-pointer">
                         <Bell size={18} />
@@ -222,26 +222,26 @@ export default function QuizPage() {
                 {/* TOP TEXT */}
                 <div className="w-full max-w-[700px]">
 
-                    <p className="text-xs sm:text-sm md:text-[15px] tracking-[2px] uppercase text-[#9E8B80] dark:text-[#7a6a5a] font-semibold">
+                    <p className="text-xs sm:text-sm md:text-[15px] tracking-[2px] uppercase text-[var(--bhn-text-soft)] dark:text-[#7a6a5a] font-semibold">
                         Assessment
                     </p>
 
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-2">
 
-                        <h1 className="text-[28px] sm:text-[32px] md:text-[35px] leading-tight font-bold text-[#2E211B] dark:text-[#ededed]">
+                        <h1 className="text-[28px] sm:text-[32px] md:text-[35px] leading-tight font-bold text-[var(--bhn-text)] dark:text-[#ededed]">
                             {quiz?.title ?? "Quiz"}
                         </h1>
 
-                        <p className="text-sm text-[#8F8179] dark:text-[#7a6a5a] whitespace-nowrap">
+                        <p className="text-sm text-[var(--bhn-text-muted)] dark:text-[#7a6a5a] whitespace-nowrap">
                             Question {currentQuestion + 1} of {totalQuestions || 1}
                         </p>
 
                     </div>
 
                     {/* PROGRESS */}
-                    <div className="w-full h-[6px] bg-[#E7DAD1] rounded-full mt-5 overflow-hidden">
+                    <div className="w-full h-[6px] bg-[var(--bhn-border-strong)] rounded-full mt-5 overflow-hidden">
                         <div
-                            className="h-full bg-[#8B4A28] dark:bg-[#b86a3a] transition-all duration-300"
+                            className="h-full bg-[var(--bhn-brand-500)] dark:bg-[var(--bhn-brand-400)] transition-all duration-300"
                             style={{
                                 width: `${(currentQuestion / totalQuestions) * 100}%`,
                             }}
@@ -251,12 +251,12 @@ export default function QuizPage() {
                 </div>
 
                 {/* QUESTION CARD */}
-                <div className="w-full max-w-[700px] bg-white rounded-2xl border border-[#E8DDD5] dark:border-[#374151] shadow-sm mt-6 sm:mt-4 overflow-hidden">
+                <div className="w-full max-w-[700px] bg-white rounded-2xl border border-[var(--bhn-border)] dark:border-[#374151] shadow-sm mt-6 sm:mt-4 overflow-hidden">
 
                     <div className="p-4 sm:p-4 md:p-5">
 
                         {/* QUESTION */}
-                        <h2 className="text-[24px] sm:text-[30px] md:text-[35px] leading-[36px] sm:leading-[42px] md:leading-[48px] font-semibold text-[#4A3A33] dark:text-[#a89080]">
+                        <h2 className="text-[24px] sm:text-[30px] md:text-[35px] leading-[36px] sm:leading-[42px] md:leading-[48px] font-semibold text-[var(--bhn-text)] dark:text-[#a89080]">
                             {current?.question || ""}
                         </h2>
 
@@ -271,27 +271,27 @@ export default function QuizPage() {
                                         key={option._id}
                                         onClick={() => handleSelectOption(option._id)}
                                         className={`w-full flex items-start sm:items-center gap-4 sm:gap-5 px-4 sm:px-6 py-4 sm:py-5 rounded-xl border transition-all duration-200 text-left ${active
-                                            ? "border-[#8B4A28] dark:border-[#c9a882] bg-[#FFFDFC]"
-                                            : "border-[#E7DDD6] dark:border-[#374151] bg-white hover:border-[#D8C3B7]"
+                                            ? "border-[var(--bhn-brand-500)] dark:border-[var(--bhn-brand-400)] bg-[var(--bhn-brand-50)]"
+                                            : "border-[var(--bhn-border)] dark:border-[#374151] bg-white hover:border-[var(--bhn-border-strong)]"
                                             }`}
                                     >
 
                                         {/* CIRCLE */}
                                         <div
                                             className={`w-7 h-7 rounded-full border-2 flex-shrink-0 flex items-center justify-center ${active
-                                                    ? "border-[#8B4A28] dark:border-[#c9a882]"
-                                                    : "border-[#D7C8BE] dark:border-[#374151]"
+                                                    ? "border-[var(--bhn-brand-500)] dark:border-[var(--bhn-brand-400)]"
+                                                    : "border-[var(--bhn-border-strong)] dark:border-[#374151]"
                                                 }`}
                                         >
                                             {active && (
-                                                <div className="w-3 h-3 rounded-full bg-[#8B4A28] dark:bg-[#b86a3a]" />
+                                                <div className="w-3 h-3 rounded-full bg-[var(--bhn-brand-500)] dark:bg-[var(--bhn-brand-400)]" />
                                             )}
                                         </div>
                                         {/* TEXT */}
                                         <p
                                             className={`text-base sm:text-lg leading-relaxed ${active
-                                                ? "text-[#2F231D] dark:text-[#ededed] font-medium"
-                                                : "text-[#6B5A52] dark:text-[#a89080]"
+                                                ? "text-[var(--bhn-text)] dark:text-[#ededed] font-medium"
+                                                : "text-[var(--bhn-text-muted)] dark:text-[#a89080]"
                                                 }`}
                                         >
                                             {option.text}
@@ -306,9 +306,9 @@ export default function QuizPage() {
                     </div>
 
                     {/* FOOTER */}
-                    <div className="bg-[#FBF1EC] dark:bg-[#1a1a1a] border-t border-[#EADDD5] dark:border-[#374151] px-4 sm:px-6 md:px-5 py-4 sm:py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div className="bg-[var(--bhn-brand-50)] dark:bg-[#1a1a1a] border-t border-[var(--bhn-border)] dark:border-[#374151] px-4 sm:px-6 md:px-5 py-4 sm:py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
 
-                        <button onClick={() => alert('Report submitted. Our team will review the issue.')} className="text-sm text-[#9C867B] dark:text-[#7a6a5a] cursor-pointer">
+                        <button onClick={() => alert('Report submitted. Our team will review the issue.')} className="text-sm text-[var(--bhn-text-soft)] dark:text-[#7a6a5a] cursor-pointer">
                             ⚑ Report Issue
                         </button>
 
@@ -320,7 +320,7 @@ export default function QuizPage() {
                                         setCurrentQuestion((prev) => prev + 1);
                                     }
                                 }}
-                                className="flex-1 sm:flex-none px-5 sm:px-6 py-3 rounded-lg border border-[#E0D2C8] dark:border-[#374151] text-[#8E7D73] dark:text-[#7a6a5a] bg-white text-sm font-medium cursor-pointer hover:bg-[#FAFAF8] dark:bg-[#171717] transition"
+                                className="flex-1 sm:flex-none px-5 sm:px-6 py-3 rounded-lg border border-[var(--bhn-border)] dark:border-[#374151] text-[var(--bhn-text-muted)] dark:text-[#7a6a5a] bg-white text-sm font-medium cursor-pointer hover:bg-[var(--bhn-surface-2)] dark:bg-[#171717] transition"
                             >
                                 Skip
                             </button>
@@ -341,12 +341,8 @@ export default function QuizPage() {
                                  sm:px-7
                                  py-3
                                  rounded-lg
-                                 bg-[#8B4A28] dark:bg-[#b86a3a]
-                                 hover:bg-[#744024] dark:hover:bg-[#a05a30]
-                                 disabled:bg-[#A0704F] dark:bg-[#b86a3a]
+                                 bhn-btn bhn-btn-primary
                                  disabled:cursor-not-allowed
-                                 active:scale-95
-                                 active:bg-[#5E321D]
                                  text-white
                                  text-sm
                                  font-medium
@@ -356,9 +352,6 @@ export default function QuizPage() {
                                  gap-2
                                  transition-all
                                  duration-150
-                                 shadow-md
-                                 hover:shadow-lg
-                                 cursor-pointer
                               "
                             >
                                 {submitLoading ? (
@@ -378,21 +371,21 @@ export default function QuizPage() {
                 </div>
 
                 {/* HINT */}
-                <div className="w-full max-w-[700px] mt-6 sm:mt-4 bg-[#F9EFE8] dark:bg-[#1a1a1a] border border-[#EEE0D7] dark:border-[#374151] rounded-xl p-4 sm:p-5">
+                <div className="w-full max-w-[700px] mt-6 sm:mt-4 bg-[var(--bhn-brand-50)] dark:bg-[#1a1a1a] border border-[var(--bhn-border)] dark:border-[#374151] rounded-xl p-4 sm:p-5">
 
                     <div className="flex items-start gap-3">
 
-                        <div className="mt-1 text-[#8B4A28] dark:text-[#c9a882] flex-shrink-0">
+                        <div className="mt-1 text-[var(--bhn-brand-500)] dark:text-[var(--bhn-brand-400)] flex-shrink-0">
                             ✦
                         </div>
 
                         <div>
 
-                            <h3 className="text-sm font-semibold text-[#5A4439] dark:text-[#a89080]">
+                            <h3 className="text-sm font-semibold text-[var(--bhn-brand-800)] dark:text-[#a89080]">
                                 Study Hint
                             </h3>
 
-                            <p className="text-sm text-[#8A776E] dark:text-[#7a6a5a] mt-1 leading-relaxed">
+                            <p className="text-sm text-[var(--bhn-text-muted)] dark:text-[#7a6a5a] mt-1 leading-relaxed">
                                 {quiz?.hint || ""}
                             </p>
 
@@ -408,45 +401,45 @@ export default function QuizPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-4 px-4 sm:px-6 lg:px-5 pb-6 sm:pb-8">
 
                 {/* CARD 1 */}
-                <div onClick={() => router.push('/student/quiz-history')} className="bg-[#FCEEE8] dark:bg-[#1a1a1a] rounded-2xl p-5 sm:p-4 min-h-[120px] cursor-pointer">
+                <div onClick={() => router.push('/student/quiz-history')} className="bg-[var(--bhn-brand-50)] dark:bg-[#1a1a1a] rounded-2xl p-5 sm:p-4 min-h-[120px] cursor-pointer">
 
-                    <Clock3 className="text-[#8B4A28] dark:text-[#c9a882]" size={20} />
+                    <Clock3 className="text-[var(--bhn-brand-500)] dark:text-[var(--bhn-brand-400)]" size={20} />
 
-                    <h3 className="mt-4 sm:mt-5 font-semibold text-[#3D2A22] dark:text-[#ededed]">
+                    <h3 className="mt-4 sm:mt-5 font-semibold text-[var(--bhn-brand-800)] dark:text-[#ededed]">
                         Quiz History
                     </h3>
 
-                    <p className="text-sm text-[#7C6B63] dark:text-[#b89b7d] mt-2 leading-relaxed">
+                    <p className="text-sm text-[var(--bhn-text-muted)] dark:text-[#b89b7d] mt-2 leading-relaxed">
                         View your previous attempts and improvement charts.
                     </p>
 
                 </div>
 
                 {/* CARD 2 */}
-                <div onClick={() => router.push('/student/discussion')} className="bg-[#FCEEE8] dark:bg-[#1a1a1a] rounded-2xl p-5 sm:p-4 min-h-[120px] cursor-pointer">
+                <div onClick={() => router.push('/student/discussion')} className="bg-[var(--bhn-brand-50)] dark:bg-[#1a1a1a] rounded-2xl p-5 sm:p-4 min-h-[120px] cursor-pointer">
 
-                    <MessageSquare className="text-[#8B4A28] dark:text-[#c9a882]" size={20} />
+                    <MessageSquare className="text-[var(--bhn-brand-500)] dark:text-[var(--bhn-brand-400)]" size={20} />
 
-                    <h3 className="mt-4 sm:mt-5 font-semibold text-[#3D2A22] dark:text-[#ededed]">
+                    <h3 className="mt-4 sm:mt-5 font-semibold text-[var(--bhn-brand-800)] dark:text-[#ededed]">
                         Discussion
                     </h3>
 
-                    <p className="text-sm text-[#7C6B63] dark:text-[#b89b7d] mt-2 leading-relaxed">
+                    <p className="text-sm text-[var(--bhn-text-muted)] dark:text-[#b89b7d] mt-2 leading-relaxed">
                         12 students are currently discussing this question.
                     </p>
 
                 </div>
 
                 {/* CARD 3 */}
-                <div onClick={() => router.push('/student/reference-material')} className="bg-[#FCEEE8] dark:bg-[#1a1a1a] rounded-2xl p-5 sm:p-4 min-h-[120px] cursor-pointer">
+                <div onClick={() => router.push('/student/reference-material')} className="bg-[var(--bhn-brand-50)] dark:bg-[#1a1a1a] rounded-2xl p-5 sm:p-4 min-h-[120px] cursor-pointer">
 
-                    <GraduationCap className="text-[#8B4A28] dark:text-[#c9a882]" size={20} />
+                    <GraduationCap className="text-[var(--bhn-brand-500)] dark:text-[var(--bhn-brand-400)]" size={20} />
 
-                    <h3 className="mt-4 sm:mt-5 font-semibold text-[#3D2A22] dark:text-[#ededed]">
+                    <h3 className="mt-4 sm:mt-5 font-semibold text-[var(--bhn-brand-800)] dark:text-[#ededed]">
                         Reference Material
                     </h3>
 
-                    <p className="text-sm text-[#7C6B63] dark:text-[#b89b7d] mt-2 leading-relaxed">
+                    <p className="text-sm text-[var(--bhn-text-muted)] dark:text-[#b89b7d] mt-2 leading-relaxed">
                         Review Module 3: Ethical Design Frameworks.
                     </p>
 
