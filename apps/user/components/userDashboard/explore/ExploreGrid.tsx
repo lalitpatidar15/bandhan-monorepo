@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { ArtisanCard } from "@/components/ui/articiancard";
 import { useCart } from "@/context/CartContext";
 import { useCompare, CompareType } from "@/context/CompareContext";
-import { useRequireAuth } from "@/lib/auth";
 import { EmptyState, Tabs } from "@bandhan/ui";
 import { ChevronLeft, ChevronRight, SearchX } from "lucide-react";
 import toast from "react-hot-toast";
@@ -62,29 +61,12 @@ export function ExploreGrid({
   onViewModeChange,
 }: ExploreGridProps) {
   const router = useRouter();
-  const { addToCart } = useCart();
-  const { gate } = useRequireAuth();
+  const { cartItems } = useCart();
   const itemsPerPage = 6;
   const { toggle, has } = useCompare();
   const paginationKey = `${viewMode}:${filters.category}:${filters.price}:${filters.rating}:${sortBy}`;
   const [pagination, setPagination] = useState({ key: paginationKey, page: 1 });
   const currentPage = pagination.key === paginationKey ? pagination.page : 1;
-
-  const handleAddToCart = (item: ExploreItem) => {
-    gate(() => {
-      const price = Number(String(item.price).replace(/[^\d.]/g, "")) || 0;
-      addToCart({
-        title: item.title,
-        price,
-        img: item.image,
-        date: new Date().toISOString().slice(0, 10),
-        guests: 1,
-        location: item.location,
-        itemType: "product",
-        productId: String(item.id),
-      });
-    });
-  };
 
   const handleCompareToggle = (item: ExploreItem) => {
     const compareType = exploreTypeToCompareType[viewMode];
@@ -240,8 +222,13 @@ export function ExploreGrid({
 
       {displayedItems.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
-          {displayedItems.map((item) => (
-             <ArtisanCard
+          {displayedItems.map((item) => {
+            const isInCart = viewMode === "products" && cartItems.some(
+              (cartItem) => cartItem.itemType === "product" && cartItem.productId === String(item.id),
+            );
+
+            return (
+              <ArtisanCard
                key={item.id}
                variant="explore"
                img={item.image}
@@ -256,12 +243,12 @@ export function ExploreGrid({
                onCompare={() => handleCompareToggle(item)}
                className="bhn-card-hover"
                onDetailsClick={() => router.push(item.href)}
-               primaryLabel={viewMode === "products" ? "Add" : undefined}
-               onPrimary={
-                 viewMode === "products" ? () => handleAddToCart(item) : undefined
-               }
+               primaryLabel={isInCart ? "Added to Cart" : undefined}
+               primaryDisabled={isInCart}
+               onPrimary={isInCart ? () => undefined : undefined}
              />
-          ))}
+            );
+          })}
         </div>
       ) : (
         <EmptyState

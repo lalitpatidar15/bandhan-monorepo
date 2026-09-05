@@ -3,26 +3,26 @@
 
 @layer base {
   :root {
-    --color-primary: #8B3A28;
-    --color-secondary: #7a3323;
-    --admin-bg: #faf5ee;
-    --admin-surface: #ffffff;
-    --admin-border: #ece4da;
-    --admin-text: #1a1612;
-    --admin-muted: #6b625a;
-    --admin-bg-start: #fff9f2;
-    --admin-input-bg: #ffffff;
-    --admin-input-border: rgba(0, 0, 0, 0.1);
-    --admin-input-text: #1a1612;
-    --admin-btn-secondary-bg: #fdf3f1;
-    --admin-btn-secondary-text: #4d2016;
-    --admin-btn-secondary-border: #7a3323;
-    --admin-btn-secondary-hover: #fce7e3;
-    --admin-table-header-text: #6b625a;
-    --admin-table-header-border: #ece4da;
-    --admin-table-cell-border: #f6f0e7;
-    --admin-table-cell-text: #1a1612;
-    --admin-table-hover: #fff9f2;
+    --color-primary: var(--bhn-brand-500);
+    --color-secondary: var(--bhn-brand-600);
+    --admin-bg: var(--bhn-bg);
+    --admin-surface: var(--bhn-surface);
+    --admin-border: var(--bhn-border);
+    --admin-text: var(--bhn-text);
+    --admin-muted: var(--bhn-text-muted);
+    --admin-bg-start: var(--bhn-surface-2);
+    --admin-input-bg: var(--bhn-surface);
+    --admin-input-border: var(--bhn-border-strong);
+    --admin-input-text: var(--bhn-text);
+    --admin-btn-secondary-bg: var(--bhn-brand-50);
+    --admin-btn-secondary-text: var(--bhn-brand-800);
+    --admin-btn-secondary-border: var(--bhn-brand-600);
+    --admin-btn-secondary-hover: var(--bhn-brand-100);
+    --admin-table-header-text: var(--bhn-text-muted);
+    --admin-table-header-border: var(--bhn-border-strong);
+    --admin-table-cell-border: var(--bhn-border);
+    --admin-table-cell-text: var(--bhn-text);
+    --admin-table-hover: var(--bhn-surface-2);
     --admin-scrollbar-thumb: #d6c4b8;
     --admin-card-muted-bg: #fff9f2;
     --admin-badge-active-bg: #dcfce7;
@@ -84,17 +84,17 @@
   .card {
     border: 1px solid var(--admin-border);
     background: var(--admin-surface);
-    border-radius: 0.75rem;
+    border-radius: var(--bhn-radius-lg);
     padding: 1rem;
-    box-shadow: 0 1px 2px rgba(54, 35, 22, 0.04);
+    box-shadow: var(--bhn-shadow-xs);
   }
 
   .card-muted {
     border: 1px solid var(--admin-border);
     background: var(--admin-card-muted-bg);
-    border-radius: 0.75rem;
+    border-radius: var(--bhn-radius-lg);
     padding: 1rem;
-    box-shadow: 0 1px 2px rgba(54, 35, 22, 0.04);
+    box-shadow: var(--bhn-shadow-xs);
   }
 
   .admin-input {
@@ -102,8 +102,9 @@
     border: 1px solid var(--admin-input-border);
     background: var(--admin-input-bg);
     color: var(--admin-input-text);
-    border-radius: 0.5rem;
-    padding: 0.4rem 0.75rem;
+    min-height: var(--bhn-control-height);
+    border-radius: var(--bhn-radius);
+    padding: 0.625rem 0.75rem;
     font-size: 0.875rem;
     outline: none;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -147,8 +148,9 @@
     justify-content: center;
     gap: 0.375rem;
     border: 0;
-    border-radius: 0.5rem;
-    padding: 0.4rem 0.75rem;
+    min-height: var(--bhn-control-height);
+    border-radius: var(--bhn-radius);
+    padding: 0.625rem 0.875rem;
     font-size: 0.8125rem;
     font-weight: 500;
     transition: all 0.15s ease;
@@ -211,6 +213,10 @@
     font-size: 0.8125rem;
   }
   .admin-table th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: var(--admin-bg-start);
     text-align: left;
     padding: 0.5rem 0.75rem;
     font-weight: 600;

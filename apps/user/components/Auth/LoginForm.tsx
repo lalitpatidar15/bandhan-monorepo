@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Button, Field, Input, Logo } from "@bandhan/ui";
@@ -75,17 +76,6 @@ export default function LoginForm() {
         return;
       }
 
-      dispatch(setCredentials({ user: result.user, token: result.token }));
-      toast.success("Login successful!");
-
-      setSuccess(true);
-
-      setForm({
-        email: "",
-        password: "",
-        remember: false,
-      });
-
       const authenticatedRole = result.user?.role as PortalRole | undefined;
       const portalUrl = authenticatedRole === "seller" ? SELLER_PORTAL_URL
         : authenticatedRole === "student" || authenticatedRole === "instructor" ? STUDENT_PORTAL_URL
@@ -93,13 +83,29 @@ export default function LoginForm() {
         : null;
 
       if (portalUrl && authenticatedRole) {
-        if (!result.ssoCode) throw new Error("Unable to start the secure portal sign-in handoff.");
         const callbackUrl = new URL("/auth/callback", portalUrl);
-        callbackUrl.searchParams.set("sso", result.ssoCode);
-        callbackUrl.searchParams.set("role", authenticatedRole);
+        if (result.ssoCode) {
+          callbackUrl.searchParams.set("sso", result.ssoCode);
+          callbackUrl.searchParams.set("role", authenticatedRole);
+        } else {
+          // Compatibility path for an older deployed API that returns a valid
+          // session token but not the newer one-time SSO grant. URL fragments
+          // are not included in HTTP requests and are cleared by the callback.
+          callbackUrl.hash = new URLSearchParams({
+            token: result.token,
+            role: authenticatedRole,
+            name: result.user?.name || "",
+          }).toString();
+        }
         window.location.assign(callbackUrl.toString());
         return;
       }
+
+      dispatch(setCredentials({ user: result.user, token: result.token }));
+      setError(null);
+      setSuccess(true);
+      setForm({ email: "", password: "", remember: false });
+      toast.success("Login successful!", { id: "portal-login" });
 
       const next = new URLSearchParams(window.location.search).get("next");
 
@@ -111,8 +117,9 @@ export default function LoginForm() {
     } catch (err: unknown) {
       const apiError = err as { data?: { message?: string }; error?: string };
       const msg = apiError.data?.message || apiError.error || "Login failed. Please try again.";
+      setSuccess(false);
       setError(msg);
-      toast.error(msg);
+      toast.error(msg, { id: "portal-login" });
     }
   };
 
@@ -173,9 +180,9 @@ export default function LoginForm() {
           Remember me
         </label>
 
-        <span className="text-[var(--bhn-brand-700)] cursor-pointer hover:underline">
+        <Link href="/forgot-password" className="text-[var(--bhn-brand-700)] hover:underline">
           Forgot password?
-        </span>
+        </Link>
       </div>
 
       {/* ERROR */}

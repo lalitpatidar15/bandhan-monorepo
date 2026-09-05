@@ -12,36 +12,35 @@ const discoveryLinks = [
 export default function HeroCarousel() {
   return (
     <section className="bhn-home-hero" aria-labelledby="home-heading">
-      <div className="bhn-home-hero-copy">
-        <p className="bhn-home-kicker"><Sparkles size={14} aria-hidden="true" /> The Bandhan ecosystem</p>
-        <h1 id="home-heading">Your celebration.<br /><em>One clear next step.</em></h1>
-        <p className="bhn-home-lead">
-          Find trusted products, services and venues, plan every detail, or build your next opportunity—all in one welcoming place.
-        </p>
-        <div className="bhn-home-actions">
-          <Link className="bhn-home-primary" href="/explore">
-            <Search size={18} aria-hidden="true" /> Start exploring <ArrowRight size={17} aria-hidden="true" />
-          </Link>
-          <Link className="bhn-home-secondary" href="/userdashboard/planner">
-            <CalendarDays size={18} aria-hidden="true" /> Plan an event
-          </Link>
+      <Image
+        src="/venue.png"
+        alt="An elegant Indian celebration venue"
+        fill
+        priority
+        sizes="100vw"
+        className="bhn-home-hero-image"
+      />
+      <div className="bhn-home-hero-shade" aria-hidden="true" />
+      <div className="bhn-home-hero-inner">
+        <div className="bhn-home-hero-copy">
+          <p className="bhn-home-kicker"><Sparkles size={14} aria-hidden="true" /> Weddings, events and beyond</p>
+          <h1 id="home-heading">Everything for your celebration, <em>all in one place.</em></h1>
+          <p className="bhn-home-lead">
+            Compare products, trusted services and memorable venues—then keep every booking and plan together.
+          </p>
+          <div className="bhn-home-actions">
+            <Link className="bhn-home-primary" href="/explore?type=products">
+              <Search size={18} aria-hidden="true" /> Explore marketplace <ArrowRight size={17} aria-hidden="true" />
+            </Link>
+            <Link className="bhn-home-secondary" href="/userdashboard/planner">
+              <CalendarDays size={18} aria-hidden="true" /> Plan an event
+            </Link>
+          </div>
+          <nav className="bhn-home-discovery" aria-label="Explore Bandhan">
+            <span>Popular:</span>
+            {discoveryLinks.map((item) => <Link key={item.label} href={item.href}>{item.label}</Link>)}
+          </nav>
         </div>
-        <nav className="bhn-home-discovery" aria-label="Explore Bandhan">
-          <span>Explore:</span>
-          {discoveryLinks.map((item) => <Link key={item.label} href={item.href}>{item.label}</Link>)}
-        </nav>
-      </div>
-      <div className="bhn-home-collage" aria-label="Celebrations brought together">
-        <figure className="bhn-home-photo bhn-home-photo-small">
-          <Image src="/photoshot.png" alt="Wedding celebration photography" fill priority sizes="(max-width: 900px) 45vw, 220px" />
-        </figure>
-        <figure className="bhn-home-photo bhn-home-photo-main">
-          <Image src="/venue4.png" alt="A decorated celebration venue" fill priority sizes="(max-width: 900px) 55vw, 360px" />
-          <figcaption>Celebrations, thoughtfully brought together</figcaption>
-        </figure>
-        <figure className="bhn-home-photo bhn-home-photo-small">
-          <Image src="/makeup.png" alt="Wedding preparation service" fill sizes="(max-width: 900px) 45vw, 220px" />
-        </figure>
       </div>
     </section>
   );

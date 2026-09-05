@@ -149,7 +149,11 @@ export default function ProductDetailLayout(props: Props) {
     }
   };
 
-  const { addToCart } = useCart();
+  const { addToCart, cartItems, removeFromCart } = useCart();
+  const cartProduct = cartItems.find(
+    (item) => item.itemType === "product" && item.productId === props.productId,
+  );
+  const isInCart = Boolean(cartProduct);
   const [activeTab, setActiveTab] = useState<"description" | "specs" | "reviews">("description");
 
   const { data: reviewsData } = useGetProductReviewsQuery(props.productId || "", {
@@ -166,10 +170,29 @@ export default function ProductDetailLayout(props: Props) {
   const [hoverRating, setHoverRating] = useState<number | null>(null);
   const [comment, setComment] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [isRemovingFromCart, setIsRemovingFromCart] = useState(false);
   const [addReview] = useAddReviewMutation();
 
   const add = () => setQty((q) => q + 1);
-  const sub = () => setQty((q) => Math.max(1, q - 1));
+  const sub = async () => {
+    if (isRemovingFromCart) return;
+
+    if (qty > 1) {
+      setQty((current) => current - 1);
+      return;
+    }
+
+    if (cartProduct) {
+      setIsRemovingFromCart(true);
+      try {
+        const removed = await removeFromCart(cartProduct.id);
+        if (removed) toast.success("Removed from cart", { id: "product-cart-removal" });
+        else toast.error("Could not remove from cart", { id: "product-cart-removal" });
+      } finally {
+        setIsRemovingFromCart(false);
+      }
+    }
+  };
 
   const handleAddToCart = async () => {
     return addToCart({
@@ -344,7 +367,9 @@ export default function ProductDetailLayout(props: Props) {
               <div className="mt-1.5 inline-flex items-center rounded-xl border border-[#EAE0D5] bg-white p-1">
                 <button
                   onClick={sub}
-                  className="h-8 w-8 rounded-lg text-base font-bold text-[#6E5C4F] hover:bg-[#FAF5EE]"
+                  disabled={isRemovingFromCart}
+                  aria-label={qty === 1 && isInCart ? "Remove product from cart" : "Decrease quantity"}
+                  className="h-8 w-8 rounded-lg text-base font-bold text-[#6E5C4F] hover:bg-[#FAF5EE] disabled:cursor-wait disabled:opacity-50"
                 >
                   -
                 </button>
@@ -364,9 +389,10 @@ export default function ProductDetailLayout(props: Props) {
             <div className="mt-6 grid grid-cols-2 gap-3">
               <button
                 onClick={handleAddToCart}
-                className="h-11 rounded-xl bg-[#C25E2B] font-bold text-white text-sm transition hover:bg-[#A84E21]"
+                disabled={isInCart}
+                className="h-11 rounded-xl bg-[#C25E2B] font-bold text-white text-sm transition hover:bg-[#A84E21] disabled:cursor-default disabled:bg-[#287D3C]"
               >
-                Add to Cart
+                {isInCart ? "Added to Cart" : "Add to Cart"}
               </button>
               <button
                 onClick={handleBuyNow}

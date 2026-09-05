@@ -17,13 +17,23 @@ export default function JobSsoCallbackPage() {
 
   useEffect(() => {
     const code = searchParams.get("sso");
-    const role = searchParams.get("role");
-    if (!code || (role !== "jobseeker" && role !== "recruiter")) {
-      setError("This sign-in link is missing or invalid.");
+    const fragment = new URLSearchParams(window.location.hash.slice(1));
+    const fragmentToken = fragment.get("token");
+    const role = searchParams.get("role") || fragment.get("role");
+    if ((role !== "jobseeker" && role !== "recruiter") || (!code && !fragmentToken)) {
+      queueMicrotask(() => setError("This sign-in link is missing or invalid."));
       return;
     }
 
     window.history.replaceState(null, "", window.location.pathname);
+    if (fragmentToken) {
+      setJobPortalSession(fragmentToken, role);
+      const name = fragment.get("name");
+      if (name) localStorage.setItem("userName", name);
+      router.replace(role === "recruiter" ? "/jobposter/dashboard" : "/Jobseeker/dashboard");
+      return;
+    }
+
     fetch(`${apiUrl()}/auth/sso/exchange`, {
       method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code, role }), credentials: "include",
     })

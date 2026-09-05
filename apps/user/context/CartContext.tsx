@@ -15,7 +15,6 @@ import {
   useAddToCartMutation,
   useClearCartMutation,
   useGetCartQuery,
-  useRemoveFromCartMutation,
   useUpdateCartItemMutation,
 } from '@/store/api/cartApi';
 import type { AddToCartRequest, CartItem as ApiCartItem, CartSummary } from '@/types/cart';
@@ -177,7 +176,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const { data: serverCart } = useGetCartQuery(undefined, { skip: !isAuthenticated });
   const [addServerItem] = useAddToCartMutation();
   const [updateServerItem] = useUpdateCartItemMutation();
-  const [removeServerItem] = useRemoveFromCartMutation();
   const [clearServerCart] = useClearCartMutation();
 
   useEffect(() => {
@@ -310,7 +308,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       const itemId = getItemIdentity(item);
       if (!itemId) return false;
       try {
-        await removeServerItem({ itemId, itemType: item.itemType }).unwrap();
+        await updateServerItem({ itemId, itemType: item.itemType, quantity: 0 }).unwrap();
         return true;
       } catch {
         return false;
@@ -319,7 +317,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
     setGuestItems((current) => current.filter((entry) => entry.id !== id));
     return true;
-  }, [cartItems, isAuthenticated, removeServerItem]);
+  }, [cartItems, isAuthenticated, updateServerItem]);
 
   const increaseQty = useCallback(async (id: string) => {
     const item = cartItems.find((entry) => entry.id === id);

@@ -12,13 +12,23 @@ function SellerSsoCallbackContent() {
 
   useEffect(() => {
     const code = searchParams.get("sso");
-    if (!code) {
-      setError("This sign-in link is missing or invalid.");
+    const fragment = new URLSearchParams(window.location.hash.slice(1));
+    const fragmentToken = fragment.get("token");
+    if (!code && !fragmentToken) {
+      queueMicrotask(() => setError("This sign-in link is missing or invalid."));
       return;
     }
 
     // Remove the short-lived grant from the address bar before exchanging it.
     window.history.replaceState(null, "", window.location.pathname);
+
+    if (fragmentToken) {
+      localStorage.setItem("sellerToken", fragmentToken);
+      localStorage.setItem("authToken", fragmentToken);
+      localStorage.setItem("userName", fragment.get("name") || "Seller");
+      router.replace("/sellerDashboard");
+      return;
+    }
 
     apiPost<{ token?: string; user?: { id?: string; fullName?: string; name?: string } }>("/auth/sso/exchange", { code, role: "seller" })
       .then((result) => {

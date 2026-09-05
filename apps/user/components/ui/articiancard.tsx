@@ -25,6 +25,7 @@ interface ArtisanCardProps {
   href?: string;
   onPrimary?: () => void;
   primaryLabel?: string;
+  primaryDisabled?: boolean;
   id?: string;
   isCompared?: boolean;
   className?: string;
@@ -50,6 +51,7 @@ export function ArtisanCard(props: ArtisanCardProps) {
   href,
   onPrimary,
   primaryLabel,
+  primaryDisabled = false,
   isCompared,
   className = "",
   } = props;
@@ -153,7 +155,8 @@ export function ArtisanCard(props: ArtisanCardProps) {
                 event.stopPropagation();
                 onPrimary();
               }}
-              className="mt-4 inline-flex w-full items-center justify-center rounded-xl bg-[#B65B2D] px-3 py-2 text-sm font-semibold text-white transition hover:bg-[#98461F]"
+              disabled={primaryDisabled}
+              className="mt-4 inline-flex w-full items-center justify-center rounded-xl bg-[#B65B2D] px-3 py-2 text-sm font-semibold text-white transition hover:bg-[#98461F] disabled:cursor-default disabled:bg-[#287D3C]"
             >
               {primaryLabel}
             </button>

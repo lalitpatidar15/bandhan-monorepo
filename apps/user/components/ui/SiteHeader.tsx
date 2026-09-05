@@ -6,7 +6,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useSyncExternalStore } from "react";
 import { STUDENT_PORTAL_URL } from "@/lib/externalLinks";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -17,13 +17,22 @@ const NAV_LINKS = [
   { label: "Community", href: "/userdashboard/feed" },
 ];
 
+const subscribeToHydration = () => () => undefined;
+const getClientHydrationSnapshot = () => true;
+const getServerHydrationSnapshot = () => false;
+
 export default function SiteHeader() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { getTotalItems } = useCart();
   const { isAuthenticated, isInitialized } = useAuth();
-  const signedIn = isInitialized && isAuthenticated;
+  const hasMounted = useSyncExternalStore(
+    subscribeToHydration,
+    getClientHydrationSnapshot,
+    getServerHydrationSnapshot,
+  );
+  const signedIn = hasMounted && isInitialized && isAuthenticated;
   const totalItems = getTotalItems();
   const [query, setQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

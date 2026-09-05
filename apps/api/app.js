@@ -21,53 +21,38 @@ const { isOriginAllowed } = require("./utils/corsOrigins");
 require("./config/firebase");
 
 const options = {
-
   definition: {
-
     openapi: "3.0.0",
 
     info: {
-
       title: "Bandhan Platform API",
 
       version: "1.0.0",
 
-      description: "Backend APIs for Bandhan commerce, student, instructor, and jobs applications.",
-
+      description:
+        "Backend APIs for Bandhan commerce, student, instructor, and jobs applications.",
     },
 
     components: {
-
       securitySchemes: {
-
         bearerAuth: {
-
           type: "http",
 
           scheme: "bearer",
 
           bearerFormat: "JWT",
-
         },
-
       },
-
     },
 
     security: [
-
       {
-
         bearerAuth: [],
-
       },
-
     ],
-
   },
 
   apis: ["./routes/**/*.js", "./app.js"],
-
 };
 
 const specs = swaggerJsdoc(options);
@@ -171,12 +156,24 @@ app.use(
       return callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
-  })
+  }),
 );
 morgan.token("timestamp", () => new Date().toISOString());
-morgan.format("timestamped-combined", ':timestamp :remote-addr - :remote-user ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"');
-morgan.format("timestamped-dev", ":timestamp :method :url :status :response-time ms");
-app.use(morgan(process.env.NODE_ENV === "production" ? "timestamped-combined" : "timestamped-dev"));
+morgan.format(
+  "timestamped-combined",
+  ':timestamp :remote-addr - :remote-user ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"',
+);
+morgan.format(
+  "timestamped-dev",
+  ":timestamp :method :url :status :response-time ms",
+);
+app.use(
+  morgan(
+    process.env.NODE_ENV === "production"
+      ? "timestamped-combined"
+      : "timestamped-dev",
+  ),
+);
 
 app.use(async (req, res, next) => {
   if (req.path === "/health") return next();
@@ -187,7 +184,8 @@ app.use(async (req, res, next) => {
   } catch (_error) {
     return res.status(503).json({
       success: false,
-      message: "Database connection is temporarily unavailable. Please try again shortly.",
+      message:
+        "Database connection is temporarily unavailable. Please try again shortly.",
     });
   }
 });
@@ -202,7 +200,10 @@ const apiLimiter = rateLimit({
   limit: 300,
   standardHeaders: "draft-8",
   legacyHeaders: false,
-  message: { success: false, message: "Too many requests. Please try again shortly." },
+  message: {
+    success: false,
+    message: "Too many requests. Please try again shortly.",
+  },
 });
 
 const authLimiter = rateLimit({
@@ -211,7 +212,10 @@ const authLimiter = rateLimit({
   standardHeaders: "draft-8",
   legacyHeaders: false,
   skipSuccessfulRequests: true,
-  message: { success: false, message: "Too many login attempts. Please try again later." },
+  message: {
+    success: false,
+    message: "Too many login attempts. Please try again later.",
+  },
 });
 
 app.use((req, res, next) => {
@@ -226,7 +230,10 @@ app.get("/health", (_req, res) => {
 });
 
 app.use("/api", apiLimiter);
-app.use(["/api/auth/login", "/api/student/login", "/api/instructor/login"], authLimiter);
+app.use(
+  ["/api/auth/login", "/api/student/login", "/api/instructor/login"],
+  authLimiter,
+);
 
 app.use("/api/auth", authRoutes);
 
@@ -328,8 +335,13 @@ app.use((error, _req, res, _next) => {
 
   if (status >= 500) console.error("Unhandled request error:", error);
 
-  const defaultMessage = isCorsError ? "Origin is not allowed" : "Internal server error";
-  const message = process.env.NODE_ENV !== "production" ? error?.message || defaultMessage : defaultMessage;
+  const defaultMessage = isCorsError
+    ? "Origin is not allowed"
+    : "Internal server error";
+  const message =
+    process.env.NODE_ENV !== "production"
+      ? error?.message || defaultMessage
+      : defaultMessage;
 
   res.status(status).json({
     success: false,
@@ -345,7 +357,7 @@ if (require.main === module) {
   const http = require("http");
   const validateEnv = require("./utils/validateEnv");
 
-  const PORT = process.env.PORT || 5000;
+  const PORT = process.env.PORT || 5001;
 
   const server = http.createServer(app);
 
