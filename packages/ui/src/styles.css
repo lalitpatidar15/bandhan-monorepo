@@ -2,9 +2,9 @@
 
 .bhn-container {
   width: 100%;
-  max-width: 1280px;
+  max-width: 1440px;
   margin-inline: auto;
-  padding-inline: var(--bhn-space-4);
+  padding-inline: var(--bhn-space-5);
 }
 
 .bhn-eyebrow {
@@ -86,11 +86,12 @@
   border: 1px solid transparent;
   border-radius: var(--bhn-radius);
   font-family: var(--bhn-font-sans);
-  font-size: var(--bhn-text-sm);
-  font-weight: 600;
+  min-height: 44px;
+  font-size: var(--bhn-text-base);
+  font-weight: 700;
   letter-spacing: 0.01em;
   line-height: 1;
-  padding: var(--bhn-space-3) var(--bhn-space-5);
+  padding: 0.75rem 1.25rem;
   cursor: pointer;
   white-space: nowrap;
   transition: background var(--bhn-transition), color var(--bhn-transition), border-color var(--bhn-transition), transform var(--bhn-transition), box-shadow var(--bhn-transition);
@@ -122,6 +123,7 @@
 .bhn-btn-primary:not(:disabled):hover {
   background: linear-gradient(180deg, var(--bhn-brand-600), var(--bhn-brand-700));
   box-shadow: var(--bhn-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transform: translateY(-1px);
 }
 
 .bhn-btn-secondary {
@@ -163,16 +165,19 @@
 }
 
 .bhn-btn-sm {
-  padding: var(--bhn-space-2) var(--bhn-space-3);
-  font-size: var(--bhn-text-xs);
+  min-height: 36px;
+  padding: 0.5rem 0.75rem;
+  font-size: var(--bhn-text-sm);
   border-radius: var(--bhn-radius-sm);
 }
 .bhn-btn-lg {
-  padding: var(--bhn-space-4) var(--bhn-space-6);
-  font-size: var(--bhn-text-base);
+  min-height: 52px;
+  padding: 0.875rem 1.5rem;
+  font-size: var(--bhn-text-lg);
   border-radius: var(--bhn-radius);
 }
 .bhn-btn-icon {
+  width: 44px;
   padding: var(--bhn-space-2);
   border-radius: var(--bhn-radius-sm);
   line-height: 1;
@@ -286,7 +291,7 @@
   background: var(--bhn-surface);
   border: 1px solid var(--bhn-border);
   border-radius: var(--bhn-radius-lg);
-  box-shadow: var(--bhn-shadow-sm);
+  box-shadow: 0 1px 2px rgba(54, 35, 22, 0.04), 0 10px 30px rgba(54, 35, 22, 0.035);
 }
 .bhn-card-hover {
   transition: transform var(--bhn-transition), box-shadow var(--bhn-transition), border-color var(--bhn-transition);
@@ -297,10 +302,10 @@
   border-color: var(--bhn-border-strong);
 }
 .bhn-card-pad {
-  padding: var(--bhn-space-5);
+  padding: var(--bhn-space-6);
 }
 .bhn-card-pad-lg {
-  padding: var(--bhn-space-6);
+  padding: var(--bhn-space-8);
 }
 .bhn-card-header {
   display: flex;
@@ -334,7 +339,7 @@
   gap: var(--bhn-space-2);
 }
 .bhn-field-label {
-  font-size: var(--bhn-text-sm);
+  font-size: var(--bhn-text-base);
   font-weight: 600;
   color: var(--bhn-text);
 }
@@ -355,12 +360,13 @@
 .bhn-textarea {
   width: 100%;
   font-family: var(--bhn-font-sans);
-  font-size: var(--bhn-text-sm);
+  min-height: 48px;
+  font-size: var(--bhn-text-base);
   color: var(--bhn-text);
   background: var(--bhn-surface);
   border: 1px solid var(--bhn-border-strong);
   border-radius: var(--bhn-radius);
-  padding: var(--bhn-space-3) var(--bhn-space-4);
+  padding: 0.75rem 1rem;
   transition: border-color var(--bhn-transition), box-shadow var(--bhn-transition);
   min-width: 0;
 }
