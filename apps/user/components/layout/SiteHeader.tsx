@@ -2,6 +2,7 @@
 
 import { PortalHeader } from '@bandhan/ui';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { Bell, BriefcaseBusiness, CalendarCheck, Heart, LogIn, Package, Store, UserRound, UserRoundPlus } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { JOB_PORTAL_URL, SELLER_PORTAL_URL, STUDENT_PORTAL_URL } from '@/lib/externalLinks';
@@ -9,7 +10,11 @@ import { JOB_PORTAL_URL, SELLER_PORTAL_URL, STUDENT_PORTAL_URL } from '@/lib/ext
 export default function SiteHeader() {
   const router = useRouter();
   const { user, isAuthenticated, isInitialized, logout } = useAuth();
-  const signedIn = isInitialized && isAuthenticated;
+  // Redux is rehydrated from browser storage. Do not let that change the first
+  // client render, otherwise it disagrees with the anonymous HTML from SSR.
+  const [hasHydrated, setHasHydrated] = useState(false);
+  useEffect(() => setHasHydrated(true), []);
+  const signedIn = hasHydrated && isInitialized && isAuthenticated;
 
   const navItems = [
     { label: 'Home', href: '/' },
