@@ -137,21 +137,21 @@ function CoursePlayerContent() {
             <StudentHeader />
 
             {/* MAIN LAYOUT */}
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 p-4 md:p-4">
+            <main className="mx-auto grid w-full max-w-[1600px] grid-cols-1 gap-5 px-4 py-5 sm:px-6 sm:py-7 xl:grid-cols-12 xl:gap-6 xl:px-8">
 
                 {/* LEFT SIDEBAR */}
-                <div className="lg:col-span-1">
-                    <div className="bhn-card flex flex-col lg:h-[calc(100vh-100px)] lg:sticky lg:top-4">
+                <aside className="xl:col-span-3">
+                    <div className="bhn-card flex flex-col xl:sticky xl:top-6 xl:max-h-[calc(100vh-3rem)]">
 
                         {/* TOP PROFILE */}
-                        <div className="p-5 border-b border-[var(--bhn-border)]">
+                        <div className="border-b border-[var(--bhn-border)] p-5 sm:p-6">
                             <div className="flex items-center gap-3">
                                 <div className="bhn-avatar bhn-avatar-md">
                                     👤
                                 </div>
 
                                 <div>
-                                    <p className="text-sm md:text-base font-semibold">
+                                    <p className="text-base font-semibold leading-snug">
                                         {courseTitle}
                                     </p>
                                     <p className="text-xs text-[var(--bhn-text-muted)]">
@@ -188,7 +188,7 @@ function CoursePlayerContent() {
                         </div>
 
                         {/* MODULES */}
-                        <div className="flex-1 overflow-y-auto p-4">
+                        <div className="flex-1 overflow-y-auto p-4 sm:p-5">
 
                             {/* Build modules with global lesson indices */}
                             {
@@ -248,38 +248,41 @@ function CoursePlayerContent() {
 
                         </div>
                     </div>
-                </div>
+                </aside>
 
                 {/* CENTER CONTENT */}
-                <div className="lg:col-span-2">
+                <section className="xl:col-span-6">
 
                     {/* VIDEO */}
-                    <div className="bg-black rounded-xl overflow-hidden">
+                    <div className="overflow-hidden rounded-2xl border border-[var(--bhn-border)] bg-black shadow-[var(--bhn-shadow-md)]">
                         <video
                             src={lesson?.videoUrl || lesson?.video || "/sample.mp4"}
                             controls
-                            className="w-full h-[220px] sm:h-[320px] md:h-[420px] object-cover"
+                            className="h-[240px] w-full object-cover sm:h-[360px] lg:h-[440px]"
                         />
                     </div>
 
                     {/* TITLE */}
-                    <h2 className="text-2xl md:text-xl font-semibold mt-4">
+                    <div className="mt-6">
+                    <p className="bhn-eyebrow">Current lesson</p>
+                    <h1 className="mt-1 text-3xl font-semibold leading-tight text-[var(--bhn-text)] sm:text-4xl">
                         {lesson?.title}
-                    </h2>
+                    </h1>
 
                     {/* META */}
-                    <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500 mt-2">
-                        <span>👨‍🏫 {courseInstructor}</span>
-                        <span>⏱ {courseDurationLabel}</span>
+                    <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-base text-[var(--bhn-text-muted)]">
+                        <span>Instructor: {courseInstructor}</span>
+                        <span>{courseDurationLabel}</span>
+                    </div>
                     </div>
 
                     {/* BUTTONS */}
-                    <div className="flex flex-wrap items-center justify-between gap-3 mt-4">
+                    <div className="mt-5 flex flex-wrap items-center gap-3">
 
-                        <div className="flex items-center gap-2 flex-wrap">
                             <button
                                 onClick={() => router.back()}
-                                className="bhn-btn bhn-btn-secondary"
+                                className="bhn-btn bhn-btn-secondary bhn-btn-icon"
+                                aria-label="Back to my courses"
                             >
                                 ◀
                             </button>
@@ -297,20 +300,15 @@ function CoursePlayerContent() {
                                         alert("Failed to mark lesson as complete");
                                     }
                                 }}
-                                disabled={isCompleting}
+                                disabled={isCompleting || lesson?.completed}
                                 className="bhn-btn bhn-btn-primary"
                             >
-                                {isCompleting ? "Marking..." : "Mark as Complete ✓"}
+                                {lesson?.completed ? "Completed" : isCompleting ? "Saving progress…" : "Mark as complete"}
                             </button>
-
-                            <button className="bhn-btn bhn-btn-ghost">
-                                
-                            </button>
-                        </div>
                     </div>
 
                     {/* TABS */}
-                    <div className="bhn-card mt-6 overflow-hidden">
+                    <div className="bhn-card mt-7 overflow-hidden">
 
                         {/* TAB HEAD */}
                         <div className="bhn-tabs border-b border-[var(--bhn-border)] px-4 md:px-5 pt-4 text-sm overflow-x-auto">
@@ -338,44 +336,44 @@ function CoursePlayerContent() {
                         </div>
 
                         {/* TAB CONTENT */}
-                        <div className="p-4 md:p-5">
+                        <div className="p-5 sm:p-6">
 
                             {activeTab === "overview" && (
                                 <>
-                                    <h3 className="font-semibold mb-2">
+                                    <h2 className="mb-3 text-xl font-semibold text-[var(--bhn-text)]">
                                         About this lesson
-                                    </h3>
+                                    </h2>
 
-                                    <p className="text-sm text-gray-600 leading-relaxed">
+                                    <p className="text-base leading-7 text-[var(--bhn-text-muted)]">
                                         {lesson?.description}
                                     </p>
 
                                     {/* BOXES */}
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5">
 
-                                        <div className="bg-[#F5ECE6] dark:bg-[#1a1a1a] p-4 rounded-lg">
-                                            <p className="text-xs text-gray-500 mb-1">
+                                        <div className="rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface-2)] p-4 sm:p-5">
+                                            <p className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-[var(--bhn-text-soft)]">
                                                 Key Takeaway
                                             </p>
 
-                                            <p className="text-sm font-medium">
+                                            <p className="text-base font-medium text-[var(--bhn-text)]">
                                                 {lesson?.keyTakeaway}
                                             </p>
                                         </div>
 
-                                        <div className="bg-[#F5ECE6] dark:bg-[#1a1a1a] p-4 rounded-lg">
-                                            <p className="text-xs text-gray-500 mb-1">
+                                        <div className="rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface-2)] p-4 sm:p-5">
+                                            <p className="mb-2 text-xs font-bold uppercase tracking-[0.12em] text-[var(--bhn-text-soft)]">
                                                 Tools Needed
                                             </p>
 
-                                            <p className="text-sm font-medium">
+                                            <p className="text-base font-medium text-[var(--bhn-text)]">
                                                 {lesson?.tools}
                                             </p>
                                         </div>
                                     </div>
 
                                     {/* QUIZ BUTTON */}
-                                    {hasQuiz && <div className="mt-6 flex justify-end">
+                                    {hasQuiz && <div className="mt-7 flex justify-end">
                                         <button
                                             onClick={() => {
                                                 router.push(`/student/quiz/${lesson._id}`);
@@ -405,10 +403,10 @@ function CoursePlayerContent() {
                             )}
                         </div>
                     </div>
-                </div>
+                </section>
 
                 {/* RIGHT PANEL */}
-                <div className="bhn-card p-4 flex flex-col justify-between h-fit">
+                <aside className="bhn-card h-fit p-5 sm:p-6 xl:col-span-3 xl:sticky xl:top-6">
 
                     {/* TOP */}
                     <div>
@@ -440,7 +438,7 @@ function CoursePlayerContent() {
                                     className="flex items-center justify-between border border-[var(--bhn-border)] p-3 rounded-lg hover:bg-[var(--bhn-surface-2)] bg-[var(--bhn-surface)] cursor-pointer gap-3"
                                 >
                                     <div className="flex items-center gap-3 min-w-0">
-                                        <div className="bg-[#F5ECE6] dark:bg-[#1a1a1a] p-2 rounded-md flex items-center justify-center flex-shrink-0">
+                                        <div className="flex flex-shrink-0 items-center justify-center rounded-md bg-[var(--bhn-surface-2)] p-2">
                                             <img
                                                 src={`/image3${index + 2}.png`}
                                                 alt="file icon"
@@ -478,7 +476,7 @@ function CoursePlayerContent() {
                     </div>
 
                     {/* BOTTOM CARD */}
-                    <div className="bg-[var(--bhn-brand-950)] text-white p-4 rounded-xl mt-6">
+                    <div className="mt-7 rounded-xl bg-[var(--bhn-brand-950)] p-5 text-white">
                         <p className="text-xs text-white/60 mb-2">
                             Feeling stuck?
                         </p>
@@ -495,8 +493,8 @@ function CoursePlayerContent() {
                              Ask Doubt
                         </button>
                     </div>
-                </div>
-            </div>
+                </aside>
+            </main>
         </div>
     );
 }
