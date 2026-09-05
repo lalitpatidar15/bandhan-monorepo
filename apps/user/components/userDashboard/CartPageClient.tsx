@@ -10,10 +10,9 @@ import {
 import { useRequireAuth } from '@/lib/auth';
 import { useAuth } from '@/hooks/useAuth';
 import type { CartItem } from '@/types/cart';
-import SectionHeading from '../ui/SectionHeading';
-import Card from '../ui/Card';
-import { Button } from '../ui/Button';
-import Loader from '../ui/Loader';
+import { SectionHeader, Button, Card, EmptyState, PriceDisplay, Badge } from '@bandhan/ui';
+import { Spinner, Skeleton } from '@bandhan/ui';
+import { Trash2, Minus, Plus } from 'lucide-react';
 
 function formatCurrency(value: number) {
   return `₹${Number(value || 0).toLocaleString('en-IN')}`;
@@ -102,17 +101,17 @@ export default function CartPageClient() {
   if (!isInitialized || !isAuthenticated || cartLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <Loader />
+        <Spinner size="lg" />
       </div>
     );
   }
 
   if (cartError) {
     return (
-      <div className="min-h-screen bg-[#F8F4EF] px-4 py-6">
+      <div className="min-h-screen bg-[var(--bhn-bg)] px-4 py-6">
         <Card className="mx-auto max-w-xl rounded-xl p-8 text-center shadow-sm">
-          <h1 className="text-lg font-semibold text-[#1C1A16]">We could not load your cart</h1>
-          <p className="mt-2 text-sm text-red-700">{getErrorMessage(cartError)}</p>
+          <h1 className="text-lg font-semibold text-[var(--bhn-text)]">We could not load your cart</h1>
+          <p className="mt-2 text-sm text-red-600">{getErrorMessage(cartError)}</p>
           <Button onClick={() => refetch()} className="mt-4">Try Again</Button>
         </Card>
       </div>
@@ -121,18 +120,15 @@ export default function CartPageClient() {
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-[#F8F4EF] px-4 py-6">
+      <div className="min-h-screen bg-[var(--bhn-bg)] px-4 py-6">
         <div className="mx-auto max-w-5xl text-center">
           <Card className="rounded-xl p-14 shadow-sm">
-            <SectionHeading
-              label="Empty Cart"
+            <EmptyState
+              icon={<svg width="48" height="48" viewBox="0 0 48 48" fill="none" className="mx-auto mb-4"><circle cx="24" cy="24" r="20" stroke="currentColor" strokeWidth="2" className="text-[var(--bhn-brand-300)]"/><path d="M24 14v10M19 19h10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="text-[var(--bhn-brand-500)]"/></svg>}
               title="Your cart is looking a little light."
               description="Browse products, services, and venues and add what you need for your event."
-              className="mx-auto max-w-2xl"
+              action={<Button onClick={() => router.push('/products/explore')}>Explore Marketplace</Button>}
             />
-            <Button onClick={() => router.push('/products/explore')} className="mt-4">
-              Explore Marketplace
-            </Button>
           </Card>
         </div>
       </div>
@@ -140,11 +136,11 @@ export default function CartPageClient() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FBF6F0] px-4 py-6">
+    <div className="min-h-screen bg-[var(--bhn-bg)] px-4 py-6">
       <div className="mx-auto max-w-7xl">
-        <SectionHeading
+        <SectionHeader
           title="Your Selection"
-          description="Review your items before continuing to checkout."
+          subtitle="Review your items before continuing to checkout."
         />
 
         {actionError && (
@@ -166,64 +162,64 @@ export default function CartPageClient() {
                 >
                   <div className="flex min-w-0 gap-4">
                     {item.image ? (
-                      // API images can come from multiple seller-configured hosts.
-                      // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={item.image}
                         alt={item.title}
                         className="h-24 w-24 shrink-0 rounded-xl object-cover"
                       />
                     ) : (
-                      <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl bg-[#F4ECE5] text-xs text-[#8B7E72]">
+                      <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl bg-[var(--bhn-brand-50)] text-xs text-[var(--bhn-brand-600)]">
                         No image
                       </div>
                     )}
 
                     <div className="min-w-0">
-                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#9A6A4B]">
+                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--bhn-brand-600)]">
                         {item.itemType === 'rental' ? 'Rental product' : item.itemType}
                       </p>
-                      <h2 className="truncate text-lg font-semibold text-[#1C1A16]">{item.title}</h2>
+                      <h2 className="truncate text-lg font-semibold text-[var(--bhn-text)]">{item.title}</h2>
                       {details.length > 0 && (
-                        <p className="mt-1 text-sm text-gray-500">{details.join(' • ')}</p>
+                        <p className="mt-1 text-sm text-[var(--bhn-text-muted)]">{details.join(' • ')}</p>
                       )}
 
-                      <div className="mt-3 flex w-fit items-center gap-3 rounded-full border px-3 py-1">
-                        <button
+                      <div className="mt-3 flex w-fit items-center gap-3 rounded-full border border-[var(--bhn-border)] bg-white px-3 py-1">
+                        <Button
                           type="button"
+                          variant="ghost"
+                          size="icon"
                           aria-label={`Decrease ${item.title} quantity`}
                           onClick={() => handleQuantity(item, item.quantity - 1)}
                           disabled={item.quantity <= 1 || isPending}
-                          className="disabled:cursor-not-allowed disabled:opacity-40"
                         >
-                          −
-                        </button>
-                        <span aria-label={`Quantity ${item.quantity}`}>{item.quantity}</span>
-                        <button
+                          <Minus size={16} />
+                        </Button>
+                        <span aria-label={`Quantity ${item.quantity}`} className="text-sm font-medium text-[var(--bhn-text)]">{item.quantity}</span>
+                        <Button
                           type="button"
+                          variant="ghost"
+                          size="icon"
                           aria-label={`Increase ${item.title} quantity`}
                           onClick={() => handleQuantity(item, item.quantity + 1)}
                           disabled={isPending}
-                          className="disabled:cursor-not-allowed disabled:opacity-40"
                         >
-                          +
-                        </button>
+                          <Plus size={16} />
+                        </Button>
                       </div>
                     </div>
                   </div>
 
                   <div className="shrink-0 text-left sm:text-right">
-                    <p className="text-lg font-semibold text-[#C2652A]">
-                      {formatCurrency(item.price * item.quantity)}
-                    </p>
-                    <button
+                    <PriceDisplay current={item.price * item.quantity} currency="₹" size="lg" />
+                    <Button
                       type="button"
+                      variant="ghost"
+                      size="sm"
                       onClick={() => handleRemove(item)}
                       disabled={isPending}
-                      className="mt-4 text-xs text-gray-500 hover:underline disabled:cursor-not-allowed disabled:opacity-40"
+                      icon={<Trash2 size={14} />}
                     >
                       {isPending ? 'Updating…' : 'Remove'}
-                    </button>
+                    </Button>
                   </div>
                 </Card>
               );
@@ -231,9 +227,9 @@ export default function CartPageClient() {
           </div>
 
           <div>
-            <Card className="sticky top-20 rounded-2xl bg-[#F6EDE6] p-4">
+            <Card className="sticky top-20 rounded-2xl bg-[var(--bhn-brand-50)] p-4">
               <h2 className="mb-4 text-lg font-semibold">Summary</h2>
-              <div className="space-y-3 text-sm text-gray-600">
+              <div className="space-y-3 text-sm text-[var(--bhn-text-muted)]">
                 <div className="flex justify-between gap-4">
                   <span>Subtotal</span>
                   <span>{formatCurrency(summary?.subtotal || 0)}</span>
@@ -247,11 +243,11 @@ export default function CartPageClient() {
                   <span>{formatCurrency(summary?.tax || 0)}</span>
                 </div>
               </div>
-              <div className="mt-4 flex justify-between border-t pt-4 font-semibold">
+              <div className="mt-4 flex justify-between border-t border-[var(--bhn-border)] pt-4 font-semibold text-[var(--bhn-text)]">
                 <span>Total</span>
-                <span>{formatCurrency(summary?.total || 0)}</span>
+                <PriceDisplay current={summary?.total || 0} currency="₹" size="lg" />
               </div>
-              <Button onClick={handleCheckout} disabled={cartFetching || Boolean(pendingItemId)} className="mt-4 w-full">
+              <Button onClick={handleCheckout} disabled={cartFetching || Boolean(pendingItemId)} className="mt-4 w-full" size="lg">
                 Proceed to Checkout
               </Button>
               <Button
@@ -261,7 +257,7 @@ export default function CartPageClient() {
               >
                 Continue Browsing
               </Button>
-              <p className="mt-3 text-center text-[10px] text-gray-500">
+              <p className="mt-3 text-center text-[10px] text-[var(--bhn-text-muted)]">
                 Prices, fees, and taxes are supplied by the server.
               </p>
             </Card>

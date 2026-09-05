@@ -2,10 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Card from "@/components/ui/Card";
-import SectionHeading from "@/components/ui/SectionHeading";
-import Header from "@/components/ui/Header";
-import Footer from "@/components/ui/Footer";
+import { SectionHeader, Card, Button, Input, EmptyState, Spinner, Badge } from '@bandhan/ui';
 import { CreditCard, Wallet, HelpCircle, Loader } from "lucide-react";
 import { MdLock } from "react-icons/md";
 import { 
@@ -41,13 +38,16 @@ declare global {
   }
 }
 
+function formatCurrency(value: number) {
+  return `₹${Number(value || 0).toLocaleString('en-IN')}`;
+}
+
 export default function CheckoutPage() {
   const router = useRouter();
   const [paymentMethod, setPaymentMethod] = useState("card");
   const [loading, setLoading] = useState(false);
   const [pincodeLoading, setPincodeLoading] = useState(false);
 
-  // Address State (Strict original shape maintained)
   const [address, setAddress] = useState({ 
     street: "", 
     city: "", 
@@ -56,7 +56,6 @@ export default function CheckoutPage() {
     phone: "" 
   });
 
-  // Client-side Validation Errors State
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const { data: checkoutData, isLoading: cartLoading, isError: quoteError, refetch: refetchQuote } = useGetCheckoutQuoteQuery();
@@ -82,7 +81,6 @@ export default function CheckoutPage() {
     }
   }, []);
 
-  // Strict Client-side Input Control
   const handleInputChange = (field: string, value: string) => {
     setErrors((prev) => ({ ...prev, [field]: "" }));
 
@@ -105,7 +103,6 @@ export default function CheckoutPage() {
     setAddress((prev) => ({ ...prev, [field]: value }));
   };
 
-  // Indian Pincode Auto-Fill (Client-Side)
   const fetchLocationFromPincode = async (pincode: string) => {
     setPincodeLoading(true);
     try {
@@ -130,7 +127,6 @@ export default function CheckoutPage() {
     }
   };
 
-  // Local Form Validation
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
 
@@ -243,125 +239,104 @@ export default function CheckoutPage() {
 
   if (cartLoading) {
     return (
-      <div className="min-h-screen bg-[#F8F4EF] flex items-center justify-center">
-        <Loader className="animate-spin text-[#964407]" size={24} />
+      <div className="min-h-screen bg-[var(--bhn-bg)] flex items-center justify-center">
+        <Spinner size="lg" className="animate-spin text-[var(--bhn-brand-500)]" />
       </div>
     );
   }
 
   if (quoteError || !checkoutData) {
     return (
-      <div className="min-h-screen bg-[#F8F4EF] flex flex-col">
-        <Header variant="checkout" />
+      <div className="min-h-screen bg-[var(--bhn-bg)] flex flex-col">
         <main className="flex-1 flex items-center justify-center px-4 py-10">
-          <Card className="w-full max-w-lg rounded-2xl border border-[#E7E1D8] bg-white p-6 text-center shadow-sm">
-            <h1 className="text-xl font-semibold text-[#1C1A16]">Checkout is not ready</h1>
-            <p className="mt-2 text-sm leading-6 text-[#6B625A]">
-              We could not verify the latest price and availability of your cart. No payment has been started.
-            </p>
-            <div className="mt-5 flex flex-col justify-center gap-2 sm:flex-row">
-              <button
-                type="button"
-                onClick={() => void refetchQuote()}
-                className="rounded-lg bg-[#964407] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#7a3606]"
-              >
-                Try again
-              </button>
-              <button
-                type="button"
-                onClick={() => router.push("/cart")}
-                className="rounded-lg border border-[#DBC1B5] bg-white px-5 py-2.5 text-sm font-semibold text-[#6B3A20] hover:bg-[#FBF6F0]"
-              >
-                Return to cart
-              </button>
-            </div>
-          </Card>
+          <div className="w-full max-w-lg">
+            <EmptyState
+              title="Checkout is not ready"
+              description="We could not verify the latest price and availability of your cart. No payment has been started."
+              action={
+                <div className="flex flex-col gap-2 sm:flex-row">
+                  <Button onClick={() => refetchQuote()}>Try again</Button>
+                  <Button variant="ghost" onClick={() => router.push("/cart")}>Return to cart</Button>
+                </div>
+              }
+            />
+          </div>
         </main>
-        <Footer variant="checkout" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#F8F4EF]">
-      <Header variant="checkout" />
+    <div className="min-h-screen bg-[var(--bhn-bg)]">
       <div className="max-w-7xl mx-auto px-3 md:px-5 py-6">
-        <div className="mb-4">
-          <SectionHeading label="" title="Checkout" className="max-w-3xl font-normal text-xl md:text-xl" />
-          <p className="text-gray-500 mt-1 text-xs">Review your details and complete your payment</p>
-        </div>
+        <SectionHeader
+          title="Checkout"
+          subtitle="Review your details and complete your payment"
+        />
 
-        <div className="grid gap-4 lg:grid-cols-[1fr_360px] items-start">
-
+        <div className="mt-4 grid gap-4 lg:grid-cols-[1fr_360px] items-start">
           <div className="space-y-5">
-            <Card className="rounded-2xl shadow-sm space-y-4 p-4 md:p-4">
+            <Card className="rounded-2xl space-y-4 p-4 md:p-4">
               <section className="space-y-3">
                 <div className="flex items-center gap-3 text-xs uppercase tracking-wider">
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#964407] text-white text-[10px]">1</span>
-                  <p className="text-sm font-medium text-[#201B14]">Shipping Address</p>
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--bhn-brand-500)] text-white text-[10px]">1</span>
+                  <p className="text-sm font-medium text-[var(--bhn-text)]">Shipping Address</p>
                 </div>
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="sm:col-span-2">
-                    <input 
-                      placeholder="Street Address" 
-                      value={address.street} 
-                      onChange={(e) => handleInputChange("street", e.target.value)} 
-                      className={`w-full rounded-lg border bg-[#FBF6F0] p-2.5 text-xs outline-none focus:border-[#964407] ${
-                        errors.street ? "border-red-500" : "border-[#DBC1B5]"
-                      }`} 
+                    <Input
+                      placeholder="Street Address"
+                      value={address.street}
+                      onChange={(e) => handleInputChange("street", e.target.value)}
+                      className={errors.street ? "border-red-500" : undefined}
+                      invalid={!!errors.street}
                     />
-                    {errors.street && <p className="text-[10px] text-red-500 mt-0.5">{errors.street}</p>}
                   </div>
 
                   <div className="relative">
-                    <input 
-                      placeholder="Pincode (6 digits)" 
-                      value={address.pincode} 
-                      onChange={(e) => handleInputChange("pincode", e.target.value)} 
+                    <Input
+                      placeholder="Pincode (6 digits)"
+                      value={address.pincode}
+                      onChange={(e) => handleInputChange("pincode", e.target.value)}
                       maxLength={6}
-                      className={`w-full rounded-lg border bg-[#FBF6F0] p-2.5 text-xs outline-none focus:border-[#964407] ${
-                        errors.pincode ? "border-red-500" : "border-[#DBC1B5]"
-                      }`} 
+                      className={errors.pincode ? "border-red-500" : undefined}
+                      invalid={!!errors.pincode}
                     />
                     {pincodeLoading && (
-                      <Loader size={12} className="animate-spin absolute right-3 top-3 text-[#964407]" />
+                      <Spinner size="sm" className="animate-spin absolute right-3 top-3 text-[var(--bhn-brand-500)]" />
                     )}
-                    {errors.pincode && <p className="text-[10px] text-red-500 mt-0.5">{errors.pincode}</p>}
                   </div>
 
-                  <div>
-                    <input 
-                      placeholder="City" 
-                      value={address.city} 
-                      onChange={(e) => handleInputChange("city", e.target.value)} 
-                      className={`w-full rounded-lg border bg-[#FBF6F0] p-2.5 text-xs outline-none focus:border-[#964407] ${
-                        errors.city ? "border-red-500" : "border-[#DBC1B5]"
-                      }`} 
+<div>
+                    <Input
+                      placeholder="City"
+                      value={address.city}
+                      onChange={(e) => handleInputChange("city", e.target.value)}
+                      className={errors.city ? "border-red-500" : undefined}
+                      invalid={!!errors.city}
                     />
                     {errors.city && <p className="text-[10px] text-red-500 mt-0.5">{errors.city}</p>}
                   </div>
 
-                  <div>
-                    <input 
-                      placeholder="State" 
-                      value={address.state} 
-                      onChange={(e) => handleInputChange("state", e.target.value)} 
-                      className={`w-full rounded-lg border bg-[#FBF6F0] p-2.5 text-xs outline-none focus:border-[#964407] ${
-                        errors.state ? "border-red-500" : "border-[#DBC1B5]"
-                      }`} 
+<div>
+                    <Input
+                      placeholder="State"
+                      value={address.state}
+                      onChange={(e) => handleInputChange("state", e.target.value)}
+                      className={errors.state ? "border-red-500" : undefined}
+                      invalid={!!errors.state}
                     />
                     {errors.state && <p className="text-[10px] text-red-500 mt-0.5">{errors.state}</p>}
                   </div>
 
-                  <div>
-                    <input 
-                      placeholder="10-digit Phone Number" 
-                      value={address.phone} 
-                      onChange={(e) => handleInputChange("phone", e.target.value)} 
+<div>
+                    <Input
+                      placeholder="10-digit Phone Number"
+                      value={address.phone}
+                      onChange={(e) => handleInputChange("phone", e.target.value)}
                       maxLength={10}
-                      className={`w-full rounded-lg border bg-[#FBF6F0] p-2.5 text-xs outline-none focus:border-[#964407] ${
-                        errors.phone ? "border-red-500" : "border-[#DBC1B5]"
-                      }`} 
+                      className={errors.phone ? "border-red-500" : undefined}
+                      invalid={!!errors.phone}
                     />
                     {errors.phone && <p className="text-[10px] text-red-500 mt-0.5">{errors.phone}</p>}
                   </div>
@@ -370,8 +345,8 @@ export default function CheckoutPage() {
 
               <section className="space-y-3">
                 <div className="flex items-center gap-3 text-xs uppercase tracking-wider">
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#964407] text-white text-[10px]">2</span>
-                  <p className="text-sm font-medium text-[#201B14]">Payment Method</p>
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--bhn-brand-500)] text-white text-[10px]">2</span>
+                  <p className="text-sm font-medium text-[var(--bhn-text)]">Payment Method</p>
                 </div>
 
                 <div className="grid gap-2">
@@ -380,21 +355,21 @@ export default function CheckoutPage() {
                     { value: "upi", icon: <Wallet size={18} />, title: "UPI Payment", details: "Google Pay, PhonePe, Paytm" },
                     { value: "emi", icon: <CreditCard size={18} />, title: "EMI (if eligible)", details: "Available plans and rates are shown securely by Razorpay" },
                   ].map((item) => (
-                    <label key={item.value} className="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-[#E7E1D8] bg-white p-3 hover:border-[#C2652A] transition-colors">
+                    <label key={item.value} className="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-[var(--bhn-border)] bg-white p-3 hover:border-[var(--bhn-brand-400)] transition-colors">
                       <div className="flex items-center gap-3">
-                        <div className="bg-[#F8ECE1] p-2 rounded-lg text-[#645D57]">{item.icon}</div>
+                        <div className="bg-[var(--bhn-brand-50)] p-2 rounded-lg text-[var(--bhn-brand-600)]">{item.icon}</div>
                         <div>
-                          <p className="font-semibold text-[#1C1A16] text-xs">{item.title}</p>
-                          <p className="text-[10px] text-[#8B7E72]">{item.details}</p>
+                          <p className="font-semibold text-[var(--bhn-text)] text-xs">{item.title}</p>
+                          <p className="text-[10px] text-[var(--bhn-text-muted)]">{item.details}</p>
                         </div>
                       </div>
-                      <input type="radio" name="payment" value={item.value} checked={paymentMethod === item.value} onChange={() => setPaymentMethod(item.value)} className="h-4 w-4 accent-[#C2652A]" />
+                      <input type="radio" name="payment" value={item.value} checked={paymentMethod === item.value} onChange={() => setPaymentMethod(item.value)} className="h-4 w-4 accent-[var(--bhn-brand-500)]" />
                     </label>
                   ))}
                 </div>
 
                 {paymentMethod === "emi" && (
-                  <div className="rounded-xl border border-[#DBC1B5] bg-[#FBF6F0] p-3 text-[11px] leading-5 text-[#6B625A]">
+                  <div className="rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-brand-50)] p-3 text-[11px] leading-5 text-[var(--bhn-text-muted)]">
                     EMI eligibility, tenure, interest, and final instalment amount are determined by your bank and displayed in the Razorpay payment window before you pay.
                   </div>
                 )}
@@ -403,60 +378,62 @@ export default function CheckoutPage() {
           </div>
 
           <aside className="space-y-5">
-            <Card className="rounded-2xl shadow-sm bg-white p-3 border border-[#E7E1D8]">
-              <h2 className="text-base font-bold text-[#1C1A16] mb-4">Order Summary</h2>
+            <Card className="rounded-2xl shadow-sm bg-white p-3 border border-[var(--bhn-border)]">
+              <h2 className="text-base font-bold text-[var(--bhn-text)] mb-4">Order Summary</h2>
               {cartItems.length === 0 ? (
-                <p className="text-xs text-gray-500 text-center py-4">Your cart is empty</p>
+                <EmptyState
+                  title="Your cart is empty"
+                  description="Add items to your cart before proceeding to checkout."
+                  action={<Button variant="ghost" onClick={() => router.push('/products/explore')}>Browse products</Button>}
+                />
               ) : (
                 <>
-                  <div className="space-y-3 border-b border-[#E7E1D8] pb-3 mb-3">
+                  <div className="space-y-3 border-b border-[var(--bhn-border)] pb-3 mb-3">
                     {cartItems.map((item) => (
                       <div key={`${item.productId}:${item.variant}`} className="flex justify-between gap-3 text-xs">
-                        <span className="text-[#6B625A] truncate max-w-[200px]">{item.title} × {item.quantity}</span>
-                        <span className="font-medium shrink-0">₹{(item.unitPrice * item.quantity).toLocaleString()}</span>
+                        <span className="text-[var(--bhn-text-muted)] truncate max-w-[200px]">{item.title} × {item.quantity}</span>
+                        <span className="font-medium shrink-0">{formatCurrency(item.unitPrice * item.quantity)}</span>
                       </div>
                     ))}
                   </div>
                   <div className="space-y-2 text-xs">
-                    <div className="flex justify-between text-[#6B625A]"><span>Subtotal</span><span>₹{subtotal.toLocaleString()}</span></div>
-                    {shipping > 0 && <div className="flex justify-between text-[#6B625A]"><span>Shipping</span><span>₹{shipping.toLocaleString()}</span></div>}
-                    <div className="flex justify-between text-[#6B625A]"><span>Service Fee</span><span>₹{serviceFee.toLocaleString()}</span></div>
-                    <div className="flex justify-between text-[#6B625A]"><span>Tax</span><span>₹{tax.toLocaleString()}</span></div>
-                    {discount > 0 && <div className="flex justify-between text-[#C2652A] font-bold"><span>Discount</span><span>-₹{discount.toLocaleString()}</span></div>}
+                    <div className="flex justify-between text-[var(--bhn-text-muted)]"><span>Subtotal</span><span>{formatCurrency(subtotal)}</span></div>
+                    {shipping > 0 && <div className="flex justify-between text-[var(--bhn-text-muted)]"><span>Shipping</span><span>{formatCurrency(shipping)}</span></div>}
+                    <div className="flex justify-between text-[var(--bhn-text-muted)]"><span>Service Fee</span><span>{formatCurrency(serviceFee)}</span></div>
+                    <div className="flex justify-between text-[var(--bhn-text-muted)]"><span>Tax</span><span>{formatCurrency(tax)}</span></div>
+                    {discount > 0 && <div className="flex justify-between text-[var(--bhn-brand-600)] font-bold"><span>Discount</span><span>-{formatCurrency(discount)}</span></div>}
                   </div>
                 </>
               )}
-              <div className="mt-4 pt-3 border-t-2 border-dashed border-[#E7E1D8]">
+
+              <div className="mt-4 pt-3 border-t-2 border-dashed border-[var(--bhn-border)]">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs font-medium text-[#6B625A]">Total</span>
-                  <span className="text-xl font-black text-[#1C1A16]">₹{total.toLocaleString()}</span>
+                  <span className="text-xs font-medium text-[var(--bhn-text-muted)]">Total</span>
+                  <span className="text-xl font-black text-[var(--bhn-text)]">{formatCurrency(total)}</span>
                 </div>
-                <button onClick={handlePayment} disabled={loading || cartItems.length === 0}
-                  className="w-full py-3 text-sm font-bold text-white bg-[#964407] rounded-xl hover:bg-[#7a3606] transition disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer">
-                  {loading ? <Loader className="animate-spin" size={16} /> : null}
-                  {loading ? "Processing..." : `Pay ₹${total.toLocaleString()}`}
-                </button>
+                <Button onClick={handlePayment} disabled={loading || cartItems.length === 0} className="w-full py-3 text-sm font-bold text-white bg-[var(--bhn-brand-500)] rounded-xl hover:bg-[var(--bhn-brand-600)] transition disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer">
+                  {loading ? <Spinner size="sm" className="animate-spin" /> : null}
+                  {loading ? "Processing..." : `Pay ${formatCurrency(total)}`}
+                </Button>
               </div>
-              <div className="flex items-center justify-center gap-2 mt-4 text-[#525866]">
+              <div className="flex items-center justify-center gap-2 mt-4 text-[var(--bhn-text-muted)]">
                 <MdLock size={14} />
                 <span className="text-[9px] font-medium uppercase">Secured by Razorpay</span>
               </div>
             </Card>
 
-            <Card className="rounded-2xl border border-[#E7E1D8] bg-[#FEF1E7] p-4 shadow-sm">
+            <Card className="rounded-2xl border border-[var(--bhn-border)] bg-[var(--bhn-brand-50)] p-4 shadow-sm">
               <div className="flex gap-3 items-start">
-                <HelpCircle className="text-[#C2652A] shrink-0" size={18} />
+                <HelpCircle className="text-[var(--bhn-brand-500)] shrink-0" size={18} />
                 <div>
-                  <p className="font-bold text-xs text-[#1C1A16]">Need help?</p>
-                  <p className="text-[10px] text-[#6B625A] mt-1">Contact our support team for assistance</p>
+                  <p className="font-bold text-xs text-[var(--bhn-text)]">Need help?</p>
+                  <p className="text-[10px] text-[var(--bhn-text-muted)] mt-1">Contact our support team for assistance</p>
                 </div>
               </div>
             </Card>
           </aside>
-
         </div>
       </div>
-      <Footer variant="checkout" />
     </div>
   );
 }
