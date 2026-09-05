@@ -3,8 +3,9 @@
 import { Star, Heart, Scale } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Card from "./Card";
+import { Card, Button } from "@bandhan/ui";
 import Image from "next/image";
+import { RatingDisplay, PriceDisplay, Badge, StatusBadge } from "@bandhan/ui";
 
 interface ArtisanCardProps {
   category?: string;
@@ -33,27 +34,27 @@ interface ArtisanCardProps {
 
 export function ArtisanCard(props: ArtisanCardProps) {
   const {
-  category,
-  title,
-  subtitle,
-  description,
-  price,
-  rating,
-  status,
-  img,
-  name,
-  location,
-  guests,
-  onCompare,
-  tag,
-  variant = "default", // 🔥 key part
-  onDetailsClick,
-  href,
-  onPrimary,
-  primaryLabel,
-  primaryDisabled = false,
-  isCompared,
-  className = "",
+    category,
+    title,
+    subtitle,
+    description,
+    price,
+    rating,
+    status,
+    img,
+    name,
+    location,
+    guests,
+    onCompare,
+    tag,
+    variant = "default",
+    onDetailsClick,
+    href,
+    onPrimary,
+    primaryLabel,
+    primaryDisabled = false,
+    isCompared,
+    className = "",
   } = props;
   const [localCompared, setLocalCompared] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -70,25 +71,24 @@ export function ArtisanCard(props: ArtisanCardProps) {
     const cardOnClick = onDetailsClick ?? (href ? () => router.push(href) : undefined);
 
     return (
-      <Card
+      <article
         onClick={cardOnClick}
-        className={`rounded-lg border border-[#E7E1D8] bg-white shadow-sm transition overflow-hidden group ${cardOnClick ? "cursor-pointer hover:shadow-lg" : ""} ${className}`}
+        className={`bhn-listing-card ${cardOnClick ? "" : "pointer-events-none"} ${className}`}
       >
         {/* IMAGE */}
-        <div className="relative overflow-hidden h-64 bg-gray-200">
+        <div className="bhn-listing-card-image relative overflow-hidden aspect-square">
           <Image
             src={img}
             alt={name || title || "Marketplace listing"}
             fill
-            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-            unoptimized
+            sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
             className="object-cover group-hover:scale-105 transition-transform duration-300"
           />
 
           {tag && (
-            <span className="absolute left-3 top-3 bg-black/80 text-white text-[10px] px-3 py-1 rounded-full uppercase tracking-wide">
+            <Badge tone="brand" className="absolute left-2 top-2 text-xs">
               {tag}
-            </span>
+            </Badge>
           )}
 
           <button
@@ -98,71 +98,98 @@ export function ArtisanCard(props: ArtisanCardProps) {
               event.preventDefault();
               setIsFavorite(!isFavorite);
             }}
-            className="absolute top-3 right-3 bg-white rounded-full p-2 shadow"
+            className="absolute top-2 right-2 bhn-btn bhn-btn-icon bhn-btn-ghost bg-white/90 shadow-sm"
+            aria-label="Add to wishlist"
           >
-            <Heart
-              size={18}
-              className={
-                isFavorite ? "fill-[#C2652A] text-[#C2652A]" : "text-[#6B625A]"
-              }
-            />
+            <Heart size={16} className="text-[var(--bhn-brand-600)]" />
           </button>
-        </div>
 
-        {/* CONTENT */}
-        <div className="p-4">
-          <div className="flex justify-between items-start">
-            <h3 className="text-lg font-semibold truncate">{name || title}</h3>
-
-            <div className="flex items-center gap-1 text-sm">
-              <Star className="text-[#C2652A] fill-[#C2652A]" size={14} />
-              {rating}
-            </div>
-          </div>
-
-          {location && (
-            <p className="text-xs text-[#6B625A] mt-1">{location}</p>
-          )}
-          {guests && <p className="text-xs text-[#6B625A]">{guests}</p>}
-          <div className="mt-4 flex items-center justify-between">
-            <p className="text-lg font-semibold text-[#C2652A]">{price}</p>
-            {onCompare && (
-              <button
-                type="button"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  event.preventDefault();
-                  handleCompareToggle();
-                }}
-                className={`bhn-chip inline-flex items-center gap-1 ${
-                  compared ? "bhn-chip-active" : ""
-                }`}
-                aria-label={compared ? "Remove from compare" : "Add to compare"}
-              >
-                <Scale
-                  size={14}
-                  className={compared ? "text-[#C25E2B]" : "text-[#6B625A]"}
-                />
-                <span className="text-xs">{compared ? "Comparing" : "Compare"}</span>
-              </button>
-            )}
-          </div>
-
-          {primaryLabel && onPrimary && (
+          {onCompare && (
             <button
               type="button"
               onClick={(event) => {
                 event.stopPropagation();
-                onPrimary();
+                event.preventDefault();
+                handleCompareToggle();
               }}
-              disabled={primaryDisabled}
-              className="mt-4 inline-flex w-full items-center justify-center rounded-xl bg-[#B65B2D] px-3 py-2 text-sm font-semibold text-white transition hover:bg-[#98461F] disabled:cursor-default disabled:bg-[#287D3C]"
+              className={`bhn-btn bhn-btn-icon bhn-btn-ghost bg-white/90 shadow-sm absolute bottom-2 right-2 ${compared ? "text-[var(--bhn-brand-600)]" : ""}`}
+              aria-label={compared ? "Remove from compare" : "Add to compare"}
             >
-              {primaryLabel}
+              <Scale size={16} />
             </button>
           )}
         </div>
-      </Card>
+
+        {/* CONTENT */}
+        <div className="bhn-listing-card-body">
+          <h3 className="bhn-listing-card-title">{name || title}</h3>
+          {location && (
+            <p className="bhn-listing-card-meta">
+              <span className="flex items-center gap-1">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="text-[var(--bhn-text-soft)]">
+                  <path d="M6 0C2.686 0 0 2.686 0 6c0 3.314 6 6 6 6s6-2.686 6-6C12 2.686 9.314 0 6 0z" stroke="currentColor" strokeWidth="1.5"/>
+                  <circle cx="6" cy="6" r="2" stroke="currentColor" strokeWidth="1.5"/>
+                </svg>
+                {location}
+              </span>
+              {guests && (
+                <span className="flex items-center gap-1">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="text-[var(--bhn-text-soft)]">
+                    <path d="M6 12c-3.314 0-6-2.686-6-6s2.686-6 6-6 6 2.686 6 6-2.686 6-6" stroke="currentColor" strokeWidth="1.5"/>
+                    <circle cx="6" cy="6" r="2" stroke="currentColor" strokeWidth="1.5"/>
+                  </svg>
+                  {guests}
+                </span>
+              )}
+            </p>
+          )}
+        </div>
+
+        <div className="bhn-listing-card-footer">
+          <PriceDisplay current={price ?? 0} currency="₹" size="sm" />
+          <div className="flex items-center gap-2 ml-auto">
+            <button
+              type="button"
+              onClick={(e: React.MouseEvent) => {
+                e.stopPropagation();
+                // Wishlist toggle would be handled by parent
+              }}
+              className="bhn-btn bhn-btn-icon bhn-btn-ghost"
+              aria-label="Add to wishlist"
+            >
+              <Heart size={16} className="text-[var(--bhn-brand-600)]" />
+            </button>
+            {onCompare && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleCompareToggle();
+                }}
+                className={`bhn-btn bhn-btn-icon bhn-btn-ghost ${compared ? "text-[var(--bhn-brand-600)]" : ""}`}
+                aria-label={compared ? "Remove from compare" : "Add to compare"}
+              >
+                <Scale size={16} />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {primaryLabel && onPrimary && (
+          <Button
+            variant={primaryDisabled ? "secondary" : "primary"}
+            size="sm"
+            className="w-full mt-4"
+            onClick={(event) => {
+              event.stopPropagation();
+              onPrimary();
+            }}
+            disabled={primaryDisabled}
+          >
+            {primaryLabel}
+          </Button>
+        )}
+      </article>
     );
   }
 
@@ -171,33 +198,37 @@ export function ArtisanCard(props: ArtisanCardProps) {
   return (
     <Card
       onClick={cardOnClick}
-      className={`rounded-2xl border border-[#E7E1D8] bg-white shadow-sm transition ${cardOnClick ? "cursor-pointer hover:shadow-md" : "hover:shadow-md"} ${className}`}
+      className={`bhn-card-hover ${cardOnClick ? "" : "pointer-events-none"} ${className}`}
+      padded
+      padding="md"
     >
-      <div className="relative h-52 rounded-2xl overflow-hidden">
+      <div className="relative h-52 rounded-xl overflow-hidden">
         <Image src={img} alt={title || name || "Marketplace listing"} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" unoptimized className="object-cover" />
 
-        {category && <div className="absolute top-3 right-3 bg-[#C2652A] text-white text-[10px] px-3 py-1 rounded-2xl uppercase tracking-wide">
-          {category}
-        </div>}
+        {category && (
+          <Badge tone="brand" className="absolute top-3 right-3 text-[10px]">
+            {category}
+          </Badge>
+        )}
       </div>
 
-      <h3 className="mt-2 px-3 text-lg font-semibold">{title || name}</h3>
+      <h3 className="mt-2 text-lg font-semibold">{title || name}</h3>
 
-      {subtitle && <p className="px-3 text-sm text-[#6B625A]">{subtitle}</p>}
+      {subtitle && <p className="mt-1 text-sm text-[var(--bhn-text-muted)]">{subtitle}</p>}
 
-      <p className="mt-2 px-3 text-sm text-[#7A6E66] line-clamp-2">
+      <p className="mt-2 text-sm text-[var(--bhn-text-muted)] line-clamp-2">
         {description}
       </p>
 
-      <div className="mt-4 px-3 pb-3 flex justify-between items-center">
+      <div className="mt-4 flex justify-between items-center">
         <div>
-          <p className="text-sm font-semibold">{price}</p>
-          {status && <p className="text-xs text-[#C2652A]">{status}</p>}
+          <PriceDisplay current={price ?? 0} currency="₹" size="sm" />
+          {status && <StatusBadge tone="warning" size="sm" className="mt-1">{status}</StatusBadge>}
         </div>
 
         <div className="flex items-center gap-1 text-sm">
-          <Star size={14} className="text-[#C2652A]" />
-          {rating}
+          <RatingDisplay value={rating ?? 0} max={5} showValue={false} size="sm" />
+          <span className="text-[var(--bhn-text-muted)]">{rating ?? 0}</span>
         </div>
       </div>
     </Card>

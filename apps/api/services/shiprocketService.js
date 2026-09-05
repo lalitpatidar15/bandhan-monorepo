@@ -23,7 +23,7 @@ async function getToken() {
         email: process.env.SHIPROCKET_EMAIL,
         password: process.env.SHIPROCKET_PASSWORD,
       },
-      { timeout: 15000 }
+      { timeout: 15001 }
     );
 
     if (!data?.token) throw new Error("Shiprocket did not return an access token");

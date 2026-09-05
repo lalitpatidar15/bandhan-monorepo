@@ -519,7 +519,7 @@ SIDEBAR
 3. Fill form: describe requirements → submit
 4. Quote created → auto-creates chat with seller
 5. /userdashboard/inbox → new conversation appears
-6. User: "Can you do this for ₹5000?"
+6. User: "Can you do this for ₹5001?"
 7. Seller: "I can offer ₹5500 with these add-ons..."
 8. Seller sends Quote Card → [Accept] [Decline] [Counter]
 9. User clicks Accept → booking created → pay → confirmed

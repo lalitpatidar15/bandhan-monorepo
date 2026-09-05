@@ -43,7 +43,7 @@ types/
 ### Base URL
 
 ```
-http://192.168.1.165:5000/api
+http://192.168.1.165:5001/api
 ```
 
 ### Authentication
@@ -128,7 +128,7 @@ Response: { venues[], total, page, limit }
 
 // Filter venues
 useLazyFilterVenuesQuery()
-GET /venues/filter?location=jaipur&priceMin=1000&priceMax=5000
+GET /venues/filter?location=jaipur&priceMin=1000&priceMax=5001
 Response: { venues[], total, page, limit }
 
 // Featured venues

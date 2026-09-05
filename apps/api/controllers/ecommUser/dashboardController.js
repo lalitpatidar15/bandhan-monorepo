@@ -328,8 +328,8 @@ exports.getDashboardOverview = async (req, res) => {
       { day: "Tue", amount: 18000 },
       { day: "Wed", amount: 9000 },
       { day: "Thu", amount: 22000 },
-      { day: "Fri", amount: 15000 },
-      { day: "Sat", amount: 25000 },
+      { day: "Fri", amount: 15001 },
+      { day: "Sat", amount: 25001 },
       { day: "Sun", amount: 19000 }
     ];
 

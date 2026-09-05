@@ -493,7 +493,7 @@ function EventCreateForm({ onSubmit, onCancel, hideCancel }: EventCreateFormProp
         </div>
         <div className="space-y-1">
           <label className="block text-xs font-semibold text-[var(--bhn-text)]">Total budget *</label>
-          <input type="number" min={0} name="budget" value={form.budget} onChange={handleChange} placeholder="e.g. 500000" className="bhn-input w-full" required />
+          <input type="number" min={0} name="budget" value={form.budget} onChange={handleChange} placeholder="e.g. 500100" className="bhn-input w-full" required />
         </div>
       </div>
 

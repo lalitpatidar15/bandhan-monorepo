@@ -8,7 +8,7 @@ test('buildConversationQuoteContext returns quote metadata for a matching quote'
     status: 'pending',
     eventDate: '2026-10-10',
     guestRange: '100-150',
-    budget: 850000,
+    budget: 850010,
     note: 'Need a premium setup',
     services: ['Decoration', 'Catering'],
     fullName: 'Asha Rao',

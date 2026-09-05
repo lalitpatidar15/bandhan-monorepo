@@ -12,7 +12,7 @@ function logout() {
 }
 
 const localApiUrl = typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
-  ? "http://localhost:5000/api"
+  ? "http://localhost:5001/api"
   : undefined;
 const rawBaseQuery = fetchBaseQuery({
   baseUrl: process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_NGROK_API || localApiUrl || "https://bandhan-api.vercel.app/api",

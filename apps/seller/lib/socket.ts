@@ -30,7 +30,7 @@ export async function getSocket() {
           window.location.origin
         );
       }
-      return process.env.NEXT_PUBLIC_SOCKET_URL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+      return process.env.NEXT_PUBLIC_SOCKET_URL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001";
     })();
 
     // Socket.IO needs a persistent server, which Vercel serverless functions do

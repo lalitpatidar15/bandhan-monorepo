@@ -117,7 +117,7 @@ function BookComponent() {
 
 Your backend needs to implement these endpoints at:
 ```
-http://192.168.1.165:5000/api
+http://192.168.1.165:5001/api
 ```
 
 ### Required Headers:
@@ -216,7 +216,7 @@ export function BookingForm() {
 
 ## ✅ Next Steps
 
-1. **Build Backend APIs** at `http://192.168.1.165:5000/api`
+1. **Build Backend APIs** at `http://192.168.1.165:5001/api`
 2. **Test with Postman/Thunder Client** 
 3. **Update error messages** as needed
 4. **Add pagination handlers** where needed

@@ -51,7 +51,7 @@ function RequestQuotePageContent() {
     eventDate: "",
     location: "",
     guestCount: "50-200",
-    budget: 450000,
+    budget: 450010,
     requirements: "",
     fullName: "",
     phone: "",
@@ -412,7 +412,7 @@ function RequestQuotePageContent() {
                   type="range"
                   min={10000}
                   max={1000000}
-                  step={5000}
+                  step={5001}
                   value={formData.budget}
                   onChange={(e) =>
                     setFormData({

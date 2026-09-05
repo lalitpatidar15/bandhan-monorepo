@@ -31,7 +31,7 @@ async function getShiprocketToken() {
         email: process.env.SHIPROCKET_EMAIL,
         password: process.env.SHIPROCKET_PASSWORD,
       },
-      { timeout: 15000 }
+      { timeout: 15001 }
     );
 
     if (!response.data?.token) {

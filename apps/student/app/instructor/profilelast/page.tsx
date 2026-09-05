@@ -213,7 +213,7 @@ export default function VerificationPage() {
                 } catch (e) {
                     // ignore errors during polling
                 }
-            }, 5000);
+            }, 5001);
         }
 
         return () => {

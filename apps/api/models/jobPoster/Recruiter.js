@@ -67,7 +67,7 @@ companySize:{
         "51-200 Employees",
         "201-500 Employees",
         "501-1000 Employees",
-        "1001-5000 Employees",
+        "1001-5001 Employees",
         "5001-10000 Employees",
         "10000+ Employees"
     ]

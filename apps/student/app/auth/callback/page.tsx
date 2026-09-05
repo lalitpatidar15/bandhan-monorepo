@@ -6,7 +6,7 @@ import { setAcademySession } from "@/lib/session";
 import { SsoLoadingScreen } from "@bandhan/ui";
 
 const apiUrl = () => {
-  const raw = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+  const raw = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api";
   return raw.endsWith("/api") ? raw : `${raw.replace(/\/$/, "")}/api`;
 };
 
@@ -17,23 +17,13 @@ export default function AcademySsoCallbackPage() {
 
   useEffect(() => {
     const code = searchParams.get("sso");
-    const fragment = new URLSearchParams(window.location.hash.slice(1));
-    const fragmentToken = fragment.get("token");
-    const role = searchParams.get("role") || fragment.get("role");
-    if ((role !== "student" && role !== "instructor") || (!code && !fragmentToken)) {
-      queueMicrotask(() => setError("This sign-in link is missing or invalid."));
+    const role = searchParams.get("role");
+    if (!code || (role !== "student" && role !== "instructor")) {
+      setError("This sign-in link is missing or invalid.");
       return;
     }
 
     window.history.replaceState(null, "", window.location.pathname);
-    if (fragmentToken) {
-      setAcademySession(fragmentToken, role);
-      const name = fragment.get("name") || "User";
-      localStorage.setItem(role === "instructor" ? "instructor" : "user", JSON.stringify({ name, role }));
-      router.replace(role === "instructor" ? "/instructor/dashboard" : "/student/courses");
-      return;
-    }
-
     fetch(`${apiUrl()}/auth/sso/exchange`, {
       method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code, role }), credentials: "include",
     })

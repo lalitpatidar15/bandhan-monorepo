@@ -25,7 +25,7 @@ export async function getSocket() {
     const url =
       process.env.NEXT_PUBLIC_SOCKET_URL ||
       process.env.NEXT_PUBLIC_API_URL ||
-      "http://localhost:5000";
+      "http://localhost:5001";
 
     // Vercel serverless functions cannot host a persistent Socket.IO server.
     // Keep the HTTP experience usable and avoid repeated failed WebSocket calls.

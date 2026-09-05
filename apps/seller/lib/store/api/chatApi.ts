@@ -4,7 +4,7 @@ const API_BASE_URL = (() => {
   if (typeof window !== "undefined") {
     return process.env.NEXT_PUBLIC_API_URL || `${window.location.origin}/api`;
   }
-  return process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+  return process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api";
 })();
 
 type CreateConversationRequest = {

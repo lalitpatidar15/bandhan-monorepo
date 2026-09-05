@@ -16,7 +16,7 @@ const POPULAR_CITIES = [
   { city: 'Delhi', state: 'Delhi', pincode: '110001' },
   { city: 'Bengaluru', state: 'Karnataka', pincode: '560001' },
   { city: 'Jaipur', state: 'Rajasthan', pincode: '302001' },
-  { city: 'Hyderabad', state: 'Telangana', pincode: '500001' },
+  { city: 'Hyderabad', state: 'Telangana', pincode: '500101' },
 ];
 
 export default function LocationPage() {

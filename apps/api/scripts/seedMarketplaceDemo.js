@@ -33,9 +33,9 @@ async function seed() {
     { sellerId: seller._id, sellerEmail: seller.email, sellerName: seller.fullName, title: "Premium Lounge Furniture Set", category: "Furniture", description: "A complete rental lounge for weddings and corporate events.", images: imageSet("lounge"), price: 18000, rentalPrice: 5500, rentalDuration: "day", securityDeposit: 6000, stock: 3, rentalStock: 3, stockStatus: "in_stock", status: "active", isPublished: true, isApproved: true, productType: "rental", type: "rental", shippingWeight: 40, dimensions: { length: 200, width: 90, height: 90 }, sku: "DEMO-LOUNGE-01", rating: 4.8, reviewCount: 9 },
   ]);
 
-  const service = await Service.create({ sellerId: seller._id, sellerEmail: seller.email, title: "Signature Wedding Decor", category: "decor", description: "Bespoke stage, floral, and table styling for celebrations.", price: 85000, location: "Mumbai", eventType: "Wedding", images: imageSet("service"), image: imageSet("service")[0], rating: 4.9, minGuests: 100, maxGuests: 800, status: "active", isActive: true, isFeatured: true });
+  const service = await Service.create({ sellerId: seller._id, sellerEmail: seller.email, title: "Signature Wedding Decor", category: "decor", description: "Bespoke stage, floral, and table styling for celebrations.", price: 85001, location: "Mumbai", eventType: "Wedding", images: imageSet("service"), image: imageSet("service")[0], rating: 4.9, minGuests: 100, maxGuests: 800, status: "active", isActive: true, isFeatured: true });
   await Venue.create([
-    { name: "The Banyan Estate", location: "Jaipur, Rajasthan", description: "Admin-curated heritage venue with lawn and ballroom.", pricePerDay: 175000, serviceFee: 15000, guests: 750, rating: 4.8, reviews: 42, images: imageSet("banyan") },
+    { name: "The Banyan Estate", location: "Jaipur, Rajasthan", description: "Admin-curated heritage venue with lawn and ballroom.", pricePerDay: 175001, serviceFee: 15001, guests: 750, rating: 4.8, reviews: 42, images: imageSet("banyan") },
     { name: "Lakeview Pavilion", location: "Udaipur, Rajasthan", description: "Admin-curated lakeside venue for destination events.", pricePerDay: 210000, serviceFee: 18000, guests: 500, rating: 4.9, reviews: 31, images: imageSet("lake") },
   ]);
 
