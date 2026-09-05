@@ -32,6 +32,19 @@ import {
 import { useGetSimilarProductsQuery } from "@/store/api/productApi";
 import type { CreateProductReviewRequest, ProductReview } from "@/types/review";
 import toast from "react-hot-toast";
+import {
+  ImageGallery,
+  PriceDisplay,
+  RatingDisplay,
+  StatusBadge,
+  SectionHeader,
+  Button,
+  Card,
+  CardBody,
+  Tabs,
+  Badge,
+  EmptyState,
+} from "@bandhan/ui";
 
 type Props = {
   title: string;
@@ -269,14 +282,14 @@ export default function ProductDetailLayout(props: Props) {
   if (props.soldCount !== undefined && props.soldCount > 0) activitySummary.push(`${props.soldCount} sold`);
 
   return (
-    <div className="w-full bg-[#FAF5EE] min-h-screen text-[#2D231C] py-6 sm:py-8">
+    <div className="w-full bg-[var(--bhn-bg)] min-h-screen py-6 sm:py-8">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 space-y-8">
         
         {/* Breadcrumb Navigation */}
-        <nav className="text-xs sm:text-sm text-[#8A786A] flex items-center gap-1.5">
+        <nav className="text-xs sm:text-sm text-[var(--bhn-text-muted)] flex items-center gap-1.5">
           <span>Home</span> / <span>Products</span> /
           {props.category ? <><span>{props.category}</span> /</> : null}{" "}
-          <span className="font-bold text-[#2D231C]">{props.title}</span>
+          <span className="font-bold text-[var(--bhn-text)]">{props.title}</span>
         </nav>
 
         {/* --- TOP SECTION: IMAGE GALLERY & ACTIONS --- */}
@@ -284,69 +297,26 @@ export default function ProductDetailLayout(props: Props) {
           
           {/* Main Image & Thumbnails Container */}
           <div>
-            <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-[#EAE0D5] bg-white flex items-center justify-center p-4 shadow-sm">
-              {image ? (
-                <Image
-                  src={image}
-                  alt={props.title}
-                  width={960}
-                  height={600}
-                  priority
-                  unoptimized
-                  className="max-h-full max-w-full object-contain"
-                />
-              ) : (
-                <div className="flex flex-col items-center gap-2 text-[#A39488]">
-                  <Package size={40} />
-                  <span className="text-sm">No product image available</span>
-                </div>
-              )}
-              {images.length > 1 && (
-                <>
-                  <button
-                    onClick={previous}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 text-[#2D231C] shadow-sm hover:bg-white"
-                  >
-                    <ChevronLeft size={18} />
-                  </button>
-                  <button
-                    onClick={next}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 text-[#2D231C] shadow-sm hover:bg-white"
-                  >
-                    <ChevronRight size={18} />
-                  </button>
-                </>
-              )}
-            </div>
-
-            {/* Thumbnails list */}
-            {images.length > 1 && (
-              <div className="mt-4 flex gap-3 overflow-x-auto pb-1">
-                {images.map((item, index) => (
-                  <button
-                    key={`${item}-${index}`}
-                    onClick={() => setSelected(index)}
-                    className={`h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl border-2 transition-all bg-white p-1 ${
-                      selected === index
-                        ? "border-[#C25E2B]"
-                        : "border-[#EAE0D5] opacity-70 hover:opacity-100"
-                    }`}
-                  >
-                    <Image src={item} alt="" width={64} height={64} unoptimized className="h-full w-full rounded-lg object-contain" />
-                  </button>
-                ))}
-              </div>
-            )}
+            <ImageGallery
+              images={images}
+              alt={props.title}
+              currentIndex={selected}
+              onIndexChange={setSelected}
+              showThumbnails={images.length > 1}
+              aspectRatio="4:3"
+              enableZoom
+              className="rounded-2xl border border-[var(--bhn-border)] bg-white shadow-sm"
+            />
           </div>
 
           {/* Right Column: Title, Price, Buy Form */}
           <div className="flex flex-col justify-start">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#2D231C] leading-tight">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[var(--bhn-text)] leading-tight">
               {props.title}
             </h1>
 
             {activitySummary.length > 0 && (
-              <div className="mt-1.5 flex flex-wrap items-center gap-2 text-xs sm:text-sm text-[#8A786A]">
+              <div className="mt-1.5 flex flex-wrap items-center gap-2 text-xs sm:text-sm text-[var(--bhn-text-muted)]">
                 {activitySummary.map((item, index) => (
                   <span key={item} className="inline-flex items-center gap-2">
                     {index > 0 ? <span aria-hidden="true">•</span> : null}
@@ -357,95 +327,97 @@ export default function ProductDetailLayout(props: Props) {
             )}
 
             {/* Price tag */}
-            <p className="mt-5 text-3xl sm:text-4xl font-black text-[#2D231C]">
-              ₹{props.price?.toLocaleString()}
-            </p>
+            <PriceDisplay
+              current={props.price}
+              currency="₹"
+              size="lg"
+              className="mt-5"
+            />
 
             {/* Quantity Selector */}
             <div className="mt-5">
-              <label className="text-xs text-[#8A786A] font-medium">Quantity</label>
-              <div className="mt-1.5 inline-flex items-center rounded-xl border border-[#EAE0D5] bg-white p-1">
-                <button
+              <label className="text-xs text-[var(--bhn-text-muted)] font-medium">Quantity</label>
+              <div className="mt-1.5 inline-flex items-center rounded-xl border border-[var(--bhn-border)] bg-white p-1">
+                <Button
+                  variant="ghost"
+                  size="icon"
                   onClick={sub}
                   disabled={isRemovingFromCart}
                   aria-label={qty === 1 && isInCart ? "Remove product from cart" : "Decrease quantity"}
-                  className="h-8 w-8 rounded-lg text-base font-bold text-[#6E5C4F] hover:bg-[#FAF5EE] disabled:cursor-wait disabled:opacity-50"
                 >
-                  -
-                </button>
-                <span className="w-10 text-center font-bold text-[#2D231C] text-sm">
+                  <ChevronLeft size={18} />
+                </Button>
+                <span className="w-10 text-center font-bold text-[var(--bhn-text)] text-sm">
                   {qty}
                 </span>
-                <button
+                <Button
+                  variant="ghost"
+                  size="icon"
                   onClick={add}
-                  className="h-8 w-8 rounded-lg text-base font-bold text-[#6E5C4F] hover:bg-[#FAF5EE]"
                 >
-                  +
-                </button>
+                  <ChevronRight size={18} />
+                </Button>
               </div>
             </div>
 
             {/* Action Buttons: Row 1 */}
             <div className="mt-6 grid grid-cols-2 gap-3">
-              <button
-                onClick={handleAddToCart}
+              <Button
+                variant={isInCart ? "secondary" : "primary"}
+                size="sm"
+                onClick={isInCart ? undefined : handleAddToCart}
                 disabled={isInCart}
-                className="h-11 rounded-xl bg-[#C25E2B] font-bold text-white text-sm transition hover:bg-[#A84E21] disabled:cursor-default disabled:bg-[#287D3C]"
               >
                 {isInCart ? "Added to Cart" : "Add to Cart"}
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={handleBuyNow}
-                className="h-11 rounded-xl border border-[#C25E2B] font-bold text-[#C25E2B] bg-[#FFFBF7] text-sm transition hover:bg-[#FDF3EB]"
               >
                 Buy Now
-              </button>
+              </Button>
             </div>
 
             {/* Action Buttons: Row 2 */}
-            <div className="mt-3 grid grid-cols-2 gap-3">
-             <button
+            <div className="mt-3 grid grid-cols-3 gap-3">
+              <Button
+                variant={isWishlisted ? "secondary" : "ghost"}
+                size="sm"
                 onClick={handleWishlistToggle}
-                className="flex h-10 items-center justify-center gap-2 rounded-xl border border-[#EAE0D5] bg-white text-xs font-bold text-[#2D231C] hover:bg-[#FAF5EE]"
+                icon={<Heart size={14} className={isWishlisted ? "fill-[var(--bhn-brand-500)]" : ""} />}
               >
-                <Heart
-                  size={14}
-                  className={isWishlisted ? "fill-[#C25E2B] text-[#C25E2B]" : "text-[#C25E2B]"}
-                />
                 {isWishlisted ? "Wishlisted" : "Wishlist"}
-              </button>
-              <button
-                type="button"
+              </Button>
+              <Button
+                variant={inCompare ? "secondary" : "ghost"}
+                size="sm"
                 onClick={handleCompareToggle}
-                className={`flex h-10 items-center justify-center gap-2 rounded-xl border border-[#EAE0D5] text-xs font-bold transition ${
-                  inCompare
-                    ? "bg-[#FFF5EB] border-[#C25E2B] text-[#C25E2B]"
-                    : "bg-white text-[#2D231C] hover:bg-[#FAF5EE]"
-                }`}
-                aria-label={inCompare ? "Remove from compare" : "Add to compare"}
+                icon={<Scale size={14} />}
               >
-                <Scale size={14} className={inCompare ? "text-[#C25E2B]" : "text-[#8A786A]"} />
                 {inCompare ? "Comparing" : "Compare"}
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={handleGetQuote}
-                className="flex h-10 items-center justify-center gap-2 rounded-xl border border-[#EAE0D5] bg-white text-xs font-bold text-[#2D231C] hover:bg-[#FAF5EE]"
+                icon={<FileText size={14} className="text-[var(--bhn-text-muted)]" />}
               >
-                <FileText size={14} className="text-[#8A786A]" /> Get Quote
-              </button>
+                Get Quote
+              </Button>
             </div>
 
             {fulfilmentFacts.length > 0 && (
-              <div className="mt-5 rounded-xl border border-[#EAE0D5] bg-white p-3 shadow-xs">
+              <div className="mt-5 rounded-xl border border-[var(--bhn-border)] bg-white p-3 shadow-xs">
                 <div
-                  className="grid gap-2 text-center text-[10px] font-medium text-[#8A786A] sm:text-[11px]"
+                  className="grid gap-2 text-center text-[10px] font-medium text-[var(--bhn-text-muted)] sm:text-[11px]"
                   style={{ gridTemplateColumns: `repeat(${fulfilmentFacts.length}, minmax(0, 1fr))` }}
                 >
                   {fulfilmentFacts.map((fact) => {
                     const Icon = fact.label === "Shipping" ? Truck : fact.label === "Returns" ? RotateCcw : ShieldCheck;
                     return (
                       <div key={fact.label} className="flex min-w-0 flex-col items-center justify-center gap-1 px-1">
-                        <Icon size={16} className="text-[#C25E2B]" />
+                        <Icon size={16} className="text-[var(--bhn-brand-500)]" />
                         <span className="leading-tight">{fact.value}</span>
                       </div>
                     );
@@ -456,16 +428,16 @@ export default function ProductDetailLayout(props: Props) {
 
             {/* Quick Overview Card */}
             {overviewDetails.length > 0 && (
-              <div className="mt-5 rounded-2xl border border-[#EAE0D5] bg-white p-5 shadow-sm">
+              <Card padded className="mt-5">
                 <div className="grid grid-cols-2 gap-4 text-left sm:grid-cols-4">
                   {overviewDetails.map((detail) => (
                     <div key={detail.label}>
-                      <p className="text-xs font-normal text-[#8A786A]">{detail.label}</p>
-                      <p className="mt-0.5 text-sm font-bold text-black">{detail.value}</p>
+                      <p className="text-xs font-normal text-[var(--bhn-text-muted)]">{detail.label}</p>
+                      <p className="mt-0.5 text-sm font-bold text-[var(--bhn-text)]">{detail.value}</p>
                     </div>
                   ))}
                 </div>
-              </div>
+              </Card>
             )}
 
           </div>
@@ -475,193 +447,164 @@ export default function ProductDetailLayout(props: Props) {
         <div className="space-y-8 pt-2">
           
           {/* Horizontal Line Divider */}
-          <div className="border-t border-[#EAE0D5]" />
+          <div className="border-t border-[var(--bhn-border)]" />
 
           {/* Navigation Tabs Header */}
-          <div className="space-y-6">
-            <div className="border-b border-[#E8DDD2]">
-              <div className="flex gap-8 overflow-x-auto no-scrollbar">
-                <button
-                  onClick={() => setActiveTab("description")}
-                  className={`pb-3 font-bold text-sm transition-all relative ${
-                    activeTab === "description"
-                      ? "text-[#C25E2B]"
-                      : "text-[#8A786A] hover:text-[#2D231C]"
-                  }`}
-                >
-                  Description
-                  {activeTab === "description" && (
-                    <div className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-[#C25E2B] rounded-t-md" />
-                  )}
-                </button>
-                <button
-                  onClick={() => setActiveTab("specs")}
-                  className={`pb-3 font-bold text-sm transition-all relative ${
-                    activeTab === "specs"
-                      ? "text-[#C25E2B]"
-                      : "text-[#8A786A] hover:text-[#2D231C]"
-                  }`}
-                >
-                  Specifications
-                  {activeTab === "specs" && (
-                    <div className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-[#C25E2B] rounded-t-md" />
-                  )}
-                </button>
-                <button
-                  onClick={() => setActiveTab("reviews")}
-                  className={`pb-3 font-bold text-sm transition-all relative ${
-                    activeTab === "reviews"
-                      ? "text-[#C25E2B]"
-                      : "text-[#8A786A] hover:text-[#2D231C]"
-                  }`}
-                >
-                  Reviews
-                  {activeTab === "reviews" && (
-                    <div className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-[#C25E2B] rounded-t-md" />
-                  )}
-                </button>
-              </div>
-            </div>
+          <Tabs
+            items={[
+              { id: "description", label: "Description" },
+              { id: "specs", label: "Specifications" },
+              { id: "reviews", label: "Reviews" },
+            ]}
+            active={activeTab}
+            onChange={(id) => setActiveTab(id as "description" | "specs" | "reviews")}
+            variant="line"
+          />
 
-            {/* Tab Content Box */}
-            <div className="bg-white border border-[#EAE0D5] rounded-2xl p-5 sm:p-7 space-y-6 shadow-sm">
-              {activeTab === "description" && (
-                <div className="space-y-6">
-                  <p className="text-sm text-[#2D231C] leading-relaxed font-normal">
-                    {props.description || "No description available for this product."}
-                  </p>
+          {/* Tab Content Box */}
+          <Card padded className="space-y-6">
+            {activeTab === "description" && (
+              <div className="space-y-6">
+                <p className="text-sm text-[var(--bhn-text)] leading-relaxed font-normal">
+                  {props.description || "No description available for this product."}
+                </p>
 
-                  {(productFacts.length > 0 || fulfilmentFacts.length > 0) && (
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                      {productFacts.length > 0 && (
-                        <div className="space-y-3 rounded-xl border border-[#EAE0D5] bg-[#FFF9F3] p-4 sm:p-5">
-                          <h4 className="text-[11px] font-bold uppercase tracking-wider text-[#8A786A]">Product information</h4>
-                          <dl className="space-y-2 pt-1 text-xs text-[#8A786A] sm:text-sm">
-                            {productFacts.map((fact) => (
-                              <div key={fact.label} className="flex items-center justify-between gap-4">
-                                <dt>{fact.label}</dt>
-                                <dd className="text-right font-bold text-[#2D231C]">{fact.value}</dd>
-                              </div>
-                            ))}
-                          </dl>
-                        </div>
-                      )}
-                      {fulfilmentFacts.length > 0 && (
-                        <div className="space-y-3 rounded-xl border border-[#EAE0D5] bg-[#FFF9F3] p-4 sm:p-5">
-                          <h4 className="text-[11px] font-bold uppercase tracking-wider text-[#8A786A]">Fulfilment & support</h4>
-                          <dl className="space-y-2 pt-1 text-xs text-[#8A786A] sm:text-sm">
-                            {fulfilmentFacts.map((fact) => (
-                              <div key={fact.label} className="flex items-center justify-between gap-4">
-                                <dt>{fact.label}</dt>
-                                <dd className="text-right font-bold text-[#2D231C]">{fact.value}</dd>
-                              </div>
-                            ))}
-                          </dl>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {activeTab === "specs" && (
-                <div>
-                  {(props.details || []).length > 0 ? (
-                    <div className="grid gap-3 sm:grid-cols-2">
-                      {props.details?.map((detail) => (
-                        <div key={detail.label} className="rounded-xl bg-[#FFF9F3] border border-[#EAE0D5] p-4">
-                          <p className="text-[11px] font-bold uppercase text-[#8A786A]">{detail.label}</p>
-                          <p className="mt-1 text-sm font-bold text-[#2D231C]">{detail.value}</p>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-sm text-[#8A786A]">No specifications listed for this product.</p>
-                  )}
-                </div>
-              )}
-
-              {activeTab === "reviews" && (
-                <div className="space-y-6">
-                  {isInitialized && !isAuthenticated && (
-                    <div className="flex flex-col gap-3 rounded-xl border border-[#EAE0D5] bg-[#FFF9F3] p-4 sm:flex-row sm:items-center sm:justify-between">
-                      <p className="text-sm text-[#6E5C4F]">Sign in to write a review for this product.</p>
-                      <button
-                        type="button"
-                        onClick={() => router.push(`/login?next=${encodeURIComponent(`/listings/product/${productId}`)}`)}
-                        className="rounded-xl bg-[#C25E2B] px-4 py-2 text-xs font-bold text-white hover:bg-[#A84E21]"
-                      >
-                        Sign in
-                      </button>
-                    </div>
-                  )}
-                  {isAuthenticated && canReview && (
-                    <div className="rounded-xl border border-[#EAE0D5] p-4 bg-[#FFF9F3]">
-                      <h3 className="font-bold text-sm text-[#2D231C]">Write a review</h3>
-                      <div className="mt-2 flex items-center gap-1.5">
-                        {[1, 2, 3, 4, 5].map((v) => (
-                          <button
-                            key={v}
-                            onClick={() => setRating(v)}
-                            onMouseEnter={() => setHoverRating(v)}
-                            onMouseLeave={() => setHoverRating(null)}
-                          >
-                            <Star
-                              size={18}
-                              className={
-                                (hoverRating ?? rating) >= v
-                                  ? "fill-[#C25E2B] text-[#C25E2B]"
-                                  : "text-[#E8DDD2]"
-                              }
-                            />
-                          </button>
-                        ))}
-                      </div>
-                      <textarea
-                        value={comment}
-                        onChange={(e) => setComment(e.target.value)}
-                        placeholder="Write your review..."
-                        className="mt-3 w-full rounded-xl border border-[#E8DDD2] bg-white p-3 text-sm outline-none focus:border-[#C25E2B]"
-                      />
-                      <button
-                        onClick={submitReview}
-                        disabled={submitting}
-                        className="mt-3 rounded-xl bg-[#C25E2B] px-5 py-2 text-xs font-bold text-white hover:bg-[#A84E21]"
-                      >
-                        {submitting ? "Submitting..." : "Submit Review"}
-                      </button>
-                    </div>
-                  )}
-
-                  <div className="space-y-4">
-                    {reviews.length === 0 ? (
-                      <p className="text-sm text-[#8A786A]">No reviews yet.</p>
-                    ) : (
-                      reviews.map((r: ProductReview) => (
-                        <div key={r._id} className="rounded-xl border border-[#EAE0D5] p-4 bg-[#FFF9F3]">
-                          <div className="flex items-center justify-between">
-                            <strong className="text-sm text-[#2D231C]">{r.customerName || "Anonymous"}</strong>
-                            <span className="text-xs text-[#8A786A]">
-                              {new Date(r.createdAt).toLocaleDateString()}
-                            </span>
-                          </div>
-                          <p className="mt-2 text-xs sm:text-sm text-[#6E5C4F]">{r.comment}</p>
-                        </div>
-                      ))
+                {(productFacts.length > 0 || fulfilmentFacts.length > 0) && (
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    {productFacts.length > 0 && (
+                      <Card padded className="bg-[var(--bhn-brand-50)]">
+                        <h4 className="text-[11px] font-bold uppercase tracking-wider text-[var(--bhn-brand-700)]">Product information</h4>
+                        <dl className="space-y-2 pt-1 text-xs text-[var(--bhn-text-muted)] sm:text-sm">
+                          {productFacts.map((fact) => (
+                            <div key={fact.label} className="flex items-center justify-between gap-4">
+                              <dt>{fact.label}</dt>
+                              <dd className="text-right font-bold text-[var(--bhn-text)]">{fact.value}</dd>
+                            </div>
+                          ))}
+                        </dl>
+                      </Card>
+                    )}
+                    {fulfilmentFacts.length > 0 && (
+                      <Card padded className="bg-[var(--bhn-brand-50)]">
+                        <h4 className="text-[11px] font-bold uppercase tracking-wider text-[var(--bhn-brand-700)]">Fulfilment & support</h4>
+                        <dl className="space-y-2 pt-1 text-xs text-[var(--bhn-text-muted)] sm:text-sm">
+                          {fulfilmentFacts.map((fact) => (
+                            <div key={fact.label} className="flex items-center justify-between gap-4">
+                              <dt>{fact.label}</dt>
+                              <dd className="text-right font-bold text-[var(--bhn-text)]">{fact.value}</dd>
+                            </div>
+                          ))}
+                        </dl>
+                      </Card>
                     )}
                   </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === "specs" && (
+              <div>
+                {(props.details || []).length > 0 ? (
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {props.details?.map((detail) => (
+                      <Card padded key={detail.label} className="bg-[var(--bhn-brand-50)]">
+                        <p className="text-[11px] font-bold uppercase text-[var(--bhn-brand-700)]">{detail.label}</p>
+                        <p className="mt-1 text-sm font-bold text-[var(--bhn-text)]">{detail.value}</p>
+                      </Card>
+                    ))}
+                  </div>
+                ) : (
+                  <EmptyState
+                    icon={<Package size={24} className="text-[var(--bhn-brand-400)]" />}
+                    title="No specifications listed for this product."
+                  />
+                )}
+              </div>
+            )}
+
+            {activeTab === "reviews" && (
+              <div className="space-y-6">
+                {isInitialized && !isAuthenticated && (
+                  <Card padded className="bg-[var(--bhn-brand-50)] flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <p className="text-sm text-[var(--bhn-brand-800)]">Sign in to write a review for this product.</p>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => router.push(`/login?next=${encodeURIComponent(`/listings/product/${productId}`)}`)}
+                    >
+                      Sign in
+                    </Button>
+                  </Card>
+                )}
+                {isAuthenticated && canReview && (
+                  <Card padded className="bg-[var(--bhn-brand-50)]">
+                    <h3 className="font-bold text-sm text-[var(--bhn-text)]">Write a review</h3>
+                    <div className="mt-2 flex items-center gap-1.5">
+                      {[1, 2, 3, 4, 5].map((v) => (
+                        <button
+                          key={v}
+                          onClick={() => setRating(v)}
+                          onMouseEnter={() => setHoverRating(v)}
+                          onMouseLeave={() => setHoverRating(null)}
+                        >
+                          <Star
+                            size={18}
+                            className={
+                              (hoverRating ?? rating) >= v
+                                ? "fill-[var(--bhn-brand-500)] text-[var(--bhn-brand-500)]"
+                                : "text-[var(--bhn-border)]"
+                            }
+                          />
+                        </button>
+                      ))}
+                    </div>
+                    <textarea
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                      placeholder="Write your review..."
+                      className="mt-3 w-full rounded-xl border border-[var(--bhn-border)] bg-white p-3 text-sm outline-none focus:border-[var(--bhn-brand-500)]"
+                    />
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={submitReview}
+                      disabled={submitting}
+                      loading={submitting}
+                    >
+                      {submitting ? "Submitting..." : "Submit Review"}
+                    </Button>
+                  </Card>
+                )}
+
+                <div className="space-y-4">
+                  {reviews.length === 0 ? (
+                    <EmptyState
+                      icon={<Star size={24} className="text-[var(--bhn-brand-400)]" />}
+                      title="No reviews yet."
+                    />
+                  ) : (
+                    reviews.map((r: ProductReview) => (
+                      <Card padded key={r._id} className="bg-[var(--bhn-brand-50)]">
+                        <div className="flex items-center justify-between">
+                          <strong className="text-sm text-[var(--bhn-text)]">{r.customerName || "Anonymous"}</strong>
+                          <span className="text-xs text-[var(--bhn-text-muted)]">
+                            {new Date(r.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <RatingDisplay value={r.rating || 0} showValue={false} size="sm" className="mt-1" />
+                        <p className="mt-2 text-xs sm:text-sm text-[var(--bhn-text-muted)]">{r.comment}</p>
+                      </Card>
+                    ))
+                  )}
                 </div>
-              )}
-            </div>
-          </div>
+              </div>
+            )}
+          </Card>
 
           <div className="space-y-1 pt-2">
-            <h3 className="text-lg font-bold text-[#2D231C]">Similar Products</h3>
-            <p className="text-xs text-[#8A786A]">
-              {props.category ? `More approved picks from ${props.category}` : "More approved marketplace picks"}
-            </p>
+            <SectionHeader title="Similar Products" subtitle={props.category ? `More approved picks from ${props.category}` : "More approved marketplace picks"} />
             {isLoadingSimilarProducts ? (
-              <p className="pt-3 text-xs text-[#8A786A] sm:text-sm">Loading similar products...</p>
+              <p className="pt-3 text-xs text-[var(--bhn-text-muted)] sm:text-sm">Loading similar products...</p>
             ) : similarProducts.length > 0 ? (
               <div className="grid gap-4 pt-4 sm:grid-cols-2 lg:grid-cols-4">
                 {similarProducts.map((product) => {
@@ -673,26 +616,29 @@ export default function ProductDetailLayout(props: Props) {
                     <Link
                       key={similarId}
                       href={`/listings/product/${encodeURIComponent(similarId)}`}
-                      className="group overflow-hidden rounded-2xl border border-[#EAE0D5] bg-white transition hover:-translate-y-0.5 hover:shadow-md"
+                      className="bhn-card-hover group overflow-hidden rounded-2xl border border-[var(--bhn-border)] bg-white transition hover:-translate-y-0.5 hover:shadow-md"
                     >
-                      <div className="aspect-[4/3] overflow-hidden bg-[#FFF9F3] p-3">
+                      <div className="aspect-[4/3] overflow-hidden bg-[var(--bhn-brand-50)] p-3">
                         {similarImage ? (
                           <Image src={similarImage} alt={product.title || "Similar product"} width={400} height={300} unoptimized className="h-full w-full object-contain transition duration-300 group-hover:scale-[1.03]" />
                         ) : (
-                          <div className="flex h-full w-full items-center justify-center text-[#A39488]"><Package size={28} /></div>
+                          <div className="flex h-full w-full items-center justify-center text-[var(--bhn-brand-400)]"><Package size={28} /></div>
                         )}
                       </div>
-                      <div className="space-y-1 p-4">
-                        <p className="line-clamp-2 text-sm font-bold text-[#2D231C]">{product.title || "Product"}</p>
-                        <p className="text-xs text-[#8A786A]">{product.category}</p>
-                        <p className="pt-1 text-sm font-black text-[#C25E2B]">₹{similarPrice.toLocaleString("en-IN")}</p>
-                      </div>
+                      <CardBody className="space-y-1">
+                        <p className="line-clamp-2 text-sm font-bold text-[var(--bhn-text)]">{product.title || "Product"}</p>
+                        <p className="text-xs text-[var(--bhn-text-muted)]">{product.category}</p>
+                        <PriceDisplay current={similarPrice} currency="₹" size="sm" />
+                      </CardBody>
                     </Link>
                   );
                 })}
               </div>
             ) : (
-              <p className="pt-3 text-xs text-[#8A786A] sm:text-sm">No other approved products are available in this category.</p>
+              <EmptyState
+                icon={<Package size={24} className="text-[var(--bhn-brand-400)]" />}
+                title="No other approved products are available in this category."
+              />
             )}
           </div>
 
