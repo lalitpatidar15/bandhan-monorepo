@@ -369,6 +369,8 @@ function ExplorePageContent() {
             setSortBy={setSortBy}
             onViewModeChange={handleViewModeChange}
             categories={categories.filter((category) => category !== "All")}
+            onFiltersChange={setFilters}
+            onClearFilters={handleClearFilters}
           />
         </div>
       </div>
