@@ -101,16 +101,16 @@ export function PortalHeader({
       }}
     >
       {/* Main row */}
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
+      <div className="mx-auto flex min-h-[76px] max-w-[1440px] items-center justify-between gap-4 px-5 py-3 sm:px-7 lg:px-10">
         {/* Logo */}
         <button
           type="button"
           onClick={onLogoClick}
-          className="flex items-center gap-2.5 shrink-0"
+          className="flex shrink-0 items-center gap-3 rounded-xl outline-none ring-offset-2 transition-opacity hover:opacity-85 focus-visible:ring-2 focus-visible:ring-[var(--bhn-brand-600)]"
         >
-          <img src="/Group1.png" alt="Bandhan Events Hub" className="h-9 w-auto rounded-lg px-2 py-1" style={{ background: '#2A1C16' }} />
+          <img src="/Group1.png" alt="Bandhan Events Hub" className="h-10 w-auto rounded-lg px-2.5 py-1.5" style={{ background: '#2A1C16' }} />
           {portalName && (
-            <span className="hidden border-l border-[var(--bhn-border)] pl-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--bhn-text-muted)] sm:inline">
+            <span className="hidden border-l border-[var(--bhn-border)] pl-3 text-[11px] font-bold uppercase tracking-[0.13em] text-[var(--bhn-text-muted)] sm:inline">
               {portalName}
             </span>
           )}
@@ -119,12 +119,12 @@ export function PortalHeader({
         {/* Desktop nav */}
         {navItems.length > 0 && (
           <nav className="hidden lg:block">
-            <ul className="flex items-center gap-1">
+            <ul className="flex items-center gap-1.5">
               {navItems.map((item) => (
                 <li key={item.href}>
                   <a
                     href={item.href}
-                    className="relative block px-4 py-2 text-sm font-medium transition"
+                    className="relative block rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors hover:bg-[var(--bhn-brand-50)]"
                     style={{
                       color: isActive(item.href) ? 'var(--bhn-brand-700)' : 'var(--bhn-text-muted)',
                       fontWeight: isActive(item.href) ? 600 : 500,
@@ -133,7 +133,7 @@ export function PortalHeader({
                     {item.label}
                     {isActive(item.href) && (
                       <span
-                        className="absolute inset-x-4 -bottom-px h-0.5 rounded-full"
+                        className="absolute inset-x-3 -bottom-px h-0.5 rounded-full"
                         style={{ background: 'var(--bhn-brand-600)' }}
                       />
                     )}
@@ -157,7 +157,7 @@ export function PortalHeader({
                 }
               }}
               aria-label={action.label}
-              className={`relative flex h-10 items-center justify-center rounded-full transition hover:bg-[var(--bhn-surface)] ${action.showLabel ? 'gap-2 px-3 text-sm font-semibold' : 'w-10'}`}
+              className={`relative flex h-11 items-center justify-center rounded-full transition-colors hover:bg-[var(--bhn-brand-50)] hover:text-[var(--bhn-brand-700)] ${action.showLabel ? 'gap-2 px-3.5 text-sm font-semibold' : 'w-11'}`}
               style={{ color: 'var(--bhn-text-muted)' }}
               target={action.href?.startsWith('http') ? '_blank' : undefined}
               rel={action.href?.startsWith('http') ? 'noopener noreferrer' : undefined}
@@ -182,7 +182,7 @@ export function PortalHeader({
                 type="button"
                 onClick={() => setDropdownOpen((o) => !o)}
                 aria-label="Account"
-                className="flex h-10 w-10 items-center justify-center rounded-full border transition-all hover:scale-[1.03] hover:shadow-md"
+                className="flex h-11 w-11 items-center justify-center rounded-full border transition-all hover:scale-[1.03] hover:shadow-md"
                 style={{
                   borderColor: dropdownOpen ? 'var(--bhn-brand-400)' : 'var(--bhn-border-strong)',
                   background: dropdownOpen ? 'var(--bhn-brand-50)' : 'var(--bhn-surface)',
@@ -190,9 +190,9 @@ export function PortalHeader({
                 }}
               >
                 {userAvatar ? (
-                  <img src={userAvatar} alt={userName || 'User'} className="h-8 w-8 rounded-full object-cover" />
+                  <img src={userAvatar} alt={userName || 'User'} className="h-9 w-9 rounded-full object-cover" />
                 ) : (
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-white" style={{ background: 'linear-gradient(135deg, var(--bhn-brand-500), var(--bhn-brand-700))' }}>{userName?.charAt(0)?.toUpperCase() || 'U'}</span>
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold text-white" style={{ background: 'linear-gradient(135deg, var(--bhn-brand-500), var(--bhn-brand-700))' }}>{userName?.charAt(0)?.toUpperCase() || 'U'}</span>
                 )}
               </button>
 
@@ -257,7 +257,7 @@ export function PortalHeader({
             <button
               type="button"
               onClick={() => setMobileOpen((o) => !o)}
-              className="flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-[var(--bhn-surface)] lg:hidden"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--bhn-border)] transition hover:bg-[var(--bhn-brand-50)] lg:hidden"
               style={{ color: 'var(--bhn-brand-600)' }}
               aria-label="Toggle menu"
             >
@@ -269,14 +269,14 @@ export function PortalHeader({
 
       {/* Mobile drawer */}
       {mobileOpen && navItems.length > 0 && (
-        <div className="border-t lg:hidden" style={{ borderColor: 'var(--bhn-border)', background: 'var(--bhn-surface-2)' }}>
-          <ul className="max-h-[70vh] overflow-y-auto px-2 py-2">
+        <div className="border-t shadow-[0_14px_30px_rgba(74,42,26,0.08)] lg:hidden" style={{ borderColor: 'var(--bhn-border)', background: 'var(--bhn-surface)' }}>
+          <ul className="max-h-[70vh] overflow-y-auto px-4 py-4">
             {navItems.map((item) => (
               <li key={item.href}>
                 <a
                   href={item.href}
                   onClick={() => setMobileOpen(false)}
-                  className="block rounded-lg px-4 py-3 text-sm font-medium"
+                  className="block rounded-xl px-4 py-3.5 text-base font-semibold"
                   style={{
                     color: isActive(item.href) ? 'var(--bhn-brand-700)' : 'var(--bhn-text)',
                     background: isActive(item.href) ? 'var(--bhn-surface)' : 'transparent',

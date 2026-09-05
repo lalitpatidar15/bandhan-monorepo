@@ -1,5 +1,5 @@
 'use client';
-import { ShoppingBag, Search, Bell, Settings, User, ChevronRight, Check, SettingsIcon } from "lucide-react";
+import { ShoppingBag, Search, Bell, Settings, User, ChevronRight, Check, SettingsIcon, Menu, X } from "lucide-react";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
@@ -83,82 +83,69 @@ export default function Header({
   // Main navbar (homepage)
   if (variant === 'main') {
     return (
-      <nav className={`bg-[#F5E9E2] ${className}`}>
-        {/* Top banner */}
-        <div className="flex items-center justify-between px-3 sm:px-4 py-1.5 w-full gap-2">
-          {/* Logo */}
-          <Link href="/" aria-label="Bandhan home">
-            <Image src="/Group1.png" alt="Bandhan Events Hub" width={433} height={96} className="h-6 w-auto rounded-md bg-[#2A1C16] px-2 py-1" />
+      <nav className={`border-b border-[#e7ded4] bg-[#fffaf5]/95 shadow-[0_1px_0_rgba(81,48,32,0.04)] backdrop-blur ${className}`}>
+        <div className="mx-auto flex min-h-[76px] max-w-[1440px] items-center justify-between gap-4 px-5 sm:px-7 lg:px-10">
+          <Link href="/" aria-label="Bandhan home" className="shrink-0 rounded-lg outline-none ring-offset-2 focus-visible:ring-2 focus-visible:ring-[#8b3a28]">
+            <Image src="/Group1.png" alt="Bandhan Events Hub" width={433} height={96} className="h-9 w-auto rounded-lg bg-[#2A1C16] px-2.5 py-1.5 sm:h-10" priority />
           </Link>
 
-          {/* Desktop Links */}
           {showNav && (
-            <div className="hidden lg:flex flex-1 items-center justify-center gap-3 px-3">
-              <Link href="/explore?type=services" className={`text-xs ${topNavClass("/explore?type=services")}`}>Services</Link>
-              <Link href="/products" className={`text-xs ${topNavClass("/products")}`}>Products</Link>
-              <a href={STUDENT_PORTAL_URL} className="text-xs text-[#667085] hover:underline">Courses</a>
-              <Link href="/jobs" className={`text-xs ${topNavClass("/jobs")}`}>Jobs</Link>
-              <Link href="/userdashboard/feed" className={`text-xs ${topNavClass("/userdashboard/feed")}`}>Community</Link>
+            <div className="hidden lg:flex flex-1 items-center justify-center gap-1.5 px-4">
+              <Link href="/explore?type=services" className={`rounded-lg px-3 py-2 text-sm transition-colors ${topNavClass("/explore?type=services")}`}>Services</Link>
+              <Link href="/products" className={`rounded-lg px-3 py-2 text-sm transition-colors ${topNavClass("/products")}`}>Products</Link>
+              <a href={STUDENT_PORTAL_URL} className="rounded-lg px-3 py-2 text-sm text-[#667085] transition-colors hover:bg-[#f7eee7] hover:text-[#8b3a28]">Courses</a>
+              <Link href="/jobs" className={`rounded-lg px-3 py-2 text-sm transition-colors ${topNavClass("/jobs")}`}>Jobs</Link>
+              <Link href="/userdashboard/feed" className={`rounded-lg px-3 py-2 text-sm transition-colors ${topNavClass("/userdashboard/feed")}`}>Community</Link>
             </div>
           )}
 
-          {/* Desktop Buttons */}
-          <div className="hidden lg:flex gap-2 shrink-0">
+          <div className="hidden lg:flex items-center gap-2.5 shrink-0">
             {currentUser ? (
               <>
-                <Link href="/userdashboard/notification" className="relative">
-                  <button className="p-2 rounded-full text-[#667085] hover:bg-gray-100 transition">
-                    <Bell size={18} />
+                <Link href="/userdashboard/notification" className="relative inline-flex h-11 w-11 items-center justify-center rounded-full text-[#6b625a] transition hover:bg-[#f7eee7] hover:text-[#8b3a28]" aria-label="Notifications">
+                    <Bell size={20} />
                     {unreadCount > 0 && (
                       <span className="absolute -top-1 -right-1 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-red-500 px-1.5 text-[10px] font-semibold text-white">
                         {unreadCount > 9 ? "9+" : unreadCount}
                       </span>
                     )}
-                  </button>
                 </Link>
-                <Link href="/userdashboard/dashboard" className="flex items-center gap-2 rounded-full border border-[#D9D1C5] bg-white px-3 py-1.5 hover:bg-[#f5f1ec] transition">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#8b4a2f] text-xs font-semibold text-white">
+                <Link href="/userdashboard/dashboard" className="flex h-11 items-center gap-2 rounded-full border border-[#ded3c8] bg-white px-2 pr-4 shadow-sm transition hover:-translate-y-px hover:border-[#b46a4d] hover:shadow-md">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#8b3a28] text-sm font-bold text-white">
                     {userInitial}
                   </span>
-                  <span className="text-xs text-[#667085] truncate max-w-[90px]">{userName}</span>
+                  <span className="max-w-[120px] truncate text-sm font-semibold text-[#3f322b]">{userName}</span>
                 </Link>
               </>
             ) : (
               <>
-                <Link href="/login" className="text-[var(--bhn-brand-800)]">
-                  <button className="bhn-btn bhn-btn-secondary bhn-btn-sm">
-                    Login
-                  </button>
-                </Link>
-                <Link href="/signup">
-                  <button className="bhn-btn bhn-btn-primary bhn-btn-sm">
-                    Sign Up
-                  </button>
-                </Link>
+                <Link href="/login" className="bhn-btn bhn-btn-secondary bhn-btn-sm">Login</Link>
+                <Link href="/signup" className="bhn-btn bhn-btn-primary bhn-btn-sm">Create account</Link>
               </>
             )}
           </div>
 
-          {/* Mobile Hamburger */}
           <button
             onClick={() => setMobileMenuOpen((open) => !open)}
-            className="lg:hidden text-[#924C2B] mt-1 lg:mt-0"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#e0d5ca] text-[#8b3a28] transition hover:bg-[#f7eee7] lg:hidden"
             aria-expanded={mobileMenuOpen}
             aria-label="Toggle navigation"
           >
-            {mobileMenuOpen ? "✕" : "☰"}
+            {mobileMenuOpen ? <X size={21} /> : <Menu size={22} />}
           </button>
         </div>
         {mobileMenuOpen && showNav && (
-          <div className="lg:hidden px-4 pb-3 grid gap-2 text-xs">
-            <Link href="/explore?type=services">Services</Link>
-            <Link href="/products">Products</Link>
-            <a href={STUDENT_PORTAL_URL}>Courses</a>
-            <Link href="/jobs">Jobs</Link>
-            <Link href="/userdashboard/feed">Community</Link>
+          <div className="border-t border-[#eee4dc] bg-[#fffaf5] px-5 py-5 shadow-[0_14px_30px_rgba(74,42,26,0.08)] lg:hidden">
+            <div className="grid gap-1 text-base font-semibold text-[#55453c]">
+              <Link href="/explore?type=services" onClick={() => setMobileMenuOpen(false)} className="rounded-xl px-4 py-3 hover:bg-[#f7eee7] hover:text-[#8b3a28]">Services</Link>
+              <Link href="/products" onClick={() => setMobileMenuOpen(false)} className="rounded-xl px-4 py-3 hover:bg-[#f7eee7] hover:text-[#8b3a28]">Products</Link>
+              <a href={STUDENT_PORTAL_URL} className="rounded-xl px-4 py-3 hover:bg-[#f7eee7] hover:text-[#8b3a28]">Courses</a>
+              <Link href="/jobs" onClick={() => setMobileMenuOpen(false)} className="rounded-xl px-4 py-3 hover:bg-[#f7eee7] hover:text-[#8b3a28]">Jobs</Link>
+              <Link href="/userdashboard/feed" onClick={() => setMobileMenuOpen(false)} className="rounded-xl px-4 py-3 hover:bg-[#f7eee7] hover:text-[#8b3a28]">Community</Link>
+            </div>
             {currentUser ? (
-              <div className="flex flex-col gap-2 pt-2">
-                <Link href="/userdashboard/notification" className="flex items-center justify-between rounded-lg border border-[#E7E1D8] bg-white px-3 py-2 text-[#6B625A] hover:bg-[#F5F1F0]">
+              <div className="mt-4 flex flex-col gap-2 border-t border-[#eee4dc] pt-4">
+                <Link href="/userdashboard/notification" className="flex min-h-12 items-center justify-between rounded-xl border border-[#e4d9ce] bg-white px-4 py-3 text-sm font-semibold text-[#55453c] hover:bg-[#f7eee7]">
                   <span>Notifications</span>
                   {unreadCount > 0 && (
                     <span className="inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-red-500 px-1.5 text-[10px] font-semibold text-white">
@@ -166,14 +153,14 @@ export default function Header({
                     </span>
                   )}
                 </Link>
-                <Link href="/userdashboard/dashboard" className="rounded-lg border border-[#E7E1D8] bg-white px-3 py-2 text-[#6B625A] hover:bg-[#F5F1F0]">
+                <Link href="/userdashboard/dashboard" className="rounded-xl border border-[#e4d9ce] bg-white px-4 py-3 text-sm font-semibold text-[#55453c] hover:bg-[#f7eee7]">
                   {`Hi, ${userName}`}
                 </Link>
               </div>
             ) : (
-              <div className="flex gap-3 pt-1">
-                <Link href="/login" className="text-[#667085] hover:underline">Login</Link>
-                <Link href="/signup" className="text-[#924C2B] font-semibold hover:underline">Sign up</Link>
+              <div className="mt-4 grid grid-cols-2 gap-3 border-t border-[#eee4dc] pt-4">
+                <Link href="/login" className="bhn-btn bhn-btn-secondary w-full">Login</Link>
+                <Link href="/signup" className="bhn-btn bhn-btn-primary w-full">Create account</Link>
               </div>
             )}
           </div>
@@ -184,37 +171,37 @@ export default function Header({
 
 if (variant === "main1") {
     return (
-      <header className="w-full border-b border-[#E7E1D8] bg-[#FAF5EE]">
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-1.5 flex flex-col sm:flex-row items-center justify-between gap-1.5 sm:gap-0">
+      <header className="w-full border-b border-[#e7ded4] bg-[#fffaf5] shadow-[0_1px_0_rgba(81,48,32,0.04)]">
+        <div className="mx-auto flex min-h-[76px] max-w-[1440px] flex-col items-center justify-between gap-3 px-5 py-3 sm:flex-row sm:px-7 lg:px-10">
           {/* LEFT: LOGO */}
           <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-start">
-            <Link href="/" aria-label="Bandhan home"><Image src="/Group1.png" alt="Bandhan Events Hub" width={433} height={96} className="h-7 w-auto rounded-md bg-[#2A1C16] px-2 py-1" /></Link>
+            <Link href="/" aria-label="Bandhan home"><Image src="/Group1.png" alt="Bandhan Events Hub" width={433} height={96} className="h-9 w-auto rounded-lg bg-[#2A1C16] px-2.5 py-1.5" /></Link>
           </div>
           {/* CENTER: SEARCH */}
           <div className="flex-1 flex justify-center w-full sm:w-auto mt-3 sm:mt-0">
-            <form onSubmit={submitSearch} className="relative w-full max-w-[420px]">
+            <form onSubmit={submitSearch} className="relative w-full max-w-[560px]">
               <Search
-                size={16}
+                size={18}
                 className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9A8F86]"
               />
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="Search venues, services..."
-                className="w-full pl-10 pr-4 py-2 rounded-full bg-[#F3ECE4] border border-[#E7E1D8] text-xs outline-none"
+                className="h-12 w-full rounded-full border border-[#ded3c8] bg-[#f8f1ea] pl-11 pr-4 text-sm text-[#3f322b] outline-none transition placeholder:text-[#97897e] focus:border-[#8b3a28] focus:bg-white focus:ring-4 focus:ring-[#8b3a28]/10"
               />
             </form>
           </div>
           {/* RIGHT: NAV + ICONS */}
           <div className="flex items-center gap-3 sm:gap-3 mt-2 sm:mt-0 w-full sm:w-auto justify-end">
-            <nav className="hidden lg:flex items-center gap-2 text-xs">
-              <Link href="/explore?type=venues" className={mainNavClass("/explore?type=venues")}>
+            <nav className="hidden lg:flex items-center gap-1 text-sm">
+              <Link href="/explore?type=venues" className={`rounded-lg px-2.5 py-2 ${mainNavClass("/explore?type=venues")} `}>
                 Venues
               </Link>
-              <Link href="/explore?type=services" className={mainNavClass("/explore?type=services")}>
+              <Link href="/explore?type=services" className={`rounded-lg px-2.5 py-2 ${mainNavClass("/explore?type=services")} `}>
                 Services
               </Link>
-              <Link href="/userdashboard/feed" className={mainNavClass("/community")}>
+              <Link href="/userdashboard/feed" className={`rounded-lg px-2.5 py-2 ${mainNavClass("/community")} `}>
                 Community
               </Link>
             </nav>
