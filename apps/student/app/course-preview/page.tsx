@@ -20,7 +20,7 @@ export default function CoursePreviewPage() {
             <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#8A4A26]">Instructor preview</p>
             <h1 className="mt-1 text-3xl font-serif font-semibold">Course preview</h1>
           </div>
-          <button onClick={() => router.back()} className="rounded-lg border border-[#DCCFC6] bg-white px-4 py-2 font-medium hover:bg-[#FAF7F5]">
+          <button onClick={() => router.back()} className="bhn-btn bhn-btn-secondary">
             Back to pricing
           </button>
         </div>

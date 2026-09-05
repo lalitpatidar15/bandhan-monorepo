@@ -2,14 +2,14 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --surface: #ffffff;
-  --border: #e5e7eb;
-  --muted: #6b7280;
-  --card-bg: #ffffff;
-  --input-bg: #ffffff;
-  --input-border: #d1d5db;
+  --background: var(--bhn-bg);
+  --foreground: var(--bhn-text);
+  --surface: var(--bhn-surface);
+  --border: var(--bhn-border);
+  --muted: var(--bhn-text-muted);
+  --card-bg: var(--bhn-surface);
+  --input-bg: var(--bhn-surface);
+  --input-border: var(--bhn-border-strong);
 }
 
 @theme inline {
@@ -27,9 +27,19 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--bhn-bg);
+  color: var(--bhn-text);
   font-family: var(--bhn-font-sans);
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--bhn-font-display);
 }
 
 *, *::before, *::after {
@@ -42,4 +52,5 @@ img, video, canvas {
 
 input, select, textarea, button {
   min-width: 0;
+  font-family: inherit;
 }

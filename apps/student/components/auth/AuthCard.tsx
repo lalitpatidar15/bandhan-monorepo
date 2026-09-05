@@ -17,16 +17,16 @@ export default function AuthCard({
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
       {/* LEFT SIDE */}
-      <div className="w-full md:w-1/2 bg-[#f5ebe6] dark:bg-[#1a1a1a] flex flex-col justify-center items-center p-6 sm:p-10 text-center min-h-[220px] md:min-h-screen">
+      <div className="w-full md:w-1/2 bg-[var(--bhn-brand-50)] flex flex-col justify-center items-center p-6 sm:p-10 text-center min-h-[220px] md:min-h-screen">
         <AcademyLogo className="h-8 sm:h-10 w-auto object-contain mb-4" />
-        <p className="text-base sm:text-lg text-gray-600">{subtitle}</p>
+        <p className="text-base sm:text-lg text-[var(--bhn-text-muted)]">{subtitle}</p>
       </div>
 
       {/* RIGHT SIDE */}
-      <div className="w-full md:w-1/2 flex justify-center items-center p-4 sm:p-8">
-        <div className="bg-white shadow-lg rounded-xl p-5 sm:p-8 w-full max-w-[400px]">
+      <div className="w-full md:w-1/2 flex justify-center items-center p-4 sm:p-8 bg-[var(--bhn-bg)]">
+        <div className="bg-[var(--bhn-surface)] shadow-lg rounded-2xl border border-[var(--bhn-border)] p-5 sm:p-8 w-full max-w-[400px]">
             <AuthTabs />
-          <h2 className="text-2xl font-semibold mb-6 text-center">
+          <h2 className="text-2xl font-semibold mb-6 text-center text-[var(--bhn-text)]">
             {title}
           </h2>
 
@@ -34,21 +34,21 @@ export default function AuthCard({
             <input
               type="email"
               placeholder="Email"
-              className="border p-2 rounded"
+              className="bhn-input"
             />
 
             <input
               type="password"
               placeholder="Password"
-              className="border p-2 rounded"
+              className="bhn-input"
             />
 
-            <button className="bg-brown-600 text-white py-2 rounded">
+            <button type="button" className="bhn-btn bhn-btn-primary">
               {buttonText}
             </button>
           </form>
 
-          <p className="text-sm text-center mt-4 text-gray-500">
+          <p className="text-sm text-center mt-4 text-[var(--bhn-text-muted)]">
             {role === "student"
               ? "Login as Student"
               : "Login as Instructor"}

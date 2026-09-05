@@ -17,7 +17,7 @@ export function Button({
     primary:
       "bg-[#7A3F23] text-white shadow-sm hover:bg-[#5D2E1A] dark:bg-[#b86a3a] dark:hover:bg-[#a05a30]",
     secondary:
-      "border border-[#DBC1B5] bg-white text-[#554339] hover:bg-[#F9F2EB] dark:border-[#374151] dark:bg-[#1a1a1a] dark:text-[#d1c4b8] dark:hover:bg-[#2a2a2a]",
+      "border border-[#7A3F23] bg-[#fdf3f1] text-[#4d2016] hover:bg-[#fce7e3] dark:border-[#b86a3a] dark:bg-[#2a1a12] dark:text-[#fce7e3] dark:hover:bg-[#3a2418]",
     ghost:
       "bg-transparent text-[#554339] hover:bg-[#F9F2EB] dark:text-[#d1c4b8] dark:hover:bg-[#2a2a2a]",
   }[variant];

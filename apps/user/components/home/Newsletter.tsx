@@ -43,7 +43,7 @@ export default function Newsletter() {
             onChange={(event) => setEmail(event.target.value)}
             className="min-w-0 flex-1 rounded-full bg-white/10 px-5 py-3 text-sm text-white placeholder:text-white/40 outline-none ring-1 ring-white/20 transition focus:ring-white/40"
           />
-          <button type="submit" disabled={isLoading} className="flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-[var(--bhn-brand-800)] transition hover:bg-white/90 disabled:cursor-wait disabled:opacity-70">
+          <button type="submit" disabled={isLoading} className="flex items-center gap-2 rounded-full bg-[var(--bhn-brand-50)] px-5 py-3 text-sm font-semibold text-[var(--bhn-brand-800)] transition hover:bg-[var(--bhn-brand-100)] disabled:cursor-wait disabled:opacity-70">
             <Send size={14} /> {isLoading ? 'Subscribing…' : 'Subscribe'}
           </button>
         </form>

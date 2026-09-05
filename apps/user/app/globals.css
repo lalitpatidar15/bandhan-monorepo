@@ -158,8 +158,8 @@ a {
 }
 .bhn-home-primary { color: #fff; background: var(--bhn-brand-700); box-shadow: var(--bhn-shadow); }
 .bhn-home-primary:hover { background: var(--bhn-brand-800); box-shadow: var(--bhn-shadow-md); transform: translateY(-1px); }
-.bhn-home-secondary { background: var(--bhn-surface); border: 1px solid var(--bhn-border-strong); }
-.bhn-home-secondary:hover { border-color: var(--bhn-brand-300); background: var(--bhn-brand-50); }
+.bhn-home-secondary { background: var(--bhn-brand-50); border: 1px solid var(--bhn-brand-600); color: var(--bhn-brand-800); }
+.bhn-home-secondary:hover { border-color: var(--bhn-brand-700); background: var(--bhn-brand-100); }
 .bhn-home-discovery { display: flex; flex-wrap: wrap; gap: .6rem 1rem; margin-top: 2rem; color: var(--bhn-text-muted); font-size: .875rem; }
 .bhn-home-discovery span { color: var(--bhn-text-soft); }
 .bhn-home-discovery a { font-weight: 700; text-decoration: underline; text-decoration-color: var(--bhn-brand-200); text-underline-offset: 4px; }

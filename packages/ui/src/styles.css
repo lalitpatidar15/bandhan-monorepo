@@ -125,15 +125,15 @@
 }
 
 .bhn-btn-secondary {
-  background: var(--bhn-surface);
-  border-color: var(--bhn-border-strong);
-  color: var(--bhn-text);
-  box-shadow: var(--bhn-shadow-sm);
+  background: var(--bhn-brand-50);
+  border-color: var(--bhn-brand-600);
+  color: var(--bhn-brand-800);
+  box-shadow: none;
 }
 .bhn-btn-secondary:not(:disabled):hover {
-  border-color: var(--bhn-brand-400);
-  color: var(--bhn-brand-700);
-  background: var(--bhn-surface-2);
+  background: var(--bhn-brand-100);
+  border-color: var(--bhn-brand-700);
+  color: var(--bhn-brand-900);
 }
 
 .bhn-btn-outline {
@@ -1109,14 +1109,13 @@
   flex-wrap: wrap;
 }
 .bhn-hero .bhn-btn-secondary {
-  border-color: rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  backdrop-filter: blur(4px);
+  border-color: var(--bhn-brand-200);
+  background: var(--bhn-brand-50);
+  color: var(--bhn-brand-800);
 }
 .bhn-hero .bhn-btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.18);
-  color: #fff;
+  background: var(--bhn-brand-100);
+  color: var(--bhn-brand-900);
 }
 
 .bhn-icon-tile {

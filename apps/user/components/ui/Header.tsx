@@ -125,13 +125,13 @@ export default function Header({
               </>
             ) : (
               <>
-                <Link href="/login" className="text-[#667085] hover:underline">
-                  <button className="px-3 py-1.5 text-[#667085] text-xs border-none bg-transparent hover:bg-gray-100 rounded">
+                <Link href="/login" className="text-[var(--bhn-brand-800)]">
+                  <button className="bhn-btn bhn-btn-secondary bhn-btn-sm">
                     Login
                   </button>
                 </Link>
                 <Link href="/signup">
-                  <button className="bg-[#924C2B] text-white px-3 py-1.5 rounded text-xs hover:bg-[#7a3d23]">
+                  <button className="bhn-btn bhn-btn-primary bhn-btn-sm">
                     Sign Up
                   </button>
                 </Link>
@@ -255,7 +255,7 @@ if (variant === "main1") {
           <div className="flex items-center gap-2">
           <Image src="/Group1.png" alt="Bandhan Events Hub" width={433} height={96}
           className="h-7 w-auto" />
-        
+
         </div>
 
           {/* Menu */}
@@ -265,7 +265,7 @@ if (variant === "main1") {
               <Link href="/userdashboard/booking">Bookings</Link>
               <Link href="/products/explore">Vendors</Link>
               <Link href="/userdashboard/orders">Orders</Link>
-               
+
             </div>
           )}
 
@@ -559,7 +559,7 @@ if (variant === "cart") {
             </Link>
           ))}
 
-        
+
         </nav>
       </div>
 
@@ -574,7 +574,7 @@ if (variant === "cart") {
         )}
 
           {/* Cart */}
-          
+
 
         {/* Settings */}
         {showSettings && (
@@ -636,7 +636,7 @@ if (variant === "checkout") {
           Bandhan
         </h1>
 
-        
+
 
         {/* Nav */}
         <nav className="hidden md:flex items-center gap-8 text-xs text-[#6B625A] ml-4">
@@ -662,15 +662,15 @@ if (variant === "checkout") {
         </div>
 
         {/* ❓ Help */}
-      
+
           <span className="text-[10px] h-4 w-4 text-center font-semibold rounded-full border border-[#C2652A] text-[#C2652A]">?</span>
-       
+
 
       </div>
       </div>
 
       {/* RIGHT: Icons */}
-     
+
     </header>
   );
 }

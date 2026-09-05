@@ -101,7 +101,7 @@ export default function ReturnsPage() {
             if (status === "pending") pending++;
             else if (status === "approved") approved++;
             else if (status === "rejected") rejected++;
-            
+
             if (status === "refunded") {
                 refundedAmount += req.amountNumber;
             }
@@ -245,13 +245,13 @@ export default function ReturnsPage() {
 
                         {/* RIGHT ACTION BUTTONS */}
                         <div className="w-full lg:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                            <button className="h-[42px] px-5 rounded-lg border border-[#E7DDD5] bg-white text-sm font-medium text-[#5B463B] hover:bg-[#F8F5F2] transition shadow-sm">
+                            <button className="bhn-btn bhn-btn-secondary h-[42px]">
                                 Orders
                             </button>
-                            <button className="h-[42px] px-5 rounded-lg border border-[#E7DDD5] bg-white text-sm font-medium text-[#5B463B] hover:bg-[#F8F5F2] transition shadow-sm">
+                            <button className="bhn-btn bhn-btn-secondary h-[42px]">
                                 Shipping
                             </button>
-                            <button className="h-[42px] px-5 rounded-lg bg-[#8B4A2F] text-white text-sm font-medium hover:bg-[#6E3B25] transition shadow-sm">
+                            <button className="bhn-btn bhn-btn-primary h-[42px]">
                                 Returns
                             </button>
                         </div>
@@ -345,7 +345,7 @@ export default function ReturnsPage() {
                                 className="bg-white border rounded-lg px-4 py-3 text-sm outline-none"
                             />
 
-                            <button onClick={clearFilters} className="bg-white border rounded-lg px-4 py-3 text-sm hover:bg-gray-50">
+                            <button onClick={clearFilters} className="bhn-btn bhn-btn-secondary">
                                 Clear Filters
                             </button>
 
@@ -591,7 +591,7 @@ export default function ReturnsPage() {
                             <p className="text-sm text-gray-300 leading-7 max-w-[620px]">
                                 Our AI analyzed your recent returns. 65% of "Damaged" claims are for the Fragile Ceramics category. Consider upgrading your packaging material.
                             </p>
-                            <button className="mt-6 bg-white text-black px-5 py-3 rounded-lg text-sm font-medium hover:bg-gray-200">
+                            <button className="mt-6 bhn-btn bhn-btn-secondary">
                                 Improve Packaging Guidelines
                             </button>
                         </div>

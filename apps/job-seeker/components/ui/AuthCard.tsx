@@ -96,7 +96,7 @@ export function AuthCard({
             <div className="flex-1 h-px bg-[#E8D7CB]"></div>
           </div>
 
-          <button type="button" className="w-full border border-[#E8D7CB] rounded-lg py-3 flex items-center justify-center gap-2 hover:bg-[#FAF7F4] transition">
+          <button type="button" className="bhn-btn bhn-btn-secondary w-full">
             <svg
               width="20"
               height="20"
