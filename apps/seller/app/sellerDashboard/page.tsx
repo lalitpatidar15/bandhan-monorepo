@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import {
     Settings,
     Bell,
@@ -18,34 +18,25 @@ import { apiGet } from "@/lib/api";
 import { getCustomerName } from "../../lib/customer";
 import { useGetInventoryProductsQuery, useGetInventoryStatsQuery } from "@/lib/store/api/inventoryApi";
 import { useGetSellerQuotesQuery } from "@/lib/store/api/chatApi";
-import { StatCard, PageHeader, Badge, statusTone } from "@bandhan/ui";
+import {
+    StatCard,
+    PageHeader,
+    Badge,
+    statusTone,
+    Button,
+    Card,
+    SearchInput,
+    SectionHeader,
+    Skeleton,
+} from "@bandhan/ui";
 
 export default function SellerDashboard() {
     const [userName, setUserName] = useState("Seller");
-    const [stats, setStats] = useState([
-        {
-            title: "TOTAL REVENUE",
-            value: "₹0",
-            icon: "/Background.png",
-            badge: "",
-            badgeColor: "bg-[#DFF7E8] text-[#1BAA5D]",
-        },
-        {
-            title: "TOTAL ORDERS",
-            value: "0",
-            icon: "/Icon.png",
-        },
-        {
-            title: "PENDING ORDERS",
-            value: "0",
-            icon: "/Icon2.png",
-        },
-        {
-            title: "SELLER RATING",
-            value: "0 / 5",
-            icon: "/Background1.png",
-        },
-    ]);
+    const [stats, setStats] = useState<Array<{
+        title: string;
+        value: string;
+        badge?: string;
+    }>>([]);
     const [recentOrders, setRecentOrders] = useState<Array<{
         id: string;
         customer: string;
@@ -84,7 +75,7 @@ export default function SellerDashboard() {
 
                 const allOrders = Array.isArray(ordersList.orders) ? ordersList.orders : [];
                 const toRecord = (value: unknown): Record<string, unknown> | null =>
-                  typeof value === "object" && value !== null ? (value as Record<string, unknown>) : null;
+                    typeof value === "object" && value !== null ? (value as Record<string, unknown>) : null;
 
                 const totalRevenue = allOrders.reduce((sum, item) => sum + Number(item.amount || 0), 0);
 
@@ -94,39 +85,34 @@ export default function SellerDashboard() {
                     : 0;
 
                 const normalizeCustomerName = (order: Record<string, unknown>) => {
-                  const buyer = toRecord(order.buyerId) || toRecord(order.customer) || toRecord(order.user);
-                  return String(
-                    order.customerName ||
-                    order.buyerName ||
-                    order.userName ||
-                    buyer?.name ||
-                    buyer?.fullName ||
-                    "Customer"
-                  );
+                    const buyer = toRecord(order.buyerId) || toRecord(order.customer) || toRecord(order.user);
+                    return String(
+                        order.customerName ||
+                        order.buyerName ||
+                        order.userName ||
+                        buyer?.name ||
+                        buyer?.fullName ||
+                        "Customer"
+                    );
                 };
 
                 setStats([
                     {
                         title: "TOTAL REVENUE",
                         value: `₹${Math.round(totalRevenue).toLocaleString()}`,
-                        icon: "/Background.png",
                         badge: "Live",
-                        badgeColor: "bg-[#DFF7E8] text-[#1BAA5D]",
                     },
                     {
                         title: "TOTAL ORDERS",
                         value: String(ordersStats.data?.total || 0),
-                        icon: "/Icon.png",
                     },
                     {
                         title: "PENDING ORDERS",
                         value: String(ordersStats.data?.pending || 0),
-                        icon: "/Icon2.png",
                     },
                     {
                         title: "SELLER RATING",
                         value: `${avgRating.toFixed(1)} / 5`,
-                        icon: "/Background1.png",
                     },
                 ]);
 
@@ -135,24 +121,24 @@ export default function SellerDashboard() {
                         const orderRecord = item as Record<string, unknown>;
                         const buyer = toRecord(orderRecord.buyerId) || toRecord(orderRecord.customer) || toRecord(orderRecord.user);
                         const customerName = String(
-                          orderRecord.customerName ||
-                          orderRecord.buyerName ||
-                          orderRecord.userName ||
-                          buyer?.name ||
-                          buyer?.fullName ||
-                          "Customer"
+                            orderRecord.customerName ||
+                            orderRecord.buyerName ||
+                            orderRecord.userName ||
+                            buyer?.name ||
+                            buyer?.fullName ||
+                            "Customer"
                         );
                         return {
-                          id: `#ORD-${String(orderRecord._id || orderRecord.id || "").slice(-5)}`,
-                          customer: customerName,
-                          service: String(orderRecord.service || orderRecord.productName || orderRecord.title || "Order"),
-                          amount: `₹${Number(orderRecord.amount || 0).toLocaleString()}`,
-                          status:
-                            String(orderRecord.orderStatus || orderRecord.status || "pending").toLowerCase() === "confirmed"
-                                ? "Confirmed"
-                                : String(orderRecord.orderStatus || orderRecord.status || "pending").toLowerCase() === "completed"
+                            id: `#ORD-${String(orderRecord._id || orderRecord.id || "").slice(-5)}`,
+                            customer: customerName,
+                            service: String(orderRecord.service || orderRecord.productName || orderRecord.title || "Order"),
+                            amount: `₹${Number(orderRecord.amount || 0).toLocaleString()}`,
+                            status:
+                                String(orderRecord.orderStatus || orderRecord.status || "pending").toLowerCase() === "confirmed"
                                     ? "Confirmed"
-                                    : "Pending",
+                                    : String(orderRecord.orderStatus || orderRecord.status || "pending").toLowerCase() === "completed"
+                                        ? "Completed"
+                                        : "Pending",
                         };
                     })
                 );
@@ -219,12 +205,13 @@ export default function SellerDashboard() {
         loadDashboard();
     }, [inventoryProductsData, inventoryStatsData, sellerQuotesData]);
 
+    // Modern components
+    const iconComponents = useMemo(() => [Wallet, ShoppingBag, Clock, Star], []);
+
     return (
         <div className="flex min-h-screen bg-[var(--bhn-bg)]">
-            
 
             {/* SIDEBAR */}
-           
             <Sidebar />
 
             {/* MAIN */}
@@ -235,15 +222,10 @@ export default function SellerDashboard() {
 
                     {/* SEARCH */}
                     <div className="relative w-full lg:w-[360px]">
-                        <Search
-                            size={18}
-                            className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--bhn-text-soft)]"
-                        />
-
-                        <input
-                            type="text"
+                        <SearchInput
                             placeholder="Search orders or services..."
-                            className="w-full h-[48px] bg-[var(--bhn-surface)] rounded-full pl-11 pr-4 outline-none border border-[var(--bhn-border)] text-sm"
+                            value=""
+                            onChange={() => {}}
                         />
                     </div>
 
@@ -287,39 +269,41 @@ export default function SellerDashboard() {
                         title={`Namaste, ${userName}`}
                         subtitle="Here's what's happening with your marketplace today."
                         actions={
-                            <button
+                            <Button
+                                variant="secondary"
+                                size="sm"
                                 onClick={() => {
                                     alert("Report Exported Successfully!");
                                 }}
-                                className="bhn-btn bhn-btn-secondary"
+                                icon={<Download size={16} />}
                             >
-                                <Download size={16} />
                                 Export Report
-                            </button>
+                            </Button>
                         }
                     />
 
                     {/* STATS */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-4">
 
-                        {stats.map((item, i) => (
-                            <StatCard
-                                key={i}
-                                label={
-                                    <>
-                                        {item.title}
-                                        {item.badge && (
-                                            <Badge tone="success" className="ml-2">{item.badge}</Badge>
-                                        )}
-                                    </>
-                                }
-                                value={item.value}
-                                icon={
-                                    [<Wallet key="w" size={18} />, <ShoppingBag key="s" size={18} />, <Clock key="c" size={18} />, <Star key="t" size={18} />][i] || <Wallet size={18} />
-                                }
-                                accent={i === 0}
-                            />
-                        ))}
+                        {stats.map((item, i) => {
+                            const Icon = iconComponents[i];
+                            return (
+                                <StatCard
+                                    key={i}
+                                    label={
+                                        <>
+                                            {item.title}
+                                            {item.badge && (
+                                                <Badge tone="success" className="ml-2">{item.badge}</Badge>
+                                            )}
+                                        </>
+                                    }
+                                    value={item.value}
+                                    icon={<Icon key={i} size={18} />}
+                                    accent={i === 0}
+                                />
+                            );
+                        })}
                     </div>
 
                     {/* GRID */}
@@ -329,17 +313,18 @@ export default function SellerDashboard() {
                         <div className="xl:col-span-2 space-y-6">
 
                             {/* GRAPH */}
-                            <div className="bhn-card bhn-card-pad p-4">
+                            <Card padded className="p-4">
 
-                                <div className="flex items-center justify-between mb-6">
-                                    <h3 className="text-[24px] font-display text-[var(--bhn-text)]">
-                                        Revenue Analytics
-                                    </h3>
-
-                                    <button className="bhn-btn bhn-btn-secondary bhn-btn-sm">
-                                        Last 30 Days
-                                    </button>
-                                </div>
+                                <SectionHeader
+                                    title="Revenue Analytics"
+                                    actionButtons={[
+                                        {
+                                            label: "Last 30 Days",
+                                            variant: "secondary",
+                                            size: "sm",
+                                        },
+                                    ]}
+                                />
 
                                 {/* BARS */}
                                 <div className="h-[240px] flex items-end justify-between gap-3">
@@ -360,23 +345,23 @@ export default function SellerDashboard() {
                                         </div>
                                     ))}
                                 </div>
-                            </div>
+                            </Card>
 
                             {/* ORDERS */}
-                            <div className="bhn-card overflow-hidden">
+                            <Card>
 
-                                <div className="flex items-center justify-between px-4 py-4 sm:px-5">
-                                    <h3 className="text-[24px] font-display text-[var(--bhn-text)]">
-                                        Recent Orders
-                                    </h3>
-
-                                    <Link
-                                        href="/orders"
-                                        className="text-[var(--bhn-brand-700)] text-sm hover:underline"
-                                    >
-                                        View All
-                                    </Link>
-                                </div>
+                                <SectionHeader
+                                    title="Recent Orders"
+                                    actionButtons={[
+                                        {
+                                            label: "View All",
+                                            onClick: () => {},
+                                            href: "/orders",
+                                            variant: "ghost",
+                                            size: "sm",
+                                        },
+                                    ]}
+                                />
 
                                 <div className="bhn-table-wrap border-x-0 border-b-0 rounded-none">
 
@@ -423,14 +408,14 @@ export default function SellerDashboard() {
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
+                            </Card>
                         </div>
 
                         {/* RIGHT */}
                         <div className="space-y-6">
 
                             {/* WALLET */}
-                            <div className="bg-[var(--bhn-surface-2)] rounded-2xl p-4 shadow-sm border border-[var(--bhn-border)]">
+                            <Card>
 
                                 <h3 className="text-[24px] font-display text-[var(--bhn-text)] mb-4">
                                     Financial Overview
@@ -441,14 +426,14 @@ export default function SellerDashboard() {
                                 </p>
 
                                 <h2 className="text-[42px] font-semibold text-[var(--bhn-text)] mt-1">
-                                    {stats[0].value || "₹0"}
+                                    {stats[0]?.value || "₹0"}
                                 </h2>
 
                                 <div className="mt-4">
 
                                     <div className="flex justify-between text-sm text-[var(--bhn-text-muted)] mb-2">
                                         <span>Commission Goal</span>
-                                        <span>₹{Math.round(Number(stats[0].value.replace(/[₹,]/g, "") || 0) * 0.1).toLocaleString()} / ₹{Math.round(Number(stats[0].value.replace(/[₹,]/g, "") || 0) * 0.2).toLocaleString()}</span>
+                                        <span>₹{Math.round(Number(stats[0]?.value.replace(/[₹,]/g, "") || 0) * 0.1).toLocaleString()} / ₹{Math.round(Number(stats[0]?.value.replace(/[₹,]/g, "") || 0) * 0.2).toLocaleString()}</span>
                                     </div>
 
                                     <div className="w-full h-2 rounded-full bg-[var(--bhn-surface-3)]">
@@ -460,13 +445,13 @@ export default function SellerDashboard() {
                                     </p>
                                 </div>
 
-                                <button className="bhn-btn bhn-btn-primary bhn-btn-block mt-4">
+                                <Button variant="primary" block className="mt-4">
                                     Withdraw Funds
-                                </button>
-                            </div>
+                                </Button>
+                            </Card>
 
                             {/* TOP SERVICES */}
-                            <div className="bhn-card bhn-card-pad">
+                            <Card padded>
 
                                 <h3 className="text-[24px] font-display text-[var(--bhn-text)] mb-5">
                                     Top Services
@@ -504,10 +489,10 @@ export default function SellerDashboard() {
                                         </button>
                                     ))}
                                 </div>
-                            </div>
+                            </Card>
 
                             {/* ACTIVITY */}
-                            <div className="bhn-card bhn-card-pad">
+                            <Card padded>
 
                                 <h3 className="text-[24px] font-display text-[var(--bhn-text)] mb-6">
                                     Recent Activity
@@ -517,7 +502,9 @@ export default function SellerDashboard() {
 
                                     {recentActivities.map((act, i) => (
                                         <div key={i} className="flex gap-4">
-                                            <img src={getSafeImageSrc(act.icon, "/Background3.png")} alt="Activity icon" className="w-8 h-8" />
+                                            <div className="w-8 h-8 rounded-lg bg-[var(--bhn-brand-50)] flex items-center justify-center flex-shrink-0">
+                                                <img src={getSafeImageSrc(act.icon, "/Background3.png")} alt="Activity icon" className="w-6 h-6" />
+                                            </div>
 
                                             <div>
                                                 <p className="text-[var(--bhn-text)] font-medium">
@@ -532,9 +519,8 @@ export default function SellerDashboard() {
                                             </div>
                                         </div>
                                     ))}
-
                                 </div>
-                            </div>
+                            </Card>
 
                         </div>
                     </div>
