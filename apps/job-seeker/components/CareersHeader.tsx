@@ -58,7 +58,7 @@ export function CareersHeader({ variant = 'jobs', activeTab }: CareersHeaderProp
     { label: 'Logout', onClick: () => { clearJobPortalSession(); window.location.assign(centralLoginUrl()); }, destructive: true },
   ] : [
     { label: 'Login', href: isJobseeker ? '/Jobseeker/login' : '/jobposter/login' },
-    { label: 'Create account', href: isJobseeker ? '/Jobseeker/signup' : '/jobposter/register' },
+    { label: 'Create account', href: isJobseeker ? '/Jobseeker/signup' : '/jobposter/profilesetup' },
   ];
 
   const activeNav = activeTab || pathname;

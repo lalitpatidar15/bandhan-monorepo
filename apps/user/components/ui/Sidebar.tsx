@@ -6,6 +6,7 @@ import {
   LayoutDashboard, Package, CalendarDays, Layers,
   MessageSquare, CreditCard, Heart, MapPin, LifeBuoy,
   UserSearch, HeartHandshakeIcon, ShoppingBag, GraduationCap, Briefcase,
+  Star, Settings,
 } from 'lucide-react';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { logout } from '@/store/slices/authSlice';
@@ -61,8 +62,8 @@ export function Sidebar({ variant = 'userdashboard', className = '', onItemClick
           { label: 'Leads', href: '/userdashboard/quote', icon: <UserSearch size={16} /> },
           { label: 'Services', href: '/products/service-listing', icon: <HeartHandshakeIcon size={16} /> },
           { label: 'Calendar', href: '/userdashboard/booking', icon: <CalendarDays size={16} /> },
-          { label: 'Reviews', href: '/userdashboard/Review', icon: <span>⭐</span> },
-          { label: 'Settings', href: '/userdashboard/dashboard', icon: <span>⚙️</span> },
+          { label: 'Reviews', href: '/vendor/profile', icon: <Star size={16} /> },
+          { label: 'Settings', href: '/userdashboard/profile', icon: <Settings size={16} /> },
         ],
       },
     ];
