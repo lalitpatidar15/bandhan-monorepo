@@ -2,8 +2,8 @@
 
 import { useMemo, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { DataTable, Pagination, FilterBar, SearchInput, SectionHeader, Button } from "@bandhan/ui";
-import { ChevronLeft, ChevronRight, Scale, Heart, Truck, RotateCcw, ShieldCheck } from "lucide-react";
+import { Pagination, FilterBar, SectionHeader } from "@bandhan/ui";
+import { Scale, Heart } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useCompare, CompareType } from "@/context/CompareContext";
 import { toast } from "react-hot-toast";
@@ -301,7 +301,14 @@ export function ExploreGrid({
               return (
                 <article
                   key={item.id}
-                  className="bhn-listing-card group"
+                  className="bhn-listing-card group cursor-pointer focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-[var(--bhn-brand-300)]"
+                  role="link"
+                  tabIndex={0}
+                  aria-label={`View ${item.title}`}
+                  onClick={() => router.push(item.href)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") router.push(item.href);
+                  }}
                 >
                   <div className="bhn-listing-card-image relative overflow-hidden aspect-square">
                     <Image
