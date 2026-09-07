@@ -38,6 +38,7 @@ import Applications from '@/components/Applications';
 import AdminHeader from '@/components/AdminHeader';
 
 export default function AdminDashboardPage() {
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [currentPage, setCurrentPage] =
     useState<AdminPage>('dashboard');
 
@@ -151,11 +152,13 @@ export default function AdminDashboardPage() {
       <Sidebar
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
+        mobileOpen={mobileNavOpen}
+        onMobileClose={() => setMobileNavOpen(false)}
       />
 
       <main className="min-w-0 flex-1 overflow-y-auto">
-        <AdminHeader title={pageTitle} />
-        <div className="min-h-full p-4">
+        <AdminHeader title={pageTitle} onMenuClick={() => setMobileNavOpen(true)} />
+        <div className="min-h-full p-4 sm:p-5 lg:p-6">
           {renderPage()}
         </div>
       </main>
