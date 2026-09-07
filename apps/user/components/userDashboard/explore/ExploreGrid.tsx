@@ -196,7 +196,7 @@ export function ExploreGrid({
       </div>
 
       <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-3 border-b border-[#E5DED7] pb-4 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-3 border-b border-[#DCD4CC] pb-4 md:flex-row md:items-center md:justify-between">
           <div className="grid grid-cols-3 gap-6" aria-label="Marketplace type">
             {(["services", "products", "venues"] as ExploreType[]).map((mode) => (
               <button
@@ -253,7 +253,7 @@ export function ExploreGrid({
                     if (event.key === "Enter") router.push(item.href);
                   }}
                 >
-                  <div className="relative aspect-[4/3] overflow-hidden bg-[#F6F2ED]">
+                  <div className="relative aspect-[16/10] overflow-hidden bg-[#F6F2ED]">
                     <Image
                       src={item.image}
                       alt={item.title}
@@ -280,18 +280,18 @@ export function ExploreGrid({
                     </button>
                   </div>
 
-                  <div className="px-4 pb-3 pt-4">
+                  <div className="px-4 pb-3 pt-3.5">
                     <div className="flex items-center justify-between gap-3">
-                      <span className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--bhn-brand-600)]">{item.category}</span>
+                      <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#8B3A28]">{item.category}</span>
                       {item.rating > 0 ? (
                         <span className="inline-flex items-center gap-1 rounded-md bg-emerald-700 px-2 py-1 text-xs font-bold text-white" aria-label={`${item.rating} out of 5 stars`}>
                           {item.rating.toFixed(1)} <Star size={11} fill="currentColor" />
                         </span>
                       ) : null}
                     </div>
-                    <h3 className="mt-2 line-clamp-2 min-h-12 text-base font-bold leading-6 text-[#211B17] transition-colors group-hover:text-[#7A3323]">{item.title}</h3>
+                    <h3 className="mt-1.5 truncate text-[15px] font-bold leading-6 text-[#211B17] transition-colors group-hover:text-[#7A3323]">{item.title}</h3>
                     {item.location && (
-                      <p className="bhn-listing-card-meta">
+                      <p className="mt-1 flex flex-wrap items-center gap-3 text-xs text-[#756B63]">
                         <span className="flex items-center gap-1">
                           <MapPin size={14} />
                           {item.location}
@@ -314,9 +314,9 @@ export function ExploreGrid({
                     ) : null}
                   </div>
 
-                  <div className="flex items-center border-t border-[#EEE8E2] px-4 py-3.5">
+                  <div className="flex min-h-14 items-center border-t border-[#EEE8E2] px-4 py-3">
                     <div className="bhn-price">
-                      <span className="bhn-price-current text-lg">{item.price}</span>
+                      <span className="text-lg font-extrabold tracking-tight text-[#63281C]">{item.price}</span>
                     </div>
                     <div className="ml-auto flex items-center gap-2">
                       <button
@@ -325,7 +325,7 @@ export function ExploreGrid({
                           e.stopPropagation();
                           handleCompareToggle(item);
                         }}
-                        className={`inline-flex min-h-10 items-center gap-1.5 rounded-lg px-2.5 text-xs font-bold transition-colors hover:bg-[var(--bhn-brand-50)] ${isInCompare ? "bg-[var(--bhn-brand-50)] text-[var(--bhn-brand-700)]" : "text-[var(--bhn-text-muted)]"}`}
+                        className={`inline-flex min-h-9 items-center gap-1.5 rounded-md px-2 text-xs font-bold transition-colors hover:bg-[#F8ECE7] ${isInCompare ? "bg-[#F8ECE7] text-[#7A3323]" : "text-[#6B625A]"}`}
                         aria-label={isInCompare ? "Remove from compare" : "Add to compare"}
                       >
                         <Scale size={15} /> {isInCompare ? "Comparing" : "Compare"}
