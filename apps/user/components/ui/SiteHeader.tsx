@@ -1,6 +1,6 @@
 'use client';
 
-import { Bell, Search, User } from "lucide-react";
+import { Bell, Menu, Search, User, X } from "lucide-react";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCart } from "@/context/CartContext";
@@ -53,47 +53,47 @@ export default function SiteHeader() {
   };
 
   return (
-    <header className="w-full border-b border-[#E7E1D8] bg-[#FAF5EE]">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-3 py-2 sm:px-4">
+    <header className="w-full border-b border-[#E8E2DC] bg-white/95 shadow-[0_1px_0_rgba(31,22,17,.03)] backdrop-blur-xl">
+      <div className="mx-auto flex max-w-[1440px] items-center gap-4 px-4 py-3 sm:px-6 lg:gap-7 lg:px-8">
         {/* Logo */}
         <Link href="/" aria-label="Bandhan home" className="shrink-0">
-          <Image src="/Group1.png" alt="Bandhan Events Hub" width={433} height={96} className="h-7 w-auto rounded-md bg-[#2A1C16] px-2 py-1" />
+          <Image src="/Group1.png" alt="Bandhan Events Hub" width={433} height={96} className="h-9 w-auto rounded-lg bg-[#271711] px-2.5 py-1.5 shadow-sm sm:h-10" priority />
         </Link>
 
         {/* Center: Search */}
-        <form onSubmit={submitSearch} className="relative hidden flex-1 justify-center md:flex">
-          <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9A8F86]" />
+        <form onSubmit={submitSearch} className="relative hidden max-w-2xl flex-1 md:flex">
+          <Search size={19} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7E736B]" />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search venues, services, products..."
-            className="w-full max-w-[420px] rounded-full border border-[#E7E1D8] bg-[#F3ECE4] py-2 pl-10 pr-4 text-xs outline-none"
+            placeholder="Search products, venues, services and courses"
+            className="h-12 w-full rounded-xl border border-[#DDD4CC] bg-[#FBF8F4] pl-12 pr-4 text-sm text-[#1A1612] outline-none transition focus:border-[#8B3A28] focus:bg-white focus:ring-4 focus:ring-[#8B3A28]/10"
           />
         </form>
 
         {/* Right: Nav + Icons */}
-        <div className="flex items-center gap-3 sm:gap-4">
-          <nav className="hidden items-center gap-3 text-xs lg:flex">
+        <div className="ml-auto flex items-center gap-2 sm:gap-3">
+          <nav className="hidden items-center gap-1 text-sm xl:flex">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className={isActive(link.href) ? "font-medium text-[#C2652A]" : "text-[#6B625A] hover:text-[#C2652A]"}
+                className={`rounded-lg px-3 py-2 font-semibold transition ${isActive(link.href) ? "bg-[#F8ECE7] text-[#7A3323]" : "text-[#5F5750] hover:bg-[#FBF8F4] hover:text-[#7A3323]"}`}
               >
                 {link.label}
               </Link>
             ))}
-            <a href={STUDENT_PORTAL_URL} className="text-[#6B625A] hover:text-[#C2652A]">Courses</a>
+            <a href={STUDENT_PORTAL_URL} className="rounded-lg px-3 py-2 font-semibold text-[#5F5750] transition hover:bg-[#FBF8F4] hover:text-[#7A3323]">Courses</a>
           </nav>
 
-          <div className="flex items-center gap-3 text-[#6B625A]">
+          <div className="flex items-center gap-1 text-[#5F5750]">
             {signedIn && (
-              <Link href="/userdashboard/notification" aria-label="Notifications">
-                <Bell size={20} className="cursor-pointer hover:text-[#C2652A]" />
+              <Link href="/userdashboard/notification" aria-label="Notifications" className="grid h-10 w-10 place-items-center rounded-lg transition hover:bg-[#FBF8F4] hover:text-[#7A3323]">
+                <Bell size={19} />
               </Link>
             )}
-            <Link href="/userdashboard/cart" className="relative" aria-label="Cart">
-              <MdOutlineShoppingCart size={20} className="cursor-pointer hover:text-[#C2652A]" />
+            <Link href="/userdashboard/cart" className="relative grid h-10 w-10 place-items-center rounded-lg transition hover:bg-[#FBF8F4] hover:text-[#7A3323]" aria-label="Cart">
+              <MdOutlineShoppingCart size={22} />
               {totalItems > 0 && (
                 <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white">
                   {totalItems}
@@ -101,13 +101,13 @@ export default function SiteHeader() {
               )}
             </Link>
             {signedIn ? (
-              <Link href="/userdashboard/dashboard" className="flex h-8 w-8 items-center justify-center rounded-full border" aria-label="Profile">
+              <Link href="/userdashboard/dashboard" className="flex h-10 w-10 items-center justify-center rounded-full border border-[#DDD4CC] bg-[#FBF8F4]" aria-label="Profile">
                 <User size={16} />
               </Link>
             ) : (
-              <div className="hidden items-center gap-3 text-xs sm:flex">
-                <Link href="/login" className="text-[#6B625A] hover:text-[#C2652A]">Login</Link>
-                <Link href="/signup" className="font-semibold text-[#924C2B] hover:underline">Sign up</Link>
+              <div className="hidden items-center gap-1 text-sm sm:flex">
+                <Link href="/login" className="rounded-lg px-3 py-2 font-semibold text-[#5F5750] hover:bg-[#FBF8F4]">Log in</Link>
+                <Link href="/signup" className="rounded-lg bg-[#7A3323] px-4 py-2.5 font-bold text-white shadow-sm transition hover:bg-[#63281C]">Sign up</Link>
               </div>
             )}
           </div>
@@ -115,35 +115,35 @@ export default function SiteHeader() {
           {/* Mobile hamburger */}
           <button
             onClick={() => setMobileMenuOpen((open) => !open)}
-            className="text-[#924C2B] lg:hidden"
+            className="grid h-10 w-10 place-items-center rounded-lg text-[#7A3323] hover:bg-[#F8ECE7] xl:hidden"
             aria-label="Toggle navigation"
           >
-            {mobileMenuOpen ? "✕" : "☰"}
+            {mobileMenuOpen ? <X size={21} /> : <Menu size={22} />}
           </button>
         </div>
       </div>
 
       {mobileMenuOpen && (
-        <div className="flex flex-col gap-2 border-t border-[#E7E1D8] px-4 py-3 text-sm lg:hidden">
+        <div className="flex flex-col gap-1 border-t border-[#E8E2DC] bg-white px-4 py-4 text-sm xl:hidden">
           <form onSubmit={submitSearch} className="relative mb-1 flex md:hidden">
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9A8F86]" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search..."
-              className="w-full rounded-full border border-[#E7E1D8] bg-[#F3ECE4] py-2 pl-9 pr-3 text-xs outline-none"
+            className="h-11 w-full rounded-xl border border-[#DDD4CC] bg-[#FBF8F4] pl-10 pr-3 text-sm outline-none"
             />
           </form>
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className={`block py-2.5 ${isActive(link.href) ? "font-medium text-[#C2652A]" : "text-[#6B625A]"}`}
+              className={`block rounded-lg px-3 py-2.5 font-semibold ${isActive(link.href) ? "bg-[#F8ECE7] text-[#7A3323]" : "text-[#5F5750]"}`}
             >
               {link.label}
             </Link>
           ))}
-          <a href={STUDENT_PORTAL_URL} className="text-[#6B625A]">Courses</a>
+          <a href={STUDENT_PORTAL_URL} className="rounded-lg px-3 py-2.5 font-semibold text-[#5F5750]">Courses</a>
           <div className="flex gap-3 pt-1">
             <Link href="/login">Login</Link>
             <Link href="/signup">Sign up</Link>
