@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { ExploreType } from "@/components/userDashboard/explore/ExploreGrid";
 import { FilterPanel, Button } from "@bandhan/ui";
+import { Check, SlidersHorizontal, Star } from "lucide-react";
 
 interface FilterState {
   category: string;
@@ -89,14 +90,21 @@ const ExploreSidebar = ({ viewMode, filters, categories, onChange, onClear }: Ex
         onApply={() => setPanelOpen(false)}
       />
 
-      <div className="hidden border-r border-[#E5DED7] pr-6 lg:block">
-        <div className="space-y-1 mb-6">
-          <h2 className="font-display text-xl font-bold tracking-tight text-[#1A1612]">Filters</h2>
-          <p className="text-sm text-[#756B63]">Refine {viewMode}</p>
+      <div className="hidden overflow-hidden rounded-xl border border-[#E2DBD4] bg-white shadow-[0_5px_18px_rgba(42,28,22,.04)] lg:block">
+        <div className="flex items-center justify-between border-b border-[#ECE6E0] px-5 py-4">
+          <div className="flex items-center gap-2.5">
+            <SlidersHorizontal size={18} className="text-[#8B3A28]" />
+            <h2 className="font-display text-lg font-bold tracking-tight text-[#1A1612]">Filters</h2>
+          </div>
+          {(filters.category || filters.price || filters.rating) && (
+            <button type="button" onClick={onClear} className="text-xs font-bold text-[#8B3A28] hover:underline">Reset</button>
+          )}
         </div>
 
         {categories.length > 0 && (
-          <div className="space-y-3">
+          <div className="border-b border-[#ECE6E0] px-5 py-5">
+            <p className="mb-3 text-sm font-bold text-[#2C2520]">Category</p>
+            <div className="space-y-1">
             {categories.map((item) => {
               const isActive = filters.category === item;
 
@@ -105,67 +113,62 @@ const ExploreSidebar = ({ viewMode, filters, categories, onChange, onClear }: Ex
                   key={item}
                   type="button"
                   onClick={() => onChange({ ...filters, category: filters.category === item ? "" : item })}
-                  className={`flex min-h-10 w-full items-center justify-between rounded-lg px-3 text-left transition ${isActive ? "bg-[#F6E9E4] font-bold text-[#7A3323]" : "text-[#514841] hover:bg-white"}`}
+                  className={`flex min-h-9 w-full items-center justify-between rounded-md px-2 text-left text-sm transition ${isActive ? "bg-[#F8ECE7] font-bold text-[#7A3323]" : "text-[#5F5750] hover:bg-[#FAF7F4] hover:text-[#2C2520]"}`}
                 >
-                  <span className="text-sm">{item}</span>
+                  <span>{item}</span>
+                  {isActive ? <Check size={15} /> : null}
                 </button>
               );
             })}
+            </div>
           </div>
         )}
 
-        <div className="mt-6">
-          <p className="text-xs font-medium text-[var(--bhn-text-muted)] mb-3">Price Range</p>
+        <div className="border-b border-[#ECE6E0] px-5 py-5">
+          <p className="mb-3 text-sm font-bold text-[#2C2520]">Price</p>
 
-          <div className="space-y-2">
+          <div className="space-y-1">
             {priceOptions.map((item) => (
               <label
                 key={item.value}
-                className={`flex min-h-10 w-full cursor-pointer items-center rounded-lg px-3 transition ${filters.price === item.value ? "bg-[#F6E9E4] font-bold text-[#7A3323]" : "text-[#514841] hover:bg-white"}`}
+                className="flex min-h-9 w-full cursor-pointer items-center gap-3 rounded-md px-2 text-sm text-[#5F5750] transition hover:bg-[#FAF7F4]"
               >
                 <input
                   type="radio"
                   name="price"
                   checked={filters.price === item.value}
                   onChange={() => onChange({ ...filters, price: item.value })}
-                  className="hidden"
+                  className="h-4 w-4 accent-[#8B3A28]"
                 />
-                <span className="text-[var(--bhn-text)]">{item.label}</span>
+                <span className={filters.price === item.value ? "font-bold text-[#7A3323]" : ""}>{item.label}</span>
               </label>
             ))}
           </div>
         </div>
 
-        <div className="mt-6">
-          <p className="text-xs font-medium text-[var(--bhn-text-muted)] mb-3">Rating</p>
+        <div className="px-5 py-5">
+          <p className="mb-3 text-sm font-bold text-[#2C2520]">Customer rating</p>
 
-          <div className="space-y-2">
+          <div className="space-y-1">
             {ratingOptions.map((item) => (
               <label
                 key={item.value}
-                className={`flex min-h-10 w-full cursor-pointer items-center rounded-lg px-3 transition ${filters.rating === item.value ? "bg-[#F6E9E4] font-bold text-[#7A3323]" : "text-[#514841] hover:bg-white"}`}
+                className="flex min-h-9 w-full cursor-pointer items-center gap-3 rounded-md px-2 text-sm text-[#5F5750] transition hover:bg-[#FAF7F4]"
               >
                 <input
                   type="radio"
                   name="rating"
                   checked={filters.rating === item.value}
                   onChange={() => onChange({ ...filters, rating: item.value })}
-                  className="hidden"
+                  className="h-4 w-4 accent-[#8B3A28]"
                 />
-                <span className="text-[var(--bhn-text)]">{item.label}</span>
+                <Star size={14} className="fill-[#D68B28] text-[#D68B28]" />
+                <span className={filters.rating === item.value ? "font-bold text-[#7A3323]" : ""}>{item.label}</span>
               </label>
             ))}
           </div>
         </div>
 
-        <Button
-          variant="ghost"
-          size="sm"
-          className="mt-6 w-full"
-          onClick={onClear}
-        >
-          Clear All
-        </Button>
       </div>
     </aside>
   );
