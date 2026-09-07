@@ -184,19 +184,20 @@ export function ExploreGrid({
 
   return (
     <div className="w-full min-w-0">
-      <div className="mb-5 flex flex-col gap-2 border-b border-[var(--bhn-border)] pb-5 sm:flex-row sm:items-end sm:justify-between">
+      <div className="mb-7 flex flex-col gap-2 border-b border-[#E5DED7] pb-7 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="mb-2 text-xs font-bold uppercase tracking-[0.16em] text-[var(--bhn-brand-600)]">
-            Bandhan marketplace · {filteredData.length} {filteredData.length === 1 ? "result" : "results"}
+          <p className="mb-3 text-[11px] font-extrabold uppercase tracking-[0.22em] text-[#8B3A28]">
+            Curated for every celebration
           </p>
-          <h1 className="font-display text-2xl font-bold tracking-tight text-[var(--bhn-text)] sm:text-3xl">{typeTitle[viewMode]}</h1>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--bhn-text-muted)] sm:text-base">{description[viewMode]}</p>
+          <h1 className="font-display text-3xl font-bold tracking-[-0.035em] text-[#1A1612] sm:text-4xl">{typeTitle[viewMode]}</h1>
+          <p className="mt-2 max-w-2xl text-base leading-7 text-[#6B625A]">{description[viewMode]}</p>
+          <p className="mt-3 text-sm font-semibold text-[#443C36]">{filteredData.length.toLocaleString("en-IN")} {filteredData.length === 1 ? "result" : "results"}</p>
         </div>
       </div>
 
       <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-3 rounded-2xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-3 shadow-[var(--bhn-shadow-xs)] md:flex-row md:items-center md:justify-between">
-          <div className="grid grid-cols-3 gap-1 rounded-xl bg-[var(--bhn-surface-3)] p-1" aria-label="Marketplace type">
+        <div className="flex flex-col gap-3 border-b border-[#E5DED7] pb-4 md:flex-row md:items-center md:justify-between">
+          <div className="grid grid-cols-3 gap-6" aria-label="Marketplace type">
             {(["services", "products", "venues"] as ExploreType[]).map((mode) => (
               <button
                 key={mode}
@@ -205,7 +206,7 @@ export function ExploreGrid({
                   setCurrentPage(1);
                   onViewModeChange(mode);
                 }}
-                className={`min-h-10 rounded-lg px-3 text-sm font-bold capitalize transition-colors ${viewMode === mode ? "bg-[var(--bhn-brand-600)] text-white shadow-sm" : "text-[var(--bhn-text-muted)] hover:bg-white hover:text-[var(--bhn-brand-700)]"}`}
+                className={`relative min-h-10 px-1 text-sm font-bold capitalize transition-colors after:absolute after:inset-x-0 after:bottom-[-17px] after:h-0.5 ${viewMode === mode ? "text-[#7A3323] after:bg-[#8B3A28]" : "text-[#756B63] after:bg-transparent hover:text-[#7A3323]"}`}
                 aria-pressed={viewMode === mode}
               >
                 {mode}
@@ -213,7 +214,7 @@ export function ExploreGrid({
             ))}
           </div>
           <div className="flex items-center gap-3">
-            <label htmlFor="explore-sort" className="shrink-0 text-xs font-bold uppercase tracking-[0.14em] text-[var(--bhn-text-soft)]">Sort by</label>
+            <label htmlFor="explore-sort" className="shrink-0 text-xs font-bold uppercase tracking-[0.14em] text-[#7E736B]">Sort by</label>
             <select
               id="explore-sort"
               value={sortBy}
@@ -221,7 +222,7 @@ export function ExploreGrid({
                 setCurrentPage(1);
                 setSortBy(e.target.value);
               }}
-              className="bhn-select min-w-0 flex-1 md:w-auto md:min-w-[210px]"
+              className="h-11 min-w-0 flex-1 rounded-lg border border-[#DCD3CB] bg-white px-3 text-sm font-semibold text-[#302923] outline-none focus:border-[#8B3A28] md:w-auto md:min-w-[210px]"
             >
               <option value="recommended">Recommended</option>
               <option value="price-low">Price: Low to High</option>
@@ -233,7 +234,7 @@ export function ExploreGrid({
 
         {displayedItems.length > 0 ? (
           <>
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             {displayedItems.map((item) => {
               const isInCart = viewMode === "products" && cartItems.some(
                 (cartItem) => cartItem.itemType === "product" && cartItem.productId === String(item.id),
@@ -243,7 +244,7 @@ export function ExploreGrid({
               return (
                 <article
                   key={item.id}
-                  className="bhn-listing-card group cursor-pointer focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-[var(--bhn-brand-300)]"
+                  className="group cursor-pointer overflow-hidden rounded-xl border border-[#E4DDD6] bg-white transition duration-200 hover:-translate-y-1 hover:border-[#D2C4BA] hover:shadow-[0_16px_35px_rgba(42,28,22,.10)] focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-[var(--bhn-brand-300)]"
                   role="link"
                   tabIndex={0}
                   aria-label={`View ${item.title}`}
@@ -252,13 +253,13 @@ export function ExploreGrid({
                     if (event.key === "Enter") router.push(item.href);
                   }}
                 >
-                  <div className="bhn-listing-card-image relative overflow-hidden !aspect-[4/3]">
+                  <div className="relative aspect-[4/3] overflow-hidden bg-[#F6F2ED]">
                     <Image
                       src={item.image}
                       alt={item.title}
                       fill
                       sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                      className={`${viewMode === "products" ? "object-contain p-4" : "object-cover"} transition-transform duration-300 group-hover:scale-[1.03]`}
+                      className={`${viewMode === "products" ? "object-contain p-3" : "object-cover"} transition-transform duration-300 group-hover:scale-[1.035]`}
                     />
                     {item.tag && (
                       <span className="absolute left-2 top-2 bhn-badge bhn-badge-brand text-xs">
@@ -279,7 +280,7 @@ export function ExploreGrid({
                     </button>
                   </div>
 
-                  <div className="bhn-listing-card-body">
+                  <div className="px-4 pb-3 pt-4">
                     <div className="flex items-center justify-between gap-3">
                       <span className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--bhn-brand-600)]">{item.category}</span>
                       {item.rating > 0 ? (
@@ -288,7 +289,7 @@ export function ExploreGrid({
                         </span>
                       ) : null}
                     </div>
-                    <h3 className="bhn-listing-card-title">{item.title}</h3>
+                    <h3 className="mt-2 line-clamp-2 min-h-12 text-base font-bold leading-6 text-[#211B17] transition-colors group-hover:text-[#7A3323]">{item.title}</h3>
                     {item.location && (
                       <p className="bhn-listing-card-meta">
                         <span className="flex items-center gap-1">
@@ -313,7 +314,7 @@ export function ExploreGrid({
                     ) : null}
                   </div>
 
-                  <div className="bhn-listing-card-footer">
+                  <div className="flex items-center border-t border-[#EEE8E2] px-4 py-3.5">
                     <div className="bhn-price">
                       <span className="bhn-price-current text-lg">{item.price}</span>
                     </div>

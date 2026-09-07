@@ -89,10 +89,10 @@ const ExploreSidebar = ({ viewMode, filters, categories, onChange, onClear }: Ex
         onApply={() => setPanelOpen(false)}
       />
 
-      <div className="hidden lg:block bhn-card p-5">
+      <div className="hidden border-r border-[#E5DED7] pr-6 lg:block">
         <div className="space-y-1 mb-6">
-          <h2 className="text-lg font-semibold text-[var(--bhn-text)]">{title}</h2>
-          <p className="text-xs uppercase tracking-[0.22em] text-[var(--bhn-text-soft)]">Filter by category</p>
+          <h2 className="font-display text-xl font-bold tracking-tight text-[#1A1612]">Filters</h2>
+          <p className="text-sm text-[#756B63]">Refine {viewMode}</p>
         </div>
 
         {categories.length > 0 && (
@@ -105,7 +105,7 @@ const ExploreSidebar = ({ viewMode, filters, categories, onChange, onClear }: Ex
                   key={item}
                   type="button"
                   onClick={() => onChange({ ...filters, category: filters.category === item ? "" : item })}
-                  className={`bhn-chip w-full justify-start ${isActive ? "bhn-chip-active" : ""}`}
+                  className={`flex min-h-10 w-full items-center justify-between rounded-lg px-3 text-left transition ${isActive ? "bg-[#F6E9E4] font-bold text-[#7A3323]" : "text-[#514841] hover:bg-white"}`}
                 >
                   <span className="text-sm">{item}</span>
                 </button>
@@ -121,7 +121,7 @@ const ExploreSidebar = ({ viewMode, filters, categories, onChange, onClear }: Ex
             {priceOptions.map((item) => (
               <label
                 key={item.value}
-                className={`bhn-chip w-full justify-start ${filters.price === item.value ? "bhn-chip-active" : ""}`}
+                className={`flex min-h-10 w-full cursor-pointer items-center rounded-lg px-3 transition ${filters.price === item.value ? "bg-[#F6E9E4] font-bold text-[#7A3323]" : "text-[#514841] hover:bg-white"}`}
               >
                 <input
                   type="radio"
@@ -143,7 +143,7 @@ const ExploreSidebar = ({ viewMode, filters, categories, onChange, onClear }: Ex
             {ratingOptions.map((item) => (
               <label
                 key={item.value}
-                className={`bhn-chip w-full justify-start ${filters.rating === item.value ? "bhn-chip-active" : ""}`}
+                className={`flex min-h-10 w-full cursor-pointer items-center rounded-lg px-3 transition ${filters.rating === item.value ? "bg-[#F6E9E4] font-bold text-[#7A3323]" : "text-[#514841] hover:bg-white"}`}
               >
                 <input
                   type="radio"

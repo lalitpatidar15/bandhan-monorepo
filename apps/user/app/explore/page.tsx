@@ -346,11 +346,12 @@ function ExplorePageContent() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-[var(--bhn-border)] bg-[var(--bhn-bg)]">
+      <header className="sticky top-0 z-40">
         <SiteHeader />
       </header>
-      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <div className="grid gap-5 lg:grid-cols-[280px_minmax(0,1fr)]">
+      <main className="min-h-[70vh] bg-[#FBFAF8]">
+      <div className="mx-auto max-w-[1440px] px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
+        <div className="grid gap-8 lg:grid-cols-[252px_minmax(0,1fr)]">
           <aside className="lg:sticky lg:top-24 lg:self-start">
             <ExploreSidebar
               viewMode={mode}
@@ -374,6 +375,7 @@ function ExplorePageContent() {
           />
         </div>
       </div>
+      </main>
       <Footer />
     </>
   );
