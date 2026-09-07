@@ -17,5 +17,9 @@ assert.match(checkout, /useGetCheckoutQuoteQuery/);
 assert.doesNotMatch(confirmation, /searchParams\.get\(["'](?:amount|paymentId|itemCount)/);
 assert.match(confirmation, /useGetUserOrdersQuery/);
 assert.doesNotMatch(productDetail, /itemsParam|totalParam/);
+assert.match(productApi, /rentalPrice,/);
+assert.match(productApi, /rentalDuration:/);
+assert.match(productDetail, /itemType: activeItemType/);
+assert.match(productDetail, /rentalDays: purchaseMode === "rent"/);
 
-console.log("Public products are moderated and checkout/confirmation values come from owned API records.");
+console.log("Public products remain moderated; sale and rental carts use owned API records and the existing cart contract.");

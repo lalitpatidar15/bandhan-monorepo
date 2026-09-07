@@ -62,6 +62,9 @@ export interface ProductDetailViewModel {
   returnPolicy?: string;
   warranty?: string;
   soldCount?: number;
+  productType?: string;
+  rentalPrice?: number;
+  rentalDuration?: string;
 }
 
 interface ProductResponse {
@@ -170,6 +173,9 @@ export function adaptProductDetail(product: ProductRecord, fallbackId = ""): Pro
     returnPolicy: nonEmptyString(product.returnPolicy),
     warranty: nonEmptyString(product.warranty),
     soldCount: soldCount !== undefined && soldCount > 0 ? soldCount : undefined,
+    productType,
+    rentalPrice,
+    rentalDuration: nonEmptyString(product.rentalDuration),
   };
 }
 

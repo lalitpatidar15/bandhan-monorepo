@@ -12,6 +12,10 @@ import {
   RotateCcw,
   Scale,
   Package,
+  CalendarDays,
+  Check,
+  MapPin,
+  Store,
 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useCompare } from "@/context/CompareContext";
@@ -36,13 +40,11 @@ import {
   ImageGallery,
   PriceDisplay,
   RatingDisplay,
-  StatusBadge,
   SectionHeader,
   Button,
   Card,
   CardBody,
   Tabs,
-  Badge,
   EmptyState,
 } from "@bandhan/ui";
 
@@ -66,6 +68,9 @@ type Props = {
   returnPolicy?: string;
   warranty?: string;
   soldCount?: number;
+  productType?: string;
+  rentalPrice?: number;
+  rentalDuration?: string;
 };
 
 const parseWishlistCheck = (data: unknown): boolean => {
@@ -80,10 +85,12 @@ export default function ProductDetailLayout(props: Props) {
   const [selected, setSelected] = useState(0);
   const image = images[selected] || "";
 
-  const previous = () => setSelected((s) => (s === 0 ? images.length - 1 : s - 1));
-  const next = () => setSelected((s) => (s === images.length - 1 ? 0 : s + 1));
-
   const [qty, setQty] = useState(1);
+  const canBuy = !["rent", "rental"].includes(props.productType || "sale");
+  const canRent = ["rent", "rental", "both"].includes(props.productType || "");
+  const [purchaseMode, setPurchaseMode] = useState<"buy" | "rent">(canBuy ? "buy" : "rent");
+  const [rentalStart, setRentalStart] = useState("");
+  const [rentalEnd, setRentalEnd] = useState("");
   const [wishlistOverride, setWishlistOverride] = useState<{ productId: string; value: boolean } | null>(null);
 
   const router = useRouter();
@@ -163,11 +170,12 @@ export default function ProductDetailLayout(props: Props) {
   };
 
   const { addToCart, cartItems, removeFromCart } = useCart();
+  const activeItemType = purchaseMode === "rent" ? "rental" : "product";
   const cartProduct = cartItems.find(
-    (item) => item.itemType === "product" && item.productId === props.productId,
+    (item) => item.itemType === activeItemType && item.productId === props.productId,
   );
   const isInCart = Boolean(cartProduct);
-  const [activeTab, setActiveTab] = useState<"description" | "specs" | "reviews">("description");
+  const [activeTab, setActiveTab] = useState<"description" | "specs" | "rental" | "reviews">("description");
 
   const { data: reviewsData } = useGetProductReviewsQuery(props.productId || "", {
     skip: !props.productId,
@@ -207,16 +215,34 @@ export default function ProductDetailLayout(props: Props) {
     }
   };
 
+  const rentalDays = rentalStart && rentalEnd
+    ? Math.max(1, Math.ceil((new Date(rentalEnd).getTime() - new Date(rentalStart).getTime()) / 86_400_000) + 1)
+    : 0;
+  const activePrice = purchaseMode === "rent" ? props.rentalPrice || props.price : props.price;
+
   const handleAddToCart = async () => {
+    if (purchaseMode === "rent" && (!rentalStart || !rentalEnd)) {
+      toast.error("Select rental start and return dates");
+      return false;
+    }
+    if (purchaseMode === "rent" && new Date(rentalEnd) < new Date(rentalStart)) {
+      toast.error("Return date must be after the start date");
+      return false;
+    }
     return addToCart({
       title: props.title,
-      price: props.price,
+      price: activePrice,
       img: image,
-      date: new Date().toISOString().slice(0, 10),
+      date: purchaseMode === "rent" ? rentalStart : new Date().toISOString().slice(0, 10),
       guests: qty,
       location: props.location || "",
-      itemType: "product",
+      itemType: activeItemType,
       productId: props.productId || "",
+      rentalStart: purchaseMode === "rent" ? rentalStart : undefined,
+      rentalEnd: purchaseMode === "rent" ? rentalEnd : undefined,
+      rentalDays: purchaseMode === "rent" ? rentalDays : undefined,
+      rentalDurationDays: purchaseMode === "rent" ? rentalDays : undefined,
+      dailyRate: purchaseMode === "rent" ? activePrice : undefined,
     });
   };
 
@@ -282,21 +308,22 @@ export default function ProductDetailLayout(props: Props) {
   if (props.soldCount !== undefined && props.soldCount > 0) activitySummary.push(`${props.soldCount} sold`);
 
   return (
-    <div className="w-full bg-[var(--bhn-bg)] min-h-screen py-6 sm:py-8">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 space-y-8">
+    <div className="min-h-screen w-full bg-[var(--bhn-bg)] py-5 sm:py-8">
+      <div className="mx-auto max-w-7xl space-y-8 px-4 sm:px-6 lg:px-8">
         
         {/* Breadcrumb Navigation */}
-        <nav className="text-xs sm:text-sm text-[var(--bhn-text-muted)] flex items-center gap-1.5">
-          <span>Home</span> / <span>Products</span> /
-          {props.category ? <><span>{props.category}</span> /</> : null}{" "}
-          <span className="font-bold text-[var(--bhn-text)]">{props.title}</span>
+        <nav aria-label="Breadcrumb" className="flex items-center gap-2 overflow-hidden text-xs text-[var(--bhn-text-muted)] sm:text-sm">
+          <Link href="/" className="hover:text-[var(--bhn-brand-700)]">Home</Link><span aria-hidden="true">/</span>
+          <Link href="/explore?type=products" className="hover:text-[var(--bhn-brand-700)]">Products</Link><span aria-hidden="true">/</span>
+          {props.category ? <><span>{props.category}</span><span aria-hidden="true">/</span></> : null}
+          <span className="truncate font-semibold text-[var(--bhn-text)]">{props.title}</span>
         </nav>
 
         {/* --- TOP SECTION: IMAGE GALLERY & ACTIONS --- */}
-        <div className="grid gap-8 lg:grid-cols-[1fr_420px] items-start">
+        <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(380px,0.9fr)] xl:gap-12">
           
           {/* Main Image & Thumbnails Container */}
-          <div>
+          <div className="min-w-0">
             <ImageGallery
               images={images}
               alt={props.title}
@@ -305,18 +332,22 @@ export default function ProductDetailLayout(props: Props) {
               showThumbnails={images.length > 1}
               aspectRatio="4:3"
               enableZoom
-              className="rounded-2xl border border-[var(--bhn-border)] bg-white shadow-sm"
+              className="rounded-2xl border border-[var(--bhn-border)] bg-white"
             />
           </div>
 
           {/* Right Column: Title, Price, Buy Form */}
-          <div className="flex flex-col justify-start">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[var(--bhn-text)] leading-tight">
+          <div className="flex flex-col justify-start lg:sticky lg:top-24">
+            <div className="flex items-center justify-between gap-4">
+              <p className="text-xs font-bold uppercase tracking-[0.15em] text-[var(--bhn-brand-600)]">{props.providerName || props.category || "Bandhan seller"}</p>
+              {props.availability ? <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700">{props.availability}</span> : null}
+            </div>
+            <h1 className="mt-2 text-3xl font-extrabold leading-tight tracking-tight text-[var(--bhn-text)] sm:text-4xl">
               {props.title}
             </h1>
 
             {activitySummary.length > 0 && (
-              <div className="mt-1.5 flex flex-wrap items-center gap-2 text-xs sm:text-sm text-[var(--bhn-text-muted)]">
+              <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-[var(--bhn-text-muted)]">
                 {activitySummary.map((item, index) => (
                   <span key={item} className="inline-flex items-center gap-2">
                     {index > 0 ? <span aria-hidden="true">•</span> : null}
@@ -326,18 +357,52 @@ export default function ProductDetailLayout(props: Props) {
               </div>
             )}
 
-            {/* Price tag */}
+            {canBuy && canRent ? (
+              <div className="mt-6 grid grid-cols-2 rounded-xl bg-[var(--bhn-surface-3)] p-1" aria-label="Choose purchase type">
+                {(["buy", "rent"] as const).map((mode) => (
+                  <button
+                    key={mode}
+                    type="button"
+                    onClick={() => setPurchaseMode(mode)}
+                    className={`min-h-11 rounded-lg text-sm font-extrabold uppercase tracking-[0.08em] transition-colors ${purchaseMode === mode ? "bg-white text-[var(--bhn-brand-700)] shadow-sm" : "text-[var(--bhn-text-muted)] hover:text-[var(--bhn-text)]"}`}
+                    aria-pressed={purchaseMode === mode}
+                  >
+                    {mode}
+                  </button>
+                ))}
+              </div>
+            ) : null}
+
             <PriceDisplay
-              current={props.price}
+              current={activePrice}
               currency="₹"
+              unit={purchaseMode === "rent" ? props.rentalDuration || "day" : undefined}
               size="lg"
-              className="mt-5"
+              className="mt-6"
             />
+            {purchaseMode === "rent" && rentalDays > 0 ? (
+              <p className="mt-1 text-sm font-semibold text-[var(--bhn-text-muted)]">₹{(activePrice * rentalDays * qty).toLocaleString("en-IN")} estimated rental subtotal</p>
+            ) : null}
+
+            {purchaseMode === "rent" ? (
+              <div className="mt-6 border-y border-[var(--bhn-border)] py-5">
+                <div className="mb-3 flex items-center gap-2"><CalendarDays size={17} className="text-[var(--bhn-brand-600)]" /><h2 className="text-sm font-bold text-[var(--bhn-text)]">Select event dates</h2></div>
+                <div className="grid grid-cols-2 gap-3">
+                  <label className="text-xs font-semibold text-[var(--bhn-text-muted)]">From
+                    <input type="date" min={new Date().toISOString().slice(0, 10)} value={rentalStart} onChange={(event) => setRentalStart(event.target.value)} className="bhn-input mt-1.5 w-full" />
+                  </label>
+                  <label className="text-xs font-semibold text-[var(--bhn-text-muted)]">To
+                    <input type="date" min={rentalStart || new Date().toISOString().slice(0, 10)} value={rentalEnd} onChange={(event) => setRentalEnd(event.target.value)} className="bhn-input mt-1.5 w-full" />
+                  </label>
+                </div>
+                {rentalDays > 0 ? <p className="mt-3 text-xs font-semibold text-[var(--bhn-brand-700)]">{rentalDays} rental {rentalDays === 1 ? "day" : "days"}</p> : null}
+              </div>
+            ) : null}
 
             {/* Quantity Selector */}
-            <div className="mt-5">
-              <label className="text-xs text-[var(--bhn-text-muted)] font-medium">Quantity</label>
-              <div className="mt-1.5 inline-flex items-center rounded-xl border border-[var(--bhn-border)] bg-white p-1">
+            <div className="mt-5 flex items-center justify-between border-b border-[var(--bhn-border)] pb-5">
+              <label className="text-sm font-bold text-[var(--bhn-text)]">Quantity</label>
+              <div className="inline-flex items-center rounded-xl border border-[var(--bhn-border)] bg-white p-1">
                 <Button
                   variant="ghost"
                   size="icon"
@@ -361,26 +426,26 @@ export default function ProductDetailLayout(props: Props) {
             </div>
 
             {/* Action Buttons: Row 1 */}
-            <div className="mt-6 grid grid-cols-2 gap-3">
+            <div className="mt-6 grid grid-cols-2 gap-3 max-sm:sticky max-sm:bottom-0 max-sm:z-20 max-sm:-mx-4 max-sm:border-t max-sm:border-[var(--bhn-border)] max-sm:bg-white max-sm:p-4">
               <Button
                 variant={isInCart ? "secondary" : "primary"}
                 size="sm"
                 onClick={isInCart ? undefined : handleAddToCart}
                 disabled={isInCart}
               >
-                {isInCart ? "Added to Cart" : "Add to Cart"}
+                {isInCart ? <><Check size={16} /> Added to Cart</> : purchaseMode === "rent" ? "Add Rental" : "Add to Cart"}
               </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={handleBuyNow}
               >
-                Buy Now
+                {purchaseMode === "rent" ? "Rent Now" : "Buy Now"}
               </Button>
             </div>
 
             {/* Action Buttons: Row 2 */}
-            <div className="mt-3 grid grid-cols-3 gap-3">
+            <div className="mt-3 grid grid-cols-3 gap-2">
               <Button
                 variant={isWishlisted ? "secondary" : "ghost"}
                 size="sm"
@@ -408,7 +473,7 @@ export default function ProductDetailLayout(props: Props) {
             </div>
 
             {fulfilmentFacts.length > 0 && (
-              <div className="mt-5 rounded-xl border border-[var(--bhn-border)] bg-white p-3 shadow-xs">
+              <div className="mt-5 border-y border-[var(--bhn-border)] py-4">
                 <div
                   className="grid gap-2 text-center text-[10px] font-medium text-[var(--bhn-text-muted)] sm:text-[11px]"
                   style={{ gridTemplateColumns: `repeat(${fulfilmentFacts.length}, minmax(0, 1fr))` }}
@@ -417,7 +482,7 @@ export default function ProductDetailLayout(props: Props) {
                     const Icon = fact.label === "Shipping" ? Truck : fact.label === "Returns" ? RotateCcw : ShieldCheck;
                     return (
                       <div key={fact.label} className="flex min-w-0 flex-col items-center justify-center gap-1 px-1">
-                        <Icon size={16} className="text-[var(--bhn-brand-500)]" />
+                        <Icon size={17} className="text-[var(--bhn-brand-500)]" />
                         <span className="leading-tight">{fact.value}</span>
                       </div>
                     );
@@ -426,9 +491,13 @@ export default function ProductDetailLayout(props: Props) {
               </div>
             )}
 
-            {/* Quick Overview Card */}
+            <div className="mt-5 grid gap-3 text-sm text-[var(--bhn-text-muted)] sm:grid-cols-2">
+              {props.location ? <p className="flex items-center gap-2"><MapPin size={16} className="text-[var(--bhn-brand-600)]" />{props.location}</p> : null}
+              {props.providerName ? <p className="flex items-center gap-2"><Store size={16} className="text-[var(--bhn-brand-600)]" />Sold by {props.providerName}</p> : null}
+            </div>
+
             {overviewDetails.length > 0 && (
-              <Card padded className="mt-5">
+              <div className="mt-5 border-t border-[var(--bhn-border)] pt-5">
                 <div className="grid grid-cols-2 gap-4 text-left sm:grid-cols-4">
                   {overviewDetails.map((detail) => (
                     <div key={detail.label}>
@@ -437,7 +506,7 @@ export default function ProductDetailLayout(props: Props) {
                     </div>
                   ))}
                 </div>
-              </Card>
+              </div>
             )}
 
           </div>
@@ -454,15 +523,15 @@ export default function ProductDetailLayout(props: Props) {
             items={[
               { id: "description", label: "Description" },
               { id: "specs", label: "Specifications" },
+              ...(canRent ? [{ id: "rental", label: "Rental information" }] : []),
               { id: "reviews", label: "Reviews" },
             ]}
             active={activeTab}
-            onChange={(id) => setActiveTab(id as "description" | "specs" | "reviews")}
+            onChange={(id) => setActiveTab(id as "description" | "specs" | "rental" | "reviews")}
             variant="line"
           />
 
-          {/* Tab Content Box */}
-          <Card padded className="space-y-6">
+          <section className="space-y-6 border-b border-[var(--bhn-border)] pb-8">
             {activeTab === "description" && (
               <div className="space-y-6">
                 <p className="text-sm text-[var(--bhn-text)] leading-relaxed font-normal">
@@ -472,30 +541,30 @@ export default function ProductDetailLayout(props: Props) {
                 {(productFacts.length > 0 || fulfilmentFacts.length > 0) && (
                   <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                     {productFacts.length > 0 && (
-                      <Card padded className="bg-[var(--bhn-brand-50)]">
-                        <h4 className="text-[11px] font-bold uppercase tracking-wider text-[var(--bhn-brand-700)]">Product information</h4>
-                        <dl className="space-y-2 pt-1 text-xs text-[var(--bhn-text-muted)] sm:text-sm">
+                      <section className="border-t border-[var(--bhn-border)] pt-5">
+                        <h4 className="text-sm font-bold text-[var(--bhn-text)]">Product information</h4>
+                        <dl className="mt-3 divide-y divide-[var(--bhn-border)] text-sm text-[var(--bhn-text-muted)]">
                           {productFacts.map((fact) => (
-                            <div key={fact.label} className="flex items-center justify-between gap-4">
+                            <div key={fact.label} className="flex items-center justify-between gap-4 py-3">
                               <dt>{fact.label}</dt>
                               <dd className="text-right font-bold text-[var(--bhn-text)]">{fact.value}</dd>
                             </div>
                           ))}
                         </dl>
-                      </Card>
+                      </section>
                     )}
                     {fulfilmentFacts.length > 0 && (
-                      <Card padded className="bg-[var(--bhn-brand-50)]">
-                        <h4 className="text-[11px] font-bold uppercase tracking-wider text-[var(--bhn-brand-700)]">Fulfilment & support</h4>
-                        <dl className="space-y-2 pt-1 text-xs text-[var(--bhn-text-muted)] sm:text-sm">
+                      <section className="border-t border-[var(--bhn-border)] pt-5">
+                        <h4 className="text-sm font-bold text-[var(--bhn-text)]">Delivery, returns and support</h4>
+                        <dl className="mt-3 divide-y divide-[var(--bhn-border)] text-sm text-[var(--bhn-text-muted)]">
                           {fulfilmentFacts.map((fact) => (
-                            <div key={fact.label} className="flex items-center justify-between gap-4">
+                            <div key={fact.label} className="flex items-center justify-between gap-4 py-3">
                               <dt>{fact.label}</dt>
                               <dd className="text-right font-bold text-[var(--bhn-text)]">{fact.value}</dd>
                             </div>
                           ))}
                         </dl>
-                      </Card>
+                      </section>
                     )}
                   </div>
                 )}
@@ -505,20 +574,34 @@ export default function ProductDetailLayout(props: Props) {
             {activeTab === "specs" && (
               <div>
                 {(props.details || []).length > 0 ? (
-                  <div className="grid gap-3 sm:grid-cols-2">
+                  <dl className="divide-y divide-[var(--bhn-border)] border-y border-[var(--bhn-border)]">
                     {props.details?.map((detail) => (
-                      <Card padded key={detail.label} className="bg-[var(--bhn-brand-50)]">
-                        <p className="text-[11px] font-bold uppercase text-[var(--bhn-brand-700)]">{detail.label}</p>
-                        <p className="mt-1 text-sm font-bold text-[var(--bhn-text)]">{detail.value}</p>
-                      </Card>
+                      <div key={detail.label} className="grid gap-1 py-3 sm:grid-cols-[220px_1fr] sm:gap-6">
+                        <dt className="text-sm text-[var(--bhn-text-muted)]">{detail.label}</dt>
+                        <dd className="text-sm font-bold text-[var(--bhn-text)]">{detail.value}</dd>
+                      </div>
                     ))}
-                  </div>
+                  </dl>
                 ) : (
                   <EmptyState
                     icon={<Package size={24} className="text-[var(--bhn-brand-400)]" />}
                     title="No specifications listed for this product."
                   />
                 )}
+              </div>
+            )}
+
+            {activeTab === "rental" && canRent && (
+              <div className="grid gap-8 md:grid-cols-[minmax(0,1fr)_280px]">
+                <div>
+                  <h2 className="text-xl font-bold text-[var(--bhn-text)]">Plan this rental around your event</h2>
+                  <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--bhn-text-muted)]">Choose the rental dates above to see the duration and estimated item subtotal before adding it to your cart. Final delivery charges and availability are confirmed during checkout.</p>
+                </div>
+                <dl className="divide-y divide-[var(--bhn-border)] border-y border-[var(--bhn-border)] text-sm">
+                  <div className="flex justify-between gap-4 py-3"><dt className="text-[var(--bhn-text-muted)]">Rental rate</dt><dd className="font-bold text-[var(--bhn-text)]">₹{(props.rentalPrice || props.price).toLocaleString("en-IN")} / {props.rentalDuration || "day"}</dd></div>
+                  <div className="flex justify-between gap-4 py-3"><dt className="text-[var(--bhn-text-muted)]">Selected duration</dt><dd className="font-bold text-[var(--bhn-text)]">{rentalDays > 0 ? `${rentalDays} ${rentalDays === 1 ? "day" : "days"}` : "Select dates"}</dd></div>
+                  <div className="flex justify-between gap-4 py-3"><dt className="text-[var(--bhn-text-muted)]">Quantity</dt><dd className="font-bold text-[var(--bhn-text)]">{qty}</dd></div>
+                </dl>
               </div>
             )}
 
@@ -599,7 +682,7 @@ export default function ProductDetailLayout(props: Props) {
                 </div>
               </div>
             )}
-          </Card>
+          </section>
 
           <div className="space-y-1 pt-2">
             <SectionHeader title="Similar Products" subtitle={props.category ? `More approved picks from ${props.category}` : "More approved marketplace picks"} />
