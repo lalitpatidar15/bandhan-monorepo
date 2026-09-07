@@ -88,28 +88,28 @@ export function PortalSidebar({
   const sidebarContent = (
     <div className="flex h-full flex-col">
       {/* Logo */}
-      <div className="flex items-center gap-3 px-5 py-5">
+      <div className="flex min-h-[72px] items-center gap-3 border-b border-[var(--bhn-border)] px-5 py-4">
         {logo || (
-          <span className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold text-white" style={{ background: 'var(--bhn-brand-600)' }}>
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg text-sm font-extrabold text-white shadow-sm" style={{ background: 'var(--bhn-brand-700)' }}>
             B
           </span>
         )}
         {portalName && (
-          <span className="hidden text-sm font-semibold text-[var(--bhn-text)] md:block">{portalName}</span>
+          <span className="hidden font-[var(--bhn-font-display)] text-sm font-bold tracking-tight text-[var(--bhn-text)] md:block">{portalName}</span>
         )}
       </div>
 
       {/* Actions */}
       {actions && (
-        <div className="px-4 pb-3">{actions}</div>
+        <div className="border-b border-[var(--bhn-border)] px-4 py-4">{actions}</div>
       )}
 
       {/* Nav sections */}
-      <nav className="flex-1 overflow-y-auto px-3 py-2">
+      <nav className="flex-1 overflow-y-auto px-3 py-4">
         {sections.map((section, si) => (
-          <div key={si} className="mb-3">
+          <div key={si} className="mb-5">
             {section.title && (
-              <p className="mb-1.5 px-2 text-[10px] font-bold uppercase tracking-wider text-[var(--bhn-text-soft)]">
+              <p className="mb-1.5 px-3 text-[10px] font-extrabold uppercase tracking-[0.16em] text-[var(--bhn-text-soft)]">
                 {section.title}
               </p>
             )}
@@ -124,8 +124,8 @@ export function PortalSidebar({
                     <button
                       type="button"
                       onClick={() => toggleSection(item.label)}
-                      className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
-                        active ? 'bg-[var(--bhn-brand-50)] text-[var(--bhn-brand-700)]' : 'text-[var(--bhn-text-muted)] hover:bg-[var(--bhn-surface)]'
+                      className={`relative flex min-h-10 w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold transition ${
+                        active ? 'bg-[var(--bhn-brand-50)] text-[var(--bhn-brand-700)] before:absolute before:bottom-2 before:left-0 before:top-2 before:w-0.5 before:rounded-full before:bg-[var(--bhn-brand-600)]' : 'text-[var(--bhn-text-muted)] hover:bg-[var(--bhn-neutral-100)] hover:text-[var(--bhn-text)]'
                       }`}
                     >
                       {item.icon && <span className="shrink-0">{item.icon}</span>}
@@ -167,10 +167,10 @@ export function PortalSidebar({
                   key={item.label}
                   href={onNavigate ? undefined : item.href}
                   onClick={onNavigate && item.href ? () => handleNavClick(item.href!) : undefined}
-                  className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
+                  className={`relative flex min-h-10 items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold transition ${
                     active
-                      ? 'bg-[var(--bhn-brand-50)] text-[var(--bhn-brand-700)]'
-                      : 'text-[var(--bhn-text-muted)] hover:bg-[var(--bhn-surface)]'
+                      ? 'bg-[var(--bhn-brand-50)] text-[var(--bhn-brand-700)] before:absolute before:bottom-2 before:left-0 before:top-2 before:w-0.5 before:rounded-full before:bg-[var(--bhn-brand-600)]'
+                      : 'text-[var(--bhn-text-muted)] hover:bg-[var(--bhn-neutral-100)] hover:text-[var(--bhn-text)]'
                   }`}
                 >
                   {item.icon && <span className="shrink-0">{item.icon}</span>}
@@ -287,8 +287,8 @@ export function PortalSidebar({
 
       {/* Desktop sidebar */}
       <aside
-        className={`hidden h-dvh w-64 shrink-0 overflow-y-auto border-r lg:block ${className || ''}`}
-        style={{ background: 'var(--bhn-surface-2)', borderColor: 'var(--bhn-border)' }}
+        className={`hidden h-dvh w-60 shrink-0 overflow-y-auto border-r lg:block ${className || ''}`}
+        style={{ background: 'var(--bhn-surface)', borderColor: 'var(--bhn-border-strong)' }}
       >
         {sidebarContent}
       </aside>
