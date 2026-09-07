@@ -308,8 +308,8 @@ export default function ProductDetailLayout(props: Props) {
   if (props.soldCount !== undefined && props.soldCount > 0) activitySummary.push(`${props.soldCount} sold`);
 
   return (
-    <div className="min-h-screen w-full bg-[var(--bhn-bg)] py-5 sm:py-8">
-      <div className="mx-auto max-w-7xl space-y-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen w-full bg-[#FBFAF8] py-6 sm:py-9">
+      <div className="mx-auto max-w-[1440px] space-y-10 px-4 sm:px-6 lg:px-8">
         
         {/* Breadcrumb Navigation */}
         <nav aria-label="Breadcrumb" className="flex items-center gap-2 overflow-hidden text-xs text-[var(--bhn-text-muted)] sm:text-sm">
@@ -320,7 +320,7 @@ export default function ProductDetailLayout(props: Props) {
         </nav>
 
         {/* --- TOP SECTION: IMAGE GALLERY & ACTIONS --- */}
-        <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(380px,0.9fr)] xl:gap-12">
+        <div className="grid items-start gap-9 lg:grid-cols-[minmax(0,1.08fr)_minmax(400px,0.92fr)] xl:gap-16">
           
           {/* Main Image & Thumbnails Container */}
           <div className="min-w-0">
@@ -332,7 +332,7 @@ export default function ProductDetailLayout(props: Props) {
               showThumbnails={images.length > 1}
               aspectRatio="4:3"
               enableZoom
-              className="rounded-2xl border border-[var(--bhn-border)] bg-white"
+              className="rounded-xl border border-[#E3DCD5] bg-white shadow-[0_8px_28px_rgba(42,28,22,.06)]"
             />
           </div>
 
@@ -342,7 +342,7 @@ export default function ProductDetailLayout(props: Props) {
               <p className="text-xs font-bold uppercase tracking-[0.15em] text-[var(--bhn-brand-600)]">{props.providerName || props.category || "Bandhan seller"}</p>
               {props.availability ? <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700">{props.availability}</span> : null}
             </div>
-            <h1 className="mt-2 text-3xl font-extrabold leading-tight tracking-tight text-[var(--bhn-text)] sm:text-4xl">
+            <h1 className="mt-3 font-display text-3xl font-bold leading-[1.08] tracking-[-0.04em] text-[#1A1612] sm:text-[2.65rem]">
               {props.title}
             </h1>
 
@@ -426,7 +426,7 @@ export default function ProductDetailLayout(props: Props) {
             </div>
 
             {/* Action Buttons: Row 1 */}
-            <div className="mt-6 grid grid-cols-2 gap-3 max-sm:sticky max-sm:bottom-0 max-sm:z-20 max-sm:-mx-4 max-sm:border-t max-sm:border-[var(--bhn-border)] max-sm:bg-white max-sm:p-4">
+            <div className="mt-7 grid grid-cols-2 gap-3 max-sm:sticky max-sm:bottom-0 max-sm:z-20 max-sm:-mx-4 max-sm:border-t max-sm:border-[var(--bhn-border)] max-sm:bg-white max-sm:p-4">
               <Button
                 variant={isInCart ? "secondary" : "primary"}
                 size="sm"
