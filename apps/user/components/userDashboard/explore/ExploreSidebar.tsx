@@ -41,7 +41,7 @@ const ExploreSidebar = ({ viewMode, filters, categories, onChange, onClear }: Ex
   ];
 
   return (
-    <aside className="lg:w-72 shrink-0">
+    <aside className="w-full min-w-0">
       <Button
         variant="secondary"
         size="sm"
