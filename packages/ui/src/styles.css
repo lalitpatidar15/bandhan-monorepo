@@ -38,9 +38,7 @@
 
 .bhn-page-shell {
   min-height: 100dvh;
-  background:
-    radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--bhn-brand-100) 42%, transparent), transparent 24rem),
-    var(--bhn-bg);
+  background: var(--bhn-bg);
 }
 .bhn-page-main {
   width: min(100% - 2rem, var(--bhn-content-max));
@@ -241,19 +239,19 @@
 }
 
 .bhn-btn-primary {
-  background: linear-gradient(180deg, var(--bhn-brand-500), var(--bhn-brand-600));
+  background: var(--bhn-brand-600);
   color: var(--bhn-text-on-brand);
-  box-shadow: var(--bhn-shadow-sm), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  box-shadow: 0 1px 2px rgba(63, 29, 20, 0.18);
 }
 .bhn-btn-primary:not(:disabled):hover {
-  background: linear-gradient(180deg, var(--bhn-brand-600), var(--bhn-brand-700));
-  box-shadow: var(--bhn-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  background: var(--bhn-brand-700);
+  box-shadow: 0 6px 16px rgba(99, 40, 28, 0.18);
   transform: translateY(-1px);
 }
 
 .bhn-btn-secondary {
   background: var(--bhn-brand-50);
-  border-color: var(--bhn-brand-600);
+  border-color: var(--bhn-brand-200);
   color: var(--bhn-brand-800);
   box-shadow: none;
 }
@@ -419,15 +417,15 @@
 
 .bhn-card {
   background: var(--bhn-surface);
-  border: 1px solid var(--bhn-border);
+  border: 1px solid var(--bhn-border-strong);
   border-radius: var(--bhn-radius-lg);
-  box-shadow: 0 1px 2px rgba(54, 35, 22, 0.04), 0 10px 30px rgba(54, 35, 22, 0.035);
+  box-shadow: var(--bhn-shadow-sm);
 }
 .bhn-card-hover {
   transition: transform var(--bhn-transition), box-shadow var(--bhn-transition), border-color var(--bhn-transition);
 }
 .bhn-card-hover:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   box-shadow: var(--bhn-shadow-md);
   border-color: var(--bhn-border-strong);
 }
