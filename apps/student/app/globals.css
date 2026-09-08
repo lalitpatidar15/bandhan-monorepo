@@ -54,3 +54,45 @@ input, select, textarea, button {
   min-width: 0;
   font-family: inherit;
 }
+
+/* Normalize legacy Academy pages without changing their data flow. */
+[class*="bg-[#FFF8F4]"],
+[class*="bg-[#FFF6F1]"],
+[class*="bg-[#F9F4F1]"],
+[class*="bg-[#F8F5F2]"] {
+  background-color: var(--bhn-bg) !important;
+}
+
+[class*="bg-[#F6EAE4]"],
+[class*="bg-[#F7FAFC]"] {
+  background-color: var(--bhn-surface-2) !important;
+}
+
+[class*="text-[#2D201B]"],
+[class*="text-[#241B18]"],
+[class*="text-[#2B211E]"] {
+  color: var(--bhn-text) !important;
+}
+
+[class*="text-[#8A7A71]"],
+[class*="text-[#6F5E55]"],
+[class*="text-[#7C6C64]"] {
+  color: var(--bhn-text-muted) !important;
+}
+
+[class*="border-[#E8DDD5]"],
+[class*="border-[#D6C6BC]"],
+[class*="border-[#E6DBD3]"] {
+  border-color: var(--bhn-border) !important;
+}
+
+[class*="bg-[#8B4A28]"],
+[class*="bg-[#8A4A26]"],
+[class*="bg-[#924C2B]"],
+[class*="bg-[#b86a3a]"] { background-color: var(--bhn-brand-600) !important; }
+
+[class~="rounded-3xl"] { border-radius: var(--bhn-radius-xl) !important; }
+[class~="rounded-2xl"] { border-radius: var(--bhn-radius-lg) !important; }
+[class~="font-serif"] { font-family: var(--bhn-font-display) !important; }
+
+main { min-width: 0; }

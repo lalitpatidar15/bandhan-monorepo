@@ -5,7 +5,7 @@ import { CareersHeader } from "@/components/CareersHeader";
 import { JobCard } from "./JobCard";
 import { FilterSidebar } from "./FilterSidebar";
 import { Button, EmptyState, Spinner } from "@bandhan/ui";
-import { BriefcaseBusiness, SearchX } from "lucide-react";
+import { ArrowUpRight, BriefcaseBusiness, Building2, MapPin, SearchX } from "lucide-react";
 import { useGetJobsQuery } from "../app/Jobseeker/redux/services/JobsApi";
 
 type SortOption =
@@ -107,6 +107,7 @@ export function JobListingPage() {
     const [remoteFilter, setRemoteFilter] = useState<RemoteFilterValue>("all");
     const [visibleJobs, setVisibleJobs] = useState(PAGE_SIZE);
     const [sortBy, setSortBy] = useState<SortOption>("most-relevant");
+    const [selectedJobId, setSelectedJobId] = useState("");
 
     // Map API items to UI-friendly shape
     const jobs = useMemo(() => {
@@ -202,6 +203,13 @@ export function JobListingPage() {
     // Effective total depends on whether a filter/search is active
     const totalAvailable = getTotalJobsFromResponse(data) ?? jobs.length;
     const effectiveTotal = isFilterActive ? filteredJobs.length : totalAvailable;
+    const selectedJob = filteredJobs.find((job) => job.jobId === selectedJobId) ?? filteredJobs[0];
+
+    useEffect(() => {
+        if (selectedJob && selectedJob.jobId !== selectedJobId) {
+            setSelectedJobId(selectedJob.jobId);
+        }
+    }, [selectedJob, selectedJobId]);
 
     // Buttons
     const showLoadMore =
@@ -246,18 +254,18 @@ export function JobListingPage() {
     };
 
     return (
-        <div className="min-h-screen bg-[#FFF8F4] text-brown-950">
+        <div className="min-h-screen bg-[var(--bhn-bg)] text-[var(--bhn-text)]">
             <CareersHeader variant="jobs" activeTab="Jobs" />
 
-            <div className="px-4 sm:px-6 lg:px-5 py-3 text-xs text-[#8A7A72] bg-[#FFF6F1]">
+            <div className="mx-auto max-w-[1680px] px-4 py-3 text-xs text-[var(--bhn-text-muted)] sm:px-6 lg:px-8">
                 <span className="text-[#2D201B] font-medium">Home</span>
                 <span className="mx-2">/</span>
                 <span>Jobs</span>
             </div>
 
-            <div className="px-4 sm:px-6 lg:px-8 py-6">
+            <div className="mx-auto max-w-[1680px] px-4 py-5 sm:px-6 lg:px-8">
                 <div className="space-y-6 w-full">
-                    <div className="flex flex-col sm:flex-row gap-3 bhn-card bhn-card-pad shadow-sm">
+                    <div className="bhn-toolbar flex flex-col gap-3 sm:flex-row">
                         <input
                             type="text"
                             placeholder="Job title / keyword"
@@ -280,8 +288,8 @@ export function JobListingPage() {
                         </Button>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-6">
-                        <div className="hidden md:block">
+                    <div className="grid grid-cols-1 gap-5 lg:grid-cols-[240px_minmax(330px,440px)_minmax(0,1fr)]">
+                        <div className="hidden lg:block">
                             <FilterSidebar
                                 jobs={jobs}
                                 selectedJobTypes={selectedJobTypes}
@@ -296,8 +304,8 @@ export function JobListingPage() {
                             />
                         </div>
 
-                        <div className="space-y-6 w-full">
-                            <div className="bhn-card bhn-card-pad flex flex-col gap-4">
+                        <div className="min-w-0 space-y-4">
+                            <div className="flex flex-col gap-4 border-b border-[var(--bhn-border)] pb-4">
                                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                                     <div>
                                         <p className="text-base font-bold text-[#2D201B]">
@@ -325,7 +333,7 @@ export function JobListingPage() {
                                 </div>
                             </div>
 
-                            <div className="space-y-4">
+                            <div className="space-y-3">
                                 {isLoading && (
                                     <div className="bhn-card">
                                         <Spinner center />
@@ -356,7 +364,12 @@ export function JobListingPage() {
                                 {!isLoading && !isError && filteredJobs.length > 0 && (
                                     <>
                                         {filteredJobs.slice(0, visibleJobs).map((job, index) => (
-                                            <JobCard key={`${job.title}-${index}`} {...job} />
+                                            <JobCard
+                                                key={`${job.title}-${index}`}
+                                                {...job}
+                                                selected={selectedJob?.jobId === job.jobId}
+                                                onSelect={() => setSelectedJobId(job.jobId)}
+                                            />
                                         ))}
                                     </>
                                 )}
@@ -385,6 +398,35 @@ export function JobListingPage() {
                                 </div>
                             )}
                         </div>
+
+                        <aside className="hidden min-w-0 lg:block">
+                            <div className="sticky top-24 min-h-[560px] border-l border-[var(--bhn-border)] pl-6">
+                                {selectedJob ? (
+                                    <>
+                                        <div className="flex items-start justify-between gap-4">
+                                            <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl bg-[var(--bhn-surface-2)] text-[var(--bhn-brand-700)]">
+                                                {selectedJob.companyLogo ? <img src={selectedJob.companyLogo} alt="" className="h-full w-full object-cover" /> : <Building2 size={24} />}
+                                            </div>
+                                            <a href={selectedJob.href} className="bhn-btn bhn-btn-primary bhn-btn-sm">Apply now <ArrowUpRight size={15} /></a>
+                                        </div>
+                                        <p className="mt-7 text-xs font-bold uppercase tracking-[0.12em] text-[var(--bhn-brand-700)]">{selectedJob.company}</p>
+                                        <h2 className="mt-2 text-2xl font-bold leading-tight">{selectedJob.title}</h2>
+                                        <div className="mt-4 flex flex-wrap gap-2">
+                                            <span className="bhn-badge bhn-badge-neutral"><MapPin size={13} />{selectedJob.location}</span>
+                                            <span className="bhn-badge bhn-badge-brand">{selectedJob.badgeText}</span>
+                                        </div>
+                                        <p className="mt-5 text-lg font-bold">{selectedJob.salary}</p>
+                                        <div className="my-6 h-px bg-[var(--bhn-border)]" />
+                                        <h3 className="text-base font-bold">About the role</h3>
+                                        <p className="mt-3 whitespace-pre-line text-sm leading-7 text-[var(--bhn-text-muted)]">{selectedJob.details}</p>
+                                        <div className="mt-6 flex flex-wrap gap-2">{selectedJob.tags.map((tag) => <span key={tag} className="bhn-badge bhn-badge-neutral">{tag}</span>)}</div>
+                                        <a href={selectedJob.href} className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-[var(--bhn-brand-700)] hover:underline">Open full job details <ArrowUpRight size={15} /></a>
+                                    </>
+                                ) : (
+                                    <EmptyState icon={<BriefcaseBusiness size={28} />} title="Select a job" description="Choose a role to review its details." />
+                                )}
+                            </div>
+                        </aside>
                     </div>
                 </div>
             </div>

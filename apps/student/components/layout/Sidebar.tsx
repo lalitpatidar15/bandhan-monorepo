@@ -12,7 +12,7 @@ export default function Sidebar() {
     {
       items: [
         { label: 'Dashboard', href: '/student', icon: <LayoutDashboard size={16} /> },
-        { label: 'Explore courses', href: '/student/allcourse', icon: <BookOpen size={16} /> },
+        { label: 'Explore courses', href: '/student/courses', icon: <BookOpen size={16} /> },
         { label: 'My learning', href: '/student/mycourse', icon: <GraduationCap size={16} /> },
         { label: 'Wishlist', href: '/student/wishlist', icon: <Heart size={16} /> },
         { label: 'Notifications', href: '/student/notifications', icon: <Bell size={16} /> },

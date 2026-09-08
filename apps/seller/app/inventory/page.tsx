@@ -5,13 +5,13 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import Sidebar from "../../components/Sidebar";
+import SellerHeader from "../../components/SellerHeader";
 import {
   useGetInventoryProductsQuery,
   useGetInventoryStatsQuery,
   useDeleteInventoryProductMutation,
 } from "@/lib/store/api/inventoryApi";
 import {
-  Bell,
   Search,
   Grid2X2,
   List,
@@ -331,47 +331,7 @@ export default function InventoryPage() {
 
       {/* MAIN CONTENT AREA */}
       <div className="flex-1 overflow-hidden">
-        {/* HEADER */}
-        <div className="bg-[var(--bhn-surface-2)] border-b border-[var(--bhn-border)] px-4 sm:px-5 py-4">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            {/* SEARCH */}
-            <div className="relative w-full lg:w-[420px]">
-              <Search
-                size={18}
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--bhn-text-soft)]"
-              />
-              <input
-                type="text"
-                placeholder="Search products..."
-                value={search}
-                onChange={(e) => {
-                  setSearch(e.target.value);
-                  setCurrentPage(1);
-                }}
-                className="w-full h-[48px] rounded-full bhn-input pl-11 pr-4 text-sm"
-              />
-            </div>
-
-            {/* RIGHT HEADER ACTIONS */}
-            <div className="flex items-center justify-between lg:justify-end gap-4">
-              <Link href="/inventory/add-product">
-                <Button variant="primary" icon={<Plus size={16} />}>
-                  Add Product
-                </Button>
-              </Link>
-
-              <button className="text-[var(--bhn-text-muted)] hover:text-[var(--bhn-text)] transition p-2 rounded-lg hover:bg-[var(--bhn-surface-3)]">
-                <Bell size={20} />
-              </button>
-
-              <img
-                src="/profile.png"
-                alt="profile"
-                className="w-9 h-9 rounded-full object-cover border border-[var(--bhn-border)]"
-              />
-            </div>
-          </div>
-        </div>
+        <SellerHeader />
 
         {isViewModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 py-6">
@@ -486,13 +446,14 @@ export default function InventoryPage() {
         )}
 
         {/* PAGE BODY */}
-        <div className="p-4 sm:p-6">
+        <div className="mx-auto w-full max-w-[1600px] p-4 sm:p-6">
           {/* TITLE & VIEW CONTROLS */}
           <PageHeader
             title="Products"
             subtitle="Manage your listings, pricing and availability"
             actions={
               <div className="flex items-center gap-2">
+                <Link href="/inventory/add-product"><Button variant="primary" icon={<Plus size={16} />}>Add Product</Button></Link>
                 <Button
                   onClick={() => setViewMode("list")}
                   variant={viewMode === "list" ? "soft" : "secondary"}

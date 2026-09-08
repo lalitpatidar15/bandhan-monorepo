@@ -150,47 +150,21 @@ export default function CourseDetails() {
     <div className="bg-[var(--bhn-bg)] min-h-screen">
       <StudentHeader />
 
-      <div
-        className="
-          flex
-          flex-col
-          xl:flex-row
-          gap-5
-          px-4
-          sm:px-6
-          md:px-5
-          lg:px-6
-          py-6
-        "
-      >
+      <div className="mx-auto grid w-full max-w-[1480px] grid-cols-1 gap-8 px-4 py-6 sm:px-6 lg:px-8 lg:py-10 xl:grid-cols-[minmax(0,1fr)_380px]">
 
         {/* LEFT SIDE */}
-        <div className="flex-1 w-full">
+        <main className="min-w-0 w-full">
 
           {/* IMAGE */}
           <img
             src={courseThumbnail}
             alt={courseTitle}
-            className="
-              w-full
-              h-[220px]
-              sm:h-[320px]
-              md:h-[420px]
-              object-cover
-              rounded-xl
-            "
+            className="aspect-video w-full rounded-2xl border border-[var(--bhn-border)] bg-[var(--bhn-surface-2)] object-cover"
           />
 
           {/* TITLE */}
           <h1
-            className="
-              text-2xl
-              sm:text-xl
-              lg:text-2xl
-              font-semibold
-              mt-5
-              leading-snug
-            "
+            className="mt-7 max-w-4xl text-3xl font-bold leading-tight tracking-[-0.025em] sm:text-4xl"
           >
             {course.title}
           </h1>
@@ -205,7 +179,7 @@ export default function CourseDetails() {
               mt-3
               text-sm
               sm:text-base
-              text-gray-600
+              text-[var(--bhn-text-muted)]
             "
           >
             <span>{instructorName}</span>
@@ -222,10 +196,9 @@ export default function CourseDetails() {
           {/* ABOUT */}
           <h2
             className="
-              mt-4
-              font-semibold
-              text-2xl
-              sm:text-xl
+              mt-10
+              border-t border-[var(--bhn-border)] pt-8
+              text-2xl font-bold
             "
           >
             About this course
@@ -233,7 +206,7 @@ export default function CourseDetails() {
 
           <p
             className="
-              text-gray-600
+              text-[var(--bhn-text-muted)]
               mt-2
               leading-relaxed
               text-sm
@@ -247,7 +220,7 @@ export default function CourseDetails() {
           {course.longDescription && (
             <p
               className="
-                text-gray-600
+              text-[var(--bhn-text-muted)]
                 mt-3
                 leading-relaxed
                 text-sm
@@ -269,8 +242,9 @@ export default function CourseDetails() {
           {/* CURRICULUM */}
           <h2
             className="
-             mt-4
-            text-[34px]
+             mt-12
+            border-t border-[var(--bhn-border)] pt-8
+            text-[28px]
             font-bold
             text-[#241B18] dark:text-[#ededed]
             mb-4
@@ -279,7 +253,7 @@ export default function CourseDetails() {
             Curriculum
           </h2>
 
-          <div className="space-y-5">
+          <div className="space-y-3">
 
             {modules.map((module, moduleIndex) => {
 
@@ -290,7 +264,7 @@ export default function CourseDetails() {
                 <div
                   key={moduleKey}
                   className="
-                    bhn-card
+                    border border-[var(--bhn-border)] bg-[var(--bhn-surface)] rounded-xl
                     overflow-hidden
                     transition-all
                     duration-300
@@ -311,8 +285,8 @@ export default function CourseDetails() {
                       justify-between
                       px-4
                       sm:px-6
-                      py-5
-                      sm:py-7
+                      py-4
+                      sm:py-5
                       transition-all
                       duration-300
 
@@ -394,7 +368,7 @@ export default function CourseDetails() {
                         lg:px-12
                         py-6
                         sm:py-8
-                        bg-white
+                        bg-[var(--bhn-surface)]
                         space-y-6
                                 "
                     >
@@ -463,25 +437,17 @@ export default function CourseDetails() {
             })}
           </div>
 
-        </div>
+        </main>
 
         {/* RIGHT SIDE CARD */}
-        <div
-          className="
-            w-full
-            xl:w-[420px]
-            2xl:w-[480px]
-          "
-        >
+        <aside className="w-full">
 
           <div
             className="
-              bhn-card
-              p-5
-              sm:p-5
-              shadow-[var(--bhn-shadow)]
+              border border-[var(--bhn-border-strong)] bg-[var(--bhn-surface)]
+              rounded-2xl p-6
               xl:sticky
-              xl:top-4
+              xl:top-24
             "
           >
 
@@ -774,7 +740,7 @@ export default function CourseDetails() {
 
           </div>
 
-        </div>
+        </aside>
 
       </div>
     </div>

@@ -93,15 +93,15 @@ export function PortalHeader({
   return (
     <header
       className={`${sticky ? 'sticky top-0 z-40' : 'relative z-40'} border-b backdrop-blur-md transition-all duration-300 ${
-        scrolled ? 'shadow-md' : ''
+        scrolled ? 'shadow-[0_8px_24px_rgba(40,28,22,0.06)]' : ''
       }`}
       style={{
-        background: scrolled ? 'rgba(255,255,255,0.95)' : 'var(--bhn-surface-2)',
-        borderColor: scrolled ? 'var(--bhn-border)' : 'transparent',
+        background: 'rgba(255,255,255,0.96)',
+        borderColor: 'var(--bhn-border)',
       }}
     >
       {/* Main row */}
-      <div className="mx-auto flex min-h-[76px] max-w-[1440px] items-center justify-between gap-4 px-5 py-3 sm:px-7 lg:px-10">
+      <div className="mx-auto flex min-h-[68px] max-w-[1520px] items-center justify-between gap-4 px-5 py-2.5 sm:px-7 lg:px-10">
         {/* Logo */}
         <button
           type="button"
@@ -182,7 +182,7 @@ export function PortalHeader({
                 type="button"
                 onClick={() => setDropdownOpen((o) => !o)}
                 aria-label="Account"
-                className="flex h-11 w-11 items-center justify-center rounded-full border transition-all hover:scale-[1.03] hover:shadow-md"
+                className="flex h-10 w-10 items-center justify-center rounded-xl border transition-colors hover:bg-[var(--bhn-surface-2)]"
                 style={{
                   borderColor: dropdownOpen ? 'var(--bhn-brand-400)' : 'var(--bhn-border-strong)',
                   background: dropdownOpen ? 'var(--bhn-brand-50)' : 'var(--bhn-surface)',
@@ -192,7 +192,7 @@ export function PortalHeader({
                 {userAvatar ? (
                   <img src={userAvatar} alt={userName || 'User'} className="h-9 w-9 rounded-full object-cover" />
                 ) : (
-                  <span className="flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold text-white" style={{ background: 'linear-gradient(135deg, var(--bhn-brand-500), var(--bhn-brand-700))' }}>{userName?.charAt(0)?.toUpperCase() || 'U'}</span>
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg text-sm font-bold text-white" style={{ background: 'var(--bhn-brand-700)' }}>{userName?.charAt(0)?.toUpperCase() || 'U'}</span>
                 )}
               </button>
 
@@ -205,7 +205,7 @@ export function PortalHeader({
                   >
                     {userName && (
                       <div className="mb-2 flex items-center gap-3 rounded-xl px-3 py-3" style={{ background: 'var(--bhn-brand-50)' }}>
-                        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-base font-bold text-white" style={{ background: 'linear-gradient(135deg, var(--bhn-brand-500), var(--bhn-brand-700))' }}>
+                        <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-base font-bold text-white" style={{ background: 'var(--bhn-brand-700)' }}>
                           {userName.charAt(0).toUpperCase()}
                         </span>
                         <div className="min-w-0">

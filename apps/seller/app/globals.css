@@ -41,3 +41,55 @@ img, video, canvas {
 input, select, textarea, button {
   min-width: 0;
 }
+
+/* Compatibility layer for authenticated screens that pre-date the shared UI
+   package. It keeps their behavior intact while bringing every seller route
+   onto the same restrained operations palette. */
+[class*="bg-[#F8F3EF]"],
+[class*="bg-[#F4F2EE]"],
+[class*="bg-[#FFF8F4]"],
+[class*="bg-[#FFF6F1]"] {
+  background-color: var(--bhn-bg) !important;
+}
+
+[class*="bg-[#FFF9F5]"],
+[class*="bg-[#FFF9F2]"],
+[class*="bg-[#FFFBF8]"] {
+  background-color: var(--bhn-surface-2) !important;
+}
+
+[class*="text-[#2D201B]"],
+[class*="text-[#2B1E19]"],
+[class*="text-[#1F2937]"] {
+  color: var(--bhn-text) !important;
+}
+
+[class*="text-[#9B928B]"],
+[class*="text-[#7A6D61]"],
+[class*="text-[#6B7280]"] {
+  color: var(--bhn-text-muted) !important;
+}
+
+[class*="border-[#D1D5DB]"],
+[class*="border-[#E7DFD8]"],
+[class*="border-[#E5D7CF]"],
+[class*="border-[#E7DDD4]"] {
+  border-color: var(--bhn-border) !important;
+}
+
+[class*="bg-[#8A4B2A]"],
+[class*="bg-[#8A4A26]"],
+[class*="bg-[#8B4A2F]"],
+[class*="bg-[#7A3E1D]"] { background-color: var(--bhn-brand-600) !important; }
+
+[class~="rounded-3xl"] { border-radius: var(--bhn-radius-xl) !important; }
+[class~="rounded-2xl"] { border-radius: var(--bhn-radius-lg) !important; }
+[class~="font-serif"] { font-family: var(--bhn-font-display) !important; }
+
+main { min-width: 0; }
+
+@media (min-width: 1024px) {
+  main > :where(section, div):not([class*="fixed"]):not([class*="absolute"]) {
+    max-width: 1600px;
+  }
+}

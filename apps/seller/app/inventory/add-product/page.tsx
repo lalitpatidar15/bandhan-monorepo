@@ -2,9 +2,9 @@
 
 export const dynamic = 'force-dynamic';
 
-import Image from "next/image";
 import Sidebar from "../../../components/Sidebar";
-import { Bell, Search, ChevronRight } from "lucide-react";
+import SellerHeader from "../../../components/SellerHeader";
+import { ChevronRight } from "lucide-react";
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, Suspense } from "react";
@@ -23,7 +23,6 @@ type StockStatus = "in_stock" | "low_stock" | "out_of_stock";
 function AddProductPageContent() {
   const router = useRouter();
 
-  const [userName, setUserName] = useState("Seller");
   const [isLoadingProduct, setIsLoadingProduct] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [validationError, setValidationError] = useState("");
@@ -92,13 +91,6 @@ function AddProductPageContent() {
     setProductRating(Number(toNumber(item.rating ?? item.averageRating ?? 0)) || 0);
     setProductReviewCount(Number(toNumber(item.reviewsCount ?? item.numReviews ?? item.reviewCount ?? item.totalReviews ?? item.reviews ?? 0)) || 0);
   };
-
-  useEffect(() => {
-    const storedName = localStorage.getItem("userName");
-    if (storedName) {
-      setUserName(storedName);
-    }
-  }, []);
 
   useEffect(() => {
     const loadCatalogConfig = async () => {
@@ -694,36 +686,13 @@ function AddProductPageContent() {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#F7F4F1] overflow-x-hidden">
+    <div className="flex min-h-screen overflow-x-hidden bg-[var(--bhn-bg)]">
       <Sidebar />
 
       <div className="flex-1 min-w-0">
-        <div className="h-auto min-h-19.5 bg-white border-b border-[#ECE7E2] px-4 sm:px-6 py-4 flex flex-col md:flex-row md:items-center gap-4">
-          <div className="flex items-center w-full">
-            <div className="flex md:hidden items-center bg-[#F7F7F7] border border-[#ECECEC] rounded-full px-4 h-10.5 flex-1 mr-3">
-              <Search size={15} className="text-[#A3A3A3]" />
-              <input type="text" placeholder="Search..." className="bg-transparent outline-none text-sm ml-2 w-full text-[#3B3B3B]" />
-            </div>
+        <SellerHeader />
 
-            <div className="hidden md:flex items-center bg-[#F7F7F7] border border-[#ECECEC] rounded-full px-4 h-10.5 w-full max-w-[320px]">
-              <Search size={15} className="text-[#A3A3A3]" />
-              <input type="text" placeholder="Search orders, products..." className="bg-transparent outline-none text-sm ml-2 w-full text-[#3B3B3B]" />
-            </div>
-
-            <div className="flex items-center gap-3 sm:gap-5 ml-auto">
-              <button className="hover:scale-110 transition" type="button">
-                <Bell size={18} className="text-[#6F6F6F]" />
-              </button>
-
-              <div className="flex items-center gap-3">
-                <span className="text-[13px] text-[#2D2D2D] font-medium hidden sm:block">{userName}</span>
-                <Image src="/profile.png" width={34} height={34} alt="profile" className="rounded-full border" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="px-4 sm:px-6 lg:px-5 py-6 overflow-x-hidden">
+        <div className="mx-auto w-full max-w-[1600px] overflow-x-hidden px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center gap-2 text-[10px] sm:text-[11px] tracking-wide uppercase text-[#A7A09A]">
             <span>Dashboard</span>
             <ChevronRight size={12} />
@@ -734,7 +703,7 @@ function AddProductPageContent() {
 
           <div className="mt-5 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-5">
             <div>
-              <h1 className="text-[30px] sm:text-[40px] leading-none font-serif font-semibold text-[#2D201B]">
+              <h1 className="text-[30px] sm:text-[38px] leading-none font-bold text-[var(--bhn-text)]">
                 {isViewOnly ? "View Product" : productId ? "Edit Product" : "Add New Product"}
               </h1>
               <p className="text-[#8A817A] text-[14px] sm:text-[15px] mt-3">
@@ -775,7 +744,7 @@ function AddProductPageContent() {
             </div>
           )}
 
-          <div className="mt-4 overflow-x-auto scrollbar-hide">
+          <div className="mt-7 overflow-x-auto border-y border-[var(--bhn-border)] py-5 scrollbar-hide">
             <div className="flex items-center min-w-175 lg:min-w-full">
               {STEP_TITLES.map((item, i) => {
                 const isActive = i === activeStep;

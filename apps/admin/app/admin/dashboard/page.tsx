@@ -148,7 +148,7 @@ export default function AdminDashboardPage() {
   const pageTitle = currentPage.replace(/-/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
 
   return (
-    <div className="flex h-dvh w-full overflow-hidden bg-gray-100">
+    <div className="flex h-dvh w-full overflow-hidden bg-[var(--bhn-bg)]">
       <Sidebar
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}

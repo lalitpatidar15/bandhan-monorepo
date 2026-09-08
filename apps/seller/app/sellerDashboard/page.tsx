@@ -4,9 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, useMemo } from "react";
 import {
-    Settings,
-    Bell,
-    Search,
     Wallet,
     ShoppingBag,
     Clock,
@@ -14,6 +11,7 @@ import {
     Download,
 } from "lucide-react";
 import Sidebar from "../../components/Sidebar";
+import SellerHeader from "../../components/SellerHeader";
 import { apiGet } from "@/lib/api";
 import { getCustomerName } from "../../lib/customer";
 import { useGetInventoryProductsQuery, useGetInventoryStatsQuery } from "@/lib/store/api/inventoryApi";
@@ -25,7 +23,6 @@ import {
     statusTone,
     Button,
     Card,
-    SearchInput,
     SectionHeader,
     Skeleton,
 } from "@bandhan/ui";
@@ -217,52 +214,10 @@ export default function SellerDashboard() {
             {/* MAIN */}
             <main className="flex-1">
 
-                {/* HEADER */}
-                <header className="bg-[var(--bhn-surface-2)] border-b border-[var(--bhn-border)] px-4 sm:px-5 py-5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-
-                    {/* SEARCH */}
-                    <div className="relative w-full lg:w-[360px]">
-                        <SearchInput
-                            placeholder="Search orders or services..."
-                            value=""
-                            onChange={() => {}}
-                        />
-                    </div>
-
-                    {/* RIGHT */}
-                    <div className="flex items-center justify-end gap-5">
-
-                        <button className="cursor-pointer">
-                            <Bell size={20} className="text-[var(--bhn-text-muted)]" />
-                        </button>
-
-                        <Link
-                            href="/settings"
-                            aria-label="Open profile settings"
-                            className="cursor-pointer"
-                        >
-                            <Settings size={20} className="text-[var(--bhn-text-muted)]" />
-                        </Link>
-
-                        <Link
-                            href="/settings"
-                            className="font-medium text-[var(--bhn-text)] hover:text-[var(--bhn-brand-700)] transition"
-                        >
-                            {userName}
-                        </Link>
-
-                        <Link href="/settings" aria-label="View seller profile">
-                            <img
-                                src="/profile.png"
-                                alt="profile"
-                                className="w-10 h-10 rounded-full object-cover ring-1 ring-[var(--bhn-border-strong)] hover:ring-[var(--bhn-brand-700)] transition"
-                            />
-                        </Link>
-                    </div>
-                </header>
+                <SellerHeader />
 
                 {/* CONTENT */}
-                <div className="p-4 sm:p-5">
+                <div className="mx-auto w-full max-w-[1600px] p-4 sm:p-6">
 
                     {/* TOP */}
                     <PageHeader

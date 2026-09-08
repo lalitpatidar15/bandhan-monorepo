@@ -54,3 +54,47 @@ input, select, textarea, button {
   min-width: 0;
   font-family: inherit;
 }
+
+/* Careers and recruiter routes formerly used several competing warm palettes.
+   Keep one professional neutral canvas and reserve terracotta for actions. */
+[class*="bg-[#FFF8F4]"],
+[class*="bg-[#FFF6F1]"],
+[class*="bg-[#FEF1E7]"],
+[class*="bg-[#F9F4F1]"] {
+  background-color: var(--bhn-bg) !important;
+}
+
+[class*="bg-[#FFF4EC]"],
+[class*="bg-[#F3E4D8]"] {
+  background-color: var(--bhn-surface-2) !important;
+}
+
+[class*="text-[#2D201B]"],
+[class*="text-[#2D1F1A]"],
+[class*="text-[#3E2F2B]"],
+[class*="text-[#3D2B1F]"] {
+  color: var(--bhn-text) !important;
+}
+
+[class*="text-[#8A7A72]"],
+[class*="text-[#7E5F49]"],
+[class*="text-[#8B7368]"] {
+  color: var(--bhn-text-muted) !important;
+}
+
+[class*="border-[#E0CFC3]"],
+[class*="border-[#E8DDD5]"],
+[class*="border-[#F1E1D7]"] {
+  border-color: var(--bhn-border) !important;
+}
+
+[class*="bg-[#8B3E05]"],
+[class*="bg-[#8B4A28]"],
+[class*="bg-[#924C2B]"],
+[class*="bg-[#7A3E2B]"] { background-color: var(--bhn-brand-600) !important; }
+
+[class~="rounded-3xl"] { border-radius: var(--bhn-radius-xl) !important; }
+[class~="rounded-2xl"] { border-radius: var(--bhn-radius-lg) !important; }
+[class~="font-serif"] { font-family: var(--bhn-font-display) !important; }
+
+main { min-width: 0; }

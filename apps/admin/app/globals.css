@@ -46,7 +46,7 @@
     min-height: 100%;
     margin: 0;
     font-family: var(--bhn-font-sans);
-    background: linear-gradient(180deg, var(--admin-bg-start) 0%, var(--admin-bg) 100%);
+    background: var(--admin-bg);
     color: var(--admin-text);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -62,8 +62,9 @@
 
 @layer components {
   .admin-sidebar {
-    background: linear-gradient(180deg, #3d1a11 0%, #261009 100%);
-    box-shadow: 12px 0 32px rgba(54, 35, 22, 0.16);
+    border-right: 1px solid var(--admin-border);
+    background: var(--admin-surface);
+    box-shadow: none;
   }
 
   .admin-sidebar-item {
@@ -72,15 +73,21 @@
     gap: 0.75rem;
     border-radius: 0.65rem;
     padding: 0.58rem 0.75rem;
-    color: #e8d5cc;
+    color: var(--admin-muted);
     font-size: 0.84rem;
     font-weight: 500;
     text-align: left;
     transition: background-color 150ms ease, color 150ms ease, transform 150ms ease;
   }
-  .admin-sidebar-item:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
-  .admin-sidebar-item-active { background: linear-gradient(90deg, #8B3A28, #7a3323); color: #fff; box-shadow: 0 8px 16px rgba(122, 51, 35, 0.28); }
-  .admin-sidebar-item-active:hover { background: linear-gradient(90deg, #7a3323, #63281c); }
+  .admin-sidebar-item:hover { background: var(--bhn-surface-2); color: var(--admin-text); }
+  .admin-sidebar-item-active { background: var(--bhn-brand-50); color: var(--bhn-brand-800); box-shadow: inset 3px 0 var(--bhn-brand-600); }
+  .admin-sidebar-item-active:hover { background: var(--bhn-brand-100); }
+
+  .admin-sidebar .text-white { color: var(--admin-text) !important; }
+  .admin-sidebar [class*="text-[#e8d5cc]"],
+  .admin-sidebar [class*="text-[#f1a596]"] { color: var(--admin-muted) !important; }
+  .admin-sidebar [class*="border-white"] { border-color: var(--admin-border) !important; }
+  .admin-sidebar [class*="bg-white/5"] { background: var(--bhn-surface-2) !important; }
   .card {
     border: 1px solid var(--admin-border);
     background: var(--admin-surface);

@@ -120,7 +120,7 @@ export default function CoursesPage() {
     <main className="min-h-screen bg-[var(--bhn-bg)] text-[var(--bhn-text)]">
       <StudentHeader />
 
-      <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-5">
+      <section className="mx-auto max-w-[1480px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         {/* PAGE HEADER */}
         <PageHeader
           title="Student Dashboard"
@@ -162,15 +162,15 @@ export default function CoursesPage() {
 
         {/* HERO */}
         <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_360px]">
-          <div className="rounded-3xl bg-[#2D201B] p-4 text-white shadow-sm sm:p-5 lg:p-4">
-            <p className="flex items-center gap-2 text-sm font-semibold text-[#F5CF9E]">
+          <div className="rounded-2xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-6 sm:p-8 lg:p-10">
+            <p className="flex items-center gap-2 text-sm font-semibold text-[var(--bhn-brand-700)]">
               <Sparkles size={17} />
               Personalized learning dashboard
             </p>
-            <h1 className="mt-4 max-w-3xl text-2xl font-semibold leading-tight sm:text-2xl">
+            <h1 className="mt-4 max-w-3xl text-3xl font-bold leading-tight tracking-[-0.025em] text-[var(--bhn-text)] sm:text-4xl">
               Build your next skill with focused tests and guided courses.
             </h1>
-            <p className="mt-4 max-w-2xl text-sm leading-6 text-[#E8DAD0] sm:text-base">
+            <p className="mt-4 max-w-2xl text-sm leading-7 text-[var(--bhn-text-muted)] sm:text-base">
               Learn from expert mentors, continue your saved courses, and practice with focused tests from one place.
             </p>
 
@@ -181,13 +181,7 @@ export default function CoursesPage() {
                     .getElementById("recommended-courses")
                     ?.scrollIntoView({ behavior: "smooth" })
                 }
-                className="
-                bg-[var(--bhn-surface)]
-                !text-[#2D201B] dark:text-[#ededed]
-                border border-[#E5D7CC] dark:border-[#374151]
-                hover:bg-[#F7EFE8] dark:hover:bg-[#1a1a1a] dark:bg-[#1a1a1a]
-                hover:!text-[#2D201B] dark:text-[#ededed]
-               "
+                className="bhn-btn bhn-btn-primary"
                 size="lg"
               >
                 Explore Courses
@@ -200,15 +194,15 @@ export default function CoursesPage() {
                 [String(heroCourses), "Courses active"],
                 [`${heroGoal}%`, "Weekly goal"],
               ].map(([value, label]) => (
-                <div key={label} className="rounded-2xl bg-[var(--bhn-surface)]/10 p-4">
-                  <p className="text-2xl font-semibold">{value}</p>
-                  <p className="mt-1 text-xs uppercase tracking-[0.14em] text-[#E8DAD0]">{label}</p>
+                <div key={label} className="border-l-2 border-[var(--bhn-brand-200)] pl-4">
+                  <p className="text-2xl font-semibold text-[var(--bhn-text)]">{value}</p>
+                  <p className="mt-1 text-xs uppercase tracking-[0.12em] text-[var(--bhn-text-muted)]">{label}</p>
                 </div>
               ))}
             </div>
           </div>
 
-          <aside className="rounded-3xl border border-[var(--bhn-border)] dark:border-[#374151] bg-[var(--bhn-surface)] p-5 shadow-sm">
+          <aside className="rounded-2xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-5">
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-semibold">Continue Learning</h2>
               <Flame className="text-[var(--bhn-brand-700)] dark:text-[#c9a882]" size={22} />
@@ -275,7 +269,7 @@ export default function CoursesPage() {
         </div>
 
         <section id="recommended-courses" className="mt-6 grid gap-4 xl:grid-cols-[280px_minmax(0,1fr)]">
-          <aside className="h-fit rounded-3xl border border-[var(--bhn-border)] dark:border-[#374151] bg-[var(--bhn-surface)] p-5 shadow-sm">
+          <aside className="h-fit rounded-2xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-5 lg:sticky lg:top-24">
             <h3 className="text-lg font-bold">Filters</h3>
             <div className="mt-5 space-y-5">
               <div>

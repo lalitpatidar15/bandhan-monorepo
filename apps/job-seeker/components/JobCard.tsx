@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { useState } from "react";
-import { Button, Badge } from "@bandhan/ui";
-import { Bookmark } from "lucide-react";
+import type { MouseEvent } from "react";
+import { Badge } from "@bandhan/ui";
+import { Bookmark, Building2, MapPin } from "lucide-react";
 import { useSaveJobMutation, useRemoveSavedJobMutation } from "@/app/Jobseeker/redux/services/JobsApi";
 
 interface JobCardProps {
@@ -16,13 +17,9 @@ interface JobCardProps {
   companyLogo?: string;
   jobId?: string;
   isSaved?: boolean;
+  selected?: boolean;
+  onSelect?: () => void;
 }
-
-const badgeIcons: Record<string, string> = {
-  REMOTE: "💻",
-  HYBRID: "🏢",
-  "ON-SITE": "📍",
-};
 
 function JobSaveButton({ jobId, initialSaved }: { jobId?: string; initialSaved: boolean }) {
   const [saved, setSaved] = useState(initialSaved);
@@ -31,7 +28,8 @@ function JobSaveButton({ jobId, initialSaved }: { jobId?: string; initialSaved: 
 
   const loading = isSaving || isRemoving;
 
-  const handleToggle = async () => {
+  const handleToggle = async (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
     if (!jobId) {
       alert("Unable to save: missing job id");
       return;
@@ -70,25 +68,27 @@ function JobSaveButton({ jobId, initialSaved }: { jobId?: string; initialSaved: 
 }
 
 export function JobCard(props: JobCardProps) {
-  const { title, company, location, salary, tags, badgeText, details, href, companyLogo, jobId, isSaved } = props;
+  const { title, company, location, salary, tags, badgeText, details, href, companyLogo, jobId, isSaved, selected, onSelect } = props;
   return (
-    <article className="bhn-card bhn-card-hover bhn-card-pad hover:cursor-default">
-      <div className="flex flex-col lg:flex-row lg:items-start gap-6">
-        {/* Left: Company Logo + Job Info */}
-        <div className="flex items-start gap-4 flex-1 min-w-0">
-          {/* Company Logo */}
-          <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-[#F3E4D8] dark:bg-[#2a2018] flex-shrink-0 text-2xl overflow-hidden">
+    <article
+      onClick={onSelect}
+      className={[
+        "bhn-card p-4 transition-all",
+        onSelect ? "cursor-pointer" : "",
+        selected ? "border-[var(--bhn-brand-500)] shadow-[0_0_0_2px_var(--bhn-brand-100)]" : "hover:border-[var(--bhn-border-strong)]",
+      ].join(" ")}
+    >
+      <div className="flex items-start gap-3">
+        <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[var(--bhn-surface-2)] flex-shrink-0 overflow-hidden text-[var(--bhn-brand-700)]">
             {companyLogo ? (
               <img src={companyLogo} alt={`${company} logo`} className="h-full w-full object-cover" />
             ) : (
-              badgeIcons[badgeText] || "💼"
+              <Building2 size={21} />
             )}
-          </div>
+        </div>
 
-          {/* Job Details */}
-          <div className="flex-1 min-w-0">
-            {/* Tags */}
-            <div className="flex flex-wrap items-center gap-2 mb-2">
+        <div className="min-w-0 flex-1">
+            <div className="mb-2 flex flex-wrap items-center gap-1.5">
               <Badge tone="brand">{badgeText}</Badge>
               {tags.map((tag) => (
                 <Badge key={tag} tone="neutral">
@@ -97,40 +97,20 @@ export function JobCard(props: JobCardProps) {
               ))}
             </div>
 
-            {/* Job Title */}
-            <h3 className="text-lg font-bold text-[#2D201B] dark:text-[#ededed] mb-2 line-clamp-2">{title}</h3>
+            <h3 className="mb-1.5 line-clamp-2 text-base font-bold text-[var(--bhn-text)]">{title}</h3>
 
-            {/* Company + Location */}
-            <p className="text-sm text-[#8A7A72] dark:text-[#a89080] mb-2">
-              <span className="font-medium">{company}</span>
-              <span className="mx-1">•</span>
-              <span>{location}</span>
+            <p className="mb-2 text-sm text-[var(--bhn-text-muted)]">
+              <span className="font-medium text-[var(--bhn-text)]">{company}</span>
+              <span className="mt-1 flex items-center gap-1"><MapPin size={13} />{location}</span>
             </p>
 
-            {/* Salary */}
-            <p className="text-sm font-semibold text-[#2D201B] dark:text-[#ededed] mb-3">{salary}</p>
-
-            {/* Description */}
-            <p className="text-sm text-[#8A7A72] dark:text-[#a89080] leading-relaxed line-clamp-2">{details}</p>
-          </div>
+            <p className="text-sm font-semibold text-[var(--bhn-text)]">{salary}</p>
+            <p className="mt-2 line-clamp-2 text-sm leading-6 text-[var(--bhn-text-muted)]">{details}</p>
         </div>
 
-        {/* Right: Apply Button */}
-        <div className="flex lg:flex-col items-center justify-between lg:items-end gap-3">
-          <div className="text-right">
-            <JobSaveButton jobId={jobId} initialSaved={Boolean(isSaved)} />
-          </div>
-          {href ? (
-            <Link href={href} className="w-full lg:w-auto">
-              <Button className="w-full lg:w-auto text-white text-xs font-semibold py-2 px-6 rounded-lg">
-                Apply Now
-              </Button>
-            </Link>
-          ) : (
-            <Button className="w-full lg:w-auto text-white text-xs font-semibold py-2 px-6 rounded-lg" onClick={() => alert(`Apply for: ${title} at ${company}`)}>
-              Apply Now
-            </Button>
-          )}
+        <div className="flex shrink-0 flex-col items-end justify-between self-stretch">
+          <JobSaveButton jobId={jobId} initialSaved={Boolean(isSaved)} />
+          {href ? <Link href={href} onClick={(event) => event.stopPropagation()} className="text-xs font-bold text-[var(--bhn-brand-700)] hover:underline">View role</Link> : null}
         </div>
       </div>
     </article>
