@@ -29,8 +29,8 @@ export default function ProgressPage() {
     ? progress.certificates.map((certificate: any, index: number) => ({
         id: certificate._id ?? certificate.courseId ?? index,
         title: certificate.title ?? "Certificate",
-        date: certificate.issuedDate
-          ? new Date(certificate.issuedDate).toLocaleDateString("en-US", {
+        date: certificate.issuedAt || certificate.issuedDate
+          ? new Date(certificate.issuedAt || certificate.issuedDate).toLocaleDateString("en-US", {
               month: "short",
               year: "numeric",
             })

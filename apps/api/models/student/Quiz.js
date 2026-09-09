@@ -26,9 +26,9 @@ const questionSchema = new mongoose.Schema({
     type: [optionSchema],
     validate: {
       validator: function (options) {
-        return options.length >= 4;
+        return options.length >= 2;
       },
-      message: "Minimum 4 options required"
+      message: "Minimum 2 options required"
     }
   }
 });

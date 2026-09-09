@@ -18,6 +18,155 @@ const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+const escapePdfText = (value) =>
+  String(value || "")
+    .normalize("NFKD")
+    .replace(/[^\x20-\x7E]/g, "")
+    .replace(/\\/g, "\\\\")
+    .replace(/\(/g, "\\(")
+    .replace(/\)/g, "\\)");
+
+const buildCertificatePdf = ({ studentName, courseTitle, issuedAt, certificateId }) => {
+  const issuedLabel = new Date(issuedAt || Date.now()).toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric"
+  });
+  const content = [
+    "q",
+    "0.545 0.227 0.157 RG",
+    "6 w",
+    "24 24 744 564 re S",
+    "0.98 0.961 0.933 rg",
+    "36 36 720 540 re f",
+    "Q",
+    "BT /F2 18 Tf 0.545 0.227 0.157 rg 258 520 Td (BANDHAN ACADEMY) Tj ET",
+    "BT /F2 40 Tf 0.102 0.086 0.071 rg 185 435 Td (Certificate of Completion) Tj ET",
+    "BT /F1 17 Tf 0.420 0.384 0.353 rg 284 380 Td (This certifies that) Tj ET",
+    `BT /F2 30 Tf 0.392 0.157 0.110 rg 180 325 Td (${escapePdfText(studentName)}) Tj ET`,
+    "0.545 0.227 0.157 RG 1 w 150 307 m 642 307 l S",
+    "BT /F1 17 Tf 0.420 0.384 0.353 rg 198 268 Td (has successfully completed the course) Tj ET",
+    `BT /F2 25 Tf 0.102 0.086 0.071 rg 145 220 Td (${escapePdfText(courseTitle)}) Tj ET`,
+    `BT /F1 13 Tf 0.420 0.384 0.353 rg 64 92 Td (Issued: ${escapePdfText(issuedLabel)}) Tj ET`,
+    `BT /F1 10 Tf 0.420 0.384 0.353 rg 510 92 Td (Certificate ID: ${escapePdfText(certificateId)}) Tj ET`
+  ].join("\n");
+
+  const objects = [
+    "<< /Type /Catalog /Pages 2 0 R >>",
+    "<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+    "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 792 612] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> >> /Contents 6 0 R >>",
+    "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",
+    "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>",
+    `<< /Length ${Buffer.byteLength(content, "utf8")} >>\nstream\n${content}\nendstream`
+  ];
+
+  let pdf = "%PDF-1.4\n";
+  const offsets = [0];
+  objects.forEach((object, index) => {
+    offsets[index + 1] = Buffer.byteLength(pdf, "utf8");
+    pdf += `${index + 1} 0 obj\n${object}\nendobj\n`;
+  });
+  const xrefOffset = Buffer.byteLength(pdf, "utf8");
+  pdf += `xref\n0 ${objects.length + 1}\n0000000000 65535 f \n`;
+  offsets.slice(1).forEach((offset) => {
+    pdf += `${String(offset).padStart(10, "0")} 00000 n \n`;
+  });
+  pdf += `trailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`;
+  return Buffer.from(pdf, "utf8");
+};
+
+const getStudentLessonQuizMetadata = (lesson, standaloneQuizId = null) => {
+  const mcqQuestionCount = lesson?.mcqData?.questions?.length || 0;
+  const embeddedQuizQuestionCount = lesson?.quiz?.questions?.length || 0;
+  const hasQuiz = Boolean(
+    standaloneQuizId ||
+    embeddedQuizQuestionCount ||
+    mcqQuestionCount ||
+    lesson?.type === "quiz" ||
+    lesson?.type === "mcq"
+  );
+
+  return {
+    mcqData: mcqQuestionCount
+      ? {
+          duration: lesson.mcqData?.duration || null,
+          passingScore: lesson.mcqData?.passingScore || null,
+          questionCount: mcqQuestionCount
+        }
+      : null,
+    quiz: embeddedQuizQuestionCount
+      ? {
+          _id: lesson.quiz?._id || null,
+          title: lesson.quiz?.title || lesson.title || "Lesson quiz",
+          description: lesson.quiz?.description || "",
+          passingMarks: lesson.quiz?.passingMarks || 50,
+          maxAttempts: lesson.quiz?.maxAttempts || 1,
+          status: lesson.quiz?.status || "draft",
+          questionCount: embeddedQuizQuestionCount
+        }
+      : null,
+    quizId:
+      standaloneQuizId ||
+      lesson?.quiz?._id ||
+      (mcqQuestionCount ? lesson?._id : null),
+    hasQuiz
+  };
+};
+
+const syncCourseProgress = async ({ enrollment, course, studentId }) => {
+  const lessonIds = new Set(
+    (course.modules || []).flatMap((module) =>
+      (module.lessons || []).map((lesson) => String(lesson._id))
+    )
+  );
+  const completedIds = new Set(
+    (enrollment.completedLessons || [])
+      .map((item) => String(item.lessonId))
+      .filter((lessonId) => lessonIds.has(lessonId))
+  );
+  const totalLessons = lessonIds.size;
+  enrollment.progressPercentage = totalLessons
+    ? Math.min(100, Math.round((completedIds.size / totalLessons) * 100))
+    : 0;
+
+  if (enrollment.progressPercentage >= 100) {
+    enrollment.status = "completed";
+    enrollment.completedAt = enrollment.completedAt || new Date();
+  } else if (enrollment.status === "completed") {
+    enrollment.status = "active";
+    enrollment.completedAt = null;
+  }
+
+  let progress = await Progress.findOne({ studentId, courseId: course._id });
+  if (!progress) {
+    progress = new Progress({ studentId, courseId: course._id });
+  }
+  progress.completedLessons = (enrollment.completedLessons || []).map((item) => ({
+    lessonId: item.lessonId,
+    completedAt: item.completedAt
+  }));
+  progress.currentModule = enrollment.currentModuleId || null;
+  progress.currentLesson = enrollment.currentLessonId || null;
+  progress.progressPercentage = enrollment.progressPercentage;
+  progress.completed = enrollment.status === "completed";
+
+  let certificate = null;
+  if (progress.completed && course.certificate !== false) {
+    const title = `${course.title} - Completion Certificate`;
+    const legacyTitle = `${course.title} — Completion Certificate`;
+    certificate = progress.certificates.find(
+      (item) => item.title === title || item.title === legacyTitle
+    ) || null;
+    if (!certificate) {
+      progress.certificates.push({ title, issuedAt: new Date() });
+      certificate = progress.certificates[progress.certificates.length - 1];
+    }
+  }
+
+  await progress.save();
+  return certificate;
+};
+
 // ======== Register Student ========
 exports.registerStudent =async(req,res)=>{
 try{
@@ -3071,6 +3220,12 @@ exports.getCoursePlayer = async (req, res) => {
     const unlockedModuleIds = new Set(
       (enrollment.unlockedModules || []).map((moduleId) => String(moduleId))
     );
+    const standaloneQuizzes = await Quiz.find({ courseId: course._id })
+      .select("_id lessonId")
+      .lean();
+    const quizByLessonId = new Map(
+      standaloneQuizzes.map((quiz) => [String(quiz.lessonId), String(quiz._id)])
+    );
 
     // ============================
     // TOTALS
@@ -3178,11 +3333,10 @@ exports.getCoursePlayer = async (req, res) => {
                 pdfUrl:
                   lesson.pdfUrl || "",
 
-                mcqData:
-                  lesson.mcqData || null,
-
-                quiz:
-                  lesson.quiz || null,
+                ...getStudentLessonQuizMetadata(
+                  lesson,
+                  quizByLessonId.get(String(lesson._id)) || null
+                ),
 
                 preview:
                   lesson.isPreview,
@@ -3509,6 +3663,29 @@ exports.completeLesson = async (req, res) => {
       });
     }
 
+    const lessonRequiresQuiz = Boolean(
+      foundLesson.quiz?.questions?.length ||
+      foundLesson.mcqData?.questions?.length ||
+      foundLesson.type === "quiz" ||
+      foundLesson.type === "mcq"
+    );
+    const lessonQuiz = await Quiz.findOne({ lessonId: foundLesson._id }).select("_id").lean();
+    if (lessonRequiresQuiz || lessonQuiz) {
+      const passedQuiz = lessonQuiz
+        ? await QuizResult.exists({
+            studentId: req.user.id,
+            quizId: lessonQuiz._id,
+            passed: true
+          })
+        : null;
+      if (!passedQuiz) {
+        return res.status(400).json({
+          success: false,
+          message: "Pass this lesson's quiz before marking it complete"
+        });
+      }
+    }
+
     // ================= ALREADY COMPLETED =================
 
     const alreadyCompleted =
@@ -3600,61 +3777,14 @@ exports.completeLesson = async (req, res) => {
 
     }
 
-    // ================= PROGRESS =================
-
-    let totalLessons = 0;
-
-    course.modules.forEach(module => {
-
-      totalLessons +=
-        module.lessons.length;
-
-    });
-
-    enrollment.progressPercentage =
-      Math.round(
-        (
-          enrollment.completedLessons.length /
-          totalLessons
-        ) * 100
-      );
-
-    if (
-      enrollment.progressPercentage >= 100
-    ) {
-
-      enrollment.progressPercentage = 100;
-
-      enrollment.status = "completed";
-
-      enrollment.completedAt =
-        new Date();
-
-      // Issue certificate on course completion
-      try {
-        let progress = await Progress.findOne({ studentId: req.user.id, courseId });
-        if (!progress) {
-          progress = await Progress.create({ studentId: req.user.id, courseId });
-        }
-        const already = progress.certificates.some(
-          (c) => c.title === course.title
-        );
-        if (!already) {
-          progress.certificates.push({
-            title: `${course.title} — Completion Certificate`,
-            pdfUrl: "",
-            issuedAt: new Date()
-          });
-          await progress.save();
-        }
-      } catch (certErr) {
-        console.error("Certificate issuance failed:", certErr.message);
-      }
-
-    }
-
     enrollment.lastAccessedAt =
       new Date();
+
+    const certificate = await syncCourseProgress({
+      enrollment,
+      course,
+      studentId: req.user.id
+    });
 
     await enrollment.save();
 
@@ -3702,7 +3832,16 @@ exports.completeLesson = async (req, res) => {
 
         completed:
           enrollment.status ===
-          "completed"
+          "completed",
+
+        certificate:
+          certificate
+            ? {
+                _id: certificate._id,
+                title: certificate.title,
+                issuedAt: certificate.issuedAt
+              }
+            : null
 
       }
 
@@ -3867,6 +4006,13 @@ exports.changeLesson = async (req, res) => {
 
     const resources =
       currentLesson.resources || [];
+    const standaloneQuiz = await Quiz.findOne({ lessonId: currentLesson._id })
+      .select("_id")
+      .lean();
+    const quizMetadata = getStudentLessonQuizMetadata(
+      currentLesson,
+      standaloneQuiz?._id || null
+    );
 
     // ================= RESPONSE =================
 
@@ -3913,15 +4059,7 @@ exports.changeLesson = async (req, res) => {
 
             "",
 
-          mcqData:
-            currentLesson.mcqData ||
-
-            null,
-
-          quiz:
-            currentLesson.quiz ||
-
-            null,
+          ...quizMetadata,
 
           resources
 
@@ -4132,8 +4270,36 @@ exports.createQuiz = async (req, res) => {
       questions
     } = req.body;
 
+    const course = await Course.findOne({
+      _id: courseId,
+      instructorId: req.user.id
+    });
+    if (!course) {
+      return res.status(404).json({
+        success: false,
+        message: "Course not found or you do not manage this course"
+      });
+    }
+    const module = course.modules.id(moduleId);
+    const lesson = module?.lessons.id(lessonId);
+    if (!module || !lesson) {
+      return res.status(404).json({
+        success: false,
+        message: "Course module or lesson not found"
+      });
+    }
+    if (!Array.isArray(questions) || !questions.length) {
+      return res.status(400).json({
+        success: false,
+        message: "At least one quiz question is required"
+      });
+    }
+
     const quiz = await Quiz.create({
       ...req.body,
+      courseId: course._id,
+      moduleId: module._id,
+      lessonId: lesson._id,
       totalQuestions: questions.length
     });
 
@@ -4174,14 +4340,22 @@ exports.getQuizForStudent = async (req, res) => {
 
       const module = course.modules.find((item) => item.lessons.some((lesson) => String(lesson._id) === String(req.params.lessonId)));
       const lesson = module?.lessons.find((item) => String(item._id) === String(req.params.lessonId));
-      const questions = (lesson?.mcqData?.questions || [])
-        .filter((question) => question?.question && Array.isArray(question.options) && question.options.length >= 4)
+      const embeddedQuiz = lesson?.quiz?.questions?.length
+        ? lesson.quiz
+        : lesson?.mcqData?.questions?.length
+          ? lesson.mcqData
+          : null;
+      const questions = (embeddedQuiz?.questions || [])
+        .filter((question) => question?.question && Array.isArray(question.options) && question.options.length >= 2)
         .map((question) => ({
           question: question.question,
           hint: question.hint || "",
           options: question.options.map((option, index) => ({
             text: typeof option === "string" ? option : option?.text || "",
-            isCorrect: index === Number(question.correctOption)
+            isCorrect:
+              typeof option === "object" && typeof option?.isCorrect === "boolean"
+                ? option.isCorrect
+                : index === Number(question.correctOption)
           }))
         }));
 
@@ -4194,9 +4368,9 @@ exports.getQuizForStudent = async (req, res) => {
           courseId: course._id,
           moduleId: module._id,
           lessonId: lesson._id,
-          title: lesson.title || "Lesson quiz",
-          description: lesson.description || "",
-          passingMarks: Number(lesson.mcqData?.passingScore) || 40,
+          title: embeddedQuiz?.title || lesson.title || "Lesson quiz",
+          description: embeddedQuiz?.description || lesson.description || "",
+          passingMarks: Number(embeddedQuiz?.passingMarks ?? embeddedQuiz?.passingScore) || 40,
           totalQuestions: questions.length,
           questions
         });
@@ -4211,9 +4385,23 @@ exports.getQuizForStudent = async (req, res) => {
       }
     }
 
+    const quizPayload = quiz.toObject ? quiz.toObject() : quiz;
+    const studentQuiz = {
+      ...quizPayload,
+      questions: (quizPayload.questions || []).map((question) => ({
+        _id: question._id,
+        question: question.question,
+        hint: question.hint || "",
+        options: (question.options || []).map((option) => ({
+          _id: option._id,
+          text: option.text
+        }))
+      }))
+    };
+
     res.status(200).json({
       success: true,
-      data: quiz
+      data: studentQuiz
     });
 
   } catch (error) {
@@ -4232,8 +4420,8 @@ exports.getQuizForStudent = async (req, res) => {
 exports.submitQuiz = async (req, res) => {
   try {
 
-    const { studentId, answers } =
-      req.body;
+    const studentId = req.user.id;
+    const answers = Array.isArray(req.body.answers) ? req.body.answers : [];
 
     const quiz =
       await Quiz.findById(
@@ -4247,26 +4435,32 @@ exports.submitQuiz = async (req, res) => {
       });
     }
 
+    const enrollment = await Enrollment.findOne({
+      studentId,
+      courseId: quiz.courseId
+    });
+
+    if (!enrollment) {
+      return res.status(403).json({
+        success: false,
+        message: "Enroll in this course before submitting its quiz"
+      });
+    }
+
     const existingResult =
       await QuizResult.findOne({
         studentId,
         quizId: quiz._id
       });
 
-    if (existingResult) {
-      return res.status(400).json({
-        success: false,
-        message:
-          "Quiz already submitted"
-      });
-    }
+    const alreadyPassed = existingResult?.passed === true;
+    let score = alreadyPassed ? existingResult.score : 0;
+    let evaluatedAnswers = alreadyPassed ? existingResult.answers : [];
 
-    let score = 0;
-
-    const evaluatedAnswers = [];
-
-    quiz.questions.forEach(
-      (question) => {
+    if (!alreadyPassed) {
+      evaluatedAnswers = [];
+      quiz.questions.forEach(
+        (question) => {
 
         const submittedAnswer =
           answers.find(
@@ -4288,7 +4482,7 @@ exports.submitQuiz = async (req, res) => {
               option.isCorrect
           );
 
-        const isCorrect =
+        const isCorrect = Boolean(correctOption) &&
           String(
             correctOption._id
           ) ===
@@ -4309,36 +4503,73 @@ exports.submitQuiz = async (req, res) => {
 
           isCorrect
         });
-      }
-    );
+        }
+      );
+    }
 
     const totalMarks =
       quiz.questions.length;
 
-    const percentage =
-      (score / totalMarks) * 100;
+    const percentage = alreadyPassed
+      ? existingResult.percentage
+      : (score / totalMarks) * 100;
 
-    const passed =
-      percentage >=
-      quiz.passingMarks;
+    const passed = alreadyPassed || percentage >= quiz.passingMarks;
 
-    const result =
-      await QuizResult.create({
+    const result = existingResult || new QuizResult({
         quizId: quiz._id,
-        studentId,
-        answers:
-          evaluatedAnswers,
-        score,
-        totalMarks,
-        percentage,
-        passed
+        studentId
       });
+    if (!alreadyPassed) {
+      result.answers = evaluatedAnswers;
+      result.score = score;
+      result.totalMarks = totalMarks;
+      result.percentage = percentage;
+      result.passed = passed;
+      await result.save();
+    }
+
+    let certificate = null;
+    if (passed) {
+      const course = await Course.findById(quiz.courseId);
+      const module = course?.modules?.find((item) => String(item._id) === String(quiz.moduleId));
+      const lesson = module?.lessons?.find((item) => String(item._id) === String(quiz.lessonId));
+      const alreadyCompleted = enrollment.completedLessons.some(
+        (item) => String(item.lessonId) === String(quiz.lessonId)
+      );
+
+      if (course && lesson && !alreadyCompleted) {
+        enrollment.completedLessons.push({
+          moduleId: module._id,
+          lessonId: lesson._id,
+          completedAt: new Date()
+        });
+      }
+
+      if (course && lesson) {
+        enrollment.currentModuleId = module._id;
+        enrollment.currentLessonId = lesson._id;
+        enrollment.lastAccessedAt = new Date();
+        certificate = await syncCourseProgress({ enrollment, course, studentId });
+        await enrollment.save();
+      }
+    }
 
     res.status(200).json({
       success: true,
       message:
         "Quiz submitted successfully",
-      data: result
+      data: {
+        ...result.toObject(),
+        courseCompleted: enrollment.status === "completed",
+        certificate: certificate
+          ? {
+              _id: certificate._id,
+              title: certificate.title,
+              issuedAt: certificate.issuedAt
+            }
+          : null
+      }
     });
 
   } catch (error) {
@@ -4356,10 +4587,8 @@ exports.submitQuiz = async (req, res) => {
 exports.getQuizResult = async ( req, res) => {
   try {
 
-    const {
-      studentId,
-      quizId
-    } = req.params;
+    const studentId = req.user.id;
+    const { quizId } = req.params;
 
     const result =
       await QuizResult.findOne({
@@ -4427,30 +4656,87 @@ return res.status(500).json({
 
 exports.getProgress = async (req, res) => {
   try {
-  
-    const id = req.params.studentId || req.params.id;
-  
-    let progress = await Progress.findById(id);
-  
-    if (!progress) {
-      progress = await Progress.findOne({ studentId: id });
-    }
- 
-    if (!progress) {
-      progress = await Progress.create({
-        studentId: id,
-        statistics: {
-          coursesCompleted: 0,
-          coursesInProgress: 0,
-          overallProgress: 0,
-          totalLearningHours: 0
-        },
-        recentlyCompleted: [],
-        completedCourses: [],
-        certificates: []
+    if (
+      req.params.studentId &&
+      String(req.params.studentId) !== String(req.user.id)
+    ) {
+      return res.status(403).json({
+        success: false,
+        message: "You can only view your own progress"
       });
     }
- 
+
+    const [progressEntries, enrollments] = await Promise.all([
+      Progress.find({ studentId: req.user.id })
+        .populate("courseId", "title thumbnail image stats certificate"),
+      Enrollment.find({ studentId: req.user.id })
+        .populate("courseId", "title thumbnail image stats certificate")
+    ]);
+    const completedEnrollments = enrollments.filter(
+      (item) => item.status === "completed" || Number(item.progressPercentage) >= 100
+    );
+
+    for (const enrollment of completedEnrollments) {
+      const course = enrollment.courseId;
+      if (!course?._id || course.certificate === false) continue;
+
+      let courseProgress = progressEntries.find(
+        (entry) => String(entry.courseId?._id || entry.courseId) === String(course._id)
+      );
+      if (!courseProgress) {
+        courseProgress = new Progress({
+          studentId: req.user.id,
+          courseId: course._id,
+          completed: true,
+          progressPercentage: 100
+        });
+        progressEntries.push(courseProgress);
+      }
+
+      const title = `${course.title} - Completion Certificate`;
+      const legacyTitle = `${course.title} — Completion Certificate`;
+      const hasCertificate = courseProgress.certificates.some(
+        (item) => item.title === title || item.title === legacyTitle
+      );
+      if (!hasCertificate) {
+        courseProgress.certificates.push({ title, issuedAt: enrollment.completedAt || new Date() });
+        await courseProgress.save();
+      }
+    }
+
+    const certificates = progressEntries.flatMap((entry) =>
+      (entry.certificates || []).map((certificate) => ({
+        ...(certificate.toObject ? certificate.toObject() : certificate),
+        courseId: entry.courseId?._id || entry.courseId,
+        courseTitle: entry.courseId?.title || "Course"
+      }))
+    );
+    const overallProgress = enrollments.length
+      ? Math.round(
+          enrollments.reduce((sum, item) => sum + Number(item.progressPercentage || 0), 0) /
+            enrollments.length
+        )
+      : 0;
+    const totalMinutes = enrollments.reduce(
+      (sum, item) => sum + Number(item.courseId?.stats?.totalDuration || 0),
+      0
+    );
+    const progress = {
+      statistics: {
+        coursesCompleted: completedEnrollments.length,
+        coursesInProgress: enrollments.length - completedEnrollments.length,
+        overallProgress,
+        totalLearningHours: Math.round((totalMinutes / 60) * 10) / 10
+      },
+      recentlyCompleted: completedEnrollments.map((item) => ({
+        courseId: item.courseId?._id || item.courseId,
+        title: item.courseId?.title || "Course",
+        thumbnail: item.courseId?.thumbnail || item.courseId?.image || "",
+        completedAt: item.completedAt
+      })),
+      certificates
+    };
+
     res.status(200).json({
       success: true,
       data: progress
@@ -4472,9 +4758,20 @@ exports.getProgress = async (req, res) => {
 exports.downloadCertificate = async ( req, res) => {
   try {
 
+    if (
+      req.params.studentId &&
+      String(req.params.studentId) !== String(req.user.id)
+    ) {
+      return res.status(403).json({
+        success: false,
+        message: "You can only download your own certificates"
+      });
+    }
+
     const progress = await Progress.findOne({
-      studentId: req.params.studentId
-    });
+      studentId: req.user.id,
+      "certificates._id": req.params.certificateId
+    }).populate("courseId", "title");
 
     if (!progress) {
       return res.status(404).json({
@@ -4495,11 +4792,21 @@ exports.downloadCertificate = async ( req, res) => {
       });
     }
 
-    return res.status(200).json({
-      success: true,
-      title: certificate.title,
-      pdfUrl: certificate.pdfUrl
+    const student = await Student.findById(req.user.id).select("fullName").lean();
+    const pdf = buildCertificatePdf({
+      studentName: student?.fullName || "Bandhan Student",
+      courseTitle: progress.courseId?.title || certificate.title.replace(/ - Completion Certificate$/, ""),
+      issuedAt: certificate.issuedAt,
+      certificateId: certificate._id
     });
+
+    const fileName = `${String(progress.courseId?.title || "course-certificate")
+      .replace(/[^a-z0-9]+/gi, "-")
+      .replace(/^-|-$/g, "") || "course-certificate"}.pdf`;
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`);
+    res.setHeader("Content-Length", pdf.length);
+    return res.status(200).send(pdf);
 
   } catch (error) {
 

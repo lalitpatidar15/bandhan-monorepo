@@ -67,22 +67,22 @@ router.get("/course-player/:courseId/lesson/:lessonId/resources",auth, requireRo
 
 
 
-router.post("/create",courseController.createQuiz);
+router.post("/create", auth, requireRole("instructor"), courseController.createQuiz);
 
 router.get("/lesson/:lessonId",auth, requireRole("student"),courseController.getQuizForStudent);
 
 router.post("/:quizId/submit", auth, requireRole("student"), courseController.submitQuiz);
 
 
-router.get("/result/:studentId/:quizId", courseController.getQuizResult);
+router.get("/result/:studentId/:quizId", auth, requireRole("student"), courseController.getQuizResult);
 
 router.post("/create-progress", courseController.createProgress);
 
 
-router.get("/progress/:studentId", courseController.getProgress);
+router.get("/progress/:studentId", auth, requireRole("student"), courseController.getProgress);
 
 
-router.get("/progress/:studentId/certificate/:certificateId", courseController.downloadCertificate);
+router.get("/progress/:studentId/certificate/:certificateId", auth, requireRole("student"), courseController.downloadCertificate);
 
 router.post("/create-profile", auth, requireRole("student"), courseController.createProfile);
 

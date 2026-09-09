@@ -56,7 +56,10 @@ test("course player exposes progress and embedded quiz data for enrolled student
   );
   const playerSource = source.slice(source.indexOf("exports.getCoursePlayer"), source.indexOf("exports.completeLesson"));
 
-  assert.match(playerSource, /mcqData:\s*lesson\.mcqData \|\| null/);
+  assert.match(playerSource, /getStudentLessonQuizMetadata\(/);
+  assert.match(playerSource, /Quiz\.find\(\{ courseId: course\._id \}\)/);
+  assert.doesNotMatch(playerSource, /mcqData:\s*lesson\.mcqData \|\| null/);
+  assert.doesNotMatch(playerSource, /quiz:\s*lesson\.quiz \|\| null/);
   assert.match(playerSource, /percentage:\s*enrollment\.progressPercentage/);
   assert.match(playerSource, /completed: completedLessonIds\.has\(String\(lesson\._id\)\)/);
 });
@@ -69,6 +72,77 @@ test("embedded instructor MCQs can be loaded as an enrolled student quiz", () =>
   const quizSource = source.slice(source.indexOf("exports.getQuizForStudent"), source.indexOf("exports.submitQuiz"));
 
   assert.match(quizSource, /"modules\.lessons\._id": req\.params\.lessonId/);
+  assert.match(quizSource, /lesson\?\.quiz\?\.questions\?\.length/);
+  assert.match(quizSource, /question\.options\.length >= 2/);
+  assert.match(quizSource, /embeddedQuiz\?\.passingMarks \?\? embeddedQuiz\?\.passingScore/);
   assert.match(quizSource, /Quiz\.create\(/);
   assert.match(quizSource, /studentId: req\.user\.id/);
+  assert.match(quizSource, /const studentQuiz = \{/);
+  assert.doesNotMatch(quizSource.slice(quizSource.indexOf("const studentQuiz")), /isCorrect:\s*option\.isCorrect/);
+});
+
+test("quiz submissions use the authenticated student and advance course completion", () => {
+  const source = fs.readFileSync(
+    path.join(__dirname, "../controllers/Student/courseController.js"),
+    "utf8",
+  );
+  const submitSource = source.slice(source.indexOf("exports.submitQuiz"), source.indexOf("exports.getQuizResult"));
+
+  assert.match(submitSource, /const studentId = req\.user\.id/);
+  assert.match(submitSource, /const alreadyPassed = existingResult\?\.passed === true/);
+  assert.match(submitSource, /const result = existingResult \|\| new QuizResult/);
+  assert.match(submitSource, /if \(passed\)/);
+  assert.match(submitSource, /syncCourseProgress\(\{ enrollment, course, studentId \}\)/);
+  assert.doesNotMatch(submitSource, /const \{ studentId, answers \}/);
+});
+
+test("quiz lessons cannot be marked complete until the authenticated student passes", () => {
+  const source = fs.readFileSync(
+    path.join(__dirname, "../controllers/Student/courseController.js"),
+    "utf8",
+  );
+  const completionSource = source.slice(source.indexOf("exports.completeLesson"), source.indexOf("// ===== create quiz"));
+
+  assert.match(completionSource, /const lessonRequiresQuiz = Boolean/);
+  assert.match(completionSource, /QuizResult\.exists\(\{/);
+  assert.match(completionSource, /studentId: req\.user\.id/);
+  assert.match(completionSource, /Pass this lesson's quiz before marking it complete/);
+});
+
+test("completed courses issue downloadable PDF certificates", () => {
+  const controller = fs.readFileSync(
+    path.join(__dirname, "../controllers/Student/courseController.js"),
+    "utf8",
+  );
+  const routes = fs.readFileSync(
+    path.join(__dirname, "../routes/student/courseRoutes.js"),
+    "utf8",
+  );
+  const certificateSource = controller.slice(controller.indexOf("exports.downloadCertificate"), controller.indexOf("// ===== profile"));
+
+  assert.match(controller, /const buildCertificatePdf/);
+  assert.match(controller, /const syncCourseProgress/);
+  assert.match(controller, /for \(const enrollment of completedEnrollments\)/);
+  assert.match(controller, /courseProgress\.certificates\.push\(\{ title, issuedAt: enrollment\.completedAt/);
+  assert.match(certificateSource, /"certificates\._id": req\.params\.certificateId/);
+  assert.match(certificateSource, /Content-Type", "application\/pdf"/);
+  assert.match(certificateSource, /res\.status\(200\)\.send\(pdf\)/);
+  assert.match(routes, /progress\/:studentId\/certificate\/:certificateId", auth, requireRole\("student"\)/);
+});
+
+test("quiz creation is instructor-only and scoped to the instructor's course", () => {
+  const controller = fs.readFileSync(
+    path.join(__dirname, "../controllers/Student/courseController.js"),
+    "utf8",
+  );
+  const routes = fs.readFileSync(
+    path.join(__dirname, "../routes/student/courseRoutes.js"),
+    "utf8",
+  );
+  const createSource = controller.slice(controller.indexOf("exports.createQuiz"), controller.indexOf("// ====== quiz"));
+
+  assert.match(routes, /post\("\/create", auth, requireRole\("instructor"\), courseController\.createQuiz\)/);
+  assert.match(createSource, /instructorId: req\.user\.id/);
+  assert.match(createSource, /course\.modules\.id\(moduleId\)/);
+  assert.match(createSource, /module\?\.lessons\.id\(lessonId\)/);
 });
