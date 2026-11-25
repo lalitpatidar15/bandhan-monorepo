@@ -61,7 +61,7 @@ function ProfileEditor({ initialForm }: { initialForm: ProfileFormData }) {
         <Button type="submit" disabled={isSaving}>
           {isSaving ? "Saving…" : "Save changes"}
         </Button>
-        {message && <p className="text-sm text-[var(--bhn-brand-600)]">{message}</p>}
+        {message && <p className="text-sm text-[var(--bhn-text)]">{message}</p>}
       </div>
     </form>
   );

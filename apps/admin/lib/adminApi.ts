@@ -124,6 +124,12 @@ export type AdminProduct = {
   shippingCost: number;
   freeShipping: boolean;
   dimensions?: { length?: number; width?: number; height?: number };
+  weight?: number;
+  originPincode?: string;
+  pickupLocation?: string;
+  courierPreference?: string;
+  dispatchAddress?: string;
+  hsnCode?: string;
 };
 
 export type AdminShipment = {
@@ -504,6 +510,8 @@ export type AdminVenue = {
   description: string;
   pricePerDay: number;
   serviceFee: number;
+  status?: string;
+  isApproved?: boolean;
   createdAt: string;
 };
 
@@ -593,6 +601,12 @@ const normalizeProducts = (payload: unknown): AdminProduct[] => {
       shippingCost: Number(product.shippingCost || 0),
       freeShipping: Boolean(product.freeShipping),
       dimensions: typeof product.dimensions === 'object' && product.dimensions ? product.dimensions as AdminProduct['dimensions'] : undefined,
+      weight: Number(product.weight || product.shippingWeight || 0) || undefined,
+      originPincode: product.originPincode ? String(product.originPincode) : undefined,
+      pickupLocation: product.pickupLocation ? String(product.pickupLocation) : undefined,
+      courierPreference: product.courierPreference ? String(product.courierPreference) : undefined,
+      dispatchAddress: product.dispatchAddress ? String(product.dispatchAddress) : undefined,
+      hsnCode: product.hsnCode ? String(product.hsnCode) : undefined,
     };
   });
 };
@@ -1162,6 +1176,8 @@ const normalizeVenues = (payload: unknown): AdminVenue[] => {
     description: String(v.description || ''),
     pricePerDay: Number(v.pricePerDay || 0),
     serviceFee: Number(v.serviceFee || 0),
+    status: v.status === undefined ? undefined : String(v.status),
+    isApproved: typeof v.isApproved === 'boolean' ? v.isApproved : undefined,
     createdAt: String(v.createdAt || ''),
   }));
 };
@@ -1221,6 +1237,87 @@ const normalizeApplications = (payload: unknown): AdminApplication[] => {
   });
 };
 
+export interface AdminSellerVerification {
+  id: string;
+  sellerId: string;
+  sellerName: string;
+  sellerEmail: string;
+  sellerPhone: string;
+  provider: string;
+  status: string;
+  businessName: string;
+  documents: Record<string, string>;
+  submittedAt: string;
+  reviewedAt?: string;
+  rejectionReason?: string;
+}
+
+export interface AdminVendorEarning {
+  id: string;
+  vendorId: string;
+  vendorName: string;
+  vendorEmail: string;
+  vendorType: 'product' | 'service' | 'venue';
+  grossAmount: number;
+  commissionRate: number;
+  commission: number;
+  netPayable: number;
+  refundedAmount: number;
+  status: string;
+  createdAt: string;
+}
+
+export interface AdminPaymentBreakdown {
+  grossCollected: number;
+  platformEarned: number;
+  commissionCollected: number;
+  platformServiceFees: number;
+  taxCollected: number;
+  vendorPayable: number;
+  refunded: number;
+  paidBookings: number;
+  byVendorType: Record<'product' | 'service' | 'venue', { gross: number; commission: number; payable: number; refunded: number; count: number }>;
+  vendors: Array<{ vendorId: string; vendorName: string; vendorEmail: string; vendorType: string; gross: number; commission: number; payable: number; orderCount: number }>;
+  recentPayments: Array<{ id: string; paymentFor: string; totalAmount: number; platformFee: number; gst: number; status: string; refundedAmount: number; createdAt: string }>;
+}
+
+const normalizeRecords = (payload: unknown): Array<Record<string, unknown>> => {
+  const data = (payload as { data?: unknown })?.data;
+  return Array.isArray(data) ? (data as Array<Record<string, unknown>>) : [];
+};
+
+const normalizeSellerVerifications = (payload: unknown): AdminSellerVerification[] =>
+  normalizeRecords(payload).map((record) => ({
+    id: String(record.id || ''),
+    sellerId: String(record.sellerId || ''),
+    sellerName: String(record.sellerName || ''),
+    sellerEmail: String(record.sellerEmail || ''),
+    sellerPhone: String(record.sellerPhone || ''),
+    provider: String(record.provider || ''),
+    status: String(record.status || 'pending'),
+    businessName: String(record.businessName || ''),
+    documents: (record.documents || {}) as Record<string, string>,
+    submittedAt: String(record.submittedAt || ''),
+    reviewedAt: record.reviewedAt ? String(record.reviewedAt) : undefined,
+    rejectionReason: record.rejectionReason ? String(record.rejectionReason) : undefined,
+  }));
+
+const normalizeVendorEarnings = (payload: unknown): AdminVendorEarning[] =>
+  normalizeRecords(payload).map((entry) => ({
+    id: String(entry.id || ''),
+    vendorId: String(entry.vendorId || ''),
+    vendorName: String(entry.vendorName || 'Vendor'),
+    vendorEmail: String(entry.vendorEmail || ''),
+    vendorType: (['product', 'service', 'venue'].includes(String(entry.vendorType)) ? entry.vendorType : 'product') as AdminVendorEarning['vendorType'],
+    grossAmount: Number(entry.grossAmount || 0),
+    commissionRate: Number(entry.commissionRate || 0),
+    commission: Number(entry.commission || 0),
+    netPayable: Number(entry.netPayable || 0),
+    refundedAmount: Number(entry.refundedAmount || 0),
+    status: String(entry.status || 'pending'),
+    createdAt: String(entry.createdAt || ''),
+  }));
+
 export const adminApi = createApi({
   reducerPath: 'adminApi',
   tagTypes: [
@@ -1258,6 +1355,9 @@ export const adminApi = createApi({
     'AdminJobPostersDetailed',
     'AdminVenues',
     'AdminServices',
+    'AdminSellerVerifications',
+    'AdminVendorEarnings',
+    'AdminPaymentBreakdown',
   ],
   baseQuery: baseQueryWithLogout,
   endpoints: (builder) => ({
@@ -1294,11 +1394,11 @@ export const adminApi = createApi({
       transformResponse: (response: unknown) => normalizeProducts(response),
       providesTags: ['AdminProducts'],
     }),
-    createProduct: builder.mutation<unknown, { title: string; name: string; category: string; price: number; sellerId: string; userId: string; status: string; isApproved: boolean; isPublished: boolean; description?: string; images: string[]; shippingRequired: boolean; freeShipping: boolean; shippingCost: number; shippingWeight?: number; dimensions?: { length?: number; width?: number; height?: number } }>({
+    createProduct: builder.mutation<unknown, { title: string; name: string; category: string; price: number; sellerId: string; userId: string; status: string; isApproved: boolean; isPublished: boolean; description?: string; images: string[]; shippingRequired: boolean; freeShipping: boolean; shippingCost: number; shippingWeight?: number; dimensions?: { length?: number; width?: number; height?: number }; weight?: number; originPincode?: string; pickupLocation?: string; courierPreference?: string; dispatchAddress?: string; hsnCode?: string }>({
       query: (body) => ({ url: '/admin/products', method: 'POST', body }),
       invalidatesTags: ['AdminProducts', 'AdminDashboard'],
     }),
-    updateProduct: builder.mutation<unknown, { id: string; title?: string; name?: string; category?: string; price?: number; sellerId?: string; userId?: string; status?: string; isApproved?: boolean; isPublished?: boolean; description?: string; images?: string[]; shippingRequired?: boolean; freeShipping?: boolean; shippingCost?: number; shippingWeight?: number; dimensions?: { length?: number; width?: number; height?: number } }>({
+    updateProduct: builder.mutation<unknown, { id: string; title?: string; name?: string; category?: string; price?: number; sellerId?: string; userId?: string; status?: string; isApproved?: boolean; isPublished?: boolean; description?: string; images?: string[]; shippingRequired?: boolean; freeShipping?: boolean; shippingCost?: number; shippingWeight?: number; dimensions?: { length?: number; width?: number; height?: number }; weight?: number; originPincode?: string; pickupLocation?: string; courierPreference?: string; dispatchAddress?: string; hsnCode?: string }>({
       query: ({ id, ...body }) => ({ url: `/admin/products/${id}`, method: 'PUT', body }),
       invalidatesTags: ['AdminProducts', 'AdminDashboard'],
     }),
@@ -1758,6 +1858,41 @@ export const adminApi = createApi({
       providesTags: ['AdminMerchants'],
     }),
 
+    // Manual seller verification
+    getSellerVerifications: builder.query<AdminSellerVerification[], void>({
+      query: () => '/admin/verifications/sellers',
+      transformResponse: normalizeSellerVerifications,
+      providesTags: ['AdminSellerVerifications'],
+    }),
+    reviewSellerVerification: builder.mutation<unknown, { id: string; action: 'approve' | 'reject'; rejectionReason?: string }>({
+      query: ({ id, ...body }) => ({ url: `/admin/verifications/sellers/${id}/review`, method: 'PUT', body }),
+      invalidatesTags: ['AdminSellerVerifications', 'AdminSellersDetailed'],
+    }),
+
+    // Vendor money distribution
+    getPaymentBreakdown: builder.query<AdminPaymentBreakdown, void>({
+      query: () => '/admin/payment-breakdown',
+      transformResponse: (payload: unknown) => {
+        const data = (payload as { data?: AdminPaymentBreakdown })?.data || ({} as AdminPaymentBreakdown);
+        return {
+          ...data,
+          byVendorType: data.byVendorType || {
+            product: { gross: 0, commission: 0, payable: 0, refunded: 0, count: 0 },
+            service: { gross: 0, commission: 0, payable: 0, refunded: 0, count: 0 },
+            venue: { gross: 0, commission: 0, payable: 0, refunded: 0, count: 0 },
+          },
+          vendors: data.vendors || [],
+          recentPayments: data.recentPayments || [],
+        };
+      },
+      providesTags: ['AdminPaymentBreakdown'],
+    }),
+    getVendorEarnings: builder.query<AdminVendorEarning[], void>({
+      query: () => '/admin/vendor-earnings',
+      transformResponse: normalizeVendorEarnings,
+      providesTags: ['AdminVendorEarnings'],
+    }),
+
     // Enhanced seller views
     getSellersDetailed: builder.query<AdminSellerDetailed[], void>({
       query: () => '/admin/sellers',
@@ -1813,7 +1948,7 @@ export const adminApi = createApi({
       query: (body) => ({ url: '/admin/venues', method: 'POST', body }),
       invalidatesTags: ['AdminVenues'],
     }),
-    updateVenue: builder.mutation<unknown, { id: string; name?: string; location?: string; description?: string; pricePerDay?: number; serviceFee?: number; guests?: number; rating?: number; reviews?: number; images?: string[] }>({
+    updateVenue: builder.mutation<unknown, { id: string; name?: string; location?: string; description?: string; pricePerDay?: number; serviceFee?: number; guests?: number; rating?: number; reviews?: number; images?: string[]; status?: string; isApproved?: boolean }>({
       query: ({ id, ...body }) => ({ url: `/admin/venues/${id}`, method: 'PUT', body }),
       invalidatesTags: ['AdminVenues'],
     }),
@@ -1941,6 +2076,10 @@ export const {
   useGetSettlementsQuery,
   useUpdateSettlementMutation,
   useGetMerchantsQuery,
+  useGetSellerVerificationsQuery,
+  useReviewSellerVerificationMutation,
+  useGetPaymentBreakdownQuery,
+  useGetVendorEarningsQuery,
   useGetSellersDetailedQuery,
   useGetSellerReviewsQuery,
   useSuspendSellerMutation,

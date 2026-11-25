@@ -489,7 +489,7 @@ function CoursePlayerContent() {
                             onClick={() =>
                                 router.push(`/student/course-doubt/${course.courseId || course.id}`)
                             }
-                            className="w-full bg-white text-[var(--bhn-brand-800)] py-2 rounded-md text-sm font-medium flex items-center justify-center gap-2 hover:bg-[var(--bhn-brand-50)]">
+                            className="w-full bg-[var(--bhn-surface)] text-[var(--bhn-brand-800)] py-2 rounded-md text-sm font-medium flex items-center justify-center gap-2 hover:bg-[var(--bhn-brand-50)]">
                              Ask Doubt
                         </button>
                     </div>

@@ -35,6 +35,10 @@ export const instructorDashboardApi = baseApi.injectEndpoints({
       query: (courseId) => `/dashboard/${courseId}/reviews/stats`,
       providesTags: ["InstructorDashboard"],
     }),
+    getInstructorPageResources: builder.query<any, void>({
+      query: () => "/instructor/page-resources",
+      providesTags: ["InstructorDashboard"],
+    }),
     replyToInstructorReview: builder.mutation<any, { reviewId: string; instructorResponse: string }>({
       query: ({ reviewId, instructorResponse }) => ({
         url: `/dashboard/reply/${reviewId}`,
@@ -54,5 +58,6 @@ export const {
   useUpdateInstructorStudentProgressMutation,
   useGetInstructorReviewsQuery,
   useGetInstructorReviewStatsQuery,
+  useGetInstructorPageResourcesQuery,
   useReplyToInstructorReviewMutation,
 } = instructorDashboardApi;

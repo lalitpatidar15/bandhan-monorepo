@@ -45,6 +45,26 @@ function normalizeId(value) {
   return String(value);
 }
 
+function firstImage(value) {
+  if (Array.isArray(value)) return value.find(Boolean) || "";
+  return typeof value === "string" ? value : "";
+}
+
+// The Conversation schema has no dedicated venue name/image fields, so expose the
+// populated venue as response-only metadata for both chat UIs.
+function serializeConversation(conversation) {
+  const data = conversation && typeof conversation.toObject === "function" ? conversation.toObject() : conversation;
+  if (!data) return data;
+
+  const venue = data.venueId;
+  if (venue && typeof venue === "object" && !Array.isArray(venue)) {
+    data.venueName = venue.name || venue.title || "";
+    data.venueImage = firstImage(venue.images) || venue.image || venue.img || "";
+  }
+
+  return data;
+}
+
 exports.createConversation = async (req, res) => {
   try {
     const serviceId = normalizeId(req.body.serviceId);
@@ -56,11 +76,13 @@ exports.createConversation = async (req, res) => {
     let buyerId = normalizeId(req.body.buyerId);
     let sellerId = normalizeId(req.body.sellerId);
 
-    // A chat is only allowed after a quote request, rental order, or explicit quoteId.
-    if (!serviceId && !venueId && !productId && !rentalOrderId && !quoteId) {
+    // Products still require a quote or rental order. Service and venue listings can
+    // start a direct conversation as long as the listing resolves a provider.
+    const hasDirectListing = Boolean(serviceId || venueId);
+    if (!hasDirectListing && !productId && !rentalOrderId && !quoteId) {
       return res.status(400).json({
         success: false,
-        message: "A verified quote request or rental order is required to start a chat.",
+        message: "A quote request, rental order, or service/venue listing is required to start a chat.",
       });
     }
     if (orderId) return res.status(403).json({ success: false, message: "Product purchases do not create chat threads." });
@@ -132,12 +154,17 @@ exports.createConversation = async (req, res) => {
       : serviceDoc
         ? normalizeId(serviceDoc.sellerId)
         : venueDoc
-          ? normalizeId(venueDoc.sellerId || venueDoc.ownerId || venueDoc.managerId || "")
+          ? normalizeId(venueDoc.sellerId || "")
           : productDoc
             ? normalizeId(productDoc.sellerId)
             : order
               ? (normalizeId(order.sellerId) || normalizeId(order.items?.[0]?.sellerId))
               : "";
+    const listingSellerId = serviceDoc
+      ? normalizeId(serviceDoc.sellerId)
+      : venueDoc
+        ? normalizeId(venueDoc.sellerId)
+        : "";
 
     const authenticatedUserId = normalizeId(req.user._id || req.user.id);
 
@@ -155,7 +182,7 @@ exports.createConversation = async (req, res) => {
         });
       }
       sellerId = authenticatedUserId;
-      if (!quoteId) {
+      if (!quoteId && (orderId || rentalOrderId)) {
         buyerId = orderBuyerId;
       }
     } else if (currentRole === "buyer") {
@@ -171,12 +198,16 @@ exports.createConversation = async (req, res) => {
           message: "You are not authorized to chat for this order.",
         });
       }
+      if (hasDirectListing && !quoteId && sellerId && listingSellerId && String(sellerId) !== String(listingSellerId)) {
+        return res.status(403).json({ success: false, message: "Seller does not match this listing." });
+      }
       buyerId = authenticatedUserId;
       if (!quoteId) {
-        sellerId = orderSellerId;
+        sellerId = hasDirectListing ? (listingSellerId || sellerId) : orderSellerId;
       }
     } else {
-      sellerId = sellerId || orderSellerId;
+      // Instructor/recruiter and other identity flows keep their explicit sellerId.
+      sellerId = hasDirectListing && !quoteId ? (listingSellerId || sellerId || orderSellerId) : (sellerId || orderSellerId);
       buyerId = buyerId || orderBuyerId;
     }
 
@@ -246,6 +277,15 @@ exports.createConversation = async (req, res) => {
       conversationData.productName = productDoc.title || productDoc.name || conversationData.productName || "";
       conversationData.productImage = productDoc.images?.[0] || conversationData.productImage || "";
     }
+    if (venueDoc && !productDoc) {
+      const venueName = venueDoc.name || venueDoc.title || "";
+      const venueImage = firstImage(venueDoc.images) || venueDoc.image || venueDoc.img || "";
+      conversationData.venueName = venueName;
+      conversationData.venueImage = venueImage;
+      // productName/productImage are the schema's generic listing context fields.
+      conversationData.productName = conversationData.productName || venueName;
+      conversationData.productImage = conversationData.productImage || venueImage;
+    }
 
     let quote = null;
     if (quoteId || serviceId || venueId || productId) {
@@ -260,11 +300,24 @@ exports.createConversation = async (req, res) => {
       quote = quote || (await Quote.findOne(quoteQuery).sort({ createdAt: -1 }));
     }
 
+    if (quote && normalizeQuoteStatus(quote.status) === "rejected") {
+      return res.status(403).json({
+        success: false,
+        message: "Chat is disabled because this quote request was rejected.",
+      });
+    }
+
     const quoteContext = buildConversationQuoteContext({ quote });
-    if ((serviceId || venueId || productId) && !quote && !req.body.quoteId) {
+    if (productId && !quoteId && !rentalOrderId && !quote) {
       return res.status(403).json({
         success: false,
         message: "A quote request is required before starting a chat.",
+      });
+    }
+    if (hasDirectListing && !quoteId && !quote && !listingSellerId) {
+      return res.status(403).json({
+        success: false,
+        message: "This listing does not have a provider available for chat.",
       });
     }
 
@@ -280,7 +333,7 @@ exports.createConversation = async (req, res) => {
       quoteFullName: quoteContext.quoteFullName,
       quotePhone: quoteContext.quotePhone,
       quoteEmail: quoteContext.quoteEmail,
-      quoteListingType: quoteContext.quoteListingType,
+      quoteListingType: quoteContext.quoteListingType || (venueId ? "venue" : serviceId ? "service" : ""),
     };
 
     const conversationDataWithQuote = {
@@ -295,6 +348,7 @@ exports.createConversation = async (req, res) => {
     };
     if (conversationDataWithQuote.quoteId) query.quoteId = conversationDataWithQuote.quoteId;
     if (conversationDataWithQuote.serviceId) query.serviceId = conversationDataWithQuote.serviceId;
+    if (conversationDataWithQuote.venueId) query.venueId = conversationDataWithQuote.venueId;
     if (conversationDataWithQuote.productId) query.productId = conversationDataWithQuote.productId;
     if (conversationDataWithQuote.orderId) query.orderId = conversationDataWithQuote.orderId;
     if (conversationDataWithQuote.rentalOrderId) query.rentalOrderId = conversationDataWithQuote.rentalOrderId;
@@ -305,16 +359,18 @@ exports.createConversation = async (req, res) => {
         .populate("sellerId", populateUserFields)
         .populate("buyerId", populateUserFields)
         .populate("serviceId")
+        .populate("venueId")
         .populate("productId")
         .populate("orderId")
         .populate("rentalOrderId");
+      const serializedExistingConversation = serializeConversation(populatedExistingConversation || existingConversation);
 
       if (req.io) {
-        req.io.to(String(existingConversation.buyerId)).emit("conversation_updated", populatedExistingConversation);
-        req.io.to(String(existingConversation.sellerId)).emit("conversation_updated", populatedExistingConversation);
+        req.io.to(String(existingConversation.buyerId)).emit("conversation_updated", serializedExistingConversation);
+        req.io.to(String(existingConversation.sellerId)).emit("conversation_updated", serializedExistingConversation);
       }
 
-      return res.json({ success: true, conversation: populatedExistingConversation || existingConversation });
+      return res.json({ success: true, conversation: serializedExistingConversation });
     }
 
     const conversation = await Conversation.create(conversationDataWithQuote);
@@ -322,16 +378,18 @@ exports.createConversation = async (req, res) => {
       .populate("sellerId", populateUserFields)
       .populate("buyerId", populateUserFields)
       .populate("serviceId")
+      .populate("venueId")
       .populate("productId")
       .populate("orderId")
       .populate("rentalOrderId");
+    const serializedConversation = serializeConversation(populatedConversation || conversation);
 
     if (req.io) {
-      req.io.to(String(conversation.buyerId)).emit("conversation_updated", populatedConversation);
-      req.io.to(String(conversation.sellerId)).emit("conversation_updated", populatedConversation);
+      req.io.to(String(conversation.buyerId)).emit("conversation_updated", serializedConversation);
+      req.io.to(String(conversation.sellerId)).emit("conversation_updated", serializedConversation);
     }
 
-    res.json({ success: true, conversation: populatedConversation || conversation });
+    res.json({ success: true, conversation: serializedConversation });
   } catch (error) {
     console.error("Error creating conversation:", error);
     res.status(500).json({ success: false, message: "Failed to create conversation." });
@@ -349,11 +407,12 @@ exports.getConversations = async (req, res) => {
       .populate("sellerId", populateUserFields)
       .populate("buyerId", populateUserFields)
       .populate("serviceId")
+      .populate("venueId")
       .populate("productId")
       .populate("orderId")
       .populate("rentalOrderId");
 
-    res.json({ success: true, conversations });
+    res.json({ success: true, conversations: conversations.map(serializeConversation) });
   } catch (error) {
     console.error("Error fetching conversations:", error);
     res.status(500).json({ success: false, message: "Failed to fetch conversations." });

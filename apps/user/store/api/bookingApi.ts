@@ -51,6 +51,21 @@ export const bookingApi = baseApi.injectEndpoints({
       invalidatesTags: (result, error, id) => [{ type: 'Dashboard', id }],
     }),
 
+    // Service / venue booking payments
+    createBookingPaymentOrder: builder.mutation<
+      { success: boolean; order: { id: string; amount: number; currency: string; receipt?: string }; quote: Record<string, number> },
+      string
+    >({
+      query: (bookingId) => ({ url: '/payment/booking/create-order', method: 'POST', body: { bookingId } }),
+    }),
+    verifyBookingPayment: builder.mutation<
+      { success: boolean; message: string; paymentId?: string },
+      { razorpay_order_id: string; razorpay_payment_id: string; razorpay_signature: string }
+    >({
+      query: (body) => ({ url: '/payment/booking/verify', method: 'POST', body }),
+      invalidatesTags: ['Dashboard'],
+    }),
+
     // Get available dates for a venue
     getAvailableDates: builder.query<{ dates: string[] }, string>({
       query: (venueId) => `/bookings/venue/${venueId}/available-dates`,
@@ -66,4 +81,6 @@ export const {
   useUpdateBookingMutation,
   useCancelBookingMutation,
   useGetAvailableDatesQuery,
+  useCreateBookingPaymentOrderMutation,
+  useVerifyBookingPaymentMutation,
 } = bookingApi;

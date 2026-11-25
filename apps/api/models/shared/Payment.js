@@ -286,7 +286,8 @@ const paymentSchema = new mongoose.Schema({
             "featured_job",
             "bulk_unlock",
             "invoice",
-            "product_order"
+            "product_order",
+            "booking"
         ],
         required:true
     },
@@ -484,7 +485,8 @@ const paymentSchema = new mongoose.Schema({
             "pending",
             "completed",
             "failed",
-            "cancelled"
+            "cancelled",
+            "refunded"
         ],
         default:"created"
     },

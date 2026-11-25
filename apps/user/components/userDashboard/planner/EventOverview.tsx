@@ -32,7 +32,7 @@ export default function EventOverview({ event, onEditField, onAddSuggestedServic
       <div className="lg:col-span-2 space-y-6">
         <div className="bhn-card p-6 space-y-4">
           <div className="flex items-center gap-2">
-            <Sparkles size={16} className="text-[var(--bhn-brand-600)]" />
+            <Sparkles size={16} className="text-[var(--bhn-text)]" />
             <h3 className="font-display text-lg font-bold text-[var(--bhn-text)]">Event details</h3>
             <Edit3 size={14} className="ml-auto text-[var(--bhn-text-muted)]" />
           </div>

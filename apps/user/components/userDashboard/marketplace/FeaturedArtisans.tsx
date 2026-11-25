@@ -54,10 +54,10 @@ export function FeaturedArtisans() {
         {/* HEADER */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between px-1">
           <div className="space-y-2">
-            <h1 className="text-xl sm:text-2xl font-bold text-[#1C1A16] tracking-tight">
+            <h1 className="text-xl sm:text-2xl font-bold text-[var(--bhn-text)] tracking-tight">
               Featured Artisans
             </h1>
-            <p className="text-[#554339] text-sm sm:text-base max-w-md">
+            <p className="text-[var(--bhn-text)] text-sm sm:text-base max-w-md">
               Hand-picked professionals for exceptional experiences.
             </p>
           </div>
@@ -67,14 +67,14 @@ export function FeaturedArtisans() {
             <button
               onClick={handlePrev}
               aria-label="Previous"
-              className="p-3 rounded-full border border-[#DBC1B5] bg-white hover:bg-[#F6EDE6] active:scale-90 transition-all shadow-sm"
+              className="p-3 rounded-full border border-[var(--bhn-border)] bg-[var(--bhn-surface)] hover:bg-[var(--bhn-surface-2)] active:scale-90 transition-all shadow-sm"
             >
               <ChevronLeft size={20} />
             </button>
             <button
               onClick={handleNext}
               aria-label="Next"
-              className="p-3 rounded-full border border-[#DBC1B5] bg-white hover:bg-[#F6EDE6] active:scale-90 transition-all shadow-sm"
+              className="p-3 rounded-full border border-[var(--bhn-border)] bg-[var(--bhn-surface)] hover:bg-[var(--bhn-surface-2)] active:scale-90 transition-all shadow-sm"
             >
               <ChevronRight size={20} />
             </button>
@@ -104,7 +104,7 @@ export function FeaturedArtisans() {
       {/* TRENDING HERO SECTION */}
       <Card
         as="section"
-        className="relative overflow-hidden rounded-[24px] sm:rounded-[32px] border border-[#E7E1D8] bg-[#1f1110] min-h-[400px] sm:min-h-[360px]"
+        className="relative overflow-hidden rounded-[24px] sm:rounded-[32px] border border-[var(--bhn-border)] bg-[var(--bhn-brand-600)] min-h-[400px] sm:min-h-[360px]"
       >
         {/* IMAGE */}
         <Image
@@ -116,15 +116,15 @@ export function FeaturedArtisans() {
         />
 
         {/* OVERLAY */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 sm:bg-gradient-to-r sm:from-black/80 sm:via-black/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[color-mix(in_srgb,var(--bhn-text)_90%,transparent)] via-[color-mix(in_srgb,var(--bhn-text)_40%,transparent)] sm:bg-gradient-to-r sm:from-[color-mix(in_srgb,var(--bhn-text)_80%,transparent)] sm:via-[color-mix(in_srgb,var(--bhn-text)_30%,transparent)] to-transparent" />
 
         {/* CONTENT */}
         <div className="relative h-full flex flex-col justify-end sm:justify-center p-4 sm:p-12 lg:p-16">
-          <h2 className="max-w-lg text-xl sm:text-2xl lg:text-xl font-serif font-semibold leading-[1.2] text-white">
+          <h2 className="max-w-lg text-xl sm:text-2xl lg:text-xl font-serif font-semibold leading-[1.2] text-[var(--bhn-text-on-brand)]">
             The Saharan Sunset <br className="hidden sm:block" /> aesthetic is trending.
           </h2>
 
-          <p className="mt-4 max-w-sm text-sm sm:text-base leading-relaxed text-orange-100/90">
+          <p className="mt-4 max-w-sm text-sm sm:text-base leading-relaxed text-[var(--bhn-warning-50)]">
             Explore how warmth and desert-inspired minimalism are reshaping
             modern celebrations this season.
           </p>
@@ -132,7 +132,7 @@ export function FeaturedArtisans() {
           <div className="mt-4 flex flex-wrap gap-4">
             <Button
               variant="primary"
-              className="rounded-full bg-[#F1A15D] px-5 py-6 text-sm font-bold text-[#3C1D05] hover:bg-[#e08b3d] transition-all active:scale-95 shadow-lg"
+              className="rounded-full bg-[var(--bhn-surface-2)] px-5 py-6 text-sm font-bold text-[var(--bhn-text)] hover:bg-[var(--bhn-brand-600)] transition-all active:scale-95 shadow-lg"
             >
               Explore Trends
             </Button>

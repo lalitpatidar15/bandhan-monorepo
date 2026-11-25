@@ -175,7 +175,7 @@ export default function NotificationsPage() {
                   onClick={() => setActiveTab(tab)}
                   className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition ${
                     activeTab === tab
-                      ? "bg-[var(--bhn-brand-600)] text-white"
+                      ? "bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)]"
                       : "bg-[var(--bhn-surface-2)] text-[var(--bhn-text-muted)] hover:bg-[var(--bhn-brand-50)]"
                   }`}
                 >

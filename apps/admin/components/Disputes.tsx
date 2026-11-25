@@ -29,8 +29,8 @@ export default function Disputes() {
           <div key={dispute.id} className="card space-y-3">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <h2 className="text-lg font-semibold text-gray-900">{dispute.title}</h2>
-                <p className="text-xs text-gray-500">Ref: {dispute.referenceId} • {dispute.type} • Raised by {dispute.raisedBy}</p>
+                <h2 className="text-lg font-semibold text-[var(--bhn-text)]">{dispute.title}</h2>
+                <p className="text-xs text-[var(--bhn-text-muted)]">Ref: {dispute.referenceId} • {dispute.type} • Raised by {dispute.raisedBy}</p>
               </div>
               <span className={`admin-badge ${statusBadgeClass(dispute.status)}`}>
                 {dispute.status}

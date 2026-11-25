@@ -29,8 +29,8 @@ export default function AdminLayout({
 
   if (loading && pathname !== '/admin/login') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#faf5ee]">
-        <div className="w-12 h-12 border-4 border-[#8B3A28] border-t-transparent rounded-full animate-spin"></div>
+      <div className="min-h-screen flex items-center justify-center bg-[var(--bhn-surface-2)]">
+        <div className="w-12 h-12 border-4 border-[var(--bhn-brand-600)] border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }

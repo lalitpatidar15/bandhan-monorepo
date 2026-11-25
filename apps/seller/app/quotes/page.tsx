@@ -11,10 +11,10 @@ import {
 } from "@/lib/store/api/chatApi";
 
 const statusStyles: Record<string, string> = {
-  approved: "bg-emerald-100 text-emerald-800 border border-emerald-200",
-  accepted: "bg-emerald-100 text-emerald-800 border border-emerald-200",
-  rejected: "bg-rose-100 text-rose-800 border border-rose-200",
-  pending: "bg-amber-100 text-amber-800 border border-amber-200",
+  approved: "bg-[var(--bhn-success-50)] text-[var(--bhn-success-700)] border border-[var(--bhn-success-500)]",
+  accepted: "bg-[var(--bhn-success-50)] text-[var(--bhn-success-700)] border border-[var(--bhn-success-500)]",
+  rejected: "bg-[var(--bhn-error-50)] text-[var(--bhn-error-700)] border border-[var(--bhn-error-500)]",
+  pending: "bg-[var(--bhn-warning-50)] text-[var(--bhn-warning-700)] border border-[var(--bhn-warning-500)]",
 };
 
 const normalizeStatus = (status: any) => String(status || "pending").trim().toLowerCase();
@@ -78,17 +78,17 @@ export default function SellerQuotesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-[#332219]">
+    <div className="min-h-screen bg-[var(--bhn-surface-2)] text-[var(--bhn-text)]">
       <div className="flex">
         <Sidebar />
         <main className="flex-1 p-8 max-w-7xl mx-auto space-y-6">
           {/* Main Top Header */}
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-[#E8DFC0]/60 pb-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-[color-mix(in_srgb,var(--bhn-border)_60%,transparent)] pb-6">
             <div>
-              <h1 className="font-serif text-3xl font-bold text-[#4A2612]">
+              <h1 className="font-serif text-3xl font-bold text-[var(--bhn-text)]">
                 {selectedQuote ? "Quote Request Details" : "Quote Requests"}
               </h1>
-              <p className="mt-1 text-sm text-[#7A6252]">
+              <p className="mt-1 text-sm text-[var(--bhn-text)]">
                 {selectedQuote
                   ? "View complete customer specifications and initiate direct service-specific chat."
                   : "Review incoming customer quotes and open direct chat."}
@@ -98,14 +98,14 @@ export default function SellerQuotesPage() {
               <button
                 type="button"
                 onClick={() => setSelectedQuote(null)}
-                className="inline-flex items-center justify-center rounded-xl bg-[#EBE3D5] px-5 py-2.5 text-sm font-semibold text-[#4A2612] hover:bg-[#E2D6C3] transition-all"
+                className="inline-flex items-center justify-center rounded-xl bg-[var(--bhn-surface-2)] px-5 py-2.5 text-sm font-semibold text-[var(--bhn-text)] hover:bg-[var(--bhn-surface-2)] transition-all"
               >
                 ← Back to All Quotes List
               </button>
             ) : (
               <Link
                 href="/chat"
-                className="inline-flex items-center justify-center rounded-xl bg-[#633318] px-5 py-2.5 text-sm font-semibold text-white shadow-md hover:bg-[#4E2711] transition-all"
+                className="inline-flex items-center justify-center rounded-xl bg-[var(--bhn-brand-600)] px-5 py-2.5 text-sm font-semibold text-[var(--bhn-text-on-brand)] shadow-md hover:bg-[var(--bhn-brand-600)] transition-all"
               >
                 Open Chat Inbox
               </Link>
@@ -114,17 +114,17 @@ export default function SellerQuotesPage() {
 
           {/* Loading / Error States */}
           {isLoading ? (
-            <div className="rounded-2xl border border-[#ECE2D8] bg-white p-8 text-center text-sm text-[#7A6252] animate-pulse">
+            <div className="rounded-2xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-8 text-center text-sm text-[var(--bhn-text)] animate-pulse">
               Loading quote requests...
             </div>
           ) : error ? (
-            <div className="rounded-2xl border border-red-200 bg-red-50 p-6 text-sm text-red-700">
+            <div className="rounded-2xl border border-[var(--bhn-error-500)] bg-[var(--bhn-error-50)] p-6 text-sm text-[var(--bhn-error-700)]">
               Unable to load quote requests. Please refresh the page.
             </div>
           ) : quotes.length === 0 ? (
-            <div className="rounded-3xl border border-dashed border-[#D5C7B7] bg-white p-12 text-center space-y-2">
-              <p className="font-serif text-lg font-semibold text-[#4A2612]">No quote requests found</p>
-              <p className="text-sm text-[#7A6252]">
+            <div className="rounded-3xl border border-dashed border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-12 text-center space-y-2">
+              <p className="font-serif text-lg font-semibold text-[var(--bhn-text)]">No quote requests found</p>
+              <p className="text-sm text-[var(--bhn-text)]">
                 Customer quote inquiries will appear here automatically.
               </p>
             </div>
@@ -137,14 +137,14 @@ export default function SellerQuotesPage() {
               const isPending = currentStatus === "pending";
 
               return (
-                <div className="rounded-3xl border border-[#E8DFC0] bg-white p-8 shadow-md space-y-8 animate-fadeIn">
+                <div className="rounded-3xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-8 shadow-md space-y-8 animate-fadeIn">
                   {/* Header inside detail page */}
-                  <div className="flex items-center justify-between border-b border-[#F0E8DC] pb-6">
+                  <div className="flex items-center justify-between border-b border-[var(--bhn-border)] pb-6">
                     <div>
-                      <span className="text-xs font-bold tracking-widest text-[#8C6D58] uppercase">
+                      <span className="text-xs font-bold tracking-widest text-[var(--bhn-text)] uppercase">
                         Customer Quote Request
                       </span>
-                      <h2 className="font-serif text-3xl font-bold text-[#3D2213] mt-1">
+                      <h2 className="font-serif text-3xl font-bold text-[var(--bhn-text)] mt-1">
                         {selectedQuote.title ||
                           selectedQuote.serviceId?.title ||
                           selectedQuote.venueId?.name ||
@@ -203,8 +203,8 @@ export default function SellerQuotesPage() {
 
                   {/* Service tags and note */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="rounded-2xl bg-[#FAF8F5] p-6 border border-[#F0E8DC]">
-                      <h4 className="text-xs font-bold text-[#8C6D58] uppercase tracking-wider mb-3">
+                    <div className="rounded-2xl bg-[var(--bhn-surface-2)] p-6 border border-[var(--bhn-border)]">
+                      <h4 className="text-xs font-bold text-[var(--bhn-text)] uppercase tracking-wider mb-3">
                         Selected Services
                       </h4>
                       <div className="flex flex-wrap gap-2">
@@ -212,22 +212,22 @@ export default function SellerQuotesPage() {
                           selectedQuote.services.map((srv: string, idx: number) => (
                             <span
                               key={idx}
-                              className="rounded-xl bg-[#EBE3D5] px-3.5 py-1.5 text-xs font-semibold text-[#4A2612]"
+                              className="rounded-xl bg-[var(--bhn-surface-2)] px-3.5 py-1.5 text-xs font-semibold text-[var(--bhn-text)]"
                             >
                               {srv}
                             </span>
                           ))
                         ) : (
-                          <span className="text-xs text-[#7A6252]">No additional service tags</span>
+                          <span className="text-xs text-[var(--bhn-text)]">No additional service tags</span>
                         )}
                       </div>
                     </div>
 
-                    <div className="rounded-2xl bg-[#FAF8F5] p-6 border border-[#F0E8DC]">
-                      <h4 className="text-xs font-bold text-[#8C6D58] uppercase tracking-wider mb-3">
+                    <div className="rounded-2xl bg-[var(--bhn-surface-2)] p-6 border border-[var(--bhn-border)]">
+                      <h4 className="text-xs font-bold text-[var(--bhn-text)] uppercase tracking-wider mb-3">
                         Customer Message & Notes
                       </h4>
-                      <p className="text-sm text-[#3D2213] whitespace-pre-wrap leading-relaxed">
+                      <p className="text-sm text-[var(--bhn-text)] whitespace-pre-wrap leading-relaxed">
                         {selectedQuote.note ||
                           selectedQuote.description ||
                           "No specific instructions provided by the customer."}
@@ -236,7 +236,7 @@ export default function SellerQuotesPage() {
                   </div>
 
                   {/* Action Buttons Footer */}
-                  <div className="flex flex-col sm:flex-row items-center justify-between border-t border-[#F0E8DC] pt-6 gap-4">
+                  <div className="flex flex-col sm:flex-row items-center justify-between border-t border-[var(--bhn-border)] pt-6 gap-4">
                     <div className="flex items-center gap-3">
                       {/* PENDING: Show both Approve and Reject */}
                       {isPending && (
@@ -245,7 +245,7 @@ export default function SellerQuotesPage() {
                             type="button"
                             onClick={() => handleApprove(selectedQuote)}
                             disabled={approving || rejecting}
-                            className="rounded-xl bg-[#633318] px-6 py-3 text-xs font-semibold text-white hover:bg-[#4E2711] shadow-md disabled:opacity-50 transition-all"
+                            className="rounded-xl bg-[var(--bhn-brand-600)] px-6 py-3 text-xs font-semibold text-[var(--bhn-text-on-brand)] hover:bg-[var(--bhn-brand-600)] shadow-md disabled:opacity-50 transition-all"
                           >
                             {approving ? "Approving..." : "Approve Quote"}
                           </button>
@@ -253,7 +253,7 @@ export default function SellerQuotesPage() {
                             type="button"
                             onClick={() => handleReject(selectedQuote._id)}
                             disabled={approving || rejecting}
-                            className="rounded-xl border border-[#D5C7B7] bg-white px-6 py-3 text-xs font-semibold text-[#3D2213] hover:bg-[#F3EEE7] disabled:opacity-50 transition-all"
+                            className="rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] px-6 py-3 text-xs font-semibold text-[var(--bhn-text)] hover:bg-[var(--bhn-surface-2)] disabled:opacity-50 transition-all"
                           >
                             {rejecting ? "Rejecting..." : "Reject Quote"}
                           </button>
@@ -262,14 +262,14 @@ export default function SellerQuotesPage() {
 
                       {/* APPROVED: Hide Reject Button completely */}
                       {isApproved && (
-                        <span className="rounded-xl bg-emerald-100 border border-emerald-300 px-5 py-2.5 text-xs font-bold text-emerald-800">
+                        <span className="rounded-xl bg-[var(--bhn-success-50)] border border-[var(--bhn-success-500)] px-5 py-2.5 text-xs font-bold text-[var(--bhn-success-700)]">
                           ✓ Quote Approved
                         </span>
                       )}
 
                       {/* REJECTED: Hide Approve Button completely */}
                       {isRejected && (
-                        <span className="rounded-xl bg-rose-100 border border-rose-300 px-5 py-2.5 text-xs font-bold text-rose-800">
+                        <span className="rounded-xl bg-[var(--bhn-error-50)] border border-[var(--bhn-error-500)] px-5 py-2.5 text-xs font-bold text-[var(--bhn-error-700)]">
                           ✕ Quote Rejected
                         </span>
                       )}
@@ -280,12 +280,12 @@ export default function SellerQuotesPage() {
                       <button
                         type="button"
                         onClick={() => handleOpenChat(selectedQuote)}
-                        className="rounded-xl bg-[#924C2B] px-8 py-3 text-xs font-semibold text-white hover:bg-[#7A3D1F] shadow-md transition-all"
+                        className="rounded-xl bg-[var(--bhn-brand-600)] px-8 py-3 text-xs font-semibold text-[var(--bhn-text-on-brand)] hover:bg-[var(--bhn-brand-600)] shadow-md transition-all"
                       >
                         Open Direct Chat with Customer
                       </button>
                     ) : (
-                      <span className="text-xs font-bold text-rose-600 bg-rose-50 border border-rose-200 px-4 py-2.5 rounded-xl">
+                      <span className="text-xs font-bold text-[var(--bhn-error-600)] bg-[var(--bhn-error-50)] border border-[var(--bhn-error-500)] px-4 py-2.5 rounded-xl">
                         Chat Disabled (Quote Rejected)
                       </span>
                     )}
@@ -295,9 +295,9 @@ export default function SellerQuotesPage() {
             })()
           ) : (
             /* ALL QUOTES TABLE VIEW */
-            <div className="overflow-x-auto rounded-3xl border border-[#E8DFC0]/70 bg-white shadow-sm">
+            <div className="overflow-x-auto rounded-3xl border border-[color-mix(in_srgb,var(--bhn-border)_70%,transparent)] bg-[var(--bhn-surface)] shadow-sm">
               <table className="w-full border-collapse text-left text-sm">
-                <thead className="bg-[#F3EEE7] text-xs font-semibold uppercase text-[#7A6252] tracking-wider border-b border-[#E8DFC0]/70">
+                <thead className="bg-[var(--bhn-surface-2)] text-xs font-semibold uppercase text-[var(--bhn-text)] tracking-wider border-b border-[color-mix(in_srgb,var(--bhn-border)_70%,transparent)]">
                   <tr>
                     <th className="px-6 py-4">Service / Venue</th>
                     <th className="px-6 py-4">Customer</th>
@@ -307,7 +307,7 @@ export default function SellerQuotesPage() {
                     <th className="px-6 py-4 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#F0E8DC]">
+                <tbody className="divide-y divide-[var(--bhn-border)]">
                   {quotes.map((quote: any) => {
                     const status = normalizeStatus(quote.status);
 
@@ -337,15 +337,15 @@ export default function SellerQuotesPage() {
                       <tr
                         key={quote._id}
                         onClick={() => setSelectedQuote(quote)}
-                        className="transition-colors hover:bg-[#FAF6F0] cursor-pointer"
+                        className="transition-colors hover:bg-[var(--bhn-surface-2)] cursor-pointer"
                       >
-                        <td className="px-6 py-4 font-semibold text-[#3D2213]">{listingName}</td>
-                        <td className="px-6 py-4 text-[#6B5545]">{customerName}</td>
-                        <td className="px-6 py-4 text-[#6B5545]">
+                        <td className="px-6 py-4 font-semibold text-[var(--bhn-text)]">{listingName}</td>
+                        <td className="px-6 py-4 text-[var(--bhn-text)]">{customerName}</td>
+                        <td className="px-6 py-4 text-[var(--bhn-text)]">
                           {quote.eventType ? `${quote.eventType} • ` : ""}
                           {formattedDate}
                         </td>
-                        <td className="px-6 py-4 font-semibold text-[#3D2213]">{budget}</td>
+                        <td className="px-6 py-4 font-semibold text-[var(--bhn-text)]">{budget}</td>
                         <td className="px-6 py-4">
                           <span
                             className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold capitalize ${
@@ -362,7 +362,7 @@ export default function SellerQuotesPage() {
                               e.stopPropagation();
                               setSelectedQuote(quote);
                             }}
-                            className="rounded-xl bg-[#633318] px-4 py-2 text-xs font-semibold text-white hover:bg-[#4E2711] transition-all shadow-sm"
+                            className="rounded-xl bg-[var(--bhn-brand-600)] px-4 py-2 text-xs font-semibold text-[var(--bhn-text-on-brand)] hover:bg-[var(--bhn-brand-600)] transition-all shadow-sm"
                           >
                             View Details & Chat
                           </button>
@@ -382,9 +382,9 @@ export default function SellerQuotesPage() {
 
 function DetailBox({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl p-4 bg-[#FAF8F5] border border-[#F0E8DC]">
-      <p className="text-[11px] font-bold text-[#8C6D58] uppercase tracking-wider">{label}</p>
-      <p className="mt-1 text-sm font-bold text-[#3D2213] capitalize">{value}</p>
+    <div className="rounded-2xl p-4 bg-[var(--bhn-surface-2)] border border-[var(--bhn-border)]">
+      <p className="text-[11px] font-bold text-[var(--bhn-text)] uppercase tracking-wider">{label}</p>
+      <p className="mt-1 text-sm font-bold text-[var(--bhn-text)] capitalize">{value}</p>
     </div>
   );
 }

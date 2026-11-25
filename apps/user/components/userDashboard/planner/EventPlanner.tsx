@@ -258,7 +258,7 @@ export default function EventPlanner() {
 
         {userEvents.length > 0 && !showCreateForm && (
           <div className="bhn-card p-6 text-center">
-            <CalendarClock size={40} className="mx-auto mb-3 text-[var(--bhn-brand-600)]" />
+            <CalendarClock size={40} className="mx-auto mb-3 text-[var(--bhn-text)]" />
             <h3 className="font-serif text-xl font-bold text-[var(--bhn-text)] mb-1">Event Planner</h3>
             <p className="text-sm text-[var(--bhn-text-muted)] mb-4">
               You have <span className="font-semibold text-[var(--bhn-text)]">{userEvents.length}</span> event
@@ -383,7 +383,7 @@ function EventWorkspace({ eventId, sourceEvent, onRefresh }: EventWorkspaceProps
     <div className="space-y-4">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-3">
-          <CalendarClock size={18} className="text-[var(--bhn-brand-600)]" />
+          <CalendarClock size={18} className="text-[var(--bhn-text)]" />
           <span className="font-semibold text-[var(--bhn-text)]">{workingEvent.title}</span>
           <span className="text-xs text-[var(--bhn-text-muted)]">({workingEvent.guestCount || 0} guests)</span>
         </div>
@@ -458,7 +458,7 @@ function EventCreateForm({ onSubmit, onCancel, hideCancel }: EventCreateFormProp
   return (
     <form onSubmit={handleSubmit} className="bhn-card p-6 space-y-5">
       <div className="flex items-center gap-3">
-        <Sparkles size={18} className="text-[var(--bhn-brand-600)]" />
+        <Sparkles size={18} className="text-[var(--bhn-text)]" />
         <h3 className="font-display text-lg font-bold text-[var(--bhn-text)]">
           {hideCancel ? "Create your first event" : "New event"}
         </h3>

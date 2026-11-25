@@ -1,7 +1,7 @@
 "use client";
 
 import StudentHeader from "@/components/common/StudentHeader";
-import Button from "@/components/common/Button";
+import { Button } from "@bandhan/ui";
 import Input from "@/components/form/Input";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -26,11 +26,6 @@ import {
 
 export default function SettingsPage() {
 
-    const [interests, setInterests] = useState<string[]>([
-        "Web Development", "Data Science", "Mobile Apps", "AI & ML",
-        "Cloud Computing", "Cybersecurity", "UI/UX Design", "Digital Marketing",
-        "Photography", "Music Production", "Business Strategy", "Creative Writing"
-    ]);
     const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
@@ -145,7 +140,7 @@ export default function SettingsPage() {
     };
 
     return (
-        <div className="min-h-screen bg-[#F7F3EF] dark:bg-[#171717]">
+        <div className="min-h-screen bg-[var(--bhn-bg)] dark:bg-[var(--bhn-neutral-900)]">
 
             {/* HEADER */}
             <StudentHeader />
@@ -155,7 +150,7 @@ export default function SettingsPage() {
                 {/* SIDEBAR */}
                 <div className="w-full lg:w-[240px] shrink-0">
 
-                    <h2 className="text-[24px] font-bold text-[#2D201B] dark:text-[#ededed]">
+                    <h2 className="text-[24px] font-bold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
                         Settings
                     </h2>
 
@@ -165,9 +160,9 @@ export default function SettingsPage() {
                         <button
                             onClick={() => setActiveTab("Profile Info")}
                             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-sm sm:text-base ${activeTab === "Profile Info"
-                                ? "bg-[#F5E8E1] dark:bg-[#1a1a1a] text-[#8B4A28] dark:text-[#c9a882] font-medium"
-                                : "text-[#7B6C63] dark:text-[#b89b7d] hover:bg-white"
-                                }`}
+                                ? "bg-[var(--bhn-surface)] dark:bg-[var(--bhn-neutral-900)] text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)] font-medium"
+                                : "text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)] hover:bg-[var(--bhn-surface)]"
+                            }`}
                         >
                             <User size={18} />
 
@@ -178,9 +173,9 @@ export default function SettingsPage() {
                         <button
                             onClick={() => setActiveTab("Preferences")}
                             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-sm sm:text-base ${activeTab === "Preferences"
-                                ? "bg-[#F5E8E1] dark:bg-[#1a1a1a] text-[#8B4A28] dark:text-[#c9a882] font-medium"
-                                : "text-[#7B6C63] dark:text-[#b89b7d] hover:bg-white"
-                                }`}
+                                ? "bg-[var(--bhn-surface)] dark:bg-[var(--bhn-neutral-900)] text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)] font-medium"
+                                : "text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)] hover:bg-[var(--bhn-surface)]"
+                            }`}
                         >
                             <Bell size={18} />
 
@@ -192,65 +187,62 @@ export default function SettingsPage() {
                         <button
                             onClick={() => setActiveTab("Learning Interests")}
                             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-sm sm:text-base ${activeTab === "Learning Interests"
-                                ? "bg-[#F5E8E1] dark:bg-[#1a1a1a] text-[#8B4A28] dark:text-[#c9a882] font-medium"
-                                : "text-[#7B6C63] dark:text-[#b89b7d] hover:bg-white"
-                                }`}
-                        >
-                            <BookOpen size={18} />
+                                ? "bg-[var(--bhn-surface)] dark:bg-[var(--bhn-neutral-900)] text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)] font-medium"
+                                : "text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)] hover:bg-[var(--bhn-surface)]"`
+                            }>
+                                <BookOpen size={18} />
 
-                            <span>Learning Interests</span>
-                        </button>
+                                <span>Learning Interests</span>
+                            </button>
 
                         {/* PAYMENT */}
                         <button
                             onClick={() => setActiveTab("Payment & Billing")}
                             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-sm sm:text-base ${activeTab === "Payment & Billing"
-                                ? "bg-[#F5E8E1] dark:bg-[#1a1a1a] text-[#8B4A28] dark:text-[#c9a882] font-medium"
-                                : "text-[#7B6C63] dark:text-[#b89b7d] hover:bg-white"
-                                }`}
-                        >
-                            <CreditCard size={18} />
+                                ? "bg-[var(--bhn-surface)] dark:bg-[var(--bhn-neutral-900)] text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)] font-medium"
+                                : "text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)] hover:bg-[var(--bhn-surface)]"`
+                            }>
+                                <CreditCard size={18} />
 
-                            <span>Payment & Billing</span>
-                        </button>
+                                <span>Payment & Billing</span>
+                            </button>
 
                         {/* SECURITY */}
                         <button
                             onClick={() => setActiveTab("Security")}
                             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-sm sm:text-base ${activeTab === "Security"
-                                ? "bg-[#F5E8E1] dark:bg-[#1a1a1a] text-[#8B4A28] dark:text-[#c9a882] font-medium"
-                                : "text-[#7B6C63] dark:text-[#b89b7d] hover:bg-white"
-                                }`}
-                        >
-                            <Shield size={18} />
+                                ? "bg-[var(--bhn-surface)] dark:bg-[var(--bhn-neutral-900)] text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)] font-medium"
+                                : "text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)] hover:bg-[var(--bhn-surface)]"`
+                            }>
+                                <Shield size={18} />
 
-                            <span>Security</span>
-                        </button>
+                                <span>Security</span>
+                            </button>
+
+                        </div>
 
                     </div>
-
-                </div>
 
                 {/* RIGHT CONTENT */}
                 <div className="flex-1 space-y-6 lg:space-y-7">
 
                     {/* PROFILE */}
                     {(activeTab === "Profile Info") && (
-                        <div className="bg-white rounded-2xl ...">
-                            <div className="bg-white rounded-2xl border border-[#E8DDD5] dark:border-[#374151] p-4 sm:p-4 lg:p-5 shadow-sm">
+                        <div className="bg-[var(--bhn-surface)] rounded-2xl">
+                            <div className="bg-[var(--bhn-surface)] rounded-2xl border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] p-4 sm:p-4 lg:p-5 shadow-sm">
 
-                                <h2 className="text-[26px] sm:text-[32px] font-bold text-[#2D201B] dark:text-[#ededed]">
+                                <h2 className="text-[26px] sm:text-[32px] font-bold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
                                     Profile Info
                                 </h2>
 
-                                <p className="text-[#8A7A71] dark:text-[#7a6a5a] mt-2 text-sm sm:text-base">
+                                <p className="text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mt-2 text-sm sm:text-base">
                                     Update your personal information and profile picture.
                                 </p>
 
                                 <div className="flex flex-col lg:flex-row items-start gap-4 lg:gap-5 mt-4">
 
                                     {/* IMAGE */}
-                                    <div className="w-[90px] h-[90px] rounded-full bg-[#F5E8E1] dark:bg-[#1a1a1a] flex items-center justify-center overflow-hidden mx-auto lg:mx-0">
+                                    <div className="w-[90px] h-[90px] rounded-full bg-[var(--bhn-neutral-50)] dark:bg-[var(--bhn-neutral-900)] flex items-center justify-center overflow-hidden mx-auto lg:mx-0">
 
                                         <img
                                             src={profileImage || "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"}
@@ -268,7 +260,7 @@ export default function SettingsPage() {
                                             {/* NAME */}
                                             <div>
 
-                                                <p className="text-sm text-[#7B6C63] dark:text-[#b89b7d] mb-2">
+                                                <p className="text-sm text-[var(--bhn-text-muted)] mb-2">
                                                     Full Name
                                                 </p>
 
@@ -284,7 +276,7 @@ export default function SettingsPage() {
                                             {/* EMAIL */}
                                             <div>
 
-                                                <p className="text-sm text-[#7B6C63] dark:text-[#b89b7d] mb-2">
+                                                <p className="text-sm text-[var(--bhn-text-muted)] mb-2">
                                                     Email Address
                                                 </p>
 
@@ -302,7 +294,7 @@ export default function SettingsPage() {
                                         {/* PHONE */}
                                         <div className="mt-5">
 
-                                            <p className="text-sm text-[#7B6C63] dark:text-[#b89b7d] mb-2">
+                                            <p className="text-sm text-[var(--bhn-text-muted)] mb-2">
                                                 Phone Number
                                             </p>
 
@@ -318,7 +310,7 @@ export default function SettingsPage() {
                                         <Button
                                             onClick={handleSaveProfile}
                                             loading={isProfileLoading || isCreatingProfile || isUpdatingProfile}
-                                            className="mt-6 bg-[#8B4A28] dark:bg-[#b86a3a] hover:bg-[#744024] dark:hover:bg-[#a05a30] text-white px-4 py-2 text-sm w-full sm:w-auto"
+                                            className="mt-6 bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] hover:bg-[var(--bhn-brand-800)] dark:hover:bg-[var(--bhn-brand-300)] text-white px-4 py-2 text-sm w-full sm:w-auto"
                                         >
                                             Save Changes
                                         </Button>
@@ -326,7 +318,6 @@ export default function SettingsPage() {
                                     </div>
 
                                 </div>
-
                             </div>
                         </div>
                     )}
@@ -335,36 +326,36 @@ export default function SettingsPage() {
                     {/* PREFERENCES */}
                     {(activeTab === "Profile Info" ||
                         activeTab === "Preferences") && (
-                            <div className="bg-white rounded-2xl ...">
-                                <div className="bg-white rounded-2xl border border-[#E8DDD5] dark:border-[#374151] p-4 sm:p-4 lg:p-5 shadow-sm">
+                            <div className="bg-[var(--bhn-surface)] rounded-2xl">
+                                <div className="bg-[var(--bhn-surface)] rounded-2xl border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] p-4 sm:p-4 lg:p-5 shadow-sm">
 
-                                    <h2 className="text-[28px] sm:text-[35px] font-bold text-[#2D201B] dark:text-[#ededed] leading-none">
+                                    <h2 className="text-[28px] sm:text-[35px] font-bold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] leading-none">
                                         Preferences
                                     </h2>
 
-                                    <p className="text-[#9A8B83] dark:text-[#7a6a5a] mt-4 text-base sm:text-lg lg:text-[20px]">
+                                    <p className="text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mt-4 text-base sm:text-base lg:text-[20px]">
                                         Manage how you interact with the platform and receive updates.
                                     </p>
 
                                     <div className="mt-4 lg:mt-6">
 
                                         {/* EMAIL */}
-                                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 py-6 border-b border-[#EEE3DC] dark:border-[#374151]">
+                                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 py-6 border-b border-[var(--bhn-border)] dark:border-[var(--bhn-border)]">
 
                                             <div className="flex items-start gap-4 sm:gap-5">
 
                                                 <Mail
                                                     size={24}
-                                                    className="text-[#8C7569] dark:text-[#7a6a5a] mt-1"
+                                                    className="text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)] mt-1"
                                                 />
 
                                                 <div>
 
-                                                    <h3 className="text-xl sm:text-2xl font-semibold text-[#2D201B] dark:text-[#ededed]">
+                                                    <h3 className="text-xl sm:text-2xl font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
                                                         Email Notifications
                                                     </h3>
 
-                                                    <p className="text-[#8A7A71] dark:text-[#7a6a5a] text-sm sm:text-base lg:text-[18px] mt-1">
+                                                    <p className="text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] text-sm sm:text-base lg:text-[18px] mt-1">
                                                         Receive course progress and system alerts via email.
                                                     </p>
 
@@ -372,98 +363,80 @@ export default function SettingsPage() {
 
                                             </div>
 
-                                            <button
-                                                onClick={() =>
-                                                    setEmailNotification(!emailNotification)
-                                                }
-                                                className={`w-[65px] h-[33px] rounded-full flex items-center px-1 transition-all duration-300 ${emailNotification
-                                                    ? "bg-[#8B4A28] dark:bg-[#b86a3a]"
-                                                    : "bg-[#E5E0DC]"
-                                                    }`}
-                                            >
+                                            {/* COURSE REMINDER */}
+                                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 py-6 border-b border-[var(--bhn-border)] dark:border-[var(--bhn-border)]">
 
-                                                <div
-                                                    className={`w-[25px] h-[25px] rounded-full bg-white transition-all duration-300 ${emailNotification ? "ml-auto" : "ml-0"
-                                                        }`}
-                                                />
+                                                <div className="flex items-start gap-4 sm:gap-5">
 
-                                            </button>
+                                                    <Clock3
+                                                        size={24}
+                                                        className="text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)] mt-1"
+                                                    />
 
-                                        </div>
+                                                    <div>
 
-                                        {/* COURSE REMINDER */}
-                                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 py-6 border-b border-[#EEE3DC] dark:border-[#374151]">
+                                                        <h3 className="text-xl sm:text-2xl font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
+                                                            Course Reminders
+                                                        </h3>
 
-                                            <div className="flex items-start gap-4 sm:gap-5">
+                                                        <p className="text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] text-sm sm:text-base lg:text-[18px] mt-1">
+                                                            Get nudge notifications for your daily learning goals.
+                                                        </p>
 
-                                                <Clock3
-                                                    size={24}
-                                                    className="text-[#8C7569] dark:text-[#7a6a5a] mt-1"
-                                                />
-
-                                                <div>
-
-                                                    <h3 className="text-xl sm:text-2xl font-semibold text-[#2D201B] dark:text-[#ededed]">
-                                                        Course Reminders
-                                                    </h3>
-
-                                                    <p className="text-[#8A7A71] dark:text-[#7a6a5a] text-sm sm:text-base lg:text-[18px] mt-1">
-                                                        Get nudge notifications for your daily learning goals.
-                                                    </p>
+                                                    </div>
 
                                                 </div>
 
+                                                <button
+                                                    onClick={() =>
+                                                        setCourseReminder(!courseReminder)
+                                                    }
+                                                    className={`w-[65px] h-[33px] rounded-full flex items-center px-1 transition-all duration-300 ${courseReminder
+                                                        ? "bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)]"
+                                                        : "bg-[var(--bhn-border)]"`
+                                                    }`}
+                                                >
+
+                                                    <div
+                                                        className={`w-[25px] h-[25px] rounded-full bg-[var(--bhn-surface)] transition-all duration-300 ${courseReminder ? "ml-auto" : "ml-0"
+                                                        }`}
+                                                    />
+
+                                                </button>
+
                                             </div>
 
-                                            <button
-                                                onClick={() =>
-                                                    setCourseReminder(!courseReminder)
-                                                }
-                                                className={`w-[65px] h-[33px] rounded-full flex items-center px-1 transition-all duration-300 ${courseReminder
-                                                    ? "bg-[#8B4A28] dark:bg-[#b86a3a]"
-                                                    : "bg-[#E5E0DC]"
-                                                    }`}
-                                            >
+                                            {/* THEME */}
+                                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 py-6">
 
-                                                <div
-                                                    className={`w-[25px] h-[25px] rounded-full bg-white transition-all duration-300 ${courseReminder ? "ml-auto" : "ml-0"
-                                                        }`}
-                                                />
+                                                <div className="flex items-start gap-4 sm:gap-5">
 
-                                            </button>
+                                                    <Moon
+                                                        size={24}
+                                                        className="text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)] mt-1"
+                                                    />
 
-                                        </div>
+                                                    <div>
 
-                                        {/* THEME */}
-                                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 py-6">
+                                                        <h3 className="text-xl sm:text-2xl font-semibold text-[var(--bhn-text)]">
+                                                            Light theme
+                                                        </h3>
 
-                                            <div className="flex items-start gap-4 sm:gap-5">
+                                                        <p className="text-[var(--bhn-text-soft)] text-sm sm:text-base lg:text-[18px] mt-1">
+                                                            A consistent, high-contrast theme is active across the learning portal.
+                                                        </p>
 
-                                                <Moon
-                                                    size={24}
-                                                    className="text-[#8C7569] dark:text-[#7a6a5a] mt-1"
-                                                />
-
-                                                <div>
-
-                                                    <h3 className="text-xl sm:text-2xl font-semibold text-[#2D201B]">
-                                                        Light theme
-                                                    </h3>
-
-                                                    <p className="text-[#8A7A71] text-sm sm:text-base lg:text-[18px] mt-1">
-                                                        A consistent, high-contrast theme is active across the learning portal.
-                                                    </p>
+                                                    </div>
 
                                                 </div>
 
-                                            </div>
+                                                <span className="rounded-full bg-[var(--bhn-surface-3)] px-4 py-2 text-xs font-semibold text-[var(--bhn-text-soft)]">Active</span>
 
-                                            <span className="rounded-full bg-[#F2ECE8] px-4 py-2 text-xs font-semibold text-[#6D5E56]">Active</span>
+                                            </div>
 
                                         </div>
 
                                     </div>
-
                                 </div>
                             </div>
                         )}
@@ -472,49 +445,33 @@ export default function SettingsPage() {
                     {/* LEARNING INTERESTS */}
                     {(activeTab === "Profile Info" ||
                         activeTab === "Learning Interests") && (
-                            <div className="bg-white rounded-2xl ...">
-                                <div className="bg-white rounded-2xl border border-[#E8DDD5] dark:border-[#374151] p-4 sm:p-4 lg:p-5 shadow-sm">
+                            <div className="bg-[var(--bhn-surface)] rounded-2xl">
+                                <div className="bg-[var(--bhn-surface)] rounded-2xl border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] p-4 sm:p-4 lg:p-5 shadow-sm">
 
-                                    <h2 className="text-[26px] sm:text-[32px] font-bold text-[#2D201B] dark:text-[#ededed]">
+                                    <h2 className="text-[26px] sm:text-[32px] font-bold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
                                         Learning Interests
                                     </h2>
 
-                                    <p className="text-[#8A7A71] dark:text-[#7a6a5a] mt-2 text-sm sm:text-base">
+                                    <p className="text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mt-2 text-sm sm:text-base">
                                         Personalize your course recommendations based on what you love.
                                     </p>
 
                                     <div className="flex flex-wrap gap-3 mt-4">
 
-                                        {interests.map((item) => (
+                                        {selectedInterests.map((item) => (
                                             <button
                                                 key={item}
                                                 onClick={() => toggleInterest(item)}
                                                 className={`px-4 sm:px-5 py-3 rounded-full text-sm font-medium transition-all
                                                  ${selectedInterests.includes(item)
-                                                        ? "bg-[#8B4A28] dark:bg-[#b86a3a] text-white"
-                                                        : "bg-[#F2ECE8] dark:bg-[#1a1a1a] text-[#6D5E56] dark:text-[#a89080]"
-                                                    }`}
+                                                    ? "bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] text-white"
+                                                    : "bg-[var(--bhn-surface-3)] dark:bg-[var(--bhn-neutral-900)] text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]"`
+                                                }`}
                                             >
                                                 {item}
                                             </button>
                                         ))}
-
                                     </div>
-
-                                    <Button
-                                        onClick={async () => {
-                                            try {
-                                                await saveProfile({ interests: selectedInterests });
-                                                alert("Interests updated successfully");
-                                            } catch (error: any) {
-                                                alert(error?.data?.message || "Unable to update interests");
-                                            }
-                                        }}
-                                        loading={isCreatingProfile || isUpdatingProfile}
-                                        className="mt-4 bg-[#8B4A28] dark:bg-[#b86a3a] hover:bg-[#744024] dark:hover:bg-[#a05a30] text-white px-4 py-2 text-sm w-full sm:w-auto"
-                                    >
-                                        Update Interests
-                                    </Button>
 
                                 </div>
                             </div>
@@ -524,14 +481,14 @@ export default function SettingsPage() {
                     {/* PAYMENT */}
                     {(activeTab === "Profile Info" ||
                         activeTab === "Payment & Billing") && (
-                            <div className="bg-white rounded-2xl ...">
-                                <div className="bg-white rounded-2xl border border-[#E8DDD5] dark:border-[#374151] p-4 sm:p-4 lg:p-5 shadow-sm">
+                            <div className="bg-[var(--bhn-surface)] rounded-2xl">
+                                <div className="bg-[var(--bhn-surface)] rounded-2xl border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] p-4 sm:p-4 lg:p-5 shadow-sm">
 
-                                    <h2 className="text-[26px] sm:text-[32px] font-bold text-[#2D201B] dark:text-[#ededed]">
+                                    <h2 className="text-[26px] sm:text-[32px] font-bold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
                                         Payment & Billing
                                     </h2>
 
-                                    <p className="text-[#8A7A71] dark:text-[#7a6a5a] mt-2 text-sm sm:text-base">
+                                    <p className="text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mt-2 text-sm sm:text-base">
                                         Securely manage your saved payment methods and transaction history.
                                     </p>
 
@@ -539,28 +496,28 @@ export default function SettingsPage() {
                                         {paymentMethods.map((method) => (
                                             <div
                                                 key={method.id}
-                                                className="border border-[#E7DDD6] dark:border-[#374151] rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                                                className="border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                                             >
                                                 <div className="flex items-center gap-4">
 
                                                     {method.type === "card" ? (
                                                         <CreditCard
                                                             size={22}
-                                                            className="text-[#8B4A28] dark:text-[#c9a882]"
+                                                            className="text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)]"
                                                         />
                                                     ) : (
                                                         <Smartphone
                                                             size={22}
-                                                            className="text-[#8B4A28] dark:text-[#c9a882]"
+                                                            className="text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)]"
                                                         />
                                                     )}
 
                                                     <div>
-                                                        <h3 className="text-[18px] font-semibold text-[#2D201B] dark:text-[#ededed]">
+                                                        <h3 className="text-[18px] font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
                                                             {method.title}
                                                         </h3>
 
-                                                        <p className="text-[#8A7A71] dark:text-[#7a6a5a] mt-1">
+                                                        <p className="text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mt-1">
                                                             {method.subtitle}
                                                         </p>
                                                     </div>
@@ -569,7 +526,7 @@ export default function SettingsPage() {
 
                                                 <button
                                                     onClick={() => removeMethod(method.id)}
-                                                    className="text-[#C05B4B] font-medium"
+                                                    className="text-[var(--bhn-error-600)] font-medium"
                                                 >
                                                     Remove
                                                 </button>
@@ -579,69 +536,68 @@ export default function SettingsPage() {
 
                                     <button
                                         onClick={() =>
-                                            setShowPaymentForm(!showPaymentForm)
-                                        }
-                                        className="mt-6 px-5 py-3 border border-[#D9CEC7] dark:border-[#374151] rounded-xl text-[#5D4E46] dark:text-[#a89080] hover:bg-[#F8F2EE] dark:hover:bg-[#1a1a1a] transition-all w-full sm:w-auto"
+                            setShowPaymentForm(!showPaymentForm)
+                        }
+                                        className="mt-6 px-5 py-3 border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] rounded-xl text-[var(--bhn-text-soft)] hover:bg-[var(--bhn-neutral-50)] dark:hover:bg-[var(--bhn-neutral-950)] transition-all w-full sm:w-auto"
                                     >
                                         + Add New Method
                                     </button>
 
-                                    {showPaymentForm && (
-                                        <div className="mt-5 border border-[#E7DDD6] dark:border-[#374151] rounded-2xl p-5">
+                                {showPaymentForm && (
+                                    <div className="mt-5 border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] rounded-2xl p-5">
 
-                                            <select
-                                                value={methodType}
-                                                onChange={(e) => setMethodType(e.target.value)}
-                                                className="w-full border rounded-xl px-4 py-3 mb-4"
-                                            >
-                                                <option value="card">Card</option>
-                                                <option value="upi">UPI</option>
-                                            </select>
+                                        <select
+                                            value={methodType}
+                                            onChange={(e) => setMethodType(e.target.value)}
+                                            className="w-full border rounded-xl px-4 py-3 mb-4"
+                                        >
+                                            <option value="card">Card</option>
+                                            <option value="upi">UPI</option>
+                                        </select>
 
-                                            <input
-                                                value={methodValue}
-                                                onChange={(e) => setMethodValue(e.target.value)}
-                                                placeholder={
-                                                    methodType === "card"
-                                                        ? "Enter Card Number"
-                                                        : "Enter UPI ID"
-                                                }
-                                                className="w-full border rounded-xl px-4 py-3"
-                                            />
+                                        <input
+                                            value={methodValue}
+                                            onChange={(e) => setMethodValue(e.target.value)}
+                                            placeholder={
+                                                methodType === "card"
+                                                    ? "Enter Card Number"
+                                                    : "Enter UPI ID"
+                                            }
+                                            className="w-full border rounded-xl px-4 py-3"
+                                        />
 
-                                            <Button
-                                                onClick={addPaymentMethod}
-                                                className="mt-4 bg-[#8B4A28] dark:bg-[#b86a3a] text-white"
-                                            >
-                                                Save Method
-                                            </Button>
+                                        <Button
+                                            onClick={addPaymentMethod}
+                                            className="mt-4 bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] text-white"
+                                        >
+                                            Save Method
+                                        </Button>
 
-                                        </div>
-                                    )}
-
-                                </div>
+                                    </div>
+                                )}
                             </div>
                         )}
+                    )}
 
                     {/* SECURITY */}
                     {(activeTab === "Profile Info" ||
                         activeTab === "Security") && (
-                            <div className="bg-white rounded-2xl ...">
-                                <div className="bg-white rounded-2xl border border-[#E8DDD5] dark:border-[#374151] p-4 sm:p-4 lg:p-5 shadow-sm">
+                            <div className="bg-[var(--bhn-surface)] rounded-2xl">
+                                <div className="bg-[var(--bhn-surface)] rounded-2xl border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] p-4 sm:p-4 lg:p-5 shadow-sm">
 
-                                    <h2 className="text-[26px] sm:text-[32px] font-bold text-[#2D201B] dark:text-[#ededed]">
+                                    <h2 className="text-[26px] sm:text-[32px] font-bold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
                                         Security
                                     </h2>
 
-                                    <p className="text-[#8A7A71] dark:text-[#7a6a5a] mt-2 text-sm sm:text-base">
+                                    <p className="text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mt-2 text-sm sm:text-base">
                                         Maintain account safety with password and authentication settings.
                                     </p>
 
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
                                         <div>
 
-                                            <p className="text-sm text-[#7B6C63] dark:text-[#b89b7d] mb-2">
+                                            <p className="text-sm text-[var(--bhn-text-muted)] mb-2">
                                                 Current Password
                                             </p>
 
@@ -656,7 +612,7 @@ export default function SettingsPage() {
 
                                         <div>
 
-                                            <p className="text-sm text-[#7B6C63] dark:text-[#b89b7d] mb-2">
+                                            <p className="text-sm text-[var(--bhn-text-muted)] mb-2">
                                                 New Password
                                             </p>
 
@@ -667,28 +623,27 @@ export default function SettingsPage() {
                                                 onChange={(value) => setNewPassword(value)}
                                                 className="h-[52px]"
                                             />
-
                                         </div>
 
                                     </div>
 
                                     {/* 2FA */}
-                                    <div className="mt-4 border border-[#E7DDD6] dark:border-[#374151] rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+                                    <div className="mt-4 border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
 
                                         <div className="flex items-start sm:items-center gap-4">
 
                                             <Shield
                                                 size={22}
-                                                className="text-[#0EA5A4] mt-1 sm:mt-0"
+                                                className="text-[var(--bhn-info-500)] mt-1 sm:mt-0"
                                             />
 
                                             <div>
 
-                                                <h3 className="text-[18px] font-semibold text-[#2D201B] dark:text-[#ededed]">
+                                                <h3 className="text-[18px] font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
                                                     Two-Factor Authentication (2FA)
                                                 </h3>
 
-                                                <p className="text-[#8A7A71] dark:text-[#7a6a5a] mt-1 text-sm sm:text-base">
+                                                <p className="text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mt-1 text-sm sm:text-base">
                                                     Enable an extra layer of security for your account.
                                                 </p>
 
@@ -698,7 +653,7 @@ export default function SettingsPage() {
 
                                         <button
                                             onClick={() => alert("Two-factor authentication will be available in a future update.")}
-                                            className="text-[#8B4A28] dark:text-[#c9a882] font-semibold text-left sm:text-right"
+                                            className="text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)] font-semibold text-left sm:text-right"
                                         >
                                             Enable now
                                         </button>
@@ -708,7 +663,7 @@ export default function SettingsPage() {
                                     <Button
                                         onClick={handleUpdatePassword}
                                         loading={isChangingPassword}
-                                        className="mt-4 bg-[#8B4A28] dark:bg-[#b86a3a] hover:bg-[#744024] dark:hover:bg-[#a05a30] text-white px-4 py-2 text-sm w-full sm:w-auto"
+                                        className="mt-4 bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] hover:bg-[var(--bhn-brand-800)] dark:hover:bg-[var(--bhn-brand-300)] text-white px-4 py-2 text-sm w-full sm:w-auto"
                                     >
                                         Update Password
                                     </Button>
@@ -716,7 +671,7 @@ export default function SettingsPage() {
                                 </div>
                             </div>
                         )}
-
+                    )}
 
                 </div>
 

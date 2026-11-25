@@ -79,14 +79,14 @@ export default function AddressesPage() {
     <DashboardLayout>
       <div className="mx-auto max-w-3xl px-4 py-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold text-[#1C1A16]">Saved Addresses</h1>
+          <h1 className="text-xl font-bold text-[var(--bhn-text)]">Saved Addresses</h1>
           <Button variant="primary" icon={<Plus className="h-4 w-4" />} onClick={() => setForm(EMPTY)}>
             Add address
           </Button>
         </div>
 
         {isLoading ? (
-          <p className="mt-8 text-gray-500">Loading…</p>
+          <p className="mt-8 text-[var(--bhn-text-muted)]">Loading…</p>
         ) : form ? (
           <div className="surface mt-4 space-y-3 p-4">
             <Input label="Full name" value={form.fullName} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setForm({ ...form, fullName: e.target.value })} />
@@ -98,7 +98,7 @@ export default function AddressesPage() {
               <Input label="State" value={form.state} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setForm({ ...form, state: e.target.value })} />
               <Input label="Pincode" value={form.pincode} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setForm({ ...form, pincode: e.target.value })} />
             </div>
-            <label className="flex items-center gap-2 text-sm text-gray-600">
+            <label className="flex items-center gap-2 text-sm text-[var(--bhn-text)]">
               <input type="checkbox" checked={form.isDefault} onChange={(e) => setForm({ ...form, isDefault: e.target.checked })} />
               Set as default
             </label>
@@ -108,22 +108,22 @@ export default function AddressesPage() {
             </div>
           </div>
         ) : addresses.length === 0 ? (
-          <div className="mt-8 rounded-xl border border-dashed border-[#E7E1D8] bg-white p-10 text-center">
-            <MapPin className="mx-auto h-10 w-10 text-gray-300" />
-            <p className="mt-3 text-gray-500">No saved addresses yet.</p>
+          <div className="mt-8 rounded-xl border border-dashed border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-10 text-center">
+            <MapPin className="mx-auto h-10 w-10 text-[var(--bhn-text-soft)]" />
+            <p className="mt-3 text-[var(--bhn-text-muted)]">No saved addresses yet.</p>
           </div>
         ) : (
           <div className="mt-4 space-y-3">
             {addresses.map((a) => (
               <div key={a.id} className="surface flex items-start justify-between p-4">
                 <div>
-                  <p className="font-semibold text-[#1C1A16]">
-                    {a.fullName} {a.isDefault && <span className="ml-2 rounded-full bg-[#FAF1EA] px-2 py-0.5 text-[10px] text-[#924C2B]">Default</span>}
+                  <p className="font-semibold text-[var(--bhn-text)]">
+                    {a.fullName} {a.isDefault && <span className="ml-2 rounded-full bg-[var(--bhn-surface-2)] px-2 py-0.5 text-[10px] text-[var(--bhn-text)]">Default</span>}
                   </p>
-                  <p className="text-sm text-gray-600">{a.line1}, {a.line2}</p>
-                  <p className="text-xs text-gray-400">{a.city}, {a.state} - {a.pincode}</p>
+                  <p className="text-sm text-[var(--bhn-text)]">{a.line1}, {a.line2}</p>
+                  <p className="text-xs text-[var(--bhn-text-muted)]">{a.city}, {a.state} - {a.pincode}</p>
                 </div>
-                <button onClick={() => remove(a.id)} className="text-xs text-red-500 hover:underline">Remove</button>
+                <button onClick={() => remove(a.id)} className="text-xs text-[var(--bhn-error-500)] hover:underline">Remove</button>
               </div>
             ))}
           </div>

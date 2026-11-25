@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const { safeDeleteProduct } = require("../../services/productService.js");
 const { getSellerFromReq, isAdmin } = require("../../utils/ownership.js");
 const { normalizeImages, hasMinimumListingImages, listingMediaError } = require("../../utils/listingMedia.js");
+const { normalizeShippingFields, validateShippingForActive } = require("../../utils/shippingFields.js");
 
 const PRODUCT_AVAILABILITY = new Set(["sale", "rent", "both"]);
 const ALLOWED_PRODUCT_FIELDS = new Set([
@@ -11,8 +12,10 @@ const ALLOWED_PRODUCT_FIELDS = new Set([
   "video", "sku", "price", "mrp", "discount", "discountType",
   "priceUnit", "rentalPrice", "rentalDuration", "securityDeposit",
   "lateReturnFee", "stock", "rentalStock", "stockStatus",
-  "specifications", "weight", "shippingRequired", "shippingCost",
-  "freeShipping", "location", "returnPolicy", "warranty", "status"
+  "specifications", "weight", "shippingWeight", "dimensions",
+  "shippingRequired", "shippingCost", "freeShipping", "originPincode",
+  "pickupLocation", "dispatchAddress", "courierPreference", "hsnCode",
+  "location", "returnPolicy", "warranty", "status"
 ]);
 
 function normalizeAvailability(value) {
@@ -265,6 +268,14 @@ exports.createProduct = async (req, res) => {
 
     const normalizedImages = normalizeImages(images.length ? images : req.body.images);
     if (!hasMinimumListingImages(normalizedImages)) return listingMediaError(res);
+
+    const shipping = normalizeShippingFields(req.body);
+    const nextStatus = req.body.status || "draft";
+    if (nextStatus === "active") {
+      const shippingError = validateShippingForActive({ ...shipping, shippingRequired: shipping.shippingRequired ?? true });
+      if (shippingError) return res.status(400).json({ success: false, message: shippingError });
+    }
+
     const product = await Product.create({
       sellerId,
       sellerEmail,
@@ -292,10 +303,7 @@ exports.createProduct = async (req, res) => {
       rentalStock: req.body.rentalStock ? Number(req.body.rentalStock) : 0,
       stockStatus: req.body.stockStatus || "in_stock",
       specifications: req.body.specifications ? (typeof req.body.specifications === "string" ? JSON.parse(req.body.specifications) : req.body.specifications) : [],
-      weight: req.body.weight ? Number(req.body.weight) : undefined,
-      shippingRequired: req.body.shippingRequired !== "false",
-      shippingCost: req.body.shippingCost ? Number(req.body.shippingCost) : 0,
-      freeShipping: req.body.freeShipping === "true",
+      ...shipping,
       location: req.body.location,
       sellerName: req.body.sellerName,
       isFeatured: false,
@@ -330,6 +338,17 @@ exports.updateProduct = async (req, res) => {
     for (const key of Object.keys(req.body)) {
       if (ALLOWED_PRODUCT_FIELDS.has(key)) {
         allowedUpdates[key] = req.body[key];
+      }
+    }
+
+    const shipping = normalizeShippingFields(req.body);
+    Object.assign(allowedUpdates, shipping);
+
+    if (allowedUpdates.status === "active" || Object.keys(shipping).length > 0) {
+      const nextProduct = { ...product.toObject(), ...allowedUpdates };
+      if (nextProduct.status === "active") {
+        const shippingError = validateShippingForActive(nextProduct);
+        if (shippingError) return res.status(400).json({ success: false, message: shippingError });
       }
     }
 

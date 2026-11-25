@@ -2412,25 +2412,24 @@ exports.enrollCourse = async (req, res) => {
       });
     }
 
-    const existing =
-      await Enrollment.findOne({
-        studentId: req.user.id,
-        courseId: req.params.courseId
-      });
+    // Atomic check-and-create: find existing enrollment or create new one
+    const enrollment =
+      await Enrollment.findOneAndUpdate(
+        { studentId: req.user.id, courseId: course._id },
+        {
+          studentId: req.user.id,
+          courseId: course._id,
+          unlockedModules: [course.modules?.[0]?._id].filter(Boolean)
+        },
+        { new: true, upsert: true }
+      );
 
-    if (existing) {
+    if (!enrollment) {
       return res.status(400).json({
         success: false,
         message: "Already enrolled"
       });
     }
-
-    const enrollment =
-      await Enrollment.create({
-        studentId: req.user.id,
-        courseId: req.params.courseId,
-        unlockedModules: [course.modules?.[0]?._id].filter(Boolean)
-      });
 
     await Promise.all([
       Student.findByIdAndUpdate(req.user.id, { $addToSet: { enrolledCourses: course._id } }),

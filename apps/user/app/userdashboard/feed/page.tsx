@@ -207,7 +207,7 @@ export default function FeedPage() {
   };
 
   return (
-    <div className="bg-[#F5F1EB] min-h-screen flex flex-col font-sans">
+    <div className="bg-[var(--bhn-surface-2)] min-h-screen flex flex-col font-sans">
       {/* HEADER */}
       <Header variant="main1" className="sticky top-0 z-50" />
 
@@ -215,17 +215,17 @@ export default function FeedPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
           {/* MOBILE HEADER BAR */}
-          <div className="lg:hidden flex items-center justify-between bg-white rounded-2xl p-4 border border-[#E5D8CC] shadow-xs">
+          <div className="lg:hidden flex items-center justify-between bg-[var(--bhn-surface)] rounded-2xl p-4 border border-[var(--bhn-border)] shadow-xs">
             <div>
-              <h2 className="font-bold text-lg text-[#1C1A16]">Community Feed</h2>
-              <p className="text-xs text-[#8A7E73]">
+              <h2 className="font-bold text-lg text-[var(--bhn-text)]">Community Feed</h2>
+              <p className="text-xs text-[var(--bhn-text-muted)]">
                 Latest event inspirations
               </p>
             </div>
 
             <button
               onClick={() => setMobileMenu(!mobileMenu)}
-              className="w-10 h-10 rounded-full bg-[#EFE5DB] text-[#8C4B2D] flex items-center justify-center transition"
+              className="w-10 h-10 rounded-full bg-[var(--bhn-surface-2)] text-[var(--bhn-text)] flex items-center justify-center transition"
             >
               {mobileMenu ? <X size={20} /> : <Menu size={20} />}
             </button>
@@ -237,21 +237,21 @@ export default function FeedPage() {
               mobileMenu ? "block" : "hidden"
             } lg:block lg:col-span-3 xl:col-span-3`}
           >
-            <div className="bg-[#F8F3ED] border border-[#E5D8CC] rounded-3xl p-5 sticky top-24 shadow-xs">
+            <div className="bg-[var(--bhn-surface-2)] border border-[var(--bhn-border)] rounded-3xl p-5 sticky top-24 shadow-xs">
 
               {/* USER PROFILE BRIEF */}
               <div className="flex items-center gap-3">
                 <img
                   src={emptyAvatar}
                   alt="Profile"
-                  className="w-12 h-12 rounded-full object-cover border border-[#DCCFC4]"
+                  className="w-12 h-12 rounded-full object-cover border border-[var(--bhn-border)]"
                 />
 
                 <div>
-                  <h2 className="font-bold text-sm text-[#1C1A16]">
+                  <h2 className="font-bold text-sm text-[var(--bhn-text)]">
                     Your profile
                   </h2>
-                  <p className="text-[11px] font-semibold text-[#8C4B2D] tracking-wider">
+                  <p className="text-[11px] font-semibold text-[var(--bhn-text)] tracking-wider">
                     BANDHAN MEMBER
                   </p>
                 </div>
@@ -262,8 +262,8 @@ export default function FeedPage() {
                 onClick={toggleJoin}
                 className={`mt-5 w-full rounded-xl px-4 py-3 text-xs font-semibold uppercase tracking-wider transition ${
                   joined 
-                    ? "bg-[#EFE5DB] text-[#8C4B2D] border border-[#DCCFC4]" 
-                    : "bg-[#8C4B2D] text-white hover:bg-[#723C22]"
+                    ? "bg-[var(--bhn-surface-2)] text-[var(--bhn-text)] border border-[var(--bhn-border)]" 
+                    : "bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)] hover:bg-[var(--bhn-brand-600)]"
                 }`}
               >
                 {joined ? "✓ Joined Community" : "Join Community"}
@@ -282,8 +282,8 @@ export default function FeedPage() {
                     key={i}
                     className={`px-4 py-3 rounded-xl cursor-pointer text-xs font-semibold tracking-wider transition ${
                       item === "HOME FEED"
-                        ? "bg-[#EFE2D5] text-[#8C4B2D]"
-                        : "hover:bg-[#EFE2D5]/50 text-[#6B625A]"
+                        ? "bg-[var(--bhn-surface-2)] text-[var(--bhn-text)]"
+                        : "hover:bg-[color-mix(in_srgb,var(--bhn-surface-2)_50%,transparent)] text-[var(--bhn-text-muted)]"
                     }`}
                   >
                     {item}
@@ -292,7 +292,7 @@ export default function FeedPage() {
               </div>
 
               {/* FOOTER LINKS */}
-              <div className="mt-8 pt-5 border-t border-[#E5D8CC] text-[11px] text-[#8E8379] space-y-3">
+              <div className="mt-8 pt-5 border-t border-[var(--bhn-border)] text-[11px] text-[var(--bhn-text-muted)] space-y-3">
                 <div className="flex gap-3 flex-wrap font-medium">
                   <span className="hover:underline cursor-pointer">ABOUT</span>
                   <span className="hover:underline cursor-pointer">HELP</span>
@@ -308,7 +308,7 @@ export default function FeedPage() {
           <main className="lg:col-span-6 xl:col-span-6 space-y-5">
 
             {/* CREATE POST CARD */}
-            <div className="bg-white border border-[#E5D8CC] rounded-3xl p-4 sm:p-5 shadow-xs">
+            <div className="bg-[var(--bhn-surface)] border border-[var(--bhn-border)] rounded-3xl p-4 sm:p-5 shadow-xs">
               <div className="flex gap-3">
                 <img
                   src={emptyAvatar}
@@ -321,7 +321,7 @@ export default function FeedPage() {
                     value={postText}
                     onChange={(e) => setPostText(e.target.value)}
                     placeholder="Share your latest event inspiration..."
-                    className="w-full bg-[#F7F1EA] rounded-2xl p-4 min-h-[110px] outline-none resize-none text-sm border border-[#EFE2D5] focus:border-[#8C4B2D] transition placeholder:text-[#A3988E]"
+                    className="w-full bg-[var(--bhn-surface-2)] rounded-2xl p-4 min-h-[110px] outline-none resize-none text-sm border border-[var(--bhn-border)] focus:border-[var(--bhn-brand-600)] transition placeholder:text-[var(--bhn-text-soft)]"
                   />
 
                   {/* MEDIA PREVIEWS */}
@@ -334,7 +334,7 @@ export default function FeedPage() {
                       />
                       <button
                         onClick={() => setImagePreview("")}
-                        className="absolute top-2 right-2 bg-black/60 text-white p-1 rounded-full hover:bg-black"
+                        className="absolute top-2 right-2 bg-[color-mix(in_srgb,var(--bhn-text)_60%,transparent)] text-[var(--bhn-text-on-brand)] p-1 rounded-full hover:bg-[var(--bhn-text)]"
                       >
                         <X size={16} />
                       </button>
@@ -348,7 +348,7 @@ export default function FeedPage() {
                       </video>
                       <button
                         onClick={() => setVideoPreview("")}
-                        className="absolute top-2 right-2 bg-black/60 text-white p-1 rounded-full hover:bg-black"
+                        className="absolute top-2 right-2 bg-[color-mix(in_srgb,var(--bhn-text)_60%,transparent)] text-[var(--bhn-text-on-brand)] p-1 rounded-full hover:bg-[var(--bhn-text)]"
                       >
                         <X size={16} />
                       </button>
@@ -357,11 +357,11 @@ export default function FeedPage() {
 
                   {/* INPUT CONTROLS */}
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-4">
-                    <div className="flex flex-wrap items-center gap-4 text-xs font-semibold tracking-wider text-[#6B625A]">
+                    <div className="flex flex-wrap items-center gap-4 text-xs font-semibold tracking-wider text-[var(--bhn-text-muted)]">
                       <button
                         type="button"
                         onClick={() => imageRef.current?.click()}
-                        className="flex items-center gap-1.5 hover:text-[#8C4B2D] transition"
+                        className="flex items-center gap-1.5 hover:text-[var(--bhn-text)] transition"
                       >
                         <ImageIcon size={16} />
                         IMAGE
@@ -370,7 +370,7 @@ export default function FeedPage() {
                       <button
                         type="button"
                         onClick={() => videoRef.current?.click()}
-                        className="flex items-center gap-1.5 hover:text-[#8C4B2D] transition"
+                        className="flex items-center gap-1.5 hover:text-[var(--bhn-text)] transition"
                       >
                         <Video size={16} />
                         VIDEO
@@ -378,7 +378,7 @@ export default function FeedPage() {
 
                       <button 
                         type="button"
-                        className="flex items-center gap-1.5 hover:text-[#8C4B2D] transition"
+                        className="flex items-center gap-1.5 hover:text-[var(--bhn-text)] transition"
                       >
                         <FileText size={16} />
                         TEXT
@@ -405,7 +405,7 @@ export default function FeedPage() {
                       type="button"
                       onClick={handleCreatePost}
                       disabled={isCreating}
-                      className="bg-[#8C4B2D] hover:bg-[#723C22] text-white px-6 py-2.5 rounded-xl text-xs font-semibold tracking-wider transition disabled:opacity-50 flex items-center justify-center gap-2"
+                      className="bg-[var(--bhn-brand-600)] hover:bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)] px-6 py-2.5 rounded-xl text-xs font-semibold tracking-wider transition disabled:opacity-50 flex items-center justify-center gap-2"
                     >
                       {isCreating && <Loader2 size={14} className="animate-spin" />}
                       POST
@@ -417,7 +417,7 @@ export default function FeedPage() {
 
             {/* FEED LOADING / STATUS BAR */}
             {apiLoading && (
-              <div className="bg-white/60 border border-dashed border-[#E5D8CC] rounded-2xl p-4 text-center text-xs font-semibold text-[#8C4B2D] flex items-center justify-center gap-2">
+              <div className="bg-[color-mix(in_srgb,var(--bhn-surface)_60%,transparent)] border border-dashed border-[var(--bhn-border)] rounded-2xl p-4 text-center text-xs font-semibold text-[var(--bhn-text)] flex items-center justify-center gap-2">
                 <Loader2 size={16} className="animate-spin" /> Fetching live posts...
               </div>
             )}
@@ -432,17 +432,17 @@ export default function FeedPage() {
                 setPosts={setPosts}
               />
             ))}
-            {!apiLoading && !posts.length && <div className="bg-white border border-[#E5D8CC] rounded-3xl p-8 text-center text-sm text-[#6B625A]">No community posts yet. Be the first to share an idea.</div>}
+            {!apiLoading && !posts.length && <div className="bg-[var(--bhn-surface)] border border-[var(--bhn-border)] rounded-3xl p-8 text-center text-sm text-[var(--bhn-text-muted)]">No community posts yet. Be the first to share an idea.</div>}
           </main>
 
           {/* RIGHT SIDEBAR */}
           <aside className="hidden lg:block lg:col-span-3 space-y-5">
 
             {/* TRENDING SECTION */}
-            <div className="bg-[#F4E9DE] border border-[#E5D8CC] rounded-3xl p-5 shadow-xs">
+            <div className="bg-[var(--bhn-surface-2)] border border-[var(--bhn-border)] rounded-3xl p-5 shadow-xs">
               <div className="flex items-center gap-2 mb-4">
-                <Sparkles size={18} className="text-[#8C4B2D]" />
-                <h2 className="font-bold text-sm text-[#1C1A16]">
+                <Sparkles size={18} className="text-[var(--bhn-text)]" />
+                <h2 className="font-bold text-sm text-[var(--bhn-text)]">
                   Trending in Events
                 </h2>
               </div>
@@ -464,8 +464,8 @@ export default function FeedPage() {
             </div>
 
             {/* SUGGESTIONS SECTION */}
-            <div className="bg-white border border-[#E5D8CC] rounded-3xl p-5 shadow-xs">
-              <h2 className="font-bold text-sm text-[#1C1A16] mb-4">
+            <div className="bg-[var(--bhn-surface)] border border-[var(--bhn-border)] rounded-3xl p-5 shadow-xs">
+              <h2 className="font-bold text-sm text-[var(--bhn-text)] mb-4">
                 Suggested Circles
               </h2>
 
@@ -475,7 +475,7 @@ export default function FeedPage() {
                 <CircleItem name="Editorial Photography" members="15k Members" />
               </div>
 
-              <button className="w-full mt-5 border border-[#DCCFC4] rounded-xl py-2.5 text-xs font-semibold text-[#8C4B2D] hover:bg-[#FAF6F1] transition">
+              <button className="w-full mt-5 border border-[var(--bhn-border)] rounded-xl py-2.5 text-xs font-semibold text-[var(--bhn-text)] hover:bg-[var(--bhn-surface-2)] transition">
                 DISCOVER MORE
               </button>
             </div>
@@ -532,7 +532,7 @@ function PostCard({ post, onLike, onShare, setPosts }: PostCardProps) {
   };
 
   return (
-    <div className="bg-white border border-[#E5D8CC] rounded-3xl overflow-hidden shadow-xs">
+    <div className="bg-[var(--bhn-surface)] border border-[var(--bhn-border)] rounded-3xl overflow-hidden shadow-xs">
       {/* HEADER */}
       <div className="p-4 sm:p-5">
         <div className="flex justify-between items-start">
@@ -545,27 +545,27 @@ function PostCard({ post, onLike, onShare, setPosts }: PostCardProps) {
 
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <h3 className="font-bold text-sm text-[#1C1A16]">
+                <h3 className="font-bold text-sm text-[var(--bhn-text)]">
                   {post.user}
                 </h3>
-                <span className="text-[10px] font-semibold bg-[#F3E6DA] text-[#8C4B2D] px-2 py-0.5 rounded-md uppercase tracking-wider">
+                <span className="text-[10px] font-semibold bg-[var(--bhn-surface-2)] text-[var(--bhn-text)] px-2 py-0.5 rounded-md uppercase tracking-wider">
                   {post.role}
                 </span>
               </div>
 
-              <p className="text-[11px] font-medium text-[#8A8178] mt-0.5">
+              <p className="text-[11px] font-medium text-[var(--bhn-text-muted)] mt-0.5">
                 {post.time}
               </p>
             </div>
           </div>
 
-          <button className="text-[#8A8178] hover:text-[#1C1A16]">
+          <button className="text-[var(--bhn-text-muted)] hover:text-[var(--bhn-text)]">
             <MoreHorizontal size={18} />
           </button>
         </div>
 
         {/* CONTENT */}
-        <p className="mt-4 text-sm leading-relaxed text-[#2B2B2B]">
+        <p className="mt-4 text-sm leading-relaxed text-[var(--bhn-text)]">
           {post.content}
         </p>
       </div>
@@ -586,13 +586,13 @@ function PostCard({ post, onLike, onShare, setPosts }: PostCardProps) {
       )}
 
       {/* FOOTER ACTIONS */}
-      <div className="flex justify-between items-center px-4 sm:px-5 py-3 border-t border-[#F2ECE6] text-xs font-semibold text-[#6B625A]">
+      <div className="flex justify-between items-center px-4 sm:px-5 py-3 border-t border-[var(--bhn-border)] text-xs font-semibold text-[var(--bhn-text-muted)]">
         <div className="flex items-center gap-5">
           {/* LIKE BUTTON */}
           <button
             onClick={onLike}
             className={`flex items-center gap-1.5 transition ${
-              post.liked ? "text-rose-600" : "hover:text-[#8C4B2D]"
+              post.liked ? "text-[var(--bhn-error-600)]" : "hover:text-[var(--bhn-text)]"
             }`}
           >
             <Heart
@@ -605,7 +605,7 @@ function PostCard({ post, onLike, onShare, setPosts }: PostCardProps) {
           {/* COMMENT TOGGLE */}
           <button
             onClick={() => setShowComments(!showComments)}
-            className="flex items-center gap-1.5 hover:text-[#8C4B2D] transition"
+            className="flex items-center gap-1.5 hover:text-[var(--bhn-text)] transition"
           >
             <MessageCircle size={18} />
             <span>{post.comments.length}</span>
@@ -615,7 +615,7 @@ function PostCard({ post, onLike, onShare, setPosts }: PostCardProps) {
         {/* SHARE */}
         <button
           onClick={onShare}
-          className="flex items-center gap-1.5 hover:text-[#8C4B2D] transition tracking-wider"
+          className="flex items-center gap-1.5 hover:text-[var(--bhn-text)] transition tracking-wider"
         >
           <Share2 size={16} />
           SHARE
@@ -624,19 +624,19 @@ function PostCard({ post, onLike, onShare, setPosts }: PostCardProps) {
 
       {/* COMMENTS DRAWER */}
       {showComments && (
-        <div className="border-t border-[#F2ECE6] bg-[#FAF6F1] p-4 space-y-4">
+        <div className="border-t border-[var(--bhn-border)] bg-[var(--bhn-surface-2)] p-4 space-y-4">
           {/* COMMENT INPUT */}
           <div className="flex items-center gap-2">
             <input
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
               placeholder="Write a comment..."
-              className="flex-1 border border-[#E5D8CC] rounded-xl px-4 py-2.5 outline-none text-xs bg-white focus:border-[#8C4B2D]"
+              className="flex-1 border border-[var(--bhn-border)] rounded-xl px-4 py-2.5 outline-none text-xs bg-[var(--bhn-surface)] focus:border-[var(--bhn-brand-600)]"
             />
 
             <button
               onClick={handleAddComment}
-              className="bg-[#8C4B2D] hover:bg-[#723C22] text-white w-10 h-10 rounded-xl flex items-center justify-center transition flex-shrink-0"
+              className="bg-[var(--bhn-brand-600)] hover:bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)] w-10 h-10 rounded-xl flex items-center justify-center transition flex-shrink-0"
             >
               <Send size={16} />
             </button>
@@ -647,18 +647,18 @@ function PostCard({ post, onLike, onShare, setPosts }: PostCardProps) {
             {post.comments.map((c) => (
               <div
                 key={c.id}
-                className="bg-white border border-[#EFE2D5] rounded-2xl p-3 shadow-2xs"
+                className="bg-[var(--bhn-surface)] border border-[var(--bhn-border)] rounded-2xl p-3 shadow-2xs"
               >
                 <div className="flex gap-2.5 items-start">
-                  <div className="w-7 h-7 rounded-full bg-[#EFE2D5] flex items-center justify-center flex-shrink-0 text-[#8C4B2D]">
+                  <div className="w-7 h-7 rounded-full bg-[var(--bhn-surface-2)] flex items-center justify-center flex-shrink-0 text-[var(--bhn-text)]">
                     <User size={14} />
                   </div>
 
                   <div>
-                    <h4 className="font-bold text-xs text-[#1C1A16]">
+                    <h4 className="font-bold text-xs text-[var(--bhn-text)]">
                       {c.user}
                     </h4>
-                    <p className="text-xs text-[#554A42] mt-0.5">
+                    <p className="text-xs text-[var(--bhn-text-muted)] mt-0.5">
                       {c.text}
                     </p>
                   </div>
@@ -681,10 +681,10 @@ interface TrendItemProps {
 function TrendItem({ title, subtitle }: TrendItemProps) {
   return (
     <div className="cursor-pointer group">
-      <h3 className="font-bold text-xs text-[#1C1A16] group-hover:text-[#8C4B2D] transition">
+      <h3 className="font-bold text-xs text-[var(--bhn-text)] group-hover:text-[var(--bhn-text)] transition">
         {title}
       </h3>
-      <p className="text-[11px] text-[#7E746A] mt-0.5">
+      <p className="text-[11px] text-[var(--bhn-text-muted)] mt-0.5">
         {subtitle}
       </p>
     </div>
@@ -701,21 +701,21 @@ function CircleItem({ name, members }: CircleItemProps) {
   return (
     <div className="flex items-center justify-between gap-2">
       <div className="flex items-center gap-2.5">
-        <div className="w-9 h-9 rounded-xl bg-[#F5E9DE] flex items-center justify-center text-[#8C4B2D] flex-shrink-0">
+        <div className="w-9 h-9 rounded-xl bg-[var(--bhn-surface-2)] flex items-center justify-center text-[var(--bhn-text)] flex-shrink-0">
           <User size={16} />
         </div>
 
         <div>
-          <h3 className="font-bold text-xs text-[#1C1A16] line-clamp-1">
+          <h3 className="font-bold text-xs text-[var(--bhn-text)] line-clamp-1">
             {name}
           </h3>
-          <p className="text-[10px] text-[#7E746A]">
+          <p className="text-[10px] text-[var(--bhn-text-muted)]">
             {members}
           </p>
         </div>
       </div>
 
-      <button className="border border-[#DCCFC4] px-3 py-1 rounded-full text-[11px] font-semibold text-[#8C4B2D] hover:bg-[#F5F1EB] transition">
+      <button className="border border-[var(--bhn-border)] px-3 py-1 rounded-full text-[11px] font-semibold text-[var(--bhn-text)] hover:bg-[var(--bhn-surface-2)] transition">
         JOIN
       </button>
     </div>

@@ -72,22 +72,22 @@ export default function EnquiryModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 sm:items-center sm:p-4">
-      <div className="w-full max-w-md rounded-t-2xl bg-white p-5 sm:rounded-2xl">
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-[color-mix(in_srgb,var(--bhn-text)_40%,transparent)] p-0 sm:items-center sm:p-4">
+      <div className="w-full max-w-md rounded-t-2xl bg-[var(--bhn-surface)] p-5 sm:rounded-2xl">
         <div className="mb-3 flex items-center justify-between">
-          <h3 className="text-lg font-bold text-[#1C1A16]">Send Enquiry</h3>
-          <button onClick={onClose} aria-label="Close" className="rounded-full p-1 text-gray-400 hover:bg-gray-100">
+          <h3 className="text-lg font-bold text-[var(--bhn-text)]">Send Enquiry</h3>
+          <button onClick={onClose} aria-label="Close" className="rounded-full p-1 text-[var(--bhn-text-muted)] hover:bg-[var(--bhn-surface-3)]">
             <X className="h-5 w-5" />
           </button>
         </div>
 
         {sent ? (
           <div className="py-6 text-center">
-            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-green-600">
+            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--bhn-success-50)] text-[var(--bhn-success-600)]">
               <Send className="h-6 w-6" />
             </div>
-            <p className="font-semibold text-[#1C1A16]">Enquiry sent!</p>
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="font-semibold text-[var(--bhn-text)]">Enquiry sent!</p>
+            <p className="mt-1 text-sm text-[var(--bhn-text-muted)]">
               Your enquiry is saved and visible in your dashboard.
             </p>
             <Button variant="primary" fullWidth className="mt-4" onClick={onClose}>
@@ -96,8 +96,8 @@ export default function EnquiryModal({
           </div>
         ) : (
           <div className="space-y-3">
-            <p className="text-xs text-gray-500">
-              About: <span className="font-medium text-[#924C2B]">{target.title}</span>
+            <p className="text-xs text-[var(--bhn-text-muted)]">
+              About: <span className="font-medium text-[var(--bhn-text)]">{target.title}</span>
             </p>
             <Input label="Name" value={form.name} onChange={(event: ChangeEvent<HTMLInputElement>) => update('name', event.target.value)} />
             <Input label="Mobile" value={form.mobile} onChange={(event: ChangeEvent<HTMLInputElement>) => update('mobile', event.target.value)} />
@@ -108,12 +108,12 @@ export default function EnquiryModal({
               <Input label="Guest count" type="number" min="0" value={form.guestCount} onChange={(event: ChangeEvent<HTMLInputElement>) => update('guestCount', event.target.value)} />
             </div>
             <div className="space-y-1">
-              <label className="text-xs text-gray-500">Message</label>
+              <label className="text-xs text-[var(--bhn-text-muted)]">Message</label>
               <textarea
                 rows={3}
                 value={form.message}
                 onChange={(event: ChangeEvent<HTMLTextAreaElement>) => update('message', event.target.value)}
-                className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm focus:border-[#924C2B] focus:outline-none"
+                className="w-full rounded-md border border-[var(--bhn-border)] px-3 py-2 text-sm focus:border-[var(--bhn-brand-600)] focus:outline-none"
                 placeholder="Tell us what you need…"
               />
             </div>

@@ -23,14 +23,14 @@
     --admin-table-cell-border: var(--bhn-border);
     --admin-table-cell-text: var(--bhn-text);
     --admin-table-hover: var(--bhn-surface-2);
-    --admin-scrollbar-thumb: #d6c4b8;
-    --admin-card-muted-bg: #fff9f2;
-    --admin-badge-active-bg: #dcfce7;
-    --admin-badge-active-text: #166534;
-    --admin-badge-inactive-bg: #fee2e2;
-    --admin-badge-inactive-text: #991b1b;
-    --admin-badge-pending-bg: #fef9c3;
-    --admin-badge-pending-text: #854d0e;
+    --admin-scrollbar-thumb: var(--bhn-text-soft);
+    --admin-card-muted-bg: var(--bhn-text-soft);
+    --admin-badge-active-bg: var(--bhn-success-50);
+    --admin-badge-active-text: var(--bhn-success-700);
+    --admin-badge-inactive-bg: var(--bhn-error-50);
+    --admin-badge-inactive-text: var(--bhn-error-700);
+    --admin-badge-pending-bg: var(--bhn-warning-50);
+    --admin-badge-pending-text: var(--bhn-warning-700);
   }
 
   * {
@@ -84,8 +84,8 @@
   .admin-sidebar-item-active:hover { background: var(--bhn-brand-100); }
 
   .admin-sidebar .text-white { color: var(--admin-text) !important; }
-  .admin-sidebar [class*="text-[#e8d5cc]"],
-  .admin-sidebar [class*="text-[#f1a596]"] { color: var(--admin-muted) !important; }
+  .admin-sidebar [class*="text-[var(--bhn-text-soft)]"],
+  .admin-sidebar [class*="text-[var(--bhn-text-soft)]"] { color: var(--admin-muted) !important; }
   .admin-sidebar [class*="border-white"] { border-color: var(--admin-border) !important; }
   .admin-sidebar [class*="bg-white/5"] { background: var(--bhn-surface-2) !important; }
   .card {
@@ -118,7 +118,7 @@
   }
 
   .admin-input:focus {
-    border-color: #8B3A28;
+    border-color: var(--bhn-text);
     box-shadow: 0 0 0 3px rgba(139, 58, 40, 0.14);
   }
 
@@ -127,14 +127,14 @@
     min-height: 2.75rem;
     cursor: pointer;
     padding-right: 2.75rem;
-    background-image: linear-gradient(45deg, transparent 50%, #8B3A28 50%), linear-gradient(135deg, #8B3A28 50%, transparent 50%);
+    background-image: linear-gradient(45deg, transparent 50%, var(--bhn-brand-600) 50%), linear-gradient(135deg, var(--bhn-brand-600) 50%, transparent 50%);
     background-position: calc(100% - 1.15rem) 1.15rem, calc(100% - 0.85rem) 1.15rem;
     background-size: 0.32rem 0.32rem, 0.32rem 0.32rem;
     background-repeat: no-repeat;
   }
 
   .admin-select:hover:not(:disabled) {
-    border-color: #8B3A28;
+    border-color: var(--bhn-text);
     box-shadow: 0 6px 16px rgba(139, 58, 40, 0.1);
   }
 
@@ -144,7 +144,7 @@
   }
   @media (prefers-color-scheme: dark) {
     .admin-input:focus {
-      border-color: #c25e2b;
+      border-color: var(--bhn-text);
       box-shadow: 0 0 0 3px rgba(194, 94, 43, 0.15);
     }
   }
@@ -166,13 +166,13 @@
   .admin-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
   .admin-btn-primary {
-    background: #8B3A28;
-    color: #fff;
+    background: var(--bhn-brand-600);
+    color: var(--bhn-text-soft);
   }
-  .admin-btn-primary:hover { background: #7a3323; }
+  .admin-btn-primary:hover { background: var(--bhn-brand-600); }
   @media (prefers-color-scheme: dark) {
-    .admin-btn-primary { background: #c25e2b; }
-    .admin-btn-primary:hover { background: #a84e21; }
+    .admin-btn-primary { background: var(--bhn-brand-600); }
+    .admin-btn-primary:hover { background: var(--bhn-brand-600); }
   }
 
   .admin-btn-secondary {
@@ -183,23 +183,23 @@
   .admin-btn-secondary:hover { background: var(--admin-btn-secondary-hover); }
 
   .admin-btn-danger {
-    background: #ef4444;
-    color: #fff;
+    background: var(--bhn-error-500);
+    color: var(--bhn-text-soft);
   }
-  .admin-btn-danger:hover { background: #dc2626; }
+  .admin-btn-danger:hover { background: var(--bhn-error-600); }
   @media (prefers-color-scheme: dark) {
-    .admin-btn-danger { background: #f87171; }
-    .admin-btn-danger:hover { background: #ef4444; }
+    .admin-btn-danger { background: var(--bhn-surface-3); }
+    .admin-btn-danger:hover { background: var(--bhn-error-500); }
   }
 
   .admin-btn-success {
-    background: #22c55e;
-    color: #fff;
+    background: var(--bhn-success-500);
+    color: var(--bhn-text-soft);
   }
-  .admin-btn-success:hover { background: #16a34a; }
+  .admin-btn-success:hover { background: var(--bhn-success-600); }
   @media (prefers-color-scheme: dark) {
-    .admin-btn-success { background: #4ade80; }
-    .admin-btn-success:hover { background: #22c55e; }
+    .admin-btn-success { background: var(--bhn-surface-2); }
+    .admin-btn-success:hover { background: var(--bhn-success-500); }
   }
 
   .admin-badge {

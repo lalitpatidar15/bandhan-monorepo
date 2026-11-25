@@ -33,11 +33,12 @@ export default function NotificationsPage() {
     icon: any;
   };
 
-  const tabs = ["All", "Courses", "Payments"];
-
   const { data: notificationsData, isLoading: isNotifLoading } = useGetNotificationsQuery(undefined);
   const [markAllRead, { isLoading: isMarkingAll }] = useMarkAllNotificationsReadMutation();
   const [markRead] = useMarkNotificationReadMutation();
+
+  const uniqueTypes: string[] = (notificationsData?.data?.notifications?.map((n: any) => n.type === "course" ? "Courses" : n.type === "payment" ? "Payments" : "All") || []);
+  const availableTabs: string[] = ["All", ...new Set(uniqueTypes)];
 
   const notifications: NotificationItem[] =
     notificationsData?.data?.notifications?.map((n: any) => ({
@@ -58,7 +59,7 @@ export default function NotificationsPage() {
   const filteredNotifications: NotificationItem[] = activeTab === "All" ? notifications : notifications.filter((item: NotificationItem) => item.type === activeTab);
 
   return (
-    <div className="min-h-screen bg-[#F7F3EF] dark:bg-[#171717]">
+    <div className="min-h-screen bg-[var(--bhn-surface-3)] dark:bg-[var(--bhn-neutral-900)]">
 
       {/* HEADER */}
       <StudentHeader />
@@ -75,11 +76,11 @@ export default function NotificationsPage() {
 
               <div>
 
-                <h1 className="text-[28px] sm:text-[34px] lg:text-[40px] font-bold text-[#2D201B] dark:text-[#ededed] leading-tight">
+                <h1 className="text-[28px] sm:text-[34px] lg:text-[40px] font-bold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] leading-tight">
                   Notifications
                 </h1>
 
-                <p className="text-[#8A7A71] dark:text-[#7a6a5a] mt-2 sm:mt-3 text-sm sm:text-base lg:text-lg">
+                <p className="text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mt-2 sm:mt-3 text-sm sm:text-base lg:text-lg">
                   Stay updated with your learning activity
                 </p>
 
@@ -88,7 +89,7 @@ export default function NotificationsPage() {
               <button
                 onClick={() => markAllRead(undefined)}
                 disabled={isMarkingAll}
-                className="text-[#B16038] dark:text-[#c9a882] font-medium hover:underline sm:mt-3 text-sm sm:text-base self-start disabled:opacity-50"
+                className="text-[var(--bhn-brand-500)] dark:text-[var(--bhn-brand-400)] font-medium hover:underline sm:mt-3 text-sm sm:text-base self-start disabled:opacity-50"
               >
                 {isMarkingAll ? "Marking..." : "Mark all as read"}
               </button>
@@ -96,23 +97,23 @@ export default function NotificationsPage() {
             </div>
 
             {/* TABS */}
-            <div className="flex gap-5 sm:gap-5 mt-4 sm:mt-6 border-b border-[#E6DDD6] dark:border-[#374151] overflow-x-auto">
+            <div className="flex gap-5 sm:gap-5 mt-4 sm:mt-6 border-b border-[var(--bhn-border)] dark:border-[var(--bhn-border)] overflow-x-auto">
 
-              {tabs.map((tab: string) => (
+              {availableTabs.map((tab: string) => (
 
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
                   className={`pb-4 text-sm font-medium transition-all relative whitespace-nowrap ${activeTab === tab
-                      ? "text-[#2D201B] dark:text-[#ededed]"
-                      : "text-[#8A7A71] dark:text-[#7a6a5a]"
+                      ? "text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]"
+                      : "text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]"
                     }`}
                 >
 
                   {tab}
 
                   {activeTab === tab && (
-                    <div className="absolute left-0 bottom-0 h-[2px] w-full bg-[#B16038] dark:bg-[#b86a3a]" />
+                    <div className="absolute left-0 bottom-0 h-[2px] w-full bg-[var(--bhn-brand-500)] dark:bg-[var(--bhn-brand-500)]" />
                   )}
 
                 </button>
@@ -124,20 +125,20 @@ export default function NotificationsPage() {
             {/* NOTIFICATIONS */}
             <div className="mt-6 space-y-4 sm:space-y-5">
 
-              {isNotifLoading && <p className="text-sm text-[#8A7A71] dark:text-[#7a6a5a]">Loading notifications...</p>}
+              {isNotifLoading && <p className="text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]">Loading notifications...</p>}
 
               {filteredNotifications.map((item: NotificationItem) => (
 
                 <div
                   key={item.id}
                   onClick={() => item.unread && markRead(item.id)}
-                  className="bg-white rounded-2xl border border-[#ECE3DC] dark:border-[#374151] p-4 sm:px-6 sm:py-5 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 hover:shadow-sm transition-all"
+                  className="bg-[var(--bhn-surface)] rounded-2xl border border-[#ECE3DC] dark:border-[var(--bhn-border)] p-4 sm:px-6 sm:py-5 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 hover:shadow-sm transition-all"
                 >
 
                   <div className="flex items-start gap-4 sm:gap-5">
 
                     {/* ICON */}
-                    <div className="min-w-[44px] w-11 h-11 rounded-xl bg-[#F8F1EC] dark:bg-[#1a1a1a] flex items-center justify-center text-[#8B4A28] dark:text-[#c9a882]">
+                    <div className="min-w-[44px] w-11 h-11 rounded-xl bg-[var(--bhn-surface-2)] dark:bg-[var(--bhn-neutral-900)] flex items-center justify-center text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)]">
 
                       {item.icon}
 
@@ -146,11 +147,11 @@ export default function NotificationsPage() {
                     {/* TEXT */}
                     <div>
 
-                      <h3 className="text-lg sm:text-xl lg:text-[22px] font-semibold text-[#2D201B] dark:text-[#ededed] leading-snug">
+                      <h3 className="text-lg sm:text-xl lg:text-[22px] font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] leading-snug">
                         {item.title}
                       </h3>
 
-                      <p className="text-[#7D6E65] dark:text-[#b89b7d] mt-2 text-sm sm:text-base lg:text-[17px] leading-relaxed">
+                      <p className="text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mt-2 text-sm sm:text-base lg:text-[17px] leading-relaxed">
                         {item.desc}
                       </p>
 
@@ -161,7 +162,7 @@ export default function NotificationsPage() {
                   {/* TIME */}
                   <div className="flex sm:flex-col items-start sm:items-end justify-between sm:justify-start gap-3 pl-[60px] sm:pl-0">
 
-                    <span className="text-xs sm:text-sm text-[#A08F85] dark:text-[#6a5a4a] whitespace-nowrap">
+                    <span className="text-xs sm:text-sm text-[#A08F85] dark:text-[var(--bhn-text-soft)] whitespace-nowrap">
                       {item.time}
                     </span>
 
@@ -180,7 +181,7 @@ export default function NotificationsPage() {
             {/* BUTTON */}
             <div className="flex justify-center mt-4 sm:mt-6">
 
-              <button onClick={() => alert('No older notifications available.')} className="w-full sm:w-auto px-6 sm:px-5 py-3 sm:py-4 border border-[#E6DDD6] dark:border-[#374151] rounded-xl text-[#7C6B63] dark:text-[#b89b7d] hover:bg-white transition-all text-sm sm:text-base cursor-pointer">
+              <button onClick={() => alert('No older notifications available.')} className="w-full sm:w-auto px-6 sm:px-5 py-3 sm:py-4 border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] rounded-xl text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] hover:bg-[var(--bhn-surface)] transition-all text-sm sm:text-base cursor-pointer">
                 Load older notifications
               </button>
 
@@ -194,21 +195,21 @@ export default function NotificationsPage() {
             {/* PROGRESS */}
             <div
               onClick={() => router.push("/student/allcourse")}
-              className="bg-white rounded-2xl border border-[#E8DDD5] dark:border-[#374151] p-5 sm:p-4 cursor-pointer">
+              className="bg-[var(--bhn-surface)] rounded-2xl border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] p-5 sm:p-4 cursor-pointer">
 
               <h3
-                className="text-xl sm:text-[24px] font-semibold text-[#2D201B] dark:text-[#ededed]">
+                className="text-xl sm:text-[24px] font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
                 Learning Progress
               </h3>
 
               {notificationsData?.data?.learningProgress?.map((course: any) => (
                 <div className="mt-5" key={course.courseId}>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-[#6D5E56] dark:text-[#a89080]">{course.courseName}</span>
-                    <span className="text-sm font-medium text-[#6D5E56] dark:text-[#a89080]">{course.progress}%</span>
+                    <span className="text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]">{course.courseName}</span>
+                    <span className="text-sm font-medium text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]">{course.progress}%</span>
                   </div>
-                  <div className="w-full h-[7px] rounded-full bg-[#EEE2DA] overflow-hidden">
-                    <div className="h-full bg-[#8B4A28] dark:bg-[#b86a3a]" style={{ width: `${course.progress}%` }} />
+                  <div className="w-full h-[7px] rounded-full bg-[var(--bhn-border)] overflow-hidden">
+                    <div className="h-full bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)]" style={{ width: `${course.progress}%` }} />
                   </div>
                 </div>
               ))}
@@ -216,13 +217,13 @@ export default function NotificationsPage() {
             </div>
 
             {/* PREMIUM */}
-            <div className="bg-[#A6532B] dark:bg-[#b86a3a] rounded-2xl p-5 sm:p-7 text-white shadow-md">
+            <div className="bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] rounded-2xl p-5 sm:p-7 text-white shadow-md">
 
               <h3 className="text-2xl sm:text-[28px] font-bold leading-tight">
                 Upgrade to Premium
               </h3>
 
-              <p className="mt-4 text-sm sm:text-base lg:text-[17px] leading-relaxed text-[#FBECE3]">
+              <p className="mt-4 text-sm sm:text-base lg:text-[17px] leading-relaxed text-[var(--bhn-brand-100)]">
                 Get unlimited access to all courses, certifications, and live mentorship sessions.
               </p>
 
@@ -232,8 +233,8 @@ export default function NotificationsPage() {
                 w-full
                 mt-6
                 sm:mt-4
-                bg-white
-                text-[#8B4A28] dark:text-[#c9a882]
+                bg-[var(--bhn-surface)]
+                text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)]
                 py-3
                 sm:py-4
                 rounded-xl
@@ -241,10 +242,10 @@ export default function NotificationsPage() {
                 text-sm
                 sm:text-base
                 cursor-pointer
-                hover:bg-[#F8F1EC] dark:bg-[#1a1a1a]
+                hover:bg-[var(--bhn-surface-2)] dark:bg-[var(--bhn-neutral-900)]
                 hover:shadow-md
                 active:scale-95
-                active:bg-[#EFE4DC] dark:bg-[#2a2a2a]
+                active:bg-[var(--bhn-border)] dark:bg-[var(--bhn-neutral-900)]
                 transition-all
                 duration-150
                "

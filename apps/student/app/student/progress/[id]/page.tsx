@@ -1,5 +1,6 @@
 "use client";
 
+import { getCookie } from "@/lib/session";
 import StudentHeader from "@/components/common/StudentHeader";
 import Button from "@/components/common/Button";
 import {
@@ -63,10 +64,10 @@ export default function ProgressPage() {
 
   if (isProgressLoading) {
     return (
-      <div className="bg-[#F7F3EF] dark:bg-[#171717] min-h-screen flex items-center justify-center p-4">
-        <div className="rounded-3xl border border-[#E8DDD5] dark:border-[#374151] bg-white p-5 shadow-sm text-center">
-          <p className="text-lg font-semibold text-[#2B1D18] dark:text-[#ededed]">Loading progress...</p>
-          <p className="text-sm text-[#7B6A62] dark:text-[#b89b7d] mt-2">Fetching your course progress data.</p>
+      <div className="bg-[var(--bhn-surface-3)] dark:bg-[var(--bhn-neutral-900)] min-h-screen flex items-center justify-center p-4">
+        <div className="rounded-3xl border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-5 shadow-sm text-center">
+          <p className="text-lg font-semibold text-[#2B1D18] dark:text-[var(--bhn-neutral-400)]">Loading progress...</p>
+          <p className="text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mt-2">Fetching your course progress data.</p>
         </div>
       </div>
     );
@@ -74,13 +75,13 @@ export default function ProgressPage() {
 
   if (isProgressError) {
     return (
-      <div className="bg-[#F7F3EF] dark:bg-[#171717] min-h-screen flex items-center justify-center p-4">
-        <div className="rounded-3xl border border-[#E8DDD5] dark:border-[#374151] bg-white p-5 shadow-sm text-center">
-          <p className="text-lg font-semibold text-[#C05C5C]">Unable to load progress</p>
-          <p className="text-sm text-[#7B6A62] dark:text-[#b89b7d] mt-2">Please try again later or return to your courses.</p>
+      <div className="bg-[var(--bhn-surface-3)] dark:bg-[var(--bhn-neutral-900)] min-h-screen flex items-center justify-center p-4">
+        <div className="rounded-3xl border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-5 shadow-sm text-center">
+          <p className="text-lg font-semibold text-[var(--bhn-error-600)]">Unable to load progress</p>
+          <p className="text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mt-2">Please try again later or return to your courses.</p>
           <button
             onClick={() => router.push("/student/courses")}
-            className="mt-5 px-6 py-3 rounded-lg bg-[#8B4A28] dark:bg-[#b86a3a] text-white text-sm font-medium hover:bg-[#744024] dark:hover:bg-[#a05a30] transition"
+            className="mt-5 px-6 py-3 rounded-lg bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] text-white text-sm font-medium hover:bg-[var(--bhn-brand-800)] dark:hover:bg-[var(--bhn-brand-300)] transition"
           >
             Browse Courses
           </button>
@@ -90,7 +91,7 @@ export default function ProgressPage() {
   }
 
   const handleDownload = async (certificate: any) => {
-    const token = localStorage.getItem("token");
+    const token = getCookie("bandhan_academy_token");
     const apiBase = process.env.NEXT_PUBLIC_API_URL || "https://bandhan-api.vercel.app/api";
     const certId = certificate.id ?? certificate._id ?? "";
     try {
@@ -138,7 +139,7 @@ export default function ProgressPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F3EF] dark:bg-[#171717]">
+    <div className="min-h-screen bg-[var(--bhn-surface-3)] dark:bg-[var(--bhn-neutral-900)]">
 
       {/* HEADER */}
       <StudentHeader />
@@ -150,15 +151,15 @@ export default function ProgressPage() {
 
           <div>
 
-            {/* <p className="text-xs sm:text-sm text-[#A08E84] dark:text-[#6a5a4a]">
+            {/* <p className="text-xs sm:text-sm text-[#A08E84] dark:text-[var(--bhn-text-soft)]">
               Home / Dashboard / Progress & Certificates
             </p> */}
 
-            <h1 className="text-xl sm:text-2xl font-bold text-[#2D201B] dark:text-[#ededed] mt-3 leading-tight">
+            <h1 className="text-xl sm:text-2xl font-bold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] mt-3 leading-tight">
               Progress & Certificates
             </h1>
 
-            <p className="text-[#8A7A71] dark:text-[#7a6a5a] mt-2 text-base sm:text-lg">
+            <p className="text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mt-2 text-base sm:text-lg">
               Track your learning journey and achievements
             </p>
 
@@ -166,7 +167,7 @@ export default function ProgressPage() {
 
           <Button
             onClick={() => router.push("/student/courses")}
-            className="bg-[#8B4A28] dark:bg-[#b86a3a] text-white px-5 sm:px-4 py-2 text-sm hover:bg-[#744024] dark:hover:bg-[#a05a30] transition-all duration-200 w-full sm:w-fit cursor-pointer">
+            className="bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] text-white px-5 sm:px-4 py-2 text-sm hover:bg-[var(--bhn-brand-800)] dark:hover:bg-[var(--bhn-brand-300)] transition-all duration-200 w-full sm:w-fit cursor-pointer">
             Browse More Courses
           </Button>
 
@@ -175,37 +176,37 @@ export default function ProgressPage() {
         {/* STATS */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-6">
 
-          <div className="bg-white rounded-2xl p-5 sm:p-7 border border-[#E8DDD5] dark:border-[#374151]">
+          <div className="bg-[var(--bhn-surface)] rounded-2xl p-5 sm:p-7 border border-[var(--bhn-border)] dark:border-[var(--bhn-border)]">
 
-            <p className="text-[#C05C5C] text-sm uppercase tracking-wide">
+            <p className="text-[var(--bhn-error-600)] text-sm uppercase tracking-wide">
               Courses Completed
             </p>
 
-            <h2 className="text-xl font-bold mt-3 text-[#2D201B] dark:text-[#ededed]">
+            <h2 className="text-xl font-bold mt-3 text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
               {coursesCompleted}
             </h2>
 
           </div>
 
-          <div className="bg-white rounded-2xl p-5 sm:p-7 border border-[#E8DDD5] dark:border-[#374151]">
+          <div className="bg-[var(--bhn-surface)] rounded-2xl p-5 sm:p-7 border border-[var(--bhn-border)] dark:border-[var(--bhn-border)]">
 
-            <p className="text-[#C05C5C] text-sm uppercase tracking-wide">
+            <p className="text-[var(--bhn-error-600)] text-sm uppercase tracking-wide">
               In Progress
             </p>
 
-            <h2 className="text-xl font-bold mt-3 text-[#2D201B] dark:text-[#ededed]">
+            <h2 className="text-xl font-bold mt-3 text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
               {coursesInProgress} Courses
             </h2>
 
           </div>
 
-          <div className="bg-white rounded-2xl p-5 sm:p-7 border border-[#E8DDD5] dark:border-[#374151]">
+          <div className="bg-[var(--bhn-surface)] rounded-2xl p-5 sm:p-7 border border-[var(--bhn-border)] dark:border-[var(--bhn-border)]">
 
-            <p className="text-[#C05C5C] text-sm uppercase tracking-wide">
+            <p className="text-[var(--bhn-error-600)] text-sm uppercase tracking-wide">
               Total Learning Hours
             </p>
 
-            <h2 className="text-xl font-bold mt-3 text-[#2D201B] dark:text-[#ededed]">
+            <h2 className="text-xl font-bold mt-3 text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
               {hoursLearned}h
             </h2>
 
@@ -217,23 +218,23 @@ export default function ProgressPage() {
         <div className="grid grid-cols-1 xl:grid-cols-[350px_1fr] gap-4 mt-4">
 
           {/* LEFT */}
-          <div className="bg-white rounded-2xl p-5 sm:p-5 border border-[#E8DDD5] dark:border-[#374151]">
+          <div className="bg-[var(--bhn-surface)] rounded-2xl p-5 sm:p-5 border border-[var(--bhn-border)] dark:border-[var(--bhn-border)]">
 
-            <h3 className="text-lg sm:text-xl font-semibold text-[#2D201B] dark:text-[#ededed]">
+            <h3 className="text-lg sm:text-xl font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
               Course Completion
             </h3>
 
             <div className="flex justify-center mt-4 sm:mt-6">
 
-              <div className="w-[140px] h-[140px] sm:w-[160px] sm:h-[160px] rounded-full border-[10px] border-[#8B4A28] dark:border-[#c9a882] flex items-center justify-center">
+              <div className="w-[140px] h-[140px] sm:w-[160px] sm:h-[160px] rounded-full border-[10px] border-[var(--bhn-brand-600)] dark:border-[var(--bhn-brand-400)] flex items-center justify-center">
 
                 <div className="text-center">
 
-                  <h1 className="text-xl sm:text-2xl font-bold text-[#2D201B] dark:text-[#ededed]">
+                  <h1 className="text-xl sm:text-2xl font-bold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
                     {overallProgress}%
                   </h1>
 
-                  <p className="text-[#8A7A71] dark:text-[#7a6a5a] text-sm mt-1">
+                  <p className="text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] text-sm mt-1">
                     Overall
                   </p>
 
@@ -243,7 +244,7 @@ export default function ProgressPage() {
 
             </div>
 
-            <p className="text-center text-[#8A7A71] dark:text-[#7a6a5a] mt-6 sm:mt-4 leading-relaxed text-sm sm:text-base">
+            <p className="text-center text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mt-6 sm:mt-4 leading-relaxed text-sm sm:text-base">
               {overallProgress > 0
                 ? `${coursesCompleted} course${coursesCompleted !== 1 ? "s" : ""} completed, ${coursesInProgress} in progress. Keep going!`
                 : "You are doing great! Complete 2 more lessons to reach your weekly goal."}
@@ -252,11 +253,11 @@ export default function ProgressPage() {
           </div>
 
           {/* RIGHT */}
-          <div className="bg-white rounded-2xl p-5 sm:p-5 border border-[#E8DDD5] dark:border-[#374151] flex flex-col justify-between overflow-x-auto">
+          <div className="bg-[var(--bhn-surface)] rounded-2xl p-5 sm:p-5 border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] flex flex-col justify-between overflow-x-auto">
 
             <div className="w-full overflow-hidden">
 
-              <h3 className="text-lg sm:text-xl font-semibold text-[#2D201B] dark:text-[#ededed]">
+              <h3 className="text-lg sm:text-xl font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
                 Weekly Learning Activity
               </h3>
 
@@ -279,7 +280,7 @@ export default function ProgressPage() {
                     key={index}
                     className="
                     flex-1
-                    bg-[#8B4A28] dark:bg-[#b86a3a]
+                    bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)]
                     rounded-t-xl
                     min-w-[24px]
                      "
@@ -295,7 +296,7 @@ export default function ProgressPage() {
                 justify-between
                 text-xs
                 sm:text-sm
-                text-[#8A7A71] dark:text-[#7a6a5a]
+                text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]
                 mt-4
                 px-1
                 w-full
@@ -315,7 +316,7 @@ export default function ProgressPage() {
 
               <div className="flex justify-start sm:justify-end mt-6">
 
-              <div className="bg-[#F8EEE8] dark:bg-[#1a1a1a] text-[#8B4A28] dark:text-[#c9a882] px-4 py-2 rounded-full text-sm">
+              <div className="bg-[var(--bhn-surface-3)] dark:bg-[var(--bhn-neutral-900)] text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)] px-4 py-2 rounded-full text-sm">
                 {hoursLearned > 0 ? `${(hoursLearned / 7).toFixed(1)}h/day` : "No data yet"}
               </div>
 
@@ -328,7 +329,7 @@ export default function ProgressPage() {
         {/* RECENTLY COMPLETED */}
         <div className="mt-6">
 
-          <h2 className="text-2xl sm:text-xl font-bold text-[#2D201B] dark:text-[#ededed]">
+          <h2 className="text-2xl sm:text-xl font-bold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
             Recently Completed
           </h2>
 
@@ -338,7 +339,7 @@ export default function ProgressPage() {
 
               <div
                 key={course.courseName ?? index}
-                className="bg-white rounded-2xl overflow-hidden border border-[#E8DDD5] dark:border-[#374151]"
+                className="bg-[var(--bhn-surface)] rounded-2xl overflow-hidden border border-[var(--bhn-border)] dark:border-[var(--bhn-border)]"
               >
 
                 <img
@@ -349,22 +350,22 @@ export default function ProgressPage() {
 
                 <div className="p-5">
 
-                  <div className="inline-block bg-[#EAF7EF] dark:bg-[#0a2018] text-[#4F8B68] text-xs px-3 py-1 rounded-full font-medium">
+                  <div className="inline-block bg-[var(--bhn-success-50)] dark:bg-[var(--bhn-neutral-900)] text-[var(--bhn-success-700)] text-xs px-3 py-1 rounded-full font-medium">
                     COMPLETED
                   </div>
 
-                  <h3 className="text-lg sm:text-xl font-semibold mt-4 text-[#2D201B] dark:text-[#ededed] leading-snug">
+                  <h3 className="text-lg sm:text-xl font-semibold mt-4 text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] leading-snug">
                     {course.title}
                   </h3>
 
-                  <p className="text-[#8A7A71] dark:text-[#7a6a5a] mt-2 text-sm sm:text-base">
+                  <p className="text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mt-2 text-sm sm:text-base">
                     By {course.author}
                   </p>
 
                   <button
                     onClick={() => alert("Certificate download will be available upon course completion.")}
                     className="
-                    text-[#8B4A28] dark:text-[#c9a882]
+                    text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)]
                     font-medium
                     mt-5
                     text-sm
@@ -372,7 +373,7 @@ export default function ProgressPage() {
                     cursor-pointer
                     transition-all
                     duration-150
-                    hover:text-[#6E3D20]
+                    hover:text-[var(--bhn-brand-800)]
                     hover:underline
                     active:scale-95
                   "
@@ -395,7 +396,7 @@ export default function ProgressPage() {
 
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 
-            <h2 className="text-2xl sm:text-xl font-bold text-[#2D201B] dark:text-[#ededed]">
+            <h2 className="text-2xl sm:text-xl font-bold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
               My Certificates
             </h2>
 
@@ -409,7 +410,7 @@ export default function ProgressPage() {
                flex
                items-center
                gap-2
-               text-[#8B4A28] dark:text-[#c9a882]
+               text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)]
                text-sm
                sm:text-base
                cursor-pointer
@@ -431,15 +432,15 @@ export default function ProgressPage() {
 
               <div
                 key={certificate.id}
-                className="bg-white rounded-2xl border border-[#E8DDD5] dark:border-[#374151] p-4 sm:p-4 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4"
+                className="bg-[var(--bhn-surface)] rounded-2xl border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] p-4 sm:p-4 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4"
               >
 
                 <div className="flex flex-col sm:flex-row items-start gap-5 sm:gap-4 flex-1">
 
                   {/* CERTIFICATE ICON */}
-                  <div className="w-full sm:w-[130px] h-[100px] bg-[#F8EEE8] dark:bg-[#1a1a1a] rounded-xl flex items-center justify-center flex-shrink-0">
+                  <div className="w-full sm:w-[130px] h-[100px] bg-[var(--bhn-surface-3)] dark:bg-[var(--bhn-neutral-900)] rounded-xl flex items-center justify-center flex-shrink-0">
 
-                    <div className="text-center text-[#C2AEA1] dark:text-[#7a6a5a]">
+                    <div className="text-center text-[#C2AEA1] dark:text-[var(--bhn-text-soft)]">
 
                       <div className="text-xl">✪</div>
 
@@ -454,15 +455,15 @@ export default function ProgressPage() {
                   {/* INFO */}
                   <div className="flex-1">
 
-                    <h3 className="text-xl sm:text-2xl font-semibold text-[#2D201B] dark:text-[#ededed] leading-snug">
+                    <h3 className="text-xl sm:text-2xl font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] leading-snug">
                       {certificate.title}
                     </h3>
 
-                    <p className="text-[#8A7A71] dark:text-[#7a6a5a] mt-2 leading-relaxed text-sm sm:text-base">
+                    <p className="text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mt-2 leading-relaxed text-sm sm:text-base">
                       Mastered fundamental principles and practical applications through comprehensive coursework and hands-on projects.
                     </p>
 
-                    <div className="flex flex-wrap items-center gap-4 sm:gap-5 mt-4 text-sm text-[#8A7A71] dark:text-[#7a6a5a]">
+                    <div className="flex flex-wrap items-center gap-4 sm:gap-5 mt-4 text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]">
 
                       <span>{certificate.date}</span>
 
@@ -480,8 +481,8 @@ export default function ProgressPage() {
                   <button
                     onClick={() => handleDownload(certificate)}
                     className="
-                    bg-[#8B4A28] dark:bg-[#b86a3a]
-                    hover:bg-[#744024] dark:hover:bg-[#a05a30]
+                    bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)]
+                    hover:bg-[var(--bhn-brand-800)] dark:hover:bg-[var(--bhn-brand-300)]
                     active:scale-95
                     text-white
                     px-5
@@ -505,7 +506,7 @@ export default function ProgressPage() {
                     onClick={() => handleShare(certificate)}
                     className="
                      border
-                     border-[#E1D3CA] dark:border-[#374151]
+                     border-[#E1D3CA] dark:border-[var(--bhn-border)]
                      px-5
                      py-3
                      rounded-xl
@@ -513,8 +514,8 @@ export default function ProgressPage() {
                      items-center
                      justify-center
                      gap-2
-                     text-[#6E5E55] dark:text-[#a89080]
-                     hover:bg-[#F9F4F1] dark:hover:bg-[#1a1a1a]
+                     text-[#6E5E55] dark:text-[var(--bhn-text-soft)]
+                     hover:bg-[var(--bhn-surface-2)] dark:hover:bg-[#1a1a1a]
                      active:scale-95
                      transition-all
                      duration-200

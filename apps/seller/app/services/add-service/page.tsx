@@ -265,63 +265,63 @@ function AddServiceContent() {
       <div className="space-y-6">
         <div className="flex flex-col md:flex-row gap-6 items-start">
           {images.length > 0 && (
-            <div className="w-full md:w-1/3 rounded-2xl overflow-hidden border border-[#E5E7EB] bg-gray-100 shadow-sm">
+            <div className="w-full md:w-1/3 rounded-2xl overflow-hidden border border-[var(--bhn-border)] bg-[var(--bhn-surface-3)] shadow-sm">
               <img src={images[0]} alt={title} className="h-64 w-full object-cover" />
             </div>
           )}
 
           <div className="flex-1 space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <span className="rounded-full bg-[#8B4A20]/10 px-3 py-1 text-xs font-semibold text-[#8B4A20] uppercase tracking-wider">
+              <span className="rounded-full bg-[color-mix(in_srgb,var(--bhn-brand-600)_10%,transparent)] px-3 py-1 text-xs font-semibold text-[var(--bhn-text)] uppercase tracking-wider">
                 {category}
               </span>
               <div className="flex gap-2">
-                <span className={`rounded-full px-3 py-1 text-xs font-medium ${isActive ? "bg-emerald-100 text-emerald-800" : "bg-red-100 text-red-800"}`}>
+                <span className={`rounded-full px-3 py-1 text-xs font-medium ${isActive ? "bg-[var(--bhn-success-50)] text-[var(--bhn-success-700)]" : "bg-[var(--bhn-error-50)] text-[var(--bhn-error-700)]"}`}>
                   {isActive ? "Active" : "Inactive"}
                 </span>
                 {isFeatured && (
-                  <span className="rounded-full bg-amber-100 text-amber-800 px-3 py-1 text-xs font-medium">
+                  <span className="rounded-full bg-[var(--bhn-warning-50)] text-[var(--bhn-warning-700)] px-3 py-1 text-xs font-medium">
                     ★ Featured
                   </span>
                 )}
               </div>
             </div>
 
-            <h2 className="text-2xl font-serif font-bold text-[#1F2937]">{title}</h2>
+            <h2 className="text-2xl font-serif font-bold text-[var(--bhn-text)]">{title}</h2>
 
-            <div className="flex items-center gap-2 text-sm text-[#6B7280]">
+            <div className="flex items-center gap-2 text-sm text-[var(--bhn-text-muted)]">
               <span>📍 {location || "Location not specified"}</span>
               <span>•</span>
-              <span className="text-amber-600 font-semibold">⭐ {rating} / 5</span>
+              <span className="text-[var(--bhn-warning-600)] font-semibold">⭐ {rating} / 5</span>
             </div>
 
             {/* Event Types Display Badges */}
             <div className="flex flex-wrap gap-1.5 py-1">
               {selectedEventTypes.map((evt) => (
-                <span key={evt} className="rounded-md bg-stone-100 border border-stone-200 px-2.5 py-1 text-xs font-medium text-stone-700">
+                <span key={evt} className="rounded-md bg-[var(--bhn-surface-3)] border border-[var(--bhn-border)] px-2.5 py-1 text-xs font-medium text-[var(--bhn-text)]">
                   🎉 {evt}
                 </span>
               ))}
             </div>
 
-            <p className="text-sm text-[#4B5563] leading-relaxed border-t border-b border-gray-100 py-3">
+            <p className="text-sm text-[var(--bhn-text-muted)] leading-relaxed border-t border-b border-[var(--bhn-border)] py-3">
               {description}
             </p>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2">
-              <div className="bg-[#FBF6F0] p-3 rounded-xl border border-[#EADFD3]">
-                <p className="text-xs text-[#8B7E72] font-medium">BASE PRICE</p>
-                <p className="text-lg font-bold text-[#8B4A20]">₹{price.toLocaleString("en-IN")}</p>
+              <div className="bg-[var(--bhn-surface-2)] p-3 rounded-xl border border-[var(--bhn-border)]">
+                <p className="text-xs text-[var(--bhn-text-muted)] font-medium">BASE PRICE</p>
+                <p className="text-lg font-bold text-[var(--bhn-text)]">₹{price.toLocaleString("en-IN")}</p>
               </div>
-              <div className="bg-[#FBF6F0] p-3 rounded-xl border border-[#EADFD3]">
-                <p className="text-xs text-[#8B7E72] font-medium">GUEST CAPACITY</p>
-                <p className="text-sm font-semibold text-[#2F241D] mt-1">
+              <div className="bg-[var(--bhn-surface-2)] p-3 rounded-xl border border-[var(--bhn-border)]">
+                <p className="text-xs text-[var(--bhn-text-muted)] font-medium">GUEST CAPACITY</p>
+                <p className="text-sm font-semibold text-[var(--bhn-text)] mt-1">
                   {minGuests} - {maxGuests} Guests
                 </p>
               </div>
-              <div className="bg-[#FBF6F0] p-3 rounded-xl border border-[#EADFD3] col-span-2 sm:col-span-1">
-                <p className="text-xs text-[#8B7E72] font-medium">SELLER EMAIL</p>
-                <p className="text-xs font-medium text-[#2F241D] truncate mt-1">
+              <div className="bg-[var(--bhn-surface-2)] p-3 rounded-xl border border-[var(--bhn-border)] col-span-2 sm:col-span-1">
+                <p className="text-xs text-[var(--bhn-text-muted)] font-medium">SELLER EMAIL</p>
+                <p className="text-xs font-medium text-[var(--bhn-text)] truncate mt-1">
                   {sellerEmail || "N/A"}
                 </p>
               </div>
@@ -331,11 +331,11 @@ function AddServiceContent() {
 
         {/* Media Gallery Preview */}
         {images.length > 1 && (
-          <div className="pt-4 border-t border-[#E5E7EB]">
-            <h4 className="text-sm font-semibold text-[#1F2937] mb-3">Service Gallery ({images.length})</h4>
+          <div className="pt-4 border-t border-[var(--bhn-border)]">
+            <h4 className="text-sm font-semibold text-[var(--bhn-text)] mb-3">Service Gallery ({images.length})</h4>
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-3">
               {images.map((img, idx) => (
-                <div key={idx} className="h-24 rounded-xl overflow-hidden border border-[#E5E7EB] bg-gray-50">
+                <div key={idx} className="h-24 rounded-xl overflow-hidden border border-[var(--bhn-border)] bg-[var(--bhn-surface-2)]">
                   <img src={img} alt={`Gallery ${idx}`} className="h-full w-full object-cover" />
                 </div>
               ))}
@@ -354,21 +354,21 @@ function AddServiceContent() {
         return (
           <div className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-[#1F2937]">Service Title</label>
+              <label className="block text-sm font-medium text-[var(--bhn-text)]">Service Title</label>
               <input
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. Signature Wedding Decor"
-                className="mt-1 w-full rounded-xl border border-[#D1D5DB] px-4 py-3 focus:outline-none focus:border-[#8B4A20]"
+                className="mt-1 w-full rounded-xl border border-[var(--bhn-border)] px-4 py-3 focus:outline-none focus:border-[var(--bhn-brand-600)]"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-[#1F2937]">Category</label>
+              <label className="block text-sm font-medium text-[var(--bhn-text)]">Category</label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="mt-1 w-full rounded-xl border border-[#D1D5DB] px-4 py-3 focus:outline-none focus:border-[#8B4A20]"
+                className="mt-1 w-full rounded-xl border border-[var(--bhn-border)] px-4 py-3 focus:outline-none focus:border-[var(--bhn-brand-600)]"
               >
                 <option value="">Select a category</option>
                 {serviceCategories.map((option) => <option key={option} value={option}>{option}</option>)}
@@ -377,10 +377,10 @@ function AddServiceContent() {
 
             {/* Event Types Selection Checkboxes */}
             <div>
-              <label className="block text-sm font-medium text-[#1F2937] mb-2">
+              <label className="block text-sm font-medium text-[var(--bhn-text)] mb-2">
                 Select Supported Event Types / Functions
               </label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 bg-stone-50 p-4 rounded-2xl border border-stone-200">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 bg-[var(--bhn-surface-2)] p-4 rounded-2xl border border-[var(--bhn-border)]">
                 {eventTypeOptions.map((type) => {
                   const checked = selectedEventTypes.includes(type);
                   return (
@@ -388,21 +388,21 @@ function AddServiceContent() {
                       key={type}
                       className={`flex items-center gap-2 p-2.5 rounded-xl border cursor-pointer text-xs font-medium transition ${
                         checked
-                          ? "bg-[#F3E8DE] border-[#8B4A20] text-[#8B4A20]"
-                          : "bg-white border-stone-200 text-stone-700 hover:bg-stone-100"
+                          ? "bg-[var(--bhn-surface-2)] border-[var(--bhn-brand-600)] text-[var(--bhn-text)]"
+                          : "bg-[var(--bhn-surface)] border-[var(--bhn-border)] text-[var(--bhn-text)] hover:bg-[var(--bhn-surface-3)]"
                       }`}
                     >
                       <input
                         type="checkbox"
                         checked={checked}
                         onChange={() => toggleEventType(type)}
-                        className="rounded accent-[#8B4A20]"
+                        className="rounded accent-[var(--bhn-brand-600)]"
                       />
                       <span>{type}</span>
                     </label>
                   );
                 })}
-                {!eventTypeOptions.length && <p className="col-span-full text-sm text-stone-500">Event types are configured by the admin and are not available yet.</p>}
+                {!eventTypeOptions.length && <p className="col-span-full text-sm text-[var(--bhn-text-muted)]">Event types are configured by the admin and are not available yet.</p>}
               </div>
             </div>
           </div>
@@ -412,41 +412,41 @@ function AddServiceContent() {
         return (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-[#1F2937]">Base Price (₹)</label>
+              <label className="block text-sm font-medium text-[var(--bhn-text)]">Base Price (₹)</label>
               <input
                 type="number"
                 value={price}
                 onChange={(e) => setPrice(toNumber(e.target.value))}
-                className="mt-1 w-full rounded-xl border border-[#D1D5DB] px-4 py-3 focus:outline-none focus:border-[#8B4A20]"
+                className="mt-1 w-full rounded-xl border border-[var(--bhn-border)] px-4 py-3 focus:outline-none focus:border-[var(--bhn-brand-600)]"
               />
             </div>
 
             <div className="grid gap-4 sm:grid-cols-3 pt-2">
               <div>
-                <label className="block text-sm font-medium text-[#1F2937]">Min Guests Capacity</label>
+                <label className="block text-sm font-medium text-[var(--bhn-text)]">Min Guests Capacity</label>
                 <input
                   type="number"
                   value={minGuests}
                   onChange={(e) => setMinGuests(toNumber(e.target.value))}
-                  className="mt-1 w-full rounded-xl border border-[#D1D5DB] px-4 py-3 focus:outline-none focus:border-[#8B4A20]"
+                  className="mt-1 w-full rounded-xl border border-[var(--bhn-border)] px-4 py-3 focus:outline-none focus:border-[var(--bhn-brand-600)]"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#1F2937]">Max Guests Capacity</label>
+                <label className="block text-sm font-medium text-[var(--bhn-text)]">Max Guests Capacity</label>
                 <input
                   type="number"
                   value={maxGuests}
                   onChange={(e) => setMaxGuests(toNumber(e.target.value))}
-                  className="mt-1 w-full rounded-xl border border-[#D1D5DB] px-4 py-3 focus:outline-none focus:border-[#8B4A20]"
+                  className="mt-1 w-full rounded-xl border border-[var(--bhn-border)] px-4 py-3 focus:outline-none focus:border-[var(--bhn-brand-600)]"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#1F2937]">Default Guests</label>
+                <label className="block text-sm font-medium text-[var(--bhn-text)]">Default Guests</label>
                 <input
                   type="number"
                   value={guests}
                   onChange={(e) => setGuests(toNumber(e.target.value))}
-                  className="mt-1 w-full rounded-xl border border-[#D1D5DB] px-4 py-3 focus:outline-none focus:border-[#8B4A20]"
+                  className="mt-1 w-full rounded-xl border border-[var(--bhn-border)] px-4 py-3 focus:outline-none focus:border-[var(--bhn-brand-600)]"
                 />
               </div>
             </div>
@@ -458,10 +458,10 @@ function AddServiceContent() {
           <div className="space-y-5">
             <div className="flex items-center justify-between">
               <div>
-                <label className="block text-sm font-semibold text-[#1F2937]">Upload Service Images</label>
-                <p className="text-xs text-[#6B7280]">Select up to 10 photos for this service gallery.</p>
+                <label className="block text-sm font-semibold text-[var(--bhn-text)]">Upload Service Images</label>
+                <p className="text-xs text-[var(--bhn-text-muted)]">Select up to 10 photos for this service gallery.</p>
               </div>
-              <span className="rounded-full bg-[#E0E7FF] px-3 py-1 text-xs font-semibold text-[#3730A3]">
+              <span className="rounded-full bg-[var(--bhn-surface-2)] px-3 py-1 text-xs font-semibold text-[var(--bhn-text-muted)]">
                 {images.length} / {MAX_IMAGES}
               </span>
             </div>
@@ -469,13 +469,13 @@ function AddServiceContent() {
             {images.length < MAX_IMAGES && (
               <div
                 onClick={() => fileInputRef.current?.click()}
-                className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-[#9CA3AF] bg-[#F9FAFB] p-6 hover:border-[#8B4A20] hover:bg-[#FDFBF7] transition"
+                className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-[var(--bhn-border)] bg-[var(--bhn-surface-2)] p-6 hover:border-[var(--bhn-brand-600)] hover:bg-[var(--bhn-surface-2)] transition"
               >
-                <svg className="h-8 w-8 text-[#6B7280]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="h-8 w-8 text-[var(--bhn-text-muted)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
-                <p className="mt-2 text-sm font-medium text-[#374151]">Click to upload photos</p>
-                <p className="text-xs text-[#9CA3AF]">PNG, JPG, WEBP up to 10MB each</p>
+                <p className="mt-2 text-sm font-medium text-[var(--bhn-text-muted)]">Click to upload photos</p>
+                <p className="text-xs text-[var(--bhn-text-soft)]">PNG, JPG, WEBP up to 10MB each</p>
                 <input
                   type="file"
                   accept="image/*"
@@ -490,12 +490,12 @@ function AddServiceContent() {
             {images.length > 0 && (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                 {images.map((src, index) => (
-                  <div key={index} className="group relative rounded-xl border border-[#E5E7EB] overflow-hidden bg-gray-50 aspect-square">
+                  <div key={index} className="group relative rounded-xl border border-[var(--bhn-border)] overflow-hidden bg-[var(--bhn-surface-2)] aspect-square">
                     <img src={src} alt={`service-${index}`} className="h-full w-full object-cover" />
                     <button
                       type="button"
                       onClick={() => handleRemoveImage(index)}
-                      className="absolute top-1.5 right-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-white shadow-md hover:bg-red-700 transition text-xs"
+                      className="absolute top-1.5 right-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-[var(--bhn-error-600)] text-[var(--bhn-text-on-brand)] shadow-md hover:bg-[var(--bhn-error-700)] transition text-xs"
                       title="Remove image"
                     >
                       ✕
@@ -511,29 +511,29 @@ function AddServiceContent() {
         return (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-[#1F2937]">Location / City</label>
+              <label className="block text-sm font-medium text-[var(--bhn-text)]">Location / City</label>
               <input
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 placeholder="e.g. Mumbai, Delhi, Jaipur"
-                className="mt-1 w-full rounded-xl border border-[#D1D5DB] px-4 py-3 focus:outline-none focus:border-[#8B4A20]"
+                className="mt-1 w-full rounded-xl border border-[var(--bhn-border)] px-4 py-3 focus:outline-none focus:border-[var(--bhn-brand-600)]"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-[#1F2937]">Service Description</label>
+              <label className="block text-sm font-medium text-[var(--bhn-text)]">Service Description</label>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={4}
                 placeholder="Write detailed information about packages and offerings..."
-                className="mt-1 w-full rounded-xl border border-[#D1D5DB] px-4 py-3 focus:outline-none focus:border-[#8B4A20]"
+                className="mt-1 w-full rounded-xl border border-[var(--bhn-border)] px-4 py-3 focus:outline-none focus:border-[var(--bhn-brand-600)]"
               />
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label className="block text-sm font-medium text-[#1F2937]">Initial Rating (0 - 5)</label>
+                <label className="block text-sm font-medium text-[var(--bhn-text)]">Initial Rating (0 - 5)</label>
                 <input
                   type="number"
                   step="0.1"
@@ -541,18 +541,18 @@ function AddServiceContent() {
                   max="5"
                   value={rating}
                   onChange={(e) => setRating(Math.min(5, Math.max(0, toNumber(e.target.value))))}
-                  className="mt-1 w-full rounded-xl border border-[#D1D5DB] px-4 py-3 focus:outline-none focus:border-[#8B4A20]"
+                  className="mt-1 w-full rounded-xl border border-[var(--bhn-border)] px-4 py-3 focus:outline-none focus:border-[var(--bhn-brand-600)]"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[#1F2937]">Seller Contact Email</label>
+                <label className="block text-sm font-medium text-[var(--bhn-text)]">Seller Contact Email</label>
                 <input
                   type="email"
                   value={sellerEmail}
                   onChange={(e) => setSellerEmail(e.target.value)}
                   placeholder="seller@bandhan.demo"
-                  className="mt-1 w-full rounded-xl border border-[#D1D5DB] px-4 py-3 focus:outline-none focus:border-[#8B4A20]"
+                  className="mt-1 w-full rounded-xl border border-[var(--bhn-border)] px-4 py-3 focus:outline-none focus:border-[var(--bhn-brand-600)]"
                 />
               </div>
             </div>
@@ -563,36 +563,36 @@ function AddServiceContent() {
         return (
           <div className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-3">
-              <label className="block text-sm font-medium text-[#1F2937]">
+              <label className="block text-sm font-medium text-[var(--bhn-text)]">
                 <span className="block mb-1">Status</span>
                 <select
                   value={status}
                   onChange={(e) => setStatus(e.target.value)}
-                  className="w-full rounded-xl border border-[#D1D5DB] px-4 py-3 focus:outline-none focus:border-[#8B4A20]"
+                  className="w-full rounded-xl border border-[var(--bhn-border)] px-4 py-3 focus:outline-none focus:border-[var(--bhn-brand-600)]"
                 >
                   <option value="active">Active</option>
                   <option value="draft">Draft</option>
                 </select>
               </label>
 
-              <label className="block text-sm font-medium text-[#1F2937]">
+              <label className="block text-sm font-medium text-[var(--bhn-text)]">
                 <span className="block mb-1">Featured Listing</span>
                 <select
                   value={String(isFeatured)}
                   onChange={(e) => setIsFeatured(e.target.value === "true")}
-                  className="w-full rounded-xl border border-[#D1D5DB] px-4 py-3 focus:outline-none focus:border-[#8B4A20]"
+                  className="w-full rounded-xl border border-[var(--bhn-border)] px-4 py-3 focus:outline-none focus:border-[var(--bhn-brand-600)]"
                 >
                   <option value="false">No</option>
                   <option value="true">Yes</option>
                 </select>
               </label>
 
-              <label className="block text-sm font-medium text-[#1F2937]">
+              <label className="block text-sm font-medium text-[var(--bhn-text)]">
                 <span className="block mb-1">Is Active</span>
                 <select
                   value={String(isActive)}
                   onChange={(e) => setIsActive(e.target.value === "true")}
-                  className="w-full rounded-xl border border-[#D1D5DB] px-4 py-3 focus:outline-none focus:border-[#8B4A20]"
+                  className="w-full rounded-xl border border-[var(--bhn-border)] px-4 py-3 focus:outline-none focus:border-[var(--bhn-brand-600)]"
                 >
                   <option value="true">Yes</option>
                   <option value="false">No</option>
@@ -623,18 +623,18 @@ function AddServiceContent() {
   ]);
 
   return (
-    <div className="flex min-h-screen bg-[#F7F3EF]">
+    <div className="flex min-h-screen bg-[var(--bhn-surface-2)]">
       <Sidebar />
       <div className="flex-1 overflow-hidden">
-        <div className="h-[78px] bg-white border-b border-[#EAE1DA] px-4 sm:px-7 flex items-center justify-between">
+        <div className="h-[78px] bg-[var(--bhn-surface)] border-b border-[var(--bhn-border)] px-4 sm:px-7 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="hidden md:block text-sm text-[#6B7280]">Hello,</div>
-            <div className="text-base font-semibold text-[#1F2937]">{userName}</div>
+            <div className="hidden md:block text-sm text-[var(--bhn-text-muted)]">Hello,</div>
+            <div className="text-base font-semibold text-[var(--bhn-text)]">{userName}</div>
           </div>
 
           <button
             onClick={() => router.push("/services")}
-            className="rounded-xl border border-[#D1D5DB] px-4 py-2 text-sm text-[#374151] hover:bg-[#F3F4F6]"
+            className="rounded-xl border border-[var(--bhn-border)] px-4 py-2 text-sm text-[var(--bhn-text-muted)] hover:bg-[var(--bhn-surface-2)]"
           >
             Back to Services
           </button>
@@ -643,10 +643,10 @@ function AddServiceContent() {
         <div className="p-4 sm:p-7">
           <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="text-2xl font-serif font-semibold text-[#111827]">
+              <h1 className="text-2xl font-serif font-semibold text-[var(--bhn-text)]">
                 {isViewOnly ? "Service Details" : serviceId ? "Edit Service" : "Add Service"}
               </h1>
-              <p className="mt-1 text-sm text-[#6B7280]">
+              <p className="mt-1 text-sm text-[var(--bhn-text-muted)]">
                 {isViewOnly ? "View complete details of this listing." : "Create and manage your service listing."}
               </p>
             </div>
@@ -660,8 +660,8 @@ function AddServiceContent() {
                     onClick={() => setActiveStep(index)}
                     className={`rounded-full border px-4 py-2 text-xs font-semibold ${
                       activeStep === index
-                        ? "border-[#8B4A20] bg-[#F3E8DE] text-[#8B4A20]"
-                        : "border-[#D1D5DB] bg-white text-[#6B7280]"
+                        ? "border-[var(--bhn-brand-600)] bg-[var(--bhn-surface-2)] text-[var(--bhn-text)]"
+                        : "border-[var(--bhn-border)] bg-[var(--bhn-surface)] text-[var(--bhn-text-muted)]"
                     }`}
                   >
                     {step}
@@ -671,25 +671,25 @@ function AddServiceContent() {
             )}
           </div>
 
-          <div className="rounded-3xl border border-[#E5E7EB] bg-white p-6 shadow-sm">
+          <div className="rounded-3xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-6 shadow-sm">
             {isLoadingService ? (
-              <div className="py-20 text-center text-sm text-[#6B7280]">Loading service details...</div>
+              <div className="py-20 text-center text-sm text-[var(--bhn-text-muted)]">Loading service details...</div>
             ) : (
               <>
                 {renderedStepContent}
 
                 {validationError && (
-                  <div className="mt-4 rounded-xl bg-[#FEE2E2] px-4 py-3 text-sm text-[#B91C1C]">
+                  <div className="mt-4 rounded-xl bg-[var(--bhn-error-50)] px-4 py-3 text-sm text-[var(--bhn-text)]">
                     {validationError}
                   </div>
                 )}
 
-                <div className="mt-6 flex flex-wrap items-center justify-between border-t border-[#E5E7EB] pt-4">
+                <div className="mt-6 flex flex-wrap items-center justify-between border-t border-[var(--bhn-border)] pt-4">
                   {isViewOnly ? (
                     <button
                       type="button"
                       onClick={() => router.push(`/services/add-service?serviceId=${serviceId}`)}
-                      className="rounded-xl bg-[#8B4A20] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#6E3214]"
+                      className="rounded-xl bg-[var(--bhn-brand-600)] px-5 py-2.5 text-sm font-medium text-[var(--bhn-text-on-brand)] hover:bg-[var(--bhn-brand-600)]"
                     >
                       Edit This Service
                     </button>
@@ -699,7 +699,7 @@ function AddServiceContent() {
                         type="button"
                         onClick={handleBack}
                         disabled={activeStep === 0}
-                        className="rounded-xl border border-[#D1D5DB] bg-white px-5 py-2.5 text-sm font-medium text-[#374151] disabled:cursor-not-allowed disabled:opacity-40"
+                        className="rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] px-5 py-2.5 text-sm font-medium text-[var(--bhn-text-muted)] disabled:cursor-not-allowed disabled:opacity-40"
                       >
                         Back
                       </button>
@@ -709,7 +709,7 @@ function AddServiceContent() {
                           type="button"
                           onClick={handleNext}
                           disabled={activeStep === STEP_TITLES.length - 1}
-                          className="rounded-xl bg-[#F3F4F6] px-5 py-2.5 text-sm font-medium text-[#374151] disabled:cursor-not-allowed disabled:opacity-40"
+                          className="rounded-xl bg-[var(--bhn-surface-2)] px-5 py-2.5 text-sm font-medium text-[var(--bhn-text-muted)] disabled:cursor-not-allowed disabled:opacity-40"
                         >
                           Continue
                         </button>
@@ -717,7 +717,7 @@ function AddServiceContent() {
                           type="button"
                           onClick={handleSave}
                           disabled={isSaving}
-                          className="rounded-xl bg-[#8B4A20] px-5 py-2.5 text-sm font-medium text-white hover:bg-[#6E3214] disabled:cursor-not-allowed disabled:opacity-40"
+                          className="rounded-xl bg-[var(--bhn-brand-600)] px-5 py-2.5 text-sm font-medium text-[var(--bhn-text-on-brand)] hover:bg-[var(--bhn-brand-600)] disabled:cursor-not-allowed disabled:opacity-40"
                         >
                           {serviceId ? "Save Changes" : "Publish Service"}
                         </button>
@@ -736,7 +736,7 @@ function AddServiceContent() {
 
 export default function AddServicePage() {
   return (
-    <Suspense fallback={<div className="p-8 text-center text-sm text-gray-500">Loading form...</div>}>
+    <Suspense fallback={<div className="p-8 text-center text-sm text-[var(--bhn-text-muted)]">Loading form...</div>}>
       <AddServiceContent />
     </Suspense>
   );

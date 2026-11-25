@@ -93,6 +93,7 @@ const productSchema = new mongoose.Schema({
   specifications: [specificationSchema],
   variants: [variantSchema],
 
+  // Shipping data captured by the seller (or admin) and consumed by Shiprocket.
   weight: Number,
   dimensions: {
     length: Number,
@@ -103,6 +104,11 @@ const productSchema = new mongoose.Schema({
   shippingWeight: Number,
   shippingCost: { type: Number, default: 0 },
   freeShipping: { type: Boolean, default: false },
+  originPincode: String,
+  pickupLocation: { type: String, default: "Primary" },
+  dispatchAddress: String,
+  courierPreference: String,
+  hsnCode: String,
 
   location: String,
   sellerName: String,

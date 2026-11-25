@@ -16,6 +16,14 @@ import { MessageSquare, Search, Send, Loader, Bell, ExternalLink } from "lucide-
 import { useAppSelector } from "@/hooks/useAppSelector";
 import { getSocket } from "@/lib/socket";
 
+const normalizeListingType = (value: string) => {
+  const normalized = String(value || "").trim().toLowerCase();
+  if (normalized === "services" || normalized === "service") return "service";
+  if (normalized === "venues" || normalized === "venue") return "venue";
+  if (normalized === "products" || normalized === "product") return "product";
+  return normalized;
+};
+
 function InboxPageContent() {
   const [activeConv, setActiveConv] = useState<string | null>(null);
   const [newMessage, setNewMessage] = useState("");
@@ -28,8 +36,17 @@ function InboxPageContent() {
   const user = useAppSelector((s) => s.auth.user as any);
   const searchParams = useSearchParams();
   const defaultConversationId = searchParams.get("convId") || searchParams.get("conversationId");
-  const sellerIdParam = searchParams.get("sellerId") || searchParams.get("sellerID");
-  const quoteIdParam = searchParams.get("quoteId") || searchParams.get("quoteID");
+  const sellerIdParam = searchParams.get("sellerId") || searchParams.get("sellerID") || "";
+  const quoteIdParam = searchParams.get("quoteId") || searchParams.get("quoteID") || "";
+  const rawListingTypeParam = searchParams.get("listingType") || "";
+  const listingIdParam = searchParams.get("listingId") || "";
+  const serviceIdParam =
+    searchParams.get("serviceId") || (normalizeListingType(rawListingTypeParam) === "service" ? listingIdParam : "");
+  const venueIdParam =
+    searchParams.get("venueId") || (normalizeListingType(rawListingTypeParam) === "venue" ? listingIdParam : "");
+  const listingTypeParam = normalizeListingType(
+    rawListingTypeParam || (serviceIdParam ? "service" : venueIdParam ? "venue" : "")
+  );
   const activeConvId = activeConv ? String(activeConv) : "";
 
   const { data: convData, isLoading: convsLoading, refetch: refetchConversations } = useGetConversationsQuery();
@@ -42,10 +59,11 @@ function InboxPageContent() {
   const [createConversation] = useCreateConversationMutation();
 
   const conversationCreated = useRef(false);
+  const autoCreateKey = [sellerIdParam, quoteIdParam, serviceIdParam, venueIdParam, listingIdParam].join("|");
 
   useEffect(() => {
     conversationCreated.current = false;
-  }, [sellerIdParam, quoteIdParam]);
+  }, [autoCreateKey]);
 
   const conversations = Array.isArray(convData?.conversations)
     ? convData.conversations
@@ -74,7 +92,15 @@ function InboxPageContent() {
       if (!searchQuery.trim()) return true;
       const term = searchQuery.trim().toLowerCase();
       return String(
-        conv.serviceTitle || conv.serviceName || conv.productName || conv.lastMessage || conv.sellerName || ""
+        conv.serviceTitle ||
+        conv.serviceName ||
+        conv.venueName ||
+        conv.venueId?.name ||
+        conv.venueId?.title ||
+        conv.productName ||
+        conv.lastMessage ||
+        conv.sellerName ||
+        ""
       )
         .toLowerCase()
         .includes(term);
@@ -91,12 +117,19 @@ function InboxPageContent() {
   }, [defaultConversationId]);
 
   useEffect(() => {
-    if (activeConv || defaultConversationId || !sellerIdParam || !quoteIdParam) return;
+    const hasQuoteFlow = Boolean(sellerIdParam && quoteIdParam);
+    const hasListingFlow = Boolean(listingIdParam && (serviceIdParam || venueIdParam));
+    if (activeConv || defaultConversationId || (!hasQuoteFlow && !hasListingFlow)) return;
 
     const matched = conversations.find((conv: any) => {
-      const convQuoteId = String(conv.quoteId || "");
       const convSellerId = String(conv.sellerId?._id || conv.sellerId || "");
-      return convQuoteId === String(quoteIdParam) && convSellerId === String(sellerIdParam);
+      const matchesSeller = !sellerIdParam || convSellerId === String(sellerIdParam);
+      const matchesQuote = hasQuoteFlow && String(conv.quoteId || "") === String(quoteIdParam);
+      const matchesService =
+        Boolean(serviceIdParam) && String(conv.serviceId?._id || conv.serviceId || "") === String(serviceIdParam);
+      const matchesVenue =
+        Boolean(venueIdParam) && String(conv.venueId?._id || conv.venueId || "") === String(venueIdParam);
+      return matchesSeller && (matchesQuote || matchesService || matchesVenue);
     });
 
     if (matched) {
@@ -106,7 +139,16 @@ function InboxPageContent() {
 
     if (!conversationCreated.current) {
       conversationCreated.current = true;
-      createConversation({ sellerId: sellerIdParam, quoteId: quoteIdParam })
+      const payload = hasQuoteFlow
+        ? { sellerId: sellerIdParam, quoteId: quoteIdParam, listingType: listingTypeParam || undefined }
+        : {
+            ...(sellerIdParam ? { sellerId: sellerIdParam } : {}),
+            ...(serviceIdParam ? { serviceId: serviceIdParam } : {}),
+            ...(venueIdParam ? { venueId: venueIdParam } : {}),
+            listingType: listingTypeParam || undefined,
+          };
+
+      createConversation(payload)
         .then((result: any) => {
           const newConvId = String(result?.conversation?._id || result?._id || result?.conversationId || "");
           if (newConvId) {
@@ -124,6 +166,10 @@ function InboxPageContent() {
     conversations,
     sellerIdParam,
     quoteIdParam,
+    serviceIdParam,
+    venueIdParam,
+    listingIdParam,
+    listingTypeParam,
     createConversation,
     refetchConversations,
   ]);
@@ -234,57 +280,84 @@ function InboxPageContent() {
     }
   };
 
-  // Service Details Extraction
+  // Listing context extraction (service or venue)
   const serviceObj = activeConversation?.serviceId || activeConversation?.service || {};
-  const serviceIdValue = serviceObj?._id || activeConversation?.serviceId || "";
-  const serviceTitle =
-    serviceObj?.title ||
-    activeConversation?.serviceTitle ||
-    activeConversation?.productName ||
-    activeConversation?.serviceName ||
-    activeConversation?.quoteServices?.[0] ||
-    "Service Inquiry";
-  const serviceCategory = serviceObj?.category || activeConversation?.category || "Service";
-  const servicePrice =
-    serviceObj?.price || activeConversation?.price || activeConversation?.amount || activeConversation?.quoteBudget || 0;
-  const serviceImage =
-    serviceObj?.images?.[0] ||
-    serviceObj?.image ||
-    activeConversation?.productImage ||
-    activeConversation?.serviceImage ||
-    "/placeholder.jpg";
-  const serviceLocation = serviceObj?.location || activeConversation?.location || "";
-  const eventTypes = serviceObj?.eventType || activeConversation?.eventType || "";
-  const quoteListingType = activeConversation?.quoteListingType || "";
-  const scopePath =
-    quoteListingType === "venue" ? `/products/Venue/${serviceIdValue}` : `/products/Services/${serviceIdValue}`;
-  const minGuests = serviceObj?.minGuests || 0;
-  const maxGuests = serviceObj?.maxGuests || 0;
+  const venueObj = activeConversation?.venueId || activeConversation?.venue || {};
+  const rawServiceId = serviceObj?._id || (typeof activeConversation?.serviceId === "string" ? activeConversation.serviceId : "");
+  const rawVenueId = venueObj?._id || (typeof activeConversation?.venueId === "string" ? activeConversation.venueId : "");
+  const listingType = normalizeListingType(
+    activeConversation?.quoteListingType || listingTypeParam || (rawVenueId ? "venue" : rawServiceId ? "service" : "")
+  );
+  const isVenueListing = listingType === "venue" || Boolean(rawVenueId);
+  const listingIdValue = isVenueListing ? rawVenueId : rawServiceId;
+  const listingObj = isVenueListing ? venueObj : serviceObj;
+  const listingTitle = isVenueListing
+    ? venueObj?.name ||
+      venueObj?.title ||
+      activeConversation?.venueName ||
+      activeConversation?.productName ||
+      activeConversation?.serviceName ||
+      "Venue inquiry"
+    : serviceObj?.title ||
+      activeConversation?.serviceTitle ||
+      activeConversation?.productName ||
+      activeConversation?.serviceName ||
+      activeConversation?.quoteServices?.[0] ||
+      "Service Inquiry";
+  const listingCategory = isVenueListing
+    ? venueObj?.venueType || venueObj?.category || "Venue"
+    : serviceObj?.category || activeConversation?.category || "Service";
+  const listingPrice = isVenueListing
+    ? venueObj?.pricePerDay ||
+      venueObj?.price ||
+      activeConversation?.price ||
+      activeConversation?.amount ||
+      activeConversation?.quoteBudget ||
+      0
+    : serviceObj?.price || activeConversation?.price || activeConversation?.amount || activeConversation?.quoteBudget || 0;
+  const listingImage = isVenueListing
+    ? venueObj?.images?.[0] ||
+      venueObj?.image ||
+      activeConversation?.venueImage ||
+      activeConversation?.productImage ||
+      "/placeholder.jpg"
+    : serviceObj?.images?.[0] ||
+      serviceObj?.image ||
+      activeConversation?.productImage ||
+      activeConversation?.serviceImage ||
+      "/placeholder.jpg";
+  const listingLocation = listingObj?.location || activeConversation?.location || "";
+  const eventTypes = listingObj?.eventType || activeConversation?.eventType || "";
+  const minGuests = isVenueListing ? venueObj?.minGuests || venueObj?.guests || 0 : serviceObj?.minGuests || 0;
+  const maxGuests = isVenueListing ? venueObj?.maxGuests || venueObj?.guests || 0 : serviceObj?.maxGuests || 0;
   const sellerName =
     activeConversation?.sellerName ||
     activeConversation?.sellerId?.fullName ||
     activeConversation?.sellerId?.name ||
-    "Service Provider";
+    (isVenueListing ? "Venue provider" : "Service Provider");
   const sellerEmail = activeConversation?.sellerEmail || activeConversation?.sellerId?.email || "";
+  const scopePath = listingIdValue
+    ? `/explore?type=${isVenueListing ? "venues" : "services"}/${String(listingIdValue)}`
+    : "";
 
   return (
-    <div className="min-h-screen bg-[#F8F4EF]">
+    <div className="min-h-screen bg-[var(--bhn-surface-2)]">
       <Header variant="main" showNav />
       <div className="flex">
         <Sidebar variant="userdashboard" />
         <main className="flex-1 flex flex-col h-[calc(100vh-44px)]">
-          <div className="flex items-center gap-3 p-4 border-b bg-white">
-            <MessageSquare className="text-[#C2652A]" size={20} />
+          <div className="flex items-center gap-3 p-4 border-b bg-[var(--bhn-surface)]">
+            <MessageSquare className="text-[var(--bhn-text)]" size={20} />
             <div>
-              <h1 className="text-lg font-bold text-[#1C1A16]">Service Messages</h1>
+              <h1 className="text-lg font-bold text-[var(--bhn-text)]">Messages</h1>
               {activeConversation ? (
-                <p className="text-sm text-gray-500">
-                  Chatting with {sellerName} regarding <span className="font-semibold text-[#8B4A20]">{serviceTitle}</span>
+                <p className="text-sm text-[var(--bhn-text-muted)]">
+                  Chatting with {sellerName} regarding <span className="font-semibold text-[var(--bhn-text)]">{listingTitle}</span>
                 </p>
               ) : null}
             </div>
             {toastMessage ? (
-              <span className="inline-flex items-center gap-1 rounded-full bg-[#F7E6D8] px-2.5 py-1 text-xs font-medium text-[#B65B2D]">
+              <span className="inline-flex items-center gap-1 rounded-full bg-[var(--bhn-surface-2)] px-2.5 py-1 text-xs font-medium text-[var(--bhn-text)]">
                 <Bell size={12} />
                 New
               </span>
@@ -292,46 +365,53 @@ function InboxPageContent() {
           </div>
 
           {toastMessage ? (
-            <div className="mx-4 mt-3 rounded-xl border border-[#E9D8CA] bg-[#FFF9F3] px-3 py-2 text-sm text-[#8A4A23] shadow-sm">
+            <div className="mx-4 mt-3 rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface-2)] px-3 py-2 text-sm text-[var(--bhn-text)] shadow-sm">
               {toastMessage}
             </div>
           ) : null}
 
           <div className="flex flex-1 overflow-hidden">
             {/* Conversations Sidebar */}
-            <div className="w-72 border-r bg-white overflow-y-auto shrink-0">
+            <div className="w-72 border-r bg-[var(--bhn-surface)] overflow-y-auto shrink-0">
               <div className="p-4 border-b">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--bhn-text-muted)]" />
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search service chats..."
-                    className="w-full rounded-xl border border-[#E5E5E5] bg-[#F7F7F8] px-10 py-2 text-sm outline-none focus:border-[#B65B2D]"
+                    placeholder="Search messages..."
+                    className="w-full rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface-2)] px-10 py-2 text-sm outline-none focus:border-[var(--bhn-brand-600)]"
                   />
                 </div>
               </div>
               {convsLoading ? (
-                <div className="p-4 text-sm text-gray-500">Loading conversations...</div>
+                <div className="p-4 text-sm text-[var(--bhn-text-muted)]">Loading conversations...</div>
               ) : visibleConversations.length === 0 ? (
-                <div className="p-4 text-sm text-gray-500">No conversations yet</div>
+                <div className="p-4 text-sm text-[var(--bhn-text-muted)]">No conversations yet</div>
               ) : (
                 visibleConversations.map((conv: any) => {
                   const name = conv.sellerName || conv.sellerId?.fullName || conv.sellerId?.name || "Seller";
                   const title =
-                    conv.serviceTitle || conv.serviceName || conv.productName || conv.lastMessage || "Service inquiry";
+                    conv.venueName ||
+                    conv.venueId?.name ||
+                    conv.venueId?.title ||
+                    conv.serviceTitle ||
+                    conv.serviceName ||
+                    conv.productName ||
+                    conv.lastMessage ||
+                    (conv.venueId ? "Venue inquiry" : "Service inquiry");
 
                   return (
                     <button
                       key={String(conv._id)}
                       onClick={() => setActiveConv(String(conv._id))}
-                      className={`w-full text-left p-3 border-b hover:bg-[#FAF5EE] transition ${
-                        activeConvId === String(conv._id) ? "bg-[#FAF5EE]" : ""
+                      className={`w-full text-left p-3 border-b hover:bg-[var(--bhn-surface-2)] transition ${
+                        activeConvId === String(conv._id) ? "bg-[var(--bhn-surface-2)]" : ""
                       }`}
                     >
-                      <p className="text-sm font-semibold text-[#1C1A16] truncate">{name}</p>
-                      <p className="text-xs text-[#8B4A20] truncate mt-0.5 font-medium">{title}</p>
+                      <p className="text-sm font-semibold text-[var(--bhn-text)] truncate">{name}</p>
+                      <p className="text-xs text-[var(--bhn-text)] truncate mt-0.5 font-medium">{title}</p>
                     </button>
                   );
                 })
@@ -339,20 +419,20 @@ function InboxPageContent() {
             </div>
 
             {/* Chat Area */}
-            <div className="flex-1 flex flex-col bg-white">
+            <div className="flex-1 flex flex-col bg-[var(--bhn-surface)]">
               {!activeConv ? (
-                <div className="flex-1 flex items-center justify-center text-gray-400 text-sm">
-                  Select a conversation to start asking about services
+                <div className="flex-1 flex items-center justify-center text-[var(--bhn-text-muted)] text-sm">
+                  Select a conversation to start asking about this listing
                 </div>
               ) : (
                 <>
                   <div className="flex-1 overflow-y-auto p-4 space-y-3">
                     {msgsLoading ? (
                       <div className="flex justify-center p-4">
-                        <Loader className="animate-spin text-[#B65B2D]" />
+                        <Loader className="animate-spin text-[var(--bhn-text)]" />
                       </div>
                     ) : messages.length === 0 ? (
-                      <p className="text-center text-gray-400 text-sm py-4">No messages yet. Ask a question below!</p>
+                      <p className="text-center text-[var(--bhn-text-muted)] text-sm py-4">No messages yet. Ask a question below!</p>
                     ) : (
                       messages.map((msg: any, i: number) => {
                         const isMyMessage = String(msg.senderId?._id || msg.senderId || "") === currentUserId;
@@ -361,14 +441,14 @@ function InboxPageContent() {
                           <div key={msg._id || i} className={`flex ${isMyMessage ? "justify-end" : "justify-start"}`}>
                             <div
                               className={`max-w-[70%] rounded-xl px-3 py-2 text-sm ${
-                                isMyMessage ? "bg-[#B65B2D] text-white" : "bg-gray-100 text-gray-800"
+                                isMyMessage ? "bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)]" : "bg-[var(--bhn-surface-3)] text-[var(--bhn-text)]"
                               }`}
                             >
                               {msg.text ? <p>{msg.text}</p> : null}
                               {msg.image ? (
                                 <img src={msg.image} alt="attachment" className="mt-2 rounded max-h-40 object-contain" />
                               ) : null}
-                              <p className={`text-[10px] mt-1 ${isMyMessage ? "text-white/70" : "text-gray-400"}`}>
+                              <p className={`text-[10px] mt-1 ${isMyMessage ? "text-[color-mix(in_srgb,var(--bhn-text-on-brand)_70%,transparent)]" : "text-[var(--bhn-text-muted)]"}`}>
                                 {new Date(msg?.createdAt || msg?.updatedAt || Date.now()).toLocaleTimeString([], {
                                   hour: "2-digit",
                                   minute: "2-digit",
@@ -383,26 +463,34 @@ function InboxPageContent() {
                   </div>
 
                   {isRejectedQuoteConversation ? (
-                    <div className="border-t bg-red-50 p-3 text-sm font-medium text-red-700">
+                    <div className="border-t bg-[var(--bhn-error-50)] p-3 text-sm font-medium text-[var(--bhn-error-700)]">
                       This quote request was rejected. Further messages cannot be sent.
                     </div>
                   ) : null}
 
-                  {/* Service Specific Quick Inquiry Prompts */}
+                  {/* Listing-specific quick inquiry prompts */}
                   {!isRejectedQuoteConversation ? (
-                    <div className="p-3 border-t bg-[#FAF5EE]">
+                    <div className="p-3 border-t bg-[var(--bhn-surface-2)]">
                       <div className="flex flex-wrap gap-2 mb-2">
-                        {[
-                          "Is this service available on my event date?",
-                          "What is included in the base package?",
-                          "Can we customize the setup?",
-                          "What is your cancellation policy?",
-                        ].map((label) => (
+                        {(isVenueListing
+                          ? [
+                              "Is this venue available on my event date?",
+                              "What is included in the venue package?",
+                              "Can we customize the setup?",
+                              "What is your cancellation policy?",
+                            ]
+                          : [
+                              "Is this service available on my event date?",
+                              "What is included in the base package?",
+                              "Can we customize the setup?",
+                              "What is your cancellation policy?",
+                            ]
+                        ).map((label) => (
                           <button
                             key={label}
                             type="button"
                             onClick={() => handleSendQuickMessage(label)}
-                            className="rounded-full border border-[#E5D2BE] bg-white px-3 py-1.5 text-xs font-medium text-[#6F4B36] hover:bg-[#F3E5D9] transition"
+                            className="rounded-full border border-[var(--bhn-border)] bg-[var(--bhn-surface)] px-3 py-1.5 text-xs font-medium text-[var(--bhn-text)] hover:bg-[var(--bhn-surface-2)] transition"
                           >
                             {label}
                           </button>
@@ -415,20 +503,20 @@ function InboxPageContent() {
                           onChange={(e) => setNewMessage(e.target.value)}
                           onKeyDown={(e) => e.key === "Enter" && handleSend()}
                           placeholder="Ask seller about availability, pricing, setup..."
-                          className="flex-1 border rounded-lg px-3 py-2 text-sm outline-none focus:border-[#B65B2D]"
+                          className="flex-1 border rounded-lg px-3 py-2 text-sm outline-none focus:border-[var(--bhn-brand-600)]"
                           disabled={isRejectedQuoteConversation}
                         />
                         <button
                           onClick={handleSend}
                           disabled={sending || !newMessage.trim() || isRejectedQuoteConversation}
-                          className="bg-[#B65B2D] text-white p-2 rounded-lg hover:bg-[#98461F] disabled:opacity-50 transition"
+                          className="bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)] p-2 rounded-lg hover:bg-[var(--bhn-brand-600)] disabled:opacity-50 transition"
                         >
                           <Send size={16} />
                         </button>
                       </div>
                     </div>
                   ) : (
-                    <div className="p-3 border-t bg-gray-50 text-sm text-gray-500">
+                    <div className="p-3 border-t bg-[var(--bhn-surface-2)] text-sm text-[var(--bhn-text-muted)]">
                       Messaging is disabled for this rejected quote.
                     </div>
                   )}
@@ -436,64 +524,66 @@ function InboxPageContent() {
               )}
             </div>
 
-            {/* Right Sidebar - Service Details Context */}
-            <aside className="hidden xl:flex w-80 flex-col border-l bg-[#FCF8F3] p-4 gap-4 overflow-y-auto">
+            {/* Right Sidebar - Listing Details Context */}
+            <aside className="hidden xl:flex w-80 flex-col border-l bg-[var(--bhn-surface-2)] p-4 gap-4 overflow-y-auto">
               {!activeConversation ? (
-                <div className="rounded-2xl border border-dashed border-[#E5D8CC] bg-white p-4 text-sm text-gray-500">
-                  Select a chat to view service details.
+                <div className="rounded-2xl border border-dashed border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-4 text-sm text-[var(--bhn-text-muted)]">
+                  Select a chat to view listing details.
                 </div>
               ) : (
                 <>
-                  <div className="rounded-2xl border border-[#E5D8CC] bg-white p-4 shadow-sm space-y-3">
-                    <div className="h-32 overflow-hidden rounded-xl bg-[#F5EDE3]">
-                      <img src={serviceImage} alt={serviceTitle} className="h-full w-full object-cover" />
+                  <div className="rounded-2xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-4 shadow-sm space-y-3">
+                    <div className="h-32 overflow-hidden rounded-xl bg-[var(--bhn-surface-2)]">
+                      <img src={listingImage} alt={listingTitle} className="h-full w-full object-cover" />
                     </div>
 
                     <div>
-                      <span className="rounded-full bg-[#8B4A20]/10 px-2.5 py-0.5 text-[10px] font-semibold text-[#8B4A20] uppercase tracking-wider">
-                        {serviceCategory}
+                      <span className="rounded-full bg-[color-mix(in_srgb,var(--bhn-brand-600)_10%,transparent)] px-2.5 py-0.5 text-[10px] font-semibold text-[var(--bhn-text)] uppercase tracking-wider">
+                        {listingCategory}
                       </span>
-                      <h3 className="mt-1 text-base font-bold text-[#1C1A16]">{serviceTitle}</h3>
-                      <p className="mt-1 text-lg font-bold text-[#B65B2D]">₹{Number(servicePrice).toLocaleString()}</p>
+                      <h3 className="mt-1 text-base font-bold text-[var(--bhn-text)]">{listingTitle}</h3>
+                      <p className="mt-1 text-lg font-bold text-[var(--bhn-text)]">₹{Number(listingPrice).toLocaleString()}</p>
                     </div>
                   </div>
 
-                  <div className="rounded-2xl border border-[#E5D8CC] bg-white p-4 shadow-sm space-y-3 text-sm text-gray-600">
-                    {serviceLocation && (
+                  <div className="rounded-2xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-4 shadow-sm space-y-3 text-sm text-[var(--bhn-text)]">
+                    {listingLocation && (
                       <div>
-                        <p className="text-xs uppercase tracking-wide text-gray-400">Location</p>
-                        <p className="font-semibold text-[#1C1A16]">📍 {serviceLocation}</p>
+                        <p className="text-xs uppercase tracking-wide text-[var(--bhn-text-muted)]">Location</p>
+                        <p className="font-semibold text-[var(--bhn-text)]">📍 {listingLocation}</p>
                       </div>
                     )}
 
                     {eventTypes && (
                       <div>
-                        <p className="text-xs uppercase tracking-wide text-gray-400">Event Types</p>
-                        <p className="font-semibold text-[#1C1A16]">🎉 {eventTypes}</p>
+                        <p className="text-xs uppercase tracking-wide text-[var(--bhn-text-muted)]">Event Types</p>
+                        <p className="font-semibold text-[var(--bhn-text)]">🎉 {eventTypes}</p>
                       </div>
                     )}
 
                     {(minGuests > 0 || maxGuests > 0) && (
                       <div>
-                        <p className="text-xs uppercase tracking-wide text-gray-400">Guest Capacity</p>
-                        <p className="font-semibold text-[#1C1A16]">{minGuests} - {maxGuests} Guests</p>
+                        <p className="text-xs uppercase tracking-wide text-[var(--bhn-text-muted)]">Guest Capacity</p>
+                        <p className="font-semibold text-[var(--bhn-text)]">{minGuests} - {maxGuests} Guests</p>
                       </div>
                     )}
 
                     <div>
-                      <p className="text-xs uppercase tracking-wide text-gray-400">Service Provider</p>
-                      <p className="font-semibold text-[#1C1A16]">{sellerName}</p>
-                      {sellerEmail && <p className="text-xs text-gray-500 truncate">{sellerEmail}</p>}
+                      <p className="text-xs uppercase tracking-wide text-[var(--bhn-text-muted)]">
+                        {isVenueListing ? "Venue Provider" : "Service Provider"}
+                      </p>
+                      <p className="font-semibold text-[var(--bhn-text)]">{sellerName}</p>
+                      {sellerEmail && <p className="text-xs text-[var(--bhn-text-muted)] truncate">{sellerEmail}</p>}
                     </div>
                   </div>
 
-                  {serviceIdValue && (
+                  {scopePath && (
                     <Link
                       href={scopePath}
                       target="_blank"
-                      className="flex items-center justify-center gap-2 rounded-xl bg-[#B65B2D] px-3 py-2.5 text-center text-sm font-semibold text-white hover:bg-[#98461F] transition shadow-sm"
+                      className="flex items-center justify-center gap-2 rounded-xl bg-[var(--bhn-brand-600)] px-3 py-2.5 text-center text-sm font-semibold text-[var(--bhn-text-on-brand)] hover:bg-[var(--bhn-brand-600)] transition shadow-sm"
                     >
-                      <span>View Full Service</span>
+                      <span>{isVenueListing ? "View Full Venue" : "View Full Service"}</span>
                       <ExternalLink size={14} />
                     </Link>
                   )}

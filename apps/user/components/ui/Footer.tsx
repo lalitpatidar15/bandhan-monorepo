@@ -33,7 +33,7 @@ export default function Footer({
         <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-2 text-[10px] text-[var(--bhn-text-muted)]">
 
           {/* LEFT */}
-          <p className="font-medium text-[var(--bhn-brand-600)] text-xs">
+          <p className="font-medium text-[var(--bhn-text)] text-xs">
             {brand}
           </p>
 
@@ -45,7 +45,7 @@ export default function Footer({
             {links.map((item, i) => (
               <span
                 key={i}
-                className="text-[10px] tracking-wide uppercase cursor-pointer hover:text-[var(--bhn-brand-600)]"
+                className="text-[10px] tracking-wide uppercase cursor-pointer hover:text-[var(--bhn-text)]"
               >
                 {item}
               </span>

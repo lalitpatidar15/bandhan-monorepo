@@ -107,20 +107,20 @@ export default function BookingCard({ venue }: any) {
   };
 
   return (
-      <Card className="bg-white rounded-2xl border border-[#E7E1D8] p-5  shadow-sm w-full max-w-sm  mt-12 self-start">
+      <Card className="bg-[var(--bhn-surface)] rounded-2xl border border-[var(--bhn-border)] p-5  shadow-sm w-full max-w-sm  mt-12 self-start">
 
       {/* PRICE */}
       <div className="mb-6">
-        <p className="text-xs uppercase tracking-[0.25em] text-[#8B7E72]">
+        <p className="text-xs uppercase tracking-[0.25em] text-[var(--bhn-text-muted)]">
           Starting Price
         </p>
 
         <div className="mt-2 flex items-end gap-2">
-          <h2 className="text-xl font-semibold text-[#1C1A16]">
+          <h2 className="text-xl font-semibold text-[var(--bhn-text)]">
             ₹{venuePrice.toLocaleString("en-IN")}
           </h2>
 
-          <span className="pb-1 text-sm text-[#8B7E72]">
+          <span className="pb-1 text-sm text-[var(--bhn-text-muted)]">
             onwards
           </span>
         </div>
@@ -128,21 +128,21 @@ export default function BookingCard({ venue }: any) {
 
       {/* EVENT DATE */}
       <div className="mb-5">
-        <label className="mb-2 block text-[11px] uppercase tracking-[0.2em] text-[#8B7E72]">
+        <label className="mb-2 block text-[11px] uppercase tracking-[0.2em] text-[var(--bhn-text-muted)]">
           Event Date
         </label>
 
         <div className="relative">
           <CalendarDays
             size={16}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8B7E72]"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--bhn-text-muted)]"
           />
 
           <input
             type="date"
             value={date}
             min={today}
-            className="h-11 w-full rounded-xl border border-[#E7E1D8] bg-white pl-10 pr-3 text-sm text-[#1C1A16] outline-none transition focus:border-[#C2652A]"
+            className="h-11 w-full rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] pl-10 pr-3 text-sm text-[var(--bhn-text)] outline-none transition focus:border-[var(--bhn-brand-600)]"
             onChange={(e) => {
               const selectedDate = e.target.value;
 
@@ -170,7 +170,7 @@ export default function BookingCard({ venue }: any) {
           {bookedDates.map((item, index) => (
             <span
               key={index}
-              className="rounded-full bg-[#FFF3EB] px-2.5 py-1 text-[10px] font-medium text-[#C2652A]"
+              className="rounded-full bg-[var(--bhn-surface-2)] px-2.5 py-1 text-[10px] font-medium text-[var(--bhn-text)]"
             >
               Booked: {item}
             </span>
@@ -180,14 +180,14 @@ export default function BookingCard({ venue }: any) {
 
       {/* GUESTS */}
       <div className="mb-6">
-        <label className="mb-2 block text-[11px] uppercase tracking-[0.2em] text-[#8B7E72]">
+        <label className="mb-2 block text-[11px] uppercase tracking-[0.2em] text-[var(--bhn-text-muted)]">
           Guest Count
         </label>
 
         <div className="relative">
           <Users
             size={16}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8B7E72]"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--bhn-text-muted)]"
           />
 
           <input
@@ -195,14 +195,14 @@ export default function BookingCard({ venue }: any) {
             min={1}
             value={guests}
             onChange={(e) => setGuests(Number(e.target.value))}
-            className="h-11 w-full rounded-xl border border-[#E7E1D8] bg-white pl-10 pr-3 text-sm text-[#1C1A16] outline-none transition focus:border-[#C2652A]"
+            className="h-11 w-full rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] pl-10 pr-3 text-sm text-[var(--bhn-text)] outline-none transition focus:border-[var(--bhn-brand-600)]"
           />
         </div>
       </div>
 
       {/* PRICING */}
-      <div className="space-y-3 rounded-2xl border border-[#EFE6DB] bg-[#FAF7F2] p-4">
-        <div className="flex items-center justify-between text-sm text-[#6B625A]">
+      <div className="space-y-3 rounded-2xl border border-[var(--bhn-border)] bg-[var(--bhn-surface-2)] p-4">
+        <div className="flex items-center justify-between text-sm text-[var(--bhn-text-muted)]">
           <span>Venue Rental</span>
 
           <span>
@@ -210,7 +210,7 @@ export default function BookingCard({ venue }: any) {
           </span>
         </div>
 
-        <div className="flex items-center justify-between text-sm text-[#6B625A]">
+        <div className="flex items-center justify-between text-sm text-[var(--bhn-text-muted)]">
           <span>Service Fee</span>
 
           <span>
@@ -218,13 +218,13 @@ export default function BookingCard({ venue }: any) {
           </span>
         </div>
 
-        <div className="border-t border-[#E7E1D8] pt-3">
+        <div className="border-t border-[var(--bhn-border)] pt-3">
           <div className="flex items-center justify-between">
-            <span className="font-medium text-[#1C1A16]">
+            <span className="font-medium text-[var(--bhn-text)]">
               Total
             </span>
 
-            <span className="text-lg font-semibold text-[#1C1A16]">
+            <span className="text-lg font-semibold text-[var(--bhn-text)]">
               ₹{total.toLocaleString("en-IN")}
             </span>
           </div>
@@ -237,7 +237,7 @@ export default function BookingCard({ venue }: any) {
         {/* BOOK NOW */}
         <Button
           onClick={handleBookNow}
-          className="h-12 w-full rounded-xl bg-[#C2652A] text-sm font-medium text-white hover:bg-[#A65320]"
+          className="h-12 w-full rounded-xl bg-[var(--bhn-brand-600)] text-sm font-medium text-[var(--bhn-text-on-brand)] hover:bg-[var(--bhn-brand-600)]"
         >
           Book Now
         </Button>
@@ -245,7 +245,7 @@ export default function BookingCard({ venue }: any) {
         {/* REQUEST QUOTE */}
         <Button
           variant="outline"
-          className="h-12 w-full rounded-xl border-[#E7E1D8] text-sm"
+          className="h-12 w-full rounded-xl border-[var(--bhn-border)] text-sm"
         >
           Request Quote
         </Button>
@@ -253,7 +253,7 @@ export default function BookingCard({ venue }: any) {
         {/* ADD TO CART */}
         <button
           onClick={handleAddToCart}
-          className="flex h-12 w-full items-center justify-center gap-2 rounded-xl border border-[#E7E1D8] text-sm font-medium text-[#C2652A] transition hover:bg-[#F8F4EF]"
+          className="flex h-12 w-full items-center justify-center gap-2 rounded-xl border border-[var(--bhn-border)] text-sm font-medium text-[var(--bhn-text)] transition hover:bg-[var(--bhn-surface-2)]"
         >
           <ShoppingCart size={16} />
           Add to Cart
@@ -266,8 +266,8 @@ export default function BookingCard({ venue }: any) {
           className={`mt-4 rounded-xl px-4 py-3 text-center text-sm font-medium
           ${
             feedback.includes("Added")
-              ? "bg-green-50 text-green-700"
-              : "bg-red-50 text-red-600"
+              ? "bg-[var(--bhn-success-50)] text-[var(--bhn-success-700)]"
+              : "bg-[var(--bhn-error-50)] text-[var(--bhn-error-600)]"
           }`}
         >
           {feedback}
@@ -276,11 +276,11 @@ export default function BookingCard({ venue }: any) {
 
       {/* FOOTER */}
       <div className="mt-5 space-y-2 text-center">
-        <p className="text-[11px] text-[#8B7E72]">
+        <p className="text-[11px] text-[var(--bhn-text-muted)]">
           You won't be charged yet
         </p>
 
-        <button className="text-[11px] text-[#6B625A] transition hover:text-[#C2652A] hover:underline">
+        <button className="text-[11px] text-[var(--bhn-text-muted)] transition hover:text-[var(--bhn-text)] hover:underline">
           Report this listing
         </button>
       </div>

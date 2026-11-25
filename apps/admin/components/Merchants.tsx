@@ -159,7 +159,7 @@ function SellerReviews({ sellerId }: { sellerId: string }) {
               </div>
               <div className="flex items-center gap-0.5">
                 {Array.from({ length: 5 }, (_, i) => (
-                  <Star key={i} className={`h-2.5 w-2.5 ${i < r.rating ? '' : 'text-gray-200'}`} style={i < r.rating ? { color: 'var(--bhn-warning-500)', fill: 'var(--bhn-warning-500)' } : undefined} />
+                  <Star key={i} className={`h-2.5 w-2.5 ${i < r.rating ? '' : 'text-[var(--bhn-text-soft)]'}`} style={i < r.rating ? { color: 'var(--bhn-warning-500)', fill: 'var(--bhn-warning-500)' } : undefined} />
                 ))}
               </div>
             </div>

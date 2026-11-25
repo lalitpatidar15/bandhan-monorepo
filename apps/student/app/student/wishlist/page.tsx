@@ -17,10 +17,10 @@ export default function WishlistPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#F7F3EF] dark:bg-[#171717]">
+      <div className="min-h-screen bg-[var(--bhn-surface-3)] dark:bg-[var(--bhn-neutral-900)]">
         <StudentHeader />
         <div className="flex items-center justify-center min-h-[calc(100vh-80px)]">
-          <p className="text-lg text-[#2D201B] dark:text-[#ededed]">Loading wishlist...</p>
+          <p className="text-lg text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">Loading wishlist...</p>
         </div>
       </div>
     );
@@ -28,7 +28,7 @@ export default function WishlistPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#F7F3EF] dark:bg-[#171717]">
+      <div className="min-h-screen bg-[var(--bhn-surface-3)] dark:bg-[var(--bhn-neutral-900)]">
         <StudentHeader />
         <div className="flex items-center justify-center min-h-[calc(100vh-80px)]">
           <p className="text-lg text-red-600">Failed to load wishlist. Please try again.</p>
@@ -38,14 +38,14 @@ export default function WishlistPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F7F3EF] dark:bg-[#171717]">
+    <div className="min-h-screen bg-[var(--bhn-surface-3)] dark:bg-[var(--bhn-neutral-900)]">
       <StudentHeader />
       <div className="px-4 sm:px-6 lg:px-5 py-8 sm:py-6">
         <div>
-          <h1 className="text-[28px] sm:text-[35px] font-bold text-[#2D201B] dark:text-[#ededed] leading-tight">
+          <h1 className="text-[28px] sm:text-[35px] font-bold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] leading-tight">
             My Wishlist
           </h1>
-          <p className="text-[#8A7A71] dark:text-[#7a6a5a] mt-3 text-base sm:text-lg">
+          <p className="text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mt-3 text-base sm:text-lg">
             Courses you've saved for later
           </p>
         </div>
@@ -78,7 +78,7 @@ export default function WishlistPage() {
               return (
                 <div
                   key={courseId}
-                  className="bg-white rounded-2xl overflow-hidden shadow-sm border border-[#E7DDD6] dark:border-[#374151] hover:shadow-md transition-all duration-300"
+                  className="bg-[var(--bhn-surface)] rounded-2xl overflow-hidden shadow-sm border border-[#E7DDD6] dark:border-[var(--bhn-border)] hover:shadow-md transition-all duration-300"
                 >
                   <div className="relative">
                     <img
@@ -106,39 +106,39 @@ export default function WishlistPage() {
                         }
                       }}
                       disabled={isRemoving || removingId === courseId}
-                      className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/90 flex items-center justify-center shadow-sm hover:bg-[#F5EDE8] dark:hover:bg-[#1a1a1a] transition-all disabled:opacity-50"
+                      className="absolute top-4 right-4 w-9 h-9 rounded-full bg-[var(--bhn-surface)]/90 flex items-center justify-center shadow-sm hover:bg-[#F5EDE8] dark:hover:bg-[#1a1a1a] transition-all disabled:opacity-50"
                     >
-                      <Trash2 size={16} className="text-[#8B4A28] dark:text-[#c9a882]" />
+                      <Trash2 size={16} className="text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)]" />
                     </button>
                   </div>
 
                   <div className="p-5">
-                    <h2 className="text-[18px] font-semibold text-[#2D201B] dark:text-[#ededed] leading-snug min-h-[58px]">
+                    <h2 className="text-[18px] font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] leading-snug min-h-[58px]">
                       {title}
                     </h2>
 
-                    <p className="text-[#8A7A71] dark:text-[#7a6a5a] mt-3 text-sm">
+                    <p className="text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mt-3 text-sm">
                       {instructorName}
                     </p>
 
                     <div className="flex items-center gap-2 mt-4">
                       <Star
                         size={15}
-                        fill="#F59E0B"
-                        className="text-[#F59E0B]"
+                        fill="var(--bhn-warning-500)"
+                        className="text-[var(--bhn-warning-500)]"
                       />
 
-                      <span className="text-sm text-[#6F5F57] font-medium">
+                      <span className="text-sm text-[var(--bhn-text-soft)] font-medium">
                         {rating}
                       </span>
 
-                      <span className="text-[#A3948C] dark:text-[#6a5a4a] text-sm">
+                      <span className="text-[#A3948C] dark:text-[var(--bhn-text-soft)] text-sm">
                         ({totalReviews} reviews)
                       </span>
                     </div>
 
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-6">
-                      <h3 className="text-[26px] sm:text-[30px] font-bold text-[#8B4A28] dark:text-[#c9a882]">
+                      <h3 className="text-[26px] sm:text-[30px] font-bold text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)]">
                         ₹{price}
                       </h3>
 
@@ -146,7 +146,7 @@ export default function WishlistPage() {
                         onClick={() => {
                           router.push(`/student/enroll/${courseId}`);
                         }}
-                        className="bg-[#8B4A28] dark:bg-[#b86a3a] hover:bg-[#744024] dark:hover:bg-[#a05a30] text-white px-5 py-2 rounded-xl text-sm transition-all duration-200 w-full sm:w-auto"
+                        className="bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] hover:bg-[var(--bhn-brand-800)] dark:hover:bg-[var(--bhn-brand-300)] text-white px-5 py-2 rounded-xl text-sm transition-all duration-200 w-full sm:w-auto"
                       >
                         Enroll Now
                       </Button>

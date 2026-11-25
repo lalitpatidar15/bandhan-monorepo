@@ -86,20 +86,20 @@ export default function ServicesPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#F7F3EF]">
+    <div className="flex min-h-screen bg-[var(--bhn-surface-2)]">
       <Sidebar />
       <div className="flex-1 overflow-hidden">
         {/* Header */}
-        <div className="h-[78px] bg-white border-b border-[#EAE1DA] px-4 sm:px-7 flex items-center justify-between">
+        <div className="h-[78px] bg-[var(--bhn-surface)] border-b border-[var(--bhn-border)] px-4 sm:px-7 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-serif font-semibold text-[#111827]">My Services</h1>
-            <p className="text-xs sm:text-sm text-[#6B7280]">
+            <h1 className="text-2xl font-serif font-semibold text-[var(--bhn-text)]">My Services</h1>
+            <p className="text-xs sm:text-sm text-[var(--bhn-text-muted)]">
               Manage service listings, edit details, and publish new offerings.
             </p>
           </div>
           <button
             onClick={() => router.push("/services/add-service")}
-            className="rounded-xl bg-[#8B4A20] px-4 sm:px-5 py-2.5 text-xs sm:text-sm font-semibold text-white hover:bg-[#6E3214] transition shadow-sm"
+            className="rounded-xl bg-[var(--bhn-brand-600)] px-4 sm:px-5 py-2.5 text-xs sm:text-sm font-semibold text-[var(--bhn-text-on-brand)] hover:bg-[var(--bhn-brand-600)] transition shadow-sm"
           >
             <span className="inline-flex items-center gap-2">
               <Plus size={16} /> Add Service
@@ -114,21 +114,21 @@ export default function ServicesPage() {
             <label className="relative block">
               <Search
                 size={18}
-                className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#9CA3AF]"
+                className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[var(--bhn-text-soft)]"
               />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by title or category..."
-                className="w-full rounded-2xl border border-[#D1D5DB] bg-white py-2.5 pl-11 pr-4 text-sm outline-none focus:border-[#8B4A20]"
+                className="w-full rounded-2xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] py-2.5 pl-11 pr-4 text-sm outline-none focus:border-[var(--bhn-brand-600)]"
               />
             </label>
 
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="rounded-2xl border border-[#D1D5DB] bg-white py-2.5 px-4 text-sm outline-none focus:border-[#8B4A20]"
+              className="rounded-2xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] py-2.5 px-4 text-sm outline-none focus:border-[var(--bhn-brand-600)]"
             >
               <option value="All">All Statuses</option>
               <option value="Active">Active</option>
@@ -136,26 +136,26 @@ export default function ServicesPage() {
             </select>
 
             <div className="hidden md:flex items-center justify-end gap-3">
-              <span className="text-xs sm:text-sm font-medium text-[#6B7280]">
-                Total: <strong className="text-[#111827]">{services.length}</strong> service(s)
+              <span className="text-xs sm:text-sm font-medium text-[var(--bhn-text-muted)]">
+                Total: <strong className="text-[var(--bhn-text)]">{services.length}</strong> service(s)
               </span>
             </div>
           </div>
 
           {/* Table Container */}
-          <div className="rounded-3xl border border-[#E5E7EB] bg-white p-5 shadow-sm">
+          <div className="rounded-3xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-5 shadow-sm">
             {isLoading ? (
-              <div className="py-24 text-center text-sm text-[#6B7280]">
+              <div className="py-24 text-center text-sm text-[var(--bhn-text-muted)]">
                 Loading services list...
               </div>
             ) : services.length === 0 ? (
-              <div className="py-24 text-center text-sm text-[#6B7280]">
+              <div className="py-24 text-center text-sm text-[var(--bhn-text-muted)]">
                 No services found. Click "Add Service" to create your first listing.
               </div>
             ) : (
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-[#E5E7EB] text-left text-sm">
-                  <thead className="bg-[#FBF6F0] text-[#4B5563]">
+                <table className="min-w-full divide-y divide-[var(--bhn-border)] text-left text-sm">
+                  <thead className="bg-[var(--bhn-surface-2)] text-[var(--bhn-text-muted)]">
                     <tr>
                       <th className="px-4 py-3.5 font-semibold">Service Info</th>
                       <th className="px-4 py-3.5 font-semibold">Category</th>
@@ -165,7 +165,7 @@ export default function ServicesPage() {
                       <th className="px-4 py-3.5 font-semibold text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#E5E7EB]">
+                  <tbody className="divide-y divide-[var(--bhn-border)]">
                     {services.map((service) => {
                       const id = String(service._id || service.id || "");
                       const displayImage =
@@ -174,11 +174,11 @@ export default function ServicesPage() {
                           : service.image || "";
 
                       return (
-                        <tr key={id} className="hover:bg-[#FDFBF7] transition">
+                        <tr key={id} className="hover:bg-[var(--bhn-surface-2)] transition">
                           {/* Image & Title */}
                           <td className="px-4 py-4">
                             <div className="flex items-center gap-3">
-                              <div className="h-14 w-14 overflow-hidden rounded-2xl border border-[#E5E7EB] bg-[#F3F4F6] shrink-0">
+                              <div className="h-14 w-14 overflow-hidden rounded-2xl border border-[var(--bhn-border)] bg-[var(--bhn-surface-2)] shrink-0">
                                 {displayImage ? (
                                   <img
                                     src={displayImage}
@@ -186,18 +186,18 @@ export default function ServicesPage() {
                                     className="h-full w-full object-cover"
                                   />
                                 ) : (
-                                  <div className="flex h-full items-center justify-center text-[10px] text-[#9CA3AF]">
+                                  <div className="flex h-full items-center justify-center text-[10px] text-[var(--bhn-text-soft)]">
                                     No Image
                                   </div>
                                 )}
                               </div>
                               <div>
-                                <div className="font-semibold text-[#111827] line-clamp-1">
+                                <div className="font-semibold text-[var(--bhn-text)] line-clamp-1">
                                   {service.title || "Untitled Service"}
                                 </div>
-                                <div className="text-xs text-[#6B7280] mt-0.5">
+                                <div className="text-xs text-[var(--bhn-text-muted)] mt-0.5">
                                   {service.isFeatured ? (
-                                    <span className="text-amber-700 font-medium">★ Featured</span>
+                                    <span className="text-[var(--bhn-warning-700)] font-medium">★ Featured</span>
                                   ) : (
                                     "Standard"
                                   )}
@@ -208,13 +208,13 @@ export default function ServicesPage() {
 
                           {/* Category */}
                           <td className="px-4 py-4">
-                            <span className="capitalize text-[#374151] font-medium">
+                            <span className="capitalize text-[var(--bhn-text-muted)] font-medium">
                               {service.category || "—"}
                             </span>
                           </td>
 
                           {/* Price */}
-                          <td className="px-4 py-4 font-semibold text-[#8B4A20]">
+                          <td className="px-4 py-4 font-semibold text-[var(--bhn-text)]">
                             {formatCurrency(service.price)}
                           </td>
 
@@ -223,8 +223,8 @@ export default function ServicesPage() {
                             <span
                               className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${
                                 String(service.status || "draft").toLowerCase() === "active"
-                                  ? "bg-emerald-100 text-emerald-800"
-                                  : "bg-amber-100 text-amber-800"
+                                  ? "bg-[var(--bhn-success-50)] text-[var(--bhn-success-700)]"
+                                  : "bg-[var(--bhn-warning-50)] text-[var(--bhn-warning-700)]"
                               }`}
                             >
                               {String(service.status || "draft").toUpperCase()}
@@ -232,7 +232,7 @@ export default function ServicesPage() {
                           </td>
 
                           {/* Date */}
-                          <td className="px-4 py-4 text-xs text-[#6B7280]">
+                          <td className="px-4 py-4 text-xs text-[var(--bhn-text-muted)]">
                             {new Date(
                               service.updatedAt || service.createdAt || Date.now()
                             ).toLocaleDateString("en-IN", {
@@ -251,7 +251,7 @@ export default function ServicesPage() {
                                 onClick={() =>
                                   router.push(`/services/add-service?serviceId=${encodeURIComponent(id)}`)
                                 }
-                                className="inline-flex items-center gap-1.5 rounded-xl border border-[#D1D5DB] bg-white px-3 py-1.5 text-xs font-medium text-[#374151] hover:bg-[#F8FAFC]"
+                                className="inline-flex items-center gap-1.5 rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] px-3 py-1.5 text-xs font-medium text-[var(--bhn-text-muted)] hover:bg-[var(--bhn-surface-2)]"
                                 title="Edit Service"
                               >
                                 <Pencil size={13} /> Edit
@@ -265,7 +265,7 @@ export default function ServicesPage() {
                                     `/services/add-service?serviceId=${encodeURIComponent(id)}&mode=view`
                                   )
                                 }
-                                className="inline-flex items-center gap-1.5 rounded-xl border border-[#D1D5DB] bg-white px-3 py-1.5 text-xs font-medium text-[#374151] hover:bg-[#F8FAFC]"
+                                className="inline-flex items-center gap-1.5 rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] px-3 py-1.5 text-xs font-medium text-[var(--bhn-text-muted)] hover:bg-[var(--bhn-surface-2)]"
                                 title="View Details"
                               >
                                 <Eye size={13} /> View
@@ -276,7 +276,7 @@ export default function ServicesPage() {
                                 type="button"
                                 onClick={() => handleDelete(id)}
                                 disabled={actionLoadingId === id}
-                                className="inline-flex items-center gap-1.5 rounded-xl border border-[#FDE2E2] bg-[#FEF2F2] px-3 py-1.5 text-xs font-medium text-[#B91C1C] hover:bg-[#FEE2E2] disabled:cursor-not-allowed disabled:opacity-60"
+                                className="inline-flex items-center gap-1.5 rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface-2)] px-3 py-1.5 text-xs font-medium text-[var(--bhn-text)] hover:bg-[var(--bhn-error-50)] disabled:cursor-not-allowed disabled:opacity-60"
                                 title="Delete Service"
                               >
                                 <Trash2 size={13} /> Delete

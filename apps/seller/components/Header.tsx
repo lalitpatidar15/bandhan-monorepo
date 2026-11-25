@@ -34,11 +34,11 @@
 //               px-5
 //               py-3
 //               rounded-xl
-//               bg-[#EFE3D9]
+//               bg-[var(--bhn-surface-2)]
 //               text-sm
 //               outline-none
 //               focus:ring-2
-//               focus:ring-[#C26A3D]/30
+//               focus:ring-[color-mix(in_srgb,var(--bhn-brand-600)_30%,transparent)]
 //             "
 //           />
 
@@ -73,7 +73,7 @@
 //           {/* USER */}
 //           <div className="flex items-center gap-3 sm:gap-4 pl-4 border-l min-w-0">
 
-//             <p className="text-sm font-medium text-gray-700 truncate max-w-[120px] sm:max-w-none">
+//             <p className="text-sm font-medium text-[var(--bhn-text)] truncate max-w-[120px] sm:max-w-none">
 //               {userName}
 //             </p>
 
@@ -114,8 +114,8 @@
 //                   cursor-pointer
 //                   ${
 //                     active
-//                       ? "text-black"
-//                       : "text-gray-500 hover:text-black"
+//                       ? "text-[var(--bhn-text)]"
+//                       : "text-[var(--bhn-text-muted)] hover:text-[var(--bhn-text)]"
 //                   }
 //                 `}
 //               >
@@ -133,7 +133,7 @@
 //                     duration-300
 //                     ${
 //                       active
-//                         ? "w-full bg-[#C26A3D]"
+//                         ? "w-full bg-[var(--bhn-brand-600)]"
 //                         : "w-0 bg-transparent"
 //                     }
 //                   `}
@@ -192,11 +192,11 @@ export default function Header() {
               px-5
               py-3
               rounded-xl
-              bg-[#EFE3D9]
+              bg-[var(--bhn-surface-2)]
               text-sm
               outline-none
               focus:ring-2
-              focus:ring-[#C26A3D]/30
+              focus:ring-[color-mix(in_srgb,var(--bhn-brand-600)_30%,transparent)]
             "
           />
 
@@ -236,7 +236,7 @@ export default function Header() {
             className="flex items-center gap-3 sm:gap-4 pl-4 border-l min-w-0"
           >
 
-            <p className="text-sm font-medium text-gray-700 truncate max-w-[120px] sm:max-w-none">
+            <p className="text-sm font-medium text-[var(--bhn-text)] truncate max-w-[120px] sm:max-w-none">
               {userName}
             </p>
 
@@ -277,8 +277,8 @@ export default function Header() {
                   transition-all
                   duration-300
                   ${active
-                    ? "bg-[#C26A3D] text-white border-[#C26A3D] shadow-md"
-                    : "bg-white text-[#6B6B6B] border-[#E5D7CF]"
+                    ? "bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)] border-[var(--bhn-brand-600)] shadow-md"
+                    : "bg-[var(--bhn-surface)] text-[var(--bhn-text-muted)] border-[var(--bhn-border)]"
                   }
                 `}
               >
@@ -309,8 +309,8 @@ export default function Header() {
                   transition-all
                   duration-300
                   ${active
-                    ? "text-black"
-                    : "text-gray-500 hover:text-black"
+                    ? "text-[var(--bhn-text)]"
+                    : "text-[var(--bhn-text-muted)] hover:text-[var(--bhn-text)]"
                   }
                 `}
               >
@@ -327,7 +327,7 @@ export default function Header() {
                     transition-all
                     duration-300
                     ${active
-                      ? "w-full bg-[#C26A3D]"
+                      ? "w-full bg-[var(--bhn-brand-600)]"
                       : "w-0 bg-transparent"
                     }
                   `}

@@ -11,10 +11,10 @@ export default function SectionHeading({ label, title, description, className = 
   return (
     <div className={cn("space-y-3", className)}>
       {label ? (
-        <p className="text-xs uppercase tracking-[0.3em] text-[#C2652A]">{label}</p>
+        <p className="text-xs uppercase tracking-[0.3em] text-[var(--bhn-text)]">{label}</p>
       ) : null}
-      <h2 className="text-xl font-semibold text-[#1C1A16] leading-tight">{title}</h2>
-      {description ? <p className="text-sm text-[#6B625A]">{description}</p> : null}
+      <h2 className="text-xl font-semibold text-[var(--bhn-text)] leading-tight">{title}</h2>
+      {description ? <p className="text-sm text-[var(--bhn-text-muted)]">{description}</p> : null}
     </div>
   );
 }

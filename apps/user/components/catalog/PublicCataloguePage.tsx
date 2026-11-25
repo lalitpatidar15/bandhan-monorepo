@@ -146,7 +146,7 @@ function ListingArtwork({ item, kind }: { item: PublicCatalogueItem; kind: Publi
           }}
         />
       ) : null}
-      <span className="absolute left-3 top-3 rounded-full border border-white/60 bg-white/90 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--bhn-brand-800)] backdrop-blur">
+      <span className="absolute left-3 top-3 rounded-full border border-[color-mix(in_srgb,var(--bhn-surface)_60%,transparent)] bg-[color-mix(in_srgb,var(--bhn-surface)_90%,transparent)] px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--bhn-brand-800)] backdrop-blur">
         {kind === "rentals" ? "For rent" : readableLabel(item.category) || readableLabel(kind.slice(0, -1))}
       </span>
     </div>
@@ -174,7 +174,7 @@ function CatalogueCard({ item, kind, detailType }: { item: PublicCatalogueItem; 
             <h2 className="mt-1 line-clamp-2 text-lg font-bold leading-snug text-[var(--bhn-text)]">{item.title}</h2>
           </div>
           {typeof item.rating === "number" && item.rating > 0 ? (
-            <span className="flex shrink-0 items-center gap-1 rounded-full bg-amber-50 px-2 py-1 text-xs font-semibold text-amber-800">
+            <span className="flex shrink-0 items-center gap-1 rounded-full bg-[var(--bhn-warning-50)] px-2 py-1 text-xs font-semibold text-[var(--bhn-warning-700)]">
               <Star aria-hidden="true" className="h-3.5 w-3.5 fill-current" /> {item.rating.toFixed(1)}
             </span>
           ) : null}
@@ -362,14 +362,14 @@ export default function PublicCataloguePage({ kind }: { kind: PublicDiscoveryKin
 
         {isLoading ? (
           <div className="flex min-h-72 flex-col items-center justify-center gap-3" role="status">
-            <LoaderCircle aria-hidden="true" className="h-7 w-7 animate-spin text-[var(--bhn-brand-600)]" />
+            <LoaderCircle aria-hidden="true" className="h-7 w-7 animate-spin text-[var(--bhn-text)]" />
             <p className="text-sm text-[var(--bhn-text-muted)]">Loading approved listings…</p>
           </div>
         ) : isError ? (
-          <div className="mt-6 rounded-2xl border border-red-200 bg-red-50 p-8 text-center">
-            <h3 className="text-lg font-bold text-red-900">We could not load these listings</h3>
-            <p className="mt-2 text-sm text-red-700">Check your connection and try again.</p>
-            <button type="button" onClick={() => refetch()} className="mt-5 rounded-xl bg-[var(--bhn-brand-700)] px-5 py-2.5 text-sm font-bold text-white hover:bg-[var(--bhn-brand-800)]">
+          <div className="mt-6 rounded-2xl border border-[var(--bhn-error-500)] bg-[var(--bhn-error-50)] p-8 text-center">
+            <h3 className="text-lg font-bold text-[var(--bhn-error-700)]">We could not load these listings</h3>
+            <p className="mt-2 text-sm text-[var(--bhn-error-700)]">Check your connection and try again.</p>
+            <button type="button" onClick={() => refetch()} className="mt-5 rounded-xl bg-[var(--bhn-brand-700)] px-5 py-2.5 text-sm font-bold text-[var(--bhn-text-on-brand)] hover:bg-[var(--bhn-brand-800)]">
               Try again
             </button>
           </div>
@@ -385,7 +385,7 @@ export default function PublicCataloguePage({ kind }: { kind: PublicDiscoveryKin
             <h3 className="mt-4 text-lg font-bold text-[var(--bhn-text)]">{config.emptyTitle}</h3>
             <p className="mx-auto mt-2 max-w-md text-sm text-[var(--bhn-text-muted)]">{config.emptyDescription}</p>
             {hasActiveFilters ? (
-              <button type="button" onClick={clearFilters} className="mt-5 rounded-xl border border-[var(--bhn-border-strong)] bg-white px-5 py-2.5 text-sm font-bold text-[var(--bhn-brand-800)] hover:bg-[var(--bhn-brand-50)]">
+              <button type="button" onClick={clearFilters} className="mt-5 rounded-xl border border-[var(--bhn-border-strong)] bg-[var(--bhn-surface)] px-5 py-2.5 text-sm font-bold text-[var(--bhn-brand-800)] hover:bg-[var(--bhn-brand-50)]">
                 Clear filters
               </button>
             ) : null}
@@ -403,7 +403,7 @@ export default function PublicCataloguePage({ kind }: { kind: PublicDiscoveryKin
               {isLoadingMore ? <LoaderCircle aria-hidden="true" className="h-4 w-4 animate-spin" /> : null}
               {isLoadingMore ? "Loading…" : "Load more"}
             </button>
-            {loadMoreError ? <p className="mt-2 text-sm text-red-700" role="alert">{loadMoreError}</p> : null}
+            {loadMoreError ? <p className="mt-2 text-sm text-[var(--bhn-error-700)]" role="alert">{loadMoreError}</p> : null}
           </div>
         ) : null}
 

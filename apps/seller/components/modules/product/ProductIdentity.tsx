@@ -39,11 +39,11 @@ export default function ProductIdentity({
   showPricingFields?: boolean;
 }) {
   return (
-    <div className="bg-white border border-[#EEE7E1] rounded-2xl p-4 sm:p-7">
+    <div className="bg-[var(--bhn-surface)] border border-[var(--bhn-border)] rounded-2xl p-4 sm:p-7">
 
       <div className="flex items-center gap-3 mb-7">
 
-        <div className="w-6 h-6 rounded-md border border-[#B37B59] flex items-center justify-center bg-[#FFF8F3] overflow-hidden">
+        <div className="w-6 h-6 rounded-md border border-[var(--bhn-brand-600)] flex items-center justify-center bg-[var(--bhn-surface-2)] overflow-hidden">
 
           <Image
             src="/image05.png"
@@ -53,13 +53,13 @@ export default function ProductIdentity({
           />
         </div>
 
-        <h2 className="font-serif text-[22px] sm:text-[25px] text-[#2B2B2B] font-semibold">
+        <h2 className="font-serif text-[22px] sm:text-[25px] text-[var(--bhn-text)] font-semibold">
           Product Identity
         </h2>
       </div>
 
       <div>
-        <label className="block text-[11px] font-semibold tracking-[1px] text-[#9B928B] mb-2">
+        <label className="block text-[11px] font-semibold tracking-[1px] text-[var(--bhn-text-soft)] mb-2">
           PRODUCT TITLE
         </label>
 
@@ -69,17 +69,17 @@ export default function ProductIdentity({
           onChange={(e) => setProductTitle(e.target.value)}
           placeholder="e.g. Hand-Woven Terracotta Vase"
           disabled={readOnly}
-          className="w-full h-[52px] border border-[#E7DFD8] rounded-xl px-4 text-[14px] outline-none focus:border-[#8A4B2A] disabled:bg-[#F4F2EE] disabled:text-[#7A6D61]"
+          className="w-full h-[52px] border border-[var(--bhn-border)] rounded-xl px-4 text-[14px] outline-none focus:border-[var(--bhn-brand-600)] disabled:bg-[var(--bhn-surface-2)] disabled:text-[var(--bhn-text-muted)]"
         />
 
-        <p className="text-[11px] text-[#B0AAA5] mt-2">
+        <p className="text-[11px] text-[var(--bhn-text-soft)] mt-2">
           Keep title descriptive and under 80 characters.
         </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-6">
         <div>
-          <label className="block text-[11px] font-semibold tracking-[1px] text-[#9B928B] mb-2">
+          <label className="block text-[11px] font-semibold tracking-[1px] text-[var(--bhn-text-soft)] mb-2">
             CATEGORY
           </label>
 
@@ -87,7 +87,7 @@ export default function ProductIdentity({
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             disabled={readOnly}
-            className="w-full h-[52px] border border-[#E7DFD8] rounded-xl px-4 text-[14px] outline-none bg-white disabled:bg-[#F4F2EE] disabled:text-[#7A6D61]"
+            className="w-full h-[52px] border border-[var(--bhn-border)] rounded-xl px-4 text-[14px] outline-none bg-[var(--bhn-surface)] disabled:bg-[var(--bhn-surface-2)] disabled:text-[var(--bhn-text-muted)]"
           >
             <option>Select Category</option>
             {catalogCategories.map((item) => (
@@ -97,7 +97,7 @@ export default function ProductIdentity({
         </div>
 
         <div>
-          <label className="block text-[11px] font-semibold tracking-[1px] text-[#9B928B] mb-2">
+          <label className="block text-[11px] font-semibold tracking-[1px] text-[var(--bhn-text-soft)] mb-2">
             SUBCATEGORY
           </label>
 
@@ -105,7 +105,7 @@ export default function ProductIdentity({
             value={subcategory}
             onChange={(e) => setSubcategory(e.target.value)}
             disabled={readOnly}
-            className="w-full h-[52px] border border-[#E7DFD8] rounded-xl px-4 text-[14px] outline-none bg-white disabled:bg-[#F4F2EE] disabled:text-[#7A6D61]"
+            className="w-full h-[52px] border border-[var(--bhn-border)] rounded-xl px-4 text-[14px] outline-none bg-[var(--bhn-surface)] disabled:bg-[var(--bhn-surface-2)] disabled:text-[var(--bhn-text-muted)]"
           >
             <option>Select Subcategory</option>
             {(catalogCategories.find((item) => item.name === category)?.subcategories || []).map((item) => (
@@ -118,23 +118,23 @@ export default function ProductIdentity({
       {showPricingFields && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-6">
           <div>
-            <label className="block text-[11px] font-semibold tracking-[1px] text-[#9B928B] mb-2">PRICE</label>
+            <label className="block text-[11px] font-semibold tracking-[1px] text-[var(--bhn-text-soft)] mb-2">PRICE</label>
             <input
               type="number"
               min={0}
               value={price}
               onChange={(e) => setPrice(Number(e.target.value))}
               disabled={readOnly}
-              className="w-full h-[52px] border border-[#E7DFD8] rounded-xl px-4 text-[14px] outline-none focus:border-[#8A4B2A] disabled:bg-[#F4F2EE] disabled:text-[#7A6D61]"
+              className="w-full h-[52px] border border-[var(--bhn-border)] rounded-xl px-4 text-[14px] outline-none focus:border-[var(--bhn-brand-600)] disabled:bg-[var(--bhn-surface-2)] disabled:text-[var(--bhn-text-muted)]"
             />
           </div>
           <div>
-            <label className="block text-[11px] font-semibold tracking-[1px] text-[#9B928B] mb-2">AVAILABILITY</label>
+            <label className="block text-[11px] font-semibold tracking-[1px] text-[var(--bhn-text-soft)] mb-2">AVAILABILITY</label>
             <select
               value={productType}
               onChange={(e) => setProductType(e.target.value as "sale" | "rent" | "both")}
               disabled={readOnly}
-              className="w-full h-[52px] border border-[#E7DFD8] rounded-xl px-4 text-[14px] outline-none bg-white disabled:bg-[#F4F2EE] disabled:text-[#7A6D61]"
+              className="w-full h-[52px] border border-[var(--bhn-border)] rounded-xl px-4 text-[14px] outline-none bg-[var(--bhn-surface)] disabled:bg-[var(--bhn-surface-2)] disabled:text-[var(--bhn-text-muted)]"
             >
               <option value="sale">Buy Only</option>
               <option value="rent">Rent Only</option>

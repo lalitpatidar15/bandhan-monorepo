@@ -82,8 +82,8 @@ export default function Courses() {
 
       <div className="card mb-3">
         <div className="flex items-center">
-          <Search className="w-4 h-4 text-gray-400 mr-2" />
-          <input type="text" placeholder="Search courses..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="flex-1 outline-none text-sm text-gray-700" />
+          <Search className="w-4 h-4 text-[var(--bhn-text-muted)] mr-2" />
+          <input type="text" placeholder="Search courses..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="flex-1 outline-none text-sm text-[var(--bhn-text)]" />
         </div>
       </div>
 
@@ -104,22 +104,22 @@ export default function Courses() {
             {filtered.map(c => (
               <tr key={c.id}>
                 <td>
-                  <div className="font-medium text-gray-900 text-sm">{c.title}</div>
-                  <div className="text-xs text-gray-500">{c.category} &bull; {c.level}</div>
+                  <div className="font-medium text-[var(--bhn-text)] text-sm">{c.title}</div>
+                  <div className="text-xs text-[var(--bhn-text-muted)]">{c.category} &bull; {c.level}</div>
                 </td>
                 <td className="text-sm">{c.instructor}</td>
                 <td className="text-sm">₹{c.price.toLocaleString()}</td>
                 <td className="text-sm">{c.totalStudents}</td>
                 <td>
                   <div className="flex items-center gap-1">
-                    <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
+                    <Star className="w-3 h-3 text-[var(--bhn-warning-500)] fill-[var(--bhn-warning-500)]" />
                     <span className="text-xs font-medium">{c.rating || '—'}</span>
                   </div>
                 </td>
                 <td>
                   <div className="flex flex-wrap gap-1">
                     <span className={`admin-badge ${c.status === 'published' ? 'admin-badge-active' : 'admin-badge-pending'}`}>{c.status}</span>
-                    <span className="admin-badge bg-blue-100 text-blue-800">{c.visibility}</span>
+                    <span className="admin-badge bg-[var(--bhn-brand-50)] text-[var(--bhn-brand-700)]">{c.visibility}</span>
                   </div>
                 </td>
                 <td>

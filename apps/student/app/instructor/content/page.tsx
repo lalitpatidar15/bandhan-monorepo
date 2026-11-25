@@ -417,7 +417,7 @@ function ContentPageContent() {
         if (lessonType === "pdf") {
             return (
                 <>
-                    <div className="border-2 border-dashed border-[#E7CFC2] dark:border-[#374151] rounded-xl p-4 sm:p-4 text-center bg-[#F9F4F1] dark:bg-[#1a1a1a]">
+                    <div className="border-2 border-dashed border-[#E7CFC2] dark:border-[var(--bhn-border)] rounded-xl p-4 sm:p-4 text-center bg-[#F9F4F1] dark:bg-[var(--bhn-neutral-900)]">
 
                         <img
                             src="/Background0.png"
@@ -425,21 +425,21 @@ function ContentPageContent() {
                             alt="upload"
                         />
 
-                        <p className="text-base sm:text-xl text-[#6F5E55] dark:text-[#b89b7d] font-semibold mb-1 leading-relaxed">
+                        <p className="text-base sm:text-xl text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] font-semibold mb-1 leading-relaxed">
                             Drag & drop your PDF here or click to upload
                         </p>
 
-                        <p className="text-xs sm:text-sm text-[#A08F86] dark:text-[#7a6a5a]">
+                        <p className="text-xs sm:text-sm text-[#A08F86] dark:text-[var(--bhn-text-soft)]">
                             Supported formats: PDF (Max 500MB)
                         </p>
 
-                        <button onClick={triggerAddPdf} className="mt-5 bg-[#8B4A28] dark:bg-[#b86a3a] text-white px-5 py-2 rounded-lg hover:scale-105 active:scale-95 transition">
+                        <button onClick={triggerAddPdf} className="mt-5 bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] text-white px-5 py-2 rounded-lg hover:scale-105 active:scale-95 transition">
                             Upload PDF
                         </button>
 
                     </div>
 
-                    <div className="mt-5 bg-[#F9F4F1] dark:bg-[#1a1a1a] p-4 rounded-lg">
+                    <div className="mt-5 bg-[#F9F4F1] dark:bg-[var(--bhn-neutral-900)] p-4 rounded-lg">
 
                         <div className="flex flex-col sm:flex-row sm:justify-between gap-2 text-sm mb-2">
 
@@ -447,17 +447,17 @@ function ContentPageContent() {
                                 {preview?.pdfFileName || lesson?.pdfFileName || "Lesson_Document.pdf"}
                             </span>
 
-                            <span onClick={() => alert("Remove PDF")} className="text-[#C46A4A] cursor-pointer">
+                            <span onClick={() => alert("Remove PDF")} className="text-[var(--bhn-brand-600)] cursor-pointer">
                                 Remove
                             </span>
 
                         </div>
 
-                        <div className="w-full bg-[#E6DBD3] dark:bg-[#2a2a2a] h-2 rounded-full">
-                            <div className="bg-[#8B4A28] dark:bg-[#b86a3a] h-2 w-[60%] rounded-full"></div>
+                        <div className="w-full bg-[#E6DBD3] dark:bg-[var(--bhn-neutral-900)] h-2 rounded-full">
+                            <div className="bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] h-2 w-[60%] rounded-full"></div>
                         </div>
 
-                        <div className="flex flex-col sm:flex-row sm:justify-between gap-1 text-xs mt-2 text-[#8A7A71] dark:text-[#7a6a5a]">
+                        <div className="flex flex-col sm:flex-row sm:justify-between gap-1 text-xs mt-2 text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]">
 
                             <span>
                                 PDF ready for preview • 1 file attached
@@ -482,7 +482,7 @@ function ContentPageContent() {
 
             return (
                 <>
-                    <div className="border-2 border-dashed border-[#E7CFC2] dark:border-[#374151] rounded-xl p-4 sm:p-4 text-center bg-[#F9F4F1] dark:bg-[#1a1a1a]">
+                    <div className="border-2 border-dashed border-[#E7CFC2] dark:border-[var(--bhn-border)] rounded-xl p-4 sm:p-4 text-center bg-[#F9F4F1] dark:bg-[var(--bhn-neutral-900)]">
 
                         <img
                             src="/Background0.png"
@@ -490,21 +490,21 @@ function ContentPageContent() {
                             alt="quiz"
                         />
 
-                        <p className="text-base sm:text-xl text-[#6F5E55] dark:text-[#b89b7d] font-semibold mb-1 leading-relaxed">
+                        <p className="text-base sm:text-xl text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] font-semibold mb-1 leading-relaxed">
                             Create or upload your quiz questions here
                         </p>
 
-                        <p className="text-xs sm:text-sm text-[#A08F86] dark:text-[#7a6a5a]">
+                        <p className="text-xs sm:text-sm text-[#A08F86] dark:text-[var(--bhn-text-soft)]">
                             Add multiple choice questions, set duration, and passing score.
                         </p>
 
-                        <button onClick={() => alert("Edit questions coming soon")} className="mt-5 bg-[#8B4A28] dark:bg-[#b86a3a] text-white px-5 py-2 rounded-lg hover:scale-105 active:scale-95 transition">
+                        <button onClick={() => alert("Edit questions coming soon")} className="mt-5 bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] text-white px-5 py-2 rounded-lg hover:scale-105 active:scale-95 transition">
                             Edit Questions
                         </button>
 
                     </div>
 
-                    <div className="mt-5 bg-[#F9F4F1] dark:bg-[#1a1a1a] p-4 rounded-lg">
+                    <div className="mt-5 bg-[#F9F4F1] dark:bg-[var(--bhn-neutral-900)] p-4 rounded-lg">
 
                         <div className="flex flex-col sm:flex-row sm:justify-between gap-2 text-sm mb-2">
 
@@ -512,23 +512,23 @@ function ContentPageContent() {
                                 {lesson?.title || preview?.title || "MCQ Lesson"}
                             </span>
 
-                            <span className="text-[#C46A4A] cursor-pointer">
+                            <span className="text-[var(--bhn-brand-600)] cursor-pointer">
                                 Preview
                             </span>
 
                         </div>
 
-                        <div className="grid sm:grid-cols-3 gap-3 text-xs mt-3 text-[#8A7A71] dark:text-[#7a6a5a]">
-                            <div className="bg-white p-3 rounded-lg border border-[#E6DBD3] dark:border-[#374151]">
-                                <p className="font-semibold text-[#2D201B] dark:text-[#ededed]">Questions</p>
+                        <div className="grid sm:grid-cols-3 gap-3 text-xs mt-3 text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]">
+                            <div className="bg-[var(--bhn-surface)] p-3 rounded-lg border border-[#E6DBD3] dark:border-[var(--bhn-border)]">
+                                <p className="font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">Questions</p>
                                 <p>{questionCount}</p>
                             </div>
-                            <div className="bg-white p-3 rounded-lg border border-[#E6DBD3] dark:border-[#374151]">
-                                <p className="font-semibold text-[#2D201B] dark:text-[#ededed]">Duration</p>
+                            <div className="bg-[var(--bhn-surface)] p-3 rounded-lg border border-[#E6DBD3] dark:border-[var(--bhn-border)]">
+                                <p className="font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">Duration</p>
                                 <p>{durationLabel} min</p>
                             </div>
-                            <div className="bg-white p-3 rounded-lg border border-[#E6DBD3] dark:border-[#374151]">
-                                <p className="font-semibold text-[#2D201B] dark:text-[#ededed]">Passing Score</p>
+                            <div className="bg-[var(--bhn-surface)] p-3 rounded-lg border border-[#E6DBD3] dark:border-[var(--bhn-border)]">
+                                <p className="font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">Passing Score</p>
                                 <p>{passingScoreLabel}%</p>
                             </div>
                         </div>
@@ -548,45 +548,45 @@ function ContentPageContent() {
                     className="hidden"
                 />
 
-                <div className="border-2 border-dashed border-[#E7CFC2] dark:border-[#374151] rounded-xl p-4 sm:p-4 text-center bg-[#F9F4F1] dark:bg-[#1a1a1a]">
+                <div className="border-2 border-dashed border-[#E7CFC2] dark:border-[var(--bhn-border)] rounded-xl p-4 sm:p-4 text-center bg-[#F9F4F1] dark:bg-[var(--bhn-neutral-900)]">
                     <img
                         src="/Background0.png"
                         className="mx-auto mb-3 w-14 h-14 sm:w-16 sm:h-16"
                         alt="upload"
                     />
 
-                    <p className="text-base sm:text-xl text-[#6F5E55] dark:text-[#b89b7d] font-semibold mb-1 leading-relaxed">
+                    <p className="text-base sm:text-xl text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] font-semibold mb-1 leading-relaxed">
                         {hasVideoUploaded ? "Replace the lesson video" : "Drag & drop your video here or click to upload"}
                     </p>
 
-                    <p className="text-xs sm:text-sm text-[#A08F86] dark:text-[#7a6a5a]">
+                    <p className="text-xs sm:text-sm text-[#A08F86] dark:text-[var(--bhn-text-soft)]">
                         Supported formats: MP4, MOV, AVI, WEBM (Max {maxVideoSizeMb}MB)
                     </p>
 
                     <button
                         onClick={triggerAddVideo}
                         disabled={isUploadingVideo}
-                        className="mt-5 bg-[#8B4A28] dark:bg-[#b86a3a] text-white px-5 py-2 rounded-lg hover:scale-105 active:scale-95 transition disabled:opacity-60"
+                        className="mt-5 bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] text-white px-5 py-2 rounded-lg hover:scale-105 active:scale-95 transition disabled:opacity-60"
                     >
                         {isUploadingVideo ? "Uploading..." : hasVideoUploaded ? "Change Video" : "Upload Video"}
                     </button>
                 </div>
 
-                <div className="mt-5 bg-[#F9F4F1] dark:bg-[#1a1a1a] p-4 rounded-lg">
+                <div className="mt-5 bg-[#F9F4F1] dark:bg-[var(--bhn-neutral-900)] p-4 rounded-lg">
                     <div className="flex flex-col sm:flex-row sm:justify-between gap-2 text-sm mb-2">
-                        <span className="break-all font-semibold text-[#2D201B] dark:text-[#ededed]">
+                        <span className="break-all font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
                             {lessonVideoLabel}
                         </span>
-                        <span className="text-[#C46A4A] cursor-pointer">
+                        <span className="text-[var(--bhn-brand-600)] cursor-pointer">
                             {hasVideoUploaded ? <span onClick={() => alert("Replace video")}>Replace</span> : "Pending"}
                         </span>
                     </div>
 
-                    <div className="w-full bg-[#E6DBD3] dark:bg-[#2a2a2a] h-2 rounded-full overflow-hidden">
-                        <div className={`bg-[#8B4A28] dark:bg-[#b86a3a] h-2 rounded-full`} style={{ width: `${videoProgressPercent}%` }}></div>
+                    <div className="w-full bg-[#E6DBD3] dark:bg-[var(--bhn-neutral-900)] h-2 rounded-full overflow-hidden">
+                        <div className={`bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] h-2 rounded-full`} style={{ width: `${videoProgressPercent}%` }}></div>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1 text-xs mt-2 text-[#8A7A71] dark:text-[#7a6a5a]">
+                    <div className="flex flex-col sm:flex-row sm:justify-between gap-1 text-xs mt-2 text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]">
                         <span>
                             {isUploadingVideo ? "Uploading video..." : hasVideoUploaded ? "Upload complete" : "No video uploaded yet."}
                         </span>
@@ -619,15 +619,15 @@ function ContentPageContent() {
 
     if (!hasLessonContext) {
         return (
-            <div className="min-h-screen bg-[#F8F5F2] dark:bg-[#171717]">
+            <div className="min-h-screen bg-[var(--bhn-bg)] dark:bg-[var(--bhn-neutral-900)]">
                 <CurriculumHeader currentStep={3} />
                 <main className="mx-auto flex min-h-[60vh] max-w-2xl items-center px-4 py-10">
-                    <section className="w-full rounded-2xl border border-[#E8DDD5] bg-white p-7 text-center shadow-sm">
-                        <h1 className="font-serif text-3xl font-semibold text-[#2D201B]">Choose a lesson before uploading</h1>
-                        <p className="mt-3 text-sm leading-6 text-[#6F5E55]">
+                    <section className="w-full rounded-2xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-7 text-center shadow-sm">
+                        <h1 className="font-serif text-3xl font-semibold text-[var(--bhn-text)]">Choose a lesson before uploading</h1>
+                        <p className="mt-3 text-sm leading-6 text-[var(--bhn-text-soft)]">
                             Content belongs to a specific lesson. Start from a course curriculum, add or select a lesson, then continue here to upload its video and resources.
                         </p>
-                        <button type="button" onClick={() => router.push("/instructor/curriculum")} className="mt-6 rounded-lg bg-[#8B4A28] px-5 py-3 text-sm font-semibold text-white hover:bg-[#713719]">
+                        <button type="button" onClick={() => router.push("/instructor/curriculum")} className="mt-6 rounded-lg bg-[var(--bhn-brand-600)] px-5 py-3 text-sm font-semibold text-white hover:bg-[#713719]">
                             Go to course setup
                         </button>
                     </section>
@@ -637,7 +637,7 @@ function ContentPageContent() {
     }
 
     return (
-        <div className="min-h-screen bg-[#F8F5F2] dark:bg-[#171717] flex flex-col overflow-x-hidden">
+        <div className="min-h-screen bg-[var(--bhn-bg)] dark:bg-[var(--bhn-neutral-900)] flex flex-col overflow-x-hidden">
 
             {/* HEADER */}
             <CurriculumHeader currentStep={3} />
@@ -661,7 +661,7 @@ function ContentPageContent() {
                     <div className="xl:col-span-2 space-y-6">
 
                         {/* VIDEO UPLOAD */}
-                        <div className="bg-white rounded-2xl p-4 sm:p-4 border border-[#E8DDD5] dark:border-[#374151]">
+                        <div className="bg-[var(--bhn-surface)] rounded-2xl p-4 sm:p-4 border border-[var(--bhn-border)] dark:border-[var(--bhn-border)]">
 
                             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
 
@@ -680,7 +680,7 @@ function ContentPageContent() {
                         </div>
 
                         {/* ADDITIONAL CONTENT */}
-                        <div className="bg-white rounded-2xl p-4 sm:p-4 border border-[#E8DDD5] dark:border-[#374151]">
+                        <div className="bg-[var(--bhn-surface)] rounded-2xl p-4 sm:p-4 border border-[var(--bhn-border)] dark:border-[var(--bhn-border)]">
 
                             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-5">
 
@@ -698,8 +698,8 @@ function ContentPageContent() {
                                             key={tab.id}
                                             onClick={() => setActiveExtraSection(tab.id as "resources" | "pdf" | "mcq")}
                                             className={`px-3 py-2 rounded-lg text-sm font-medium transition ${activeExtraSection === tab.id
-                                                    ? "bg-[#8B4A28] dark:bg-[#b86a3a] text-white"
-                                                    : "bg-[#F3EAE4] dark:bg-[#1a1a1a] text-[#8B4A28] hover:bg-[#E8D2C1] dark:hover:bg-[#2a2a2a]"
+                                                    ? "bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] text-white"
+                                                    : "bg-[#F3EAE4] dark:bg-[var(--bhn-neutral-900)] text-[var(--bhn-brand-700)] hover:bg-[#E8D2C1] dark:hover:bg-[#2a2a2a]"
                                                 }`}
                                         >
                                             {tab.label}
@@ -712,10 +712,10 @@ function ContentPageContent() {
                                 {activeExtraSection === "resources" && (
                                     <>
                                         <div className="flex items-center justify-between gap-4">
-                                            <p className="text-sm text-[#6F5E55] dark:text-[#b89b7d]">Upload lesson resources like documents and files.</p>
+                                            <p className="text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]">Upload lesson resources like documents and files.</p>
                                             <button
                                                 onClick={triggerAddResource}
-                                                className="text-sm text-[#8B4A28] font-semibold"
+                                                className="text-sm text-[var(--bhn-brand-700)] font-semibold"
                                             >
                                                 {resourceLoading ? "Uploading..." : "+ Add Resource"}
                                             </button>
@@ -730,7 +730,7 @@ function ContentPageContent() {
                                         />
 
                                         {resources.length === 0 ? (
-                                            <div className="rounded-lg border border-dashed border-[#D8CAC1] bg-[#FCF9F7] p-5 text-sm text-[#6F5E55]">
+                                            <div className="rounded-lg border border-dashed border-[#D8CAC1] bg-[#FCF9F7] p-5 text-sm text-[var(--bhn-text-soft)]">
                                                 No resources have been uploaded for this lesson yet.
                                             </div>
                                         ) : resources.map((r: any, idx: number) => {
@@ -738,7 +738,7 @@ function ContentPageContent() {
                                             return (
                                                 <div
                                                     key={name + idx}
-                                                    className="flex items-center justify-between gap-3 bg-[#F9F4F1] dark:bg-[#1a1a1a] p-4 sm:p-5 rounded-lg"
+                                                    className="flex items-center justify-between gap-3 bg-[#F9F4F1] dark:bg-[var(--bhn-neutral-900)] p-4 sm:p-5 rounded-lg"
                                                 >
                                                     <div className="flex items-center gap-3 min-w-0">
                                                         <img src="/Background1.png" className="w-10 shrink-0" alt="file" />
@@ -766,10 +766,10 @@ function ContentPageContent() {
                                 {activeExtraSection === "pdf" && (
                                     <>
                                         <div className="flex items-center justify-between gap-4">
-                                            <p className="text-sm text-[#6F5E55] dark:text-[#b89b7d]">Upload PDF notes for this lesson.</p>
+                                            <p className="text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]">Upload PDF notes for this lesson.</p>
                                             <button
                                                 onClick={triggerAddPdf}
-                                                className="text-sm text-[#8B4A28] font-semibold"
+                                                className="text-sm text-[var(--bhn-brand-700)] font-semibold"
                                             >
                                                 {pdfFileName ? "Replace PDF" : "+ Upload PDF"}
                                             </button>
@@ -784,12 +784,12 @@ function ContentPageContent() {
                                         />
 
                                         {pdfFileName ? (
-                                            <div className="bg-[#F9F4F1] dark:bg-[#1a1a1a] p-4 rounded-lg border border-[#E6DBD3] dark:border-[#374151]">
-                                                <p className="text-sm text-[#2D201B] dark:text-[#ededed]">PDF attached to lesson:</p>
+                                            <div className="bg-[#F9F4F1] dark:bg-[var(--bhn-neutral-900)] p-4 rounded-lg border border-[#E6DBD3] dark:border-[var(--bhn-border)]">
+                                                <p className="text-sm text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">PDF attached to lesson:</p>
                                                 <p className="text-sm font-medium mt-1">{pdfFileName}</p>
                                             </div>
                                         ) : (
-                                            <div className="bg-[#FFF4E7] p-4 rounded-lg border border-[#F2D7C5] text-sm text-[#6F4A26]">
+                                            <div className="bg-[var(--bhn-warning-50)] p-4 rounded-lg border border-[var(--bhn-warning-500)] text-sm text-[var(--bhn-brand-700)]">
                                                 Upload a PDF note to attach with this lesson.
                                             </div>
                                         )}
@@ -799,11 +799,11 @@ function ContentPageContent() {
                                 {activeExtraSection === "mcq" && (
                                     <>
                                         <div className="flex items-center justify-between gap-4">
-                                            <p className="text-sm text-[#6F5E55] dark:text-[#b89b7d]">Create or edit the MCQ quiz for this lesson.</p>
+                                            <p className="text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]">Create or edit the MCQ quiz for this lesson.</p>
                                             <button
                                                 onClick={handleSaveMcq}
                                                 disabled={isEditingLesson}
-                                                className="text-sm text-[#8B4A28] font-semibold"
+                                                className="text-sm text-[var(--bhn-brand-700)] font-semibold"
                                             >
                                                 {isEditingLesson ? "Saving..." : "Save MCQ"}
                                             </button>
@@ -811,32 +811,32 @@ function ContentPageContent() {
 
                                         <div className="grid sm:grid-cols-2 gap-4">
                                             <div>
-                                                <p className="text-xs text-[#8A7A71] dark:text-[#7a6a5a] mb-1">Quiz Duration (min)</p>
+                                                <p className="text-xs text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mb-1">Quiz Duration (min)</p>
                                                 <input
                                                     type="number"
                                                     value={mcqDuration}
                                                     onChange={(e) => setMcqDuration(Number(e.target.value) || 0)}
-                                                    className="w-full border border-[#E6DBD3] dark:border-[#374151] rounded-lg p-3 bg-[#F9F4F1] dark:bg-[#1a1a1a] outline-none text-[#2D201B] dark:text-[#ededed] focus:border-[#8B4A28]"
+                                                    className="w-full border border-[#E6DBD3] dark:border-[var(--bhn-border)] rounded-lg p-3 bg-[#F9F4F1] dark:bg-[var(--bhn-neutral-900)] outline-none text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] focus:border-[var(--bhn-brand-600)]"
                                                 />
                                             </div>
                                             <div>
-                                                <p className="text-xs text-[#8A7A71] dark:text-[#7a6a5a] mb-1">Passing Score (%)</p>
+                                                <p className="text-xs text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mb-1">Passing Score (%)</p>
                                                 <input
                                                     type="number"
                                                     value={mcqPassingScore}
                                                     onChange={(e) => setMcqPassingScore(Number(e.target.value) || 0)}
-                                                    className="w-full border border-[#E6DBD3] dark:border-[#374151] rounded-lg p-3 bg-[#F9F4F1] dark:bg-[#1a1a1a] outline-none text-[#2D201B] dark:text-[#ededed] focus:border-[#8B4A28]"
+                                                    className="w-full border border-[#E6DBD3] dark:border-[var(--bhn-border)] rounded-lg p-3 bg-[#F9F4F1] dark:bg-[var(--bhn-neutral-900)] outline-none text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] focus:border-[var(--bhn-brand-600)]"
                                                 />
                                             </div>
                                         </div>
 
                                         {mcqQuestions.map((question, questionIndex) => (
-                                            <div key={questionIndex} className="bg-[#F9F4F1] dark:bg-[#1a1a1a] rounded-lg p-4 border border-[#E6DBD3] dark:border-[#374151]">
+                                            <div key={questionIndex} className="bg-[#F9F4F1] dark:bg-[var(--bhn-neutral-900)] rounded-lg p-4 border border-[#E6DBD3] dark:border-[var(--bhn-border)]">
                                                 <div className="flex justify-between items-start gap-4 mb-3">
-                                                    <p className="text-sm font-semibold text-[#2D201B] dark:text-[#ededed]">Question {questionIndex + 1}</p>
+                                                    <p className="text-sm font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">Question {questionIndex + 1}</p>
                                                     <button
                                                         onClick={() => handleRemoveMcqQuestion(questionIndex)}
-                                                        className="text-sm text-[#A13636] hover:text-[#7A0324]"
+                                                        className="text-sm text-[var(--bhn-error-600)] hover:text-[var(--bhn-error-700)]"
                                                     >
                                                         Remove
                                                     </button>
@@ -847,7 +847,7 @@ function ContentPageContent() {
                                                     value={question.question}
                                                     onChange={(e) => handleUpdateMcqQuestion(questionIndex, "question", e.target.value)}
                                                     placeholder="Enter question"
-                                                    className="w-full border border-[#E6DBD3] dark:border-[#374151] rounded-lg p-3 mb-3 bg-white outline-none text-[#2D201B] dark:text-[#ededed] focus:border-[#8B4A28]"
+                                                    className="w-full border border-[#E6DBD3] dark:border-[var(--bhn-border)] rounded-lg p-3 mb-3 bg-[var(--bhn-surface)] outline-none text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] focus:border-[var(--bhn-brand-600)]"
                                                 />
 
                                                 <div className="space-y-3">
@@ -864,7 +864,7 @@ function ContentPageContent() {
                                                                 value={option}
                                                                 onChange={(e) => handleUpdateMcqOption(questionIndex, optionIndex, e.target.value)}
                                                                 placeholder={`Option ${optionIndex + 1}`}
-                                                                className="flex-1 border border-[#E6DBD3] dark:border-[#374151] rounded-lg p-3 bg-white outline-none text-[#2D201B] dark:text-[#ededed] focus:border-[#8B4A28]"
+                                                                className="flex-1 border border-[#E6DBD3] dark:border-[var(--bhn-border)] rounded-lg p-3 bg-[var(--bhn-surface)] outline-none text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] focus:border-[var(--bhn-brand-600)]"
                                                             />
                                                         </div>
                                                     ))}
@@ -875,14 +875,14 @@ function ContentPageContent() {
                                                     onChange={(e) => handleUpdateMcqQuestion(questionIndex, "explanation", e.target.value)}
                                                     placeholder="Explanation (optional)"
                                                     rows={3}
-                                                    className="w-full border border-[#E6DBD3] dark:border-[#374151] rounded-lg p-3 mt-3 bg-white outline-none text-[#2D201B] dark:text-[#ededed] focus:border-[#8B4A28]"
+                                                    className="w-full border border-[#E6DBD3] dark:border-[var(--bhn-border)] rounded-lg p-3 mt-3 bg-[var(--bhn-surface)] outline-none text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] focus:border-[var(--bhn-brand-600)]"
                                                 />
                                             </div>
                                         ))}
 
                                         <button
                                             onClick={handleAddMcqQuestion}
-                                            className="w-full bg-[#F3EAE4] dark:bg-[#1a1a1a] text-[#8B4A28] font-semibold rounded-lg py-3 hover:bg-[#E8D2C1] dark:hover:bg-[#2a2a2a] transition"
+                                            className="w-full bg-[#F3EAE4] dark:bg-[var(--bhn-neutral-900)] text-[var(--bhn-brand-700)] font-semibold rounded-lg py-3 hover:bg-[#E8D2C1] dark:hover:bg-[#2a2a2a] transition"
                                         >
                                             + Add Question
                                         </button>
@@ -890,7 +890,7 @@ function ContentPageContent() {
                                 )}
 
                                 {saveMessage && (
-                                    <div className="rounded-lg border border-[#D8E6DC] bg-[#F2FCF5] p-4 text-sm text-[#2B6B3F]">
+                                    <div className="rounded-lg border border-[var(--bhn-success-500)] bg-[var(--bhn-success-50)] p-4 text-sm text-[var(--bhn-success-700)]">
                                         {saveMessage}
                                     </div>
                                 )}
@@ -899,13 +899,13 @@ function ContentPageContent() {
                         </div>
 
                         {/* LESSON SETTINGS */}
-                        <div className="bg-white rounded-2xl p-4 sm:p-4 border border-[#E8DDD5] dark:border-[#374151]">
+                        <div className="bg-[var(--bhn-surface)] rounded-2xl p-4 sm:p-4 border border-[var(--bhn-border)] dark:border-[var(--bhn-border)]">
                             <h2 className="text-2xl sm:text-[28px] font-serif font-semibold mb-6">
                                 Lesson Settings
                             </h2>
 
                             {/* Lesson Title */}
-                            <p className="text-xs text-[#8A7A71] dark:text-[#7a6a5a] mb-1">
+                            <p className="text-xs text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mb-1">
                                 Lesson Title
                             </p>
 
@@ -914,11 +914,11 @@ function ContentPageContent() {
                                 value={lessonSettingsTitle}
                                 onChange={(e) => setLessonSettingsTitle(e.target.value)}
                                 placeholder="Enter lesson title..."
-                                className="w-full border border-[#E6DBD3] dark:border-[#374151] rounded-lg p-3 mb-4 bg-[#F9F4F1] dark:bg-[#1a1a1a] outline-none text-[#2D201B] dark:text-[#ededed] placeholder:text-[#B7A79E] dark:placeholder:text-[#6a5a4a] focus:border-[#8B4A28]"
+                                className="w-full border border-[#E6DBD3] dark:border-[var(--bhn-border)] rounded-lg p-3 mb-4 bg-[#F9F4F1] dark:bg-[var(--bhn-neutral-900)] outline-none text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] placeholder:text-[var(--bhn-text-soft)] dark:placeholder:text-[var(--bhn-text-soft)] focus:border-[var(--bhn-brand-600)]"
                             />
 
                             {/* Description */}
-                            <p className="text-xs text-[#8A7A71] dark:text-[#7a6a5a] mb-1">
+                            <p className="text-xs text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mb-1">
                                 Description
                             </p>
 
@@ -927,14 +927,14 @@ function ContentPageContent() {
                                 value={lessonSettingsDescription}
                                 onChange={(e) => setLessonSettingsDescription(e.target.value)}
                                 placeholder="Write lesson description..."
-                                className="w-full border border-[#E6DBD3] dark:border-[#374151] rounded-lg p-3 mb-4 bg-[#F9F4F1] dark:bg-[#1a1a1a] outline-none text-[#2D201B] dark:text-[#ededed] placeholder:text-[#B7A79E] dark:placeholder:text-[#6a5a4a] focus:border-[#8B4A28] resize-none"
+                                className="w-full border border-[#E6DBD3] dark:border-[var(--bhn-border)] rounded-lg p-3 mb-4 bg-[#F9F4F1] dark:bg-[var(--bhn-neutral-900)] outline-none text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] placeholder:text-[var(--bhn-text-soft)] dark:placeholder:text-[var(--bhn-text-soft)] focus:border-[var(--bhn-brand-600)] resize-none"
                             />
 
                             <div className="flex flex-col lg:flex-row lg:justify-between gap-5">
 
                                 {/* Duration */}
                                 <div>
-                                    <p className="text-xs text-[#8A7A71] dark:text-[#7a6a5a] mb-1">
+                                    <p className="text-xs text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mb-1">
                                         Duration (Minutes)
                                     </p>
 
@@ -943,24 +943,24 @@ function ContentPageContent() {
                                         value={lessonSettingsDuration}
                                         onChange={(e) => setLessonSettingsDuration(e.target.value)}
                                         placeholder="12"
-                                        className="border border-[#E6DBD3] dark:border-[#374151] rounded-lg p-2 w-24 outline-none bg-[#F9F4F1] dark:bg-[#1a1a1a] text-[#2D201B] dark:text-[#ededed] placeholder:text-[#B7A79E] dark:placeholder:text-[#6a5a4a] focus:border-[#8B4A28]"
+                                        className="border border-[#E6DBD3] dark:border-[var(--bhn-border)] rounded-lg p-2 w-24 outline-none bg-[#F9F4F1] dark:bg-[var(--bhn-neutral-900)] text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] placeholder:text-[var(--bhn-text-soft)] dark:placeholder:text-[var(--bhn-text-soft)] focus:border-[var(--bhn-brand-600)]"
                                     />
                                 </div>
 
                                 {/* Toggle */}
                                 <div className="flex items-center gap-3">
-                                    <span className="text-sm text-[#2D201B] dark:text-[#ededed]">
+                                    <span className="text-sm text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
                                         Mark as Read
                                     </span>
 
                                     <div
                                         onClick={() => setIsMarked(!isMarked)}
                                         className={`w-10 h-5 rounded-full relative cursor-pointer transition-all duration-300
-                                        ${isMarked ? "bg-[#8B4A28] dark:bg-[#b86a3a]" : "bg-[#E6DBD3] dark:bg-[#2a2a2a]"}
+                                        ${isMarked ? "bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)]" : "bg-[#E6DBD3] dark:bg-[var(--bhn-neutral-900)]"}
                                            `}
                                     >
                                         <div
-                                            className={`w-4 h-4 bg-white rounded-full absolute top-0.5 transition-all duration-300
+                                            className={`w-4 h-4 bg-[var(--bhn-surface)] rounded-full absolute top-0.5 transition-all duration-300
                                             ${isMarked ? "right-0.5" : "left-0.5"}
                                           `}
                                         />
@@ -977,7 +977,7 @@ function ContentPageContent() {
                                 type="button"
                                 onClick={handleSaveDraft}
                                 disabled={loading}
-                                className={`border border-[#E6DBD3] dark:border-[#374151] px-6 py-3 rounded-lg bg-white transition ${loading ? "opacity-70 cursor-not-allowed" : "hover:bg-[#F9F4F1] dark:hover:bg-[#1a1a1a] dark:bg-[#1a1a1a]"}`}
+                                className={`border border-[#E6DBD3] dark:border-[var(--bhn-border)] px-6 py-3 rounded-lg bg-[var(--bhn-surface)] transition ${loading ? "opacity-70 cursor-not-allowed" : "hover:bg-[#F9F4F1] dark:hover:bg-[var(--bhn-neutral-900)] dark:bg-[var(--bhn-neutral-900)]"}`}
                             >
                                 {loading ? "Saving..." : "Save as Draft"}
                             </button>
@@ -986,8 +986,8 @@ function ContentPageContent() {
                                 onClick={handleContinue}
                                 disabled={loading}
                                 className={`px-6 py-3 rounded-lg text-white transition ${loading
-                                    ? "bg-[#A67C63] dark:bg-[#2a2018] scale-95"
-                                    : "bg-[#8B4A28] dark:bg-[#b86a3a] hover:scale-105 active:scale-95"
+                                    ? "bg-[var(--bhn-brand-400)] dark:bg-[var(--bhn-neutral-900)] scale-95"
+                                    : "bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] hover:scale-105 active:scale-95"
                                     }`}
                             >
                                 {loading ? "Saving..." : "Save & Continue"}
@@ -1001,7 +1001,7 @@ function ContentPageContent() {
                     <div className="space-y-6">
 
                         {/* VIDEO PREVIEW */}
-                        <div className="bg-white rounded-2xl border border-[#E8DDD5] dark:border-[#374151] overflow-hidden">
+                        <div className="bg-[var(--bhn-surface)] rounded-2xl border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] overflow-hidden">
                             {lessonVideoUrl ? (
                                 <video
                                     controls
@@ -1009,23 +1009,23 @@ function ContentPageContent() {
                                     className="w-full h-[220px] sm:h-[260px] object-cover bg-black"
                                 />
                             ) : (
-                                <div className="h-[220px] sm:h-[260px] bg-[#F3EAE4] dark:bg-[#1a1a1a] flex items-center justify-center">
+                                <div className="h-[220px] sm:h-[260px] bg-[#F3EAE4] dark:bg-[var(--bhn-neutral-900)] flex items-center justify-center">
                                     <div className="text-center px-6">
-                                        <div className="w-16 h-16 mx-auto rounded-full bg-[#8B4A28] dark:bg-[#b86a3a] flex items-center justify-center text-white text-2xl">
+                                        <div className="w-16 h-16 mx-auto rounded-full bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] flex items-center justify-center text-white text-2xl">
                                             ▶
                                         </div>
-                                        <p className="mt-3 text-sm font-semibold text-[#2D201B] dark:text-[#ededed]">Video preview</p>
-                                        <p className="text-sm text-[#6F5E55] dark:text-[#b89b7d] mt-1">Upload a lesson video to preview it here.</p>
+                                        <p className="mt-3 text-sm font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">Video preview</p>
+                                        <p className="text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mt-1">Upload a lesson video to preview it here.</p>
                                     </div>
                                 </div>
                             )}
 
                             <div className="p-4 sm:p-5">
-                                <p className="text-[11px] text-[#8A7A71] dark:text-[#7a6a5a] mb-1 tracking-wide">PREVIEW</p>
-                                <p className="text-[15px] font-semibold text-[#2D201B] dark:text-[#ededed] mb-2 leading-snug">{lessonDisplayTitle}</p>
-                                <p className="text-sm text-[#6F5E55] dark:text-[#b89b7d] mb-3 leading-relaxed">{lessonDisplayDescription}</p>
+                                <p className="text-[11px] text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mb-1 tracking-wide">PREVIEW</p>
+                                <p className="text-[15px] font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] mb-2 leading-snug">{lessonDisplayTitle}</p>
+                                <p className="text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mb-3 leading-relaxed">{lessonDisplayDescription}</p>
 
-                                <div className="flex flex-wrap items-center gap-4 text-xs text-[#8A7A71] dark:text-[#7a6a5a]">
+                                <div className="flex flex-wrap items-center gap-4 text-xs text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]">
                                     <div className="flex items-center gap-1">
                                         <img src="/icon2.png" className="w-4 h-4" alt="video" />
                                         <span>{preview?.type || lesson?.type || "Video"}</span>
@@ -1045,9 +1045,9 @@ function ContentPageContent() {
                         </div>
 
                         {/* STATUS */}
-                        <div className="bg-white rounded-2xl p-4 sm:p-4 border border-[#EFE7E1] w-full">
+                        <div className="bg-[var(--bhn-surface)] rounded-2xl p-4 sm:p-4 border border-[#EFE7E1] w-full">
 
-                            <h3 className="text-lg sm:text-[21px] font-medium tracking-wide uppercase text-[#4A3B34] mb-5">
+                            <h3 className="text-lg sm:text-[21px] font-medium tracking-wide uppercase text-[var(--bhn-text)] mb-5">
                                 Upload Status
                             </h3>
 
@@ -1055,14 +1055,14 @@ function ContentPageContent() {
 
                                 {statusItems.map((item) => (
                                     <li key={item.label} className="flex items-center gap-3">
-                                        <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${item.done ? "bg-[#D9F5E7]" : "border border-[#CFC5BE]"}`}>
+                                        <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${item.done ? "bg-[var(--bhn-success-50)]" : "border border-[var(--bhn-border)]"}`}>
                                             {item.done ? (
                                                 <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 text-[#34C77B]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                                                 </svg>
                                             ) : null}
                                         </div>
-                                        <span className={`text-sm sm:text-[16px] ${item.done ? "text-[#2D201B] dark:text-[#ededed]" : "text-[#9C8F88]"}`}>
+                                        <span className={`text-sm sm:text-[16px] ${item.done ? "text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]" : "text-[var(--bhn-text-soft)]"}`}>
                                             {item.label}
                                         </span>
                                     </li>
@@ -1070,7 +1070,7 @@ function ContentPageContent() {
 
                                 <li className="flex items-center gap-3">
 
-                                    <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${uploadChecklist?.readyToPublish ? "bg-[#D9F5E7]" : "border border-[#CFC5BE]"}`}>
+                                    <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${uploadChecklist?.readyToPublish ? "bg-[var(--bhn-success-50)]" : "border border-[var(--bhn-border)]"}`}>
                                         {uploadChecklist?.readyToPublish ? (
                                             <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5 text-[#34C77B]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
@@ -1078,7 +1078,7 @@ function ContentPageContent() {
                                         ) : null}
                                     </div>
 
-                                    <span className={`text-sm sm:text-[16px] ${uploadChecklist?.readyToPublish ? "text-[#2D201B] dark:text-[#ededed]" : "text-[#9C8F88]"}`}>
+                                    <span className={`text-sm sm:text-[16px] ${uploadChecklist?.readyToPublish ? "text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]" : "text-[var(--bhn-text-soft)]"}`}>
                                         Ready to publish
                                     </span>
 
@@ -1089,13 +1089,13 @@ function ContentPageContent() {
                         </div>
 
                         {/* TIPS */}
-                        <div className="bg-[#FFF4ED] rounded-2xl p-4 sm:p-5 border border-[#F1D6C6]">
+                        <div className="bg-[var(--bhn-surface-3)] rounded-2xl p-4 sm:p-5 border border-[var(--bhn-border)]">
 
                             <h2 className="text-2xl sm:text-[23px] font-serif font-semibold mb-6">
                                 Instructor Tips
                             </h2>
 
-                            <p className="text-sm sm:text-[16px] text-[#6F5E55] dark:text-[#b89b7d] leading-relaxed">
+                            <p className="text-sm sm:text-[16px] text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] leading-relaxed">
 
                                 "Short videos (5–10 min) increase engagement and completion rates by up to 40%."
 
@@ -1106,7 +1106,7 @@ function ContentPageContent() {
 
                             </p>
 
-                            <h3 className="font-bold mt-6 mb-2 text-[#A13636] text-sm sm:text-[16px]">
+                            <h3 className="font-bold mt-6 mb-2 text-[var(--bhn-error-600)] text-sm sm:text-[16px]">
                                 GEF QUALITY GUIDELINES
                             </h3>
 
@@ -1124,7 +1124,7 @@ function ContentPageContent() {
 
 export default function ContentPage() {
     return (
-        <Suspense fallback={<div className="min-h-screen bg-[#F7F3EF] dark:bg-[#171717] p-5">Loading lesson content...</div>}>
+        <Suspense fallback={<div className="min-h-screen bg-[var(--bhn-surface-3)] dark:bg-[var(--bhn-neutral-900)] p-5">Loading lesson content...</div>}>
             <ContentPageContent />
         </Suspense>
     );

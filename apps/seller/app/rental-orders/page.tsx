@@ -344,7 +344,7 @@ export default function RentalOrdersPage() {
               type="checkbox"
               checked={inspectDamage}
               onChange={(e) => setInspectDamage(e.target.checked)}
-              className="h-4 w-4 rounded border-[var(--bhn-border-strong)] text-[var(--bhn-brand-600)]"
+              className="h-4 w-4 rounded border-[var(--bhn-border-strong)] text-[var(--bhn-text)]"
             />
             <label htmlFor="damage" className="text-xs font-medium text-[var(--bhn-text)]">
               Damage reported

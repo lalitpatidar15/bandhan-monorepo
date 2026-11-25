@@ -36,50 +36,50 @@ export default function Instructors() {
       <div className="flex justify-between items-center mb-4">
         <h1 className="admin-page-heading">Instructors</h1>
         <div className="relative">
-          <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-gray-400" />
+          <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-[var(--bhn-text-muted)]" />
           <input value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="Search instructors..." className="admin-input pl-8 w-56" />
         </div>
       </div>
 
       {isLoading ? (
-        <div className="py-8 text-center text-sm text-gray-500">Loading...</div>
+        <div className="py-8 text-center text-sm text-[var(--bhn-text-muted)]">Loading...</div>
       ) : filtered.length === 0 ? (
-        <div className="card py-8 text-center text-sm text-gray-500">No instructors found</div>
+        <div className="card py-8 text-center text-sm text-[var(--bhn-text-muted)]">No instructors found</div>
       ) : (
         <div className="space-y-2">
           {filtered.map((i) => (
             <div key={i._id} className="card overflow-hidden">
               <div
-                className="flex items-center gap-4 px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors"
+                className="flex items-center gap-4 px-4 py-3 cursor-pointer hover:bg-[var(--bhn-surface-2)] transition-colors"
                 onClick={() => toggleExpand(i._id)}
               >
-                <div className="h-9 w-9 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs shrink-0">
+                <div className="h-9 w-9 rounded-full bg-[var(--bhn-brand-50)] text-[var(--bhn-brand-700)] flex items-center justify-center font-bold text-xs shrink-0">
                   {i.fullName.charAt(0).toUpperCase()}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-semibold text-gray-900 truncate">{i.fullName}</span>
-                    {i.isVerified && <Shield className="w-3 h-3 text-blue-500 fill-blue-100" />}
+                    <span className="text-sm font-semibold text-[var(--bhn-text)] truncate">{i.fullName}</span>
+                    {i.isVerified && <Shield className="w-3 h-3 text-[var(--bhn-brand-500)] fill-[var(--bhn-brand-50)]" />}
                     <span className={`admin-badge text-[10px] ${statusBadgeClass(i.accountStatus)}`}>{i.accountStatus}</span>
                   </div>
-                  <div className="text-xs text-gray-500 truncate">{i.headline || i.email}</div>
+                  <div className="text-xs text-[var(--bhn-text-muted)] truncate">{i.headline || i.email}</div>
                 </div>
 
-                <div className="flex items-center gap-5 text-xs text-gray-600 shrink-0">
+                <div className="flex items-center gap-5 text-xs text-[var(--bhn-text)] shrink-0">
                   <div className="flex items-center gap-1" title="Average Rating">
-                    <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
+                    <Star className="w-3 h-3 text-[var(--bhn-warning-500)] fill-[var(--bhn-warning-500)]" />
                     <span className="font-medium">{i.avgRating || '—'}</span>
-                    <span className="text-gray-400">({i.reviewCount})</span>
+                    <span className="text-[var(--bhn-text-muted)]">({i.reviewCount})</span>
                   </div>
                   <div className="flex items-center gap-1" title="Courses">
-                    <BookOpen className="w-3 h-3 text-purple-500" />
+                    <BookOpen className="w-3 h-3 text-[var(--bhn-brand-500)]" />
                     <span>{i.totalCourses}</span>
                   </div>
                   <div className="flex items-center gap-1" title="Students">
-                    <Users className="w-3 h-3 text-green-600" />
+                    <Users className="w-3 h-3 text-[var(--bhn-success-600)]" />
                     <span>{i.totalStudents}</span>
                   </div>
-                  <div className="text-gray-400">{i.profileCompletion}%</div>
+                  <div className="text-[var(--bhn-text-muted)]">{i.profileCompletion}%</div>
                 </div>
 
                 <div className="flex items-center gap-1 shrink-0">
@@ -104,7 +104,7 @@ export default function Instructors() {
                   >
                     <Eye className="w-3 h-3" /> Details
                   </button>
-                  {expandedId === i._id ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
+                  {expandedId === i._id ? <ChevronUp className="w-4 h-4 text-[var(--bhn-text-muted)]" /> : <ChevronDown className="w-4 h-4 text-[var(--bhn-text-muted)]" />}
                 </div>
               </div>
 
@@ -130,9 +130,9 @@ function InstructorDetails({ instructor }: { instructor: import('@/lib/adminApi'
   const lastLogin = instructor.lastLogin ? new Intl.DateTimeFormat('en-IN', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(instructor.lastLogin)) : 'Never';
 
   return (
-    <div className="border-t bg-slate-50 px-4 py-4">
+    <div className="border-t bg-[var(--bhn-surface-2)] px-4 py-4">
       <div className="mb-3 flex items-center justify-between gap-3">
-        <h2 className="text-sm font-semibold text-slate-900">Instructor profile details</h2>
+        <h2 className="text-sm font-semibold text-[var(--bhn-text)]">Instructor profile details</h2>
         <span className={`admin-badge ${instructor.isVerified ? 'admin-badge-active' : 'admin-badge-pending'}`}>
           {instructor.isVerified ? 'Verified instructor' : 'Verification pending'}
         </span>
@@ -163,51 +163,51 @@ function InstructorDetails({ instructor }: { instructor: import('@/lib/adminApi'
           <DetailLine label="Experience" value={instructor.experience.length ? instructor.experience.map((item) => [item.title, item.company, item.years].filter(Boolean).join(' — ')).join('; ') : 'Not provided'} />
         </DetailCard>
       </div>
-      {instructor.bio && <p className="mt-3 rounded-lg border bg-white p-3 text-xs leading-5 text-slate-600"><span className="font-semibold text-slate-800">Bio: </span>{instructor.bio}</p>}
+      {instructor.bio && <p className="mt-3 rounded-lg border bg-[var(--bhn-surface)] p-3 text-xs leading-5 text-[var(--bhn-text)]"><span className="font-semibold text-[var(--bhn-text)]">Bio: </span>{instructor.bio}</p>}
       {(instructor.linkedin || instructor.portfolio || instructor.website) && <div className="mt-3 flex flex-wrap gap-2 text-xs">{[
         ['LinkedIn', instructor.linkedin], ['Portfolio', instructor.portfolio], ['Website', instructor.website],
-      ].filter(([, url]) => url).map(([label, url]) => <a key={label} href={url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-blue-700 hover:underline"><ExternalLink className="h-3 w-3" />{label}</a>)}</div>}
+      ].filter(([, url]) => url).map(([label, url]) => <a key={label} href={url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[var(--bhn-brand-700)] hover:underline"><ExternalLink className="h-3 w-3" />{label}</a>)}</div>}
     </div>
   );
 }
 
 function DetailCard({ title, children }: { title: string; children: React.ReactNode }) {
-  return <section className="rounded-lg border bg-white p-3"><h3 className="mb-2 font-semibold text-slate-800">{title}</h3><div className="space-y-1.5">{children}</div></section>;
+  return <section className="rounded-lg border bg-[var(--bhn-surface)] p-3"><h3 className="mb-2 font-semibold text-[var(--bhn-text)]">{title}</h3><div className="space-y-1.5">{children}</div></section>;
 }
 
 function DetailLine({ icon, label, value }: { icon?: React.ReactNode; label: string; value: string }) {
-  return <div><span className="mr-1 inline-flex items-center gap-1 text-slate-500">{icon}{label}:</span><span className="break-words text-slate-800">{value}</span></div>;
+  return <div><span className="mr-1 inline-flex items-center gap-1 text-[var(--bhn-text-muted)]">{icon}{label}:</span><span className="break-words text-[var(--bhn-text)]">{value}</span></div>;
 }
 
 function InstructorReviews({ instructorId }: { instructorId: string }) {
   const { data: reviews = [], isLoading } = useGetInstructorReviewsQuery(instructorId);
 
-  if (isLoading) return <div className="px-4 py-3 border-t text-xs text-gray-500">Loading reviews...</div>;
-  if (reviews.length === 0) return <div className="px-4 py-3 border-t text-xs text-gray-500">No reviews yet</div>;
+  if (isLoading) return <div className="px-4 py-3 border-t text-xs text-[var(--bhn-text-muted)]">Loading reviews...</div>;
+  if (reviews.length === 0) return <div className="px-4 py-3 border-t text-xs text-[var(--bhn-text-muted)]">No reviews yet</div>;
 
   return (
-    <div className="border-t bg-gray-50 px-4 py-3">
+    <div className="border-t bg-[var(--bhn-surface-2)] px-4 py-3">
       <div className="flex items-center gap-2 mb-2">
-        <MessageSquare className="w-3.5 h-3.5 text-gray-500" />
-        <span className="text-xs font-semibold text-gray-700">Course Reviews ({reviews.length})</span>
+        <MessageSquare className="w-3.5 h-3.5 text-[var(--bhn-text-muted)]" />
+        <span className="text-xs font-semibold text-[var(--bhn-text)]">Course Reviews ({reviews.length})</span>
       </div>
       <div className="space-y-2 max-h-64 overflow-y-auto">
         {reviews.map((r) => (
-          <div key={r._id} className="bg-white rounded-lg p-2.5 border text-xs">
+          <div key={r._id} className="bg-[var(--bhn-surface)] rounded-lg p-2.5 border text-xs">
             <div className="flex items-center justify-between mb-1">
               <div className="flex items-center gap-2">
-                <span className="font-medium text-gray-900">{r.studentName}</span>
-                <span className="text-gray-400">on {r.courseName}</span>
+                <span className="font-medium text-[var(--bhn-text)]">{r.studentName}</span>
+                <span className="text-[var(--bhn-text-muted)]">on {r.courseName}</span>
               </div>
               <div className="flex items-center gap-0.5">
                 {Array.from({ length: 5 }, (_, i) => (
-                  <Star key={i} className={`w-2.5 h-2.5 ${i < r.rating ? 'text-amber-500 fill-amber-500' : 'text-gray-200'}`} />
+                  <Star key={i} className={`w-2.5 h-2.5 ${i < r.rating ? 'text-[var(--bhn-warning-500)] fill-[var(--bhn-warning-500)]' : 'text-[var(--bhn-text-soft)]'}`} />
                 ))}
               </div>
             </div>
-            <div className="text-gray-600">{r.review}</div>
+            <div className="text-[var(--bhn-text)]">{r.review}</div>
             {r.instructorResponse && (
-              <div className="mt-1.5 pl-2 border-l-2 border-blue-300 text-gray-500">
+              <div className="mt-1.5 pl-2 border-l-2 border-[var(--bhn-brand-100)] text-[var(--bhn-text-muted)]">
                 <span className="font-medium">Instructor reply:</span> {r.instructorResponse}
               </div>
             )}

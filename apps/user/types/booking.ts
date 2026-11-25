@@ -14,6 +14,7 @@ export interface Booking {
   contactPerson?: string;
   alternateMobile?: string;
   status: 'pending' | 'confirmed' | 'cancelled' | 'completed' | 'in_progress';
+  paymentStatus?: 'pending' | 'authorized' | 'paid' | 'failed' | 'refunded' | 'partially_refunded';
   totalPrice: number;
   createdAt: string;
   updatedAt: string;

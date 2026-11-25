@@ -548,24 +548,24 @@ export default function Curriculum2() {
 
     if (!courseId) {
         return (
-            <div className="min-h-screen bg-[#F8F5F2] dark:bg-[#171717] flex items-center justify-center">
-                <p className="text-lg text-[#2D201B] dark:text-[#ededed]">Course ID missing.</p>
+            <div className="min-h-screen bg-[var(--bhn-bg)] dark:bg-[var(--bhn-neutral-900)] flex items-center justify-center">
+                <p className="text-lg text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">Course ID missing.</p>
             </div>
         );
     }
 
     if (isCourseLoading) {
         return (
-            <div className="min-h-screen bg-[#F8F5F2] dark:bg-[#171717] flex items-center justify-center">
-                <p className="text-lg text-[#2D201B] dark:text-[#ededed]">Loading curriculum data...</p>
+            <div className="min-h-screen bg-[var(--bhn-bg)] dark:bg-[var(--bhn-neutral-900)] flex items-center justify-center">
+                <p className="text-lg text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">Loading curriculum data...</p>
             </div>
         );
     }
 
     if (courseError) {
         return (
-            <div className="min-h-screen bg-[#F8F5F2] dark:bg-[#171717] flex items-center justify-center">
-                <p className="text-lg text-red-600">Unable to load curriculum modules. Please refresh.</p>
+            <div className="min-h-screen bg-[var(--bhn-bg)] dark:bg-[var(--bhn-neutral-900)] flex items-center justify-center">
+                <p className="text-lg text-[var(--bhn-error-600)]">Unable to load curriculum modules. Please refresh.</p>
             </div>
         );
     }
@@ -578,7 +578,7 @@ export default function Curriculum2() {
     const durationText = summary?.estimatedDuration ? `${summary.estimatedDuration} min` : formattedDuration;
 
     return (
-        <div className="min-h-screen bg-[#F8F5F2] dark:bg-[#171717] flex flex-col">
+        <div className="min-h-screen bg-[var(--bhn-bg)] dark:bg-[var(--bhn-neutral-900)] flex flex-col">
 
             {/* HEADER */}
             <CurriculumHeader currentStep={2} />
@@ -604,9 +604,9 @@ export default function Curriculum2() {
                                     <div
                                         key={moduleKey}
                                         onClick={() => setSelectedModuleId(moduleKey)}
-                                        className={`bg-white border rounded-xl overflow-hidden transition shadow-sm ${moduleSelected ? "border-[#8B4A28] dark:border-[#c9a882] ring-1 ring-[#8B4A28] dark:ring-[#c9a882]" : "border-[#E6DBD3] dark:border-[#374151]"}`}
+                                        className={`bg-[var(--bhn-surface)] border rounded-xl overflow-hidden transition shadow-sm ${moduleSelected ? "border-[#8B4A28] dark:border-[#c9a882] ring-1 ring-[#8B4A28] dark:ring-[#c9a882]" : "border-[#E6DBD3] dark:border-[var(--bhn-border)]"}`}
                                     >
-                                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-4 sm:px-5 py-4 border-b border-[#EFE4DC] dark:border-[#374151] bg-[#FBF8F6] dark:bg-[#171717]">
+                                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-4 sm:px-5 py-4 border-b border-[#EFE4DC] dark:border-[var(--bhn-border)] bg-[#FBF8F6] dark:bg-[var(--bhn-neutral-900)]">
                                             <div className="flex items-start gap-3">
                                                 <img
                                                     src="/dots.png"
@@ -614,7 +614,7 @@ export default function Curriculum2() {
                                                     alt="dots"
                                                 />
                                                 <div className="w-full">
-                                                    <p className="text-[11px] tracking-widest text-[#A13636] uppercase">
+                                                    <p className="text-[11px] tracking-widest text-[var(--bhn-error-600)] uppercase">
                                                         MODULE {moduleIndex + 1}
                                                     </p>
                                                     {editingModuleId === (module._id || String(module.id ?? moduleIndex)) ? (
@@ -622,26 +622,26 @@ export default function Curriculum2() {
                                                             <input
                                                                 value={editingModuleTitle}
                                                                 onChange={(e) => setEditingModuleTitle(e.target.value)}
-                                                                className="w-full rounded-lg border border-[#D6C6BC] dark:border-[#374151] px-3 py-2 text-sm text-[#2D201B] dark:text-[#ededed]"
+                                                                className="w-full rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] px-3 py-2 text-sm text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]"
                                                             />
                                                             <div className="flex gap-2">
                                                                 <button
                                                                     onClick={() => handleSaveEdit(module._id || String(module.id ?? moduleIndex))}
                                                                     disabled={isEditingModule}
-                                                                    className="rounded-lg bg-[#8B4A28] dark:bg-[#b86a3a] px-3 py-2 text-sm text-white hover:bg-[#7A3F22] dark:hover:bg-[#a05a30] disabled:opacity-50"
+                                                                    className="rounded-lg bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] px-3 py-2 text-sm text-white hover:bg-[#7A3F22] dark:hover:bg-[var(--bhn-brand-300)] disabled:opacity-50"
                                                                 >
                                                                     Save
                                                                 </button>
                                                                 <button
                                                                     onClick={() => setEditingModuleId(null)}
-                                                                    className="rounded-lg border border-[#D6C6BC] dark:border-[#374151] px-3 py-2 text-sm text-[#6F5E55] dark:text-[#b89b7d] hover:bg-[#FAF6F3] dark:hover:bg-[#171717] dark:bg-[#171717]"
+                                                                    className="rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] px-3 py-2 text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] hover:bg-[#FAF6F3] dark:hover:bg-[#171717] dark:bg-[var(--bhn-neutral-900)]"
                                                                 >
                                                                     Cancel
                                                                 </button>
                                                             </div>
                                                         </div>
                                                     ) : (
-                                                        <h3 className="text-[15px] sm:text-[16px] font-semibold text-[#2D201B] dark:text-[#ededed] font-serif">
+                                                        <h3 className="text-[15px] sm:text-[16px] font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] font-serif">
                                                             {module.title}
                                                         </h3>
                                                     )}
@@ -654,7 +654,7 @@ export default function Curriculum2() {
                                                         void handleMoveModule(moduleIndex, "up");
                                                     }}
                                                     disabled={moduleIndex === 0}
-                                                    className="w-10 h-10 rounded-full border border-[#D6C6BC] dark:border-[#374151] bg-white flex items-center justify-center text-[#6F5E55] dark:text-[#b89b7d] hover:bg-[#F5F2EE] dark:hover:bg-[#1a1a1a] dark:bg-[#1a1a1a] disabled:cursor-not-allowed disabled:opacity-40"
+                                                    className="w-10 h-10 rounded-full border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] bg-[var(--bhn-surface)] flex items-center justify-center text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] hover:bg-[#F5F2EE] dark:hover:bg-[var(--bhn-neutral-900)] dark:bg-[var(--bhn-neutral-900)] disabled:cursor-not-allowed disabled:opacity-40"
                                                     type="button"
                                                     aria-label="Move module up"
                                                 >
@@ -666,7 +666,7 @@ export default function Curriculum2() {
                                                         void handleMoveModule(moduleIndex, "down");
                                                     }}
                                                     disabled={moduleIndex === modules.length - 1}
-                                                    className="w-10 h-10 rounded-full border border-[#D6C6BC] dark:border-[#374151] bg-white flex items-center justify-center text-[#6F5E55] dark:text-[#b89b7d] hover:bg-[#F5F2EE] dark:hover:bg-[#1a1a1a] dark:bg-[#1a1a1a] disabled:cursor-not-allowed disabled:opacity-40"
+                                                    className="w-10 h-10 rounded-full border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] bg-[var(--bhn-surface)] flex items-center justify-center text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] hover:bg-[#F5F2EE] dark:hover:bg-[var(--bhn-neutral-900)] dark:bg-[var(--bhn-neutral-900)] disabled:cursor-not-allowed disabled:opacity-40"
                                                     type="button"
                                                     aria-label="Move module down"
                                                 >
@@ -677,7 +677,7 @@ export default function Curriculum2() {
                                                         e.stopPropagation();
                                                         handleStartEdit(module, moduleIndex);
                                                     }}
-                                                    className="w-10 h-10 rounded-full border border-[#D6C6BC] dark:border-[#374151] bg-white flex items-center justify-center text-[#6F5E55] dark:text-[#b89b7d] hover:bg-[#F5F2EE] dark:hover:bg-[#1a1a1a] dark:bg-[#1a1a1a]"
+                                                    className="w-10 h-10 rounded-full border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] bg-[var(--bhn-surface)] flex items-center justify-center text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] hover:bg-[#F5F2EE] dark:hover:bg-[var(--bhn-neutral-900)] dark:bg-[var(--bhn-neutral-900)]"
                                                     type="button"
                                                 >
                                                     <img src="/Edit.png" alt="Edit module" className="w-4 h-4" />
@@ -687,7 +687,7 @@ export default function Curriculum2() {
                                                         e.stopPropagation();
                                                         handleDelete(module._id || String(module.id ?? moduleIndex));
                                                     }}
-                                                    className="w-10 h-10 rounded-full border border-[#D6C6BC] dark:border-[#374151] bg-white flex items-center justify-center text-[#6F5E55] dark:text-[#b89b7d] hover:bg-[#F5F2EE] dark:hover:bg-[#1a1a1a] dark:bg-[#1a1a1a]"
+                                                    className="w-10 h-10 rounded-full border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] bg-[var(--bhn-surface)] flex items-center justify-center text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] hover:bg-[#F5F2EE] dark:hover:bg-[var(--bhn-neutral-900)] dark:bg-[var(--bhn-neutral-900)]"
                                                     type="button"
                                                 >
                                                     <img src="/delete.png" alt="Delete module" className="w-4 h-4" />
@@ -716,11 +716,11 @@ export default function Curriculum2() {
 
                                                             if (isEditingThisLesson) {
                                                                 return (
-                                                                    <div key={lessonKey} className="rounded-xl border border-[#D6C6BC] dark:border-[#374151] bg-[#FCF8F5] dark:bg-[#1a1a1a] p-4">
+                                                                    <div key={lessonKey} className="rounded-xl border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] bg-[#FCF8F5] dark:bg-[var(--bhn-neutral-900)] p-4">
                                                                         <div className="flex items-center justify-between mb-4">
                                                                             <div>
-                                                                                <p className="text-sm font-semibold text-[#2D201B] dark:text-[#ededed]">Edit Lesson</p>
-                                                                                <p className="text-xs text-[#6F5E55] dark:text-[#b89b7d]">{(lesson.type || lesson.lessonType || "video").toUpperCase()}</p>
+                                                                                <p className="text-sm font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">Edit Lesson</p>
+                                                                                <p className="text-xs text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]">{(lesson.type || lesson.lessonType || "video").toUpperCase()}</p>
                                                                             </div>
                                                                             <button
                                                                                 onClick={() => {
@@ -728,7 +728,7 @@ export default function Curriculum2() {
                                                                                     setEditingLessonId(null);
                                                                                     clearLessonEditForm();
                                                                                 }}
-                                                                                className="text-sm text-[#6F5E55] dark:text-[#b89b7d] hover:text-[#2D201B] dark:text-[#ededed]"
+                                                                                className="text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] hover:text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]"
                                                                                 type="button"
                                                                             >
                                                                                 Cancel
@@ -737,39 +737,39 @@ export default function Curriculum2() {
 
                                                                         <div className="space-y-4">
                                                                             <div>
-                                                                                <label className="block text-sm font-medium text-[#2D201B] dark:text-[#ededed] mb-2">Title</label>
+                                                                                <label className="block text-sm font-medium text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] mb-2">Title</label>
                                                                                 <input
                                                                                     value={editingLessonTitle}
                                                                                     onChange={(e) => setEditingLessonTitle(e.target.value)}
-                                                                                    className="w-full rounded-lg border border-[#D6C6BC] dark:border-[#374151] px-3 py-2 text-sm"
+                                                                                    className="w-full rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] px-3 py-2 text-sm"
                                                                                 />
                                                                             </div>
                                                                             <div>
-                                                                                <label className="block text-sm font-medium text-[#2D201B] dark:text-[#ededed] mb-2">Description</label>
+                                                                                <label className="block text-sm font-medium text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] mb-2">Description</label>
                                                                                 <textarea
                                                                                     value={editingLessonDescription}
                                                                                     onChange={(e) => setEditingLessonDescription(e.target.value)}
                                                                                     rows={3}
-                                                                                    className="w-full rounded-lg border border-[#D6C6BC] dark:border-[#374151] px-3 py-2 text-sm"
+                                                                                    className="w-full rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] px-3 py-2 text-sm"
                                                                                 />
                                                                             </div>
 
                                                                             {editingLessonType === "video" && (
                                                                                 <>
                                                                                     <div>
-                                                                                        <label className="block text-sm font-medium text-[#2D201B] dark:text-[#ededed] mb-2">Video URL</label>
+                                                                                        <label className="block text-sm font-medium text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] mb-2">Video URL</label>
                                                                                         <input
                                                                                             value={editingLessonVideoUrl}
                                                                                             onChange={(e) => setEditingLessonVideoUrl(e.target.value)}
-                                                                                            className="w-full rounded-lg border border-[#D6C6BC] dark:border-[#374151] px-3 py-2 text-sm"
+                                                                                            className="w-full rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] px-3 py-2 text-sm"
                                                                                         />
                                                                                     </div>
                                                                                     <div>
-                                                                                        <label className="block text-sm font-medium text-[#2D201B] dark:text-[#ededed] mb-2">Duration</label>
+                                                                                        <label className="block text-sm font-medium text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] mb-2">Duration</label>
                                                                                         <input
                                                                                             value={editingLessonDuration}
                                                                                             onChange={(e) => setEditingLessonDuration(e.target.value)}
-                                                                                            className="w-full rounded-lg border border-[#D6C6BC] dark:border-[#374151] px-3 py-2 text-sm"
+                                                                                            className="w-full rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] px-3 py-2 text-sm"
                                                                                         />
                                                                                     </div>
                                                                                     <div className="flex items-center gap-3">
@@ -778,9 +778,9 @@ export default function Curriculum2() {
                                                                                             type="checkbox"
                                                                                             checked={editingLessonIsPreview}
                                                                                             onChange={(e) => setEditingLessonIsPreview(e.target.checked)}
-                                                                                            className="h-4 w-4 rounded border-[#D6C6BC] dark:border-[#374151]"
+                                                                                            className="h-4 w-4 rounded border-[var(--bhn-border)] dark:border-[var(--bhn-border)]"
                                                                                         />
-                                                                                        <label htmlFor="edit-video-preview" className="text-sm text-[#6F5E55] dark:text-[#b89b7d]">Preview lesson</label>
+                                                                                        <label htmlFor="edit-video-preview" className="text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]">Preview lesson</label>
                                                                                     </div>
                                                                                 </>
                                                                             )}
@@ -788,19 +788,19 @@ export default function Curriculum2() {
                                                                             {editingLessonType === "pdf" && (
                                                                                 <>
                                                                                     <div>
-                                                                                        <label className="block text-sm font-medium text-[#2D201B] dark:text-[#ededed] mb-2">PDF URL</label>
+                                                                                        <label className="block text-sm font-medium text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] mb-2">PDF URL</label>
                                                                                         <input
                                                                                             value={editingLessonPdfUrl}
                                                                                             onChange={(e) => setEditingLessonPdfUrl(e.target.value)}
-                                                                                            className="w-full rounded-lg border border-[#D6C6BC] dark:border-[#374151] px-3 py-2 text-sm"
+                                                                                            className="w-full rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] px-3 py-2 text-sm"
                                                                                         />
                                                                                     </div>
                                                                                     <div>
-                                                                                        <label className="block text-sm font-medium text-[#2D201B] dark:text-[#ededed] mb-2">PDF File Name</label>
+                                                                                        <label className="block text-sm font-medium text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] mb-2">PDF File Name</label>
                                                                                         <input
                                                                                             value={editingLessonPdfFileName}
                                                                                             onChange={(e) => setEditingLessonPdfFileName(e.target.value)}
-                                                                                            className="w-full rounded-lg border border-[#D6C6BC] dark:border-[#374151] px-3 py-2 text-sm"
+                                                                                            className="w-full rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] px-3 py-2 text-sm"
                                                                                         />
                                                                                     </div>
                                                                                 </>
@@ -808,9 +808,9 @@ export default function Curriculum2() {
 
                                                                             {editingLessonType === "mcq" && (
                                                                                 <div className="space-y-2">
-                                                                                    <p className="text-sm text-[#6F5E55] dark:text-[#b89b7d]">Questions: {editingLessonMcqData?.questions?.length ?? 0}</p>
-                                                                                    <p className="text-sm text-[#6F5E55] dark:text-[#b89b7d]">Duration: {editingLessonMcqData?.duration ?? "—"} min</p>
-                                                                                    <p className="text-sm text-[#6F5E55] dark:text-[#b89b7d]">Passing Score: {editingLessonMcqData?.passingScore ?? "—"}%</p>
+                                                                                    <p className="text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]">Questions: {editingLessonMcqData?.questions?.length ?? 0}</p>
+                                                                                    <p className="text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]">Duration: {editingLessonMcqData?.duration ?? "—"} min</p>
+                                                                                    <p className="text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]">Passing Score: {editingLessonMcqData?.passingScore ?? "—"}%</p>
                                                                                 </div>
                                                                             )}
 
@@ -818,7 +818,7 @@ export default function Curriculum2() {
                                                                                 <button
                                                                                     onClick={() => handleSaveLessonEdit(moduleKey, lessonKey)}
                                                                                     disabled={isEditingLesson}
-                                                                                    className="rounded-lg bg-[#8B4A28] dark:bg-[#b86a3a] px-4 py-2 text-sm text-white hover:bg-[#7A3F22] dark:hover:bg-[#a05a30] disabled:opacity-50"
+                                                                                    className="rounded-lg bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] px-4 py-2 text-sm text-white hover:bg-[#7A3F22] dark:hover:bg-[var(--bhn-brand-300)] disabled:opacity-50"
                                                                                     type="button"
                                                                                 >
                                                                                     {isEditingLesson ? "Saving..." : "Save Lesson"}
@@ -829,7 +829,7 @@ export default function Curriculum2() {
                                                                                         setEditingLessonModuleId(null);
                                                                                         clearLessonEditForm();
                                                                                     }}
-                                                                                    className="rounded-lg border border-[#D6C6BC] dark:border-[#374151] px-3 py-2 text-sm text-[#6F5E55] dark:text-[#b89b7d] hover:bg-[#FAF6F3] dark:hover:bg-[#171717] dark:bg-[#171717]"
+                                                                                    className="rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] px-3 py-2 text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] hover:bg-[#FAF6F3] dark:hover:bg-[#171717] dark:bg-[var(--bhn-neutral-900)]"
                                                                                     type="button"
                                                                                 >
                                                                                     Cancel
@@ -837,7 +837,7 @@ export default function Curriculum2() {
                                                                             </div>
 
                                                                             {lessonActionMessage && (
-                                                                                <p className="text-sm text-[#1F7A4D]">{lessonActionMessage}</p>
+                                                                                <p className="text-sm text-[var(--bhn-success-700)]">{lessonActionMessage}</p>
                                                                             )}
                                                                         </div>
                                                                     </div>
@@ -870,33 +870,33 @@ export default function Curriculum2() {
 
                                                 <div className="mt-3">
                                                     {openLessonModuleId === (module._id || String(module.id ?? moduleIndex)) ? (
-                                                        <div className="space-y-4 rounded-xl border border-[#D6C6BC] dark:border-[#374151] p-4 bg-[#FCF8F5] dark:bg-[#1a1a1a]">
-                                                            <p className="text-sm font-semibold text-[#2D201B] dark:text-[#ededed]">Add New Lesson</p>
+                                                        <div className="space-y-4 rounded-xl border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] p-4 bg-[#FCF8F5] dark:bg-[var(--bhn-neutral-900)]">
+                                                            <p className="text-sm font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">Add New Lesson</p>
                                                             <div className="space-y-4">
                                                                 <div className="flex items-center justify-between gap-3">
-                                                                    <div className="text-sm text-[#6F5E55] dark:text-[#b89b7d]">Step {lessonAddStep} of 6</div>
-                                                                    <div className="text-xs uppercase tracking-[0.15em] text-[#A13636]">Curriculum Wizard</div>
+                                                                    <div className="text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]">Step {lessonAddStep} of 6</div>
+                                                                    <div className="text-xs uppercase tracking-[0.15em] text-[var(--bhn-error-600)]">Curriculum Wizard</div>
                                                                 </div>
 
                                                                 {lessonAddStep === 1 && (
                                                                     <div className="space-y-4">
                                                                         <div>
-                                                                            <label className="block text-sm font-medium text-[#2D201B] dark:text-[#ededed] mb-2">Lesson Name</label>
+                                                                            <label className="block text-sm font-medium text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] mb-2">Lesson Name</label>
                                                                             <input
                                                                                 value={newLessonTitle}
                                                                                 onChange={(e) => setNewLessonTitle(e.target.value)}
                                                                                 placeholder="Enter lesson title"
-                                                                                className="w-full rounded-lg border border-[#D6C6BC] dark:border-[#374151] px-3 py-2 text-sm"
+                                                                                className="w-full rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] px-3 py-2 text-sm"
                                                                             />
                                                                         </div>
                                                                         <div>
-                                                                            <label className="block text-sm font-medium text-[#2D201B] dark:text-[#ededed] mb-2">Lesson Description</label>
+                                                                            <label className="block text-sm font-medium text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] mb-2">Lesson Description</label>
                                                                             <textarea
                                                                                 value={newLessonDescription}
                                                                                 onChange={(e) => setNewLessonDescription(e.target.value)}
                                                                                 rows={4}
                                                                                 placeholder="Add a short lesson description"
-                                                                                className="w-full rounded-lg border border-[#D6C6BC] dark:border-[#374151] px-3 py-2 text-sm"
+                                                                                className="w-full rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] px-3 py-2 text-sm"
                                                                             />
                                                                         </div>
                                                                     </div>
@@ -905,7 +905,7 @@ export default function Curriculum2() {
                                                                 {lessonAddStep === 2 && (
                                                                     <div className="space-y-4">
                                                                         <div>
-                                                                            <label className="block text-sm font-medium text-[#2D201B] dark:text-[#ededed] mb-2">Video URL or upload file</label>
+                                                                            <label className="block text-sm font-medium text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] mb-2">Video URL or upload file</label>
                                                                             <input
                                                                                 value={newLessonVideoUrl}
                                                                                 onChange={(e) => {
@@ -915,7 +915,7 @@ export default function Curriculum2() {
                                                                                     }
                                                                                 }}
                                                                                 placeholder="https://..."
-                                                                                className="w-full rounded-lg border border-[#D6C6BC] dark:border-[#374151] px-3 py-2 text-sm"
+                                                                                className="w-full rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] px-3 py-2 text-sm"
                                                                             />
                                                                         </div>
                                                                         <div>
@@ -931,12 +931,12 @@ export default function Curriculum2() {
                                                                             />
                                                                         </div>
                                                                         <div>
-                                                                            <label className="block text-sm font-medium text-[#2D201B] dark:text-[#ededed] mb-2">Video Duration</label>
+                                                                            <label className="block text-sm font-medium text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] mb-2">Video Duration</label>
                                                                             <input
                                                                                 value={newLessonVideoDuration}
                                                                                 onChange={(e) => setNewLessonVideoDuration(e.target.value)}
                                                                                 placeholder="e.g. 15 min"
-                                                                                className="w-full rounded-lg border border-[#D6C6BC] dark:border-[#374151] px-3 py-2 text-sm"
+                                                                                className="w-full rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] px-3 py-2 text-sm"
                                                                             />
                                                                         </div>
                                                                         <div className="flex items-center gap-3">
@@ -945,9 +945,9 @@ export default function Curriculum2() {
                                                                                 type="checkbox"
                                                                                 checked={newLessonIsPreview}
                                                                                 onChange={(e) => setNewLessonIsPreview(e.target.checked)}
-                                                                                className="h-4 w-4 rounded border-[#D6C6BC] dark:border-[#374151]"
+                                                                                className="h-4 w-4 rounded border-[var(--bhn-border)] dark:border-[var(--bhn-border)]"
                                                                             />
-                                                                            <label htmlFor={`lesson-preview-${moduleKey}`} className="text-sm text-[#6F5E55] dark:text-[#b89b7d]">Mark lesson as preview</label>
+                                                                            <label htmlFor={`lesson-preview-${moduleKey}`} className="text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]">Mark lesson as preview</label>
                                                                         </div>
                                                                     </div>
                                                                 )}
@@ -955,7 +955,7 @@ export default function Curriculum2() {
                                                                 {lessonAddStep === 3 && (
                                                                     <div className="space-y-4">
                                                                         <div>
-                                                                            <label className="block text-sm font-medium text-[#2D201B] dark:text-[#ededed] mb-2">PDF / Notes URL</label>
+                                                                            <label className="block text-sm font-medium text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] mb-2">PDF / Notes URL</label>
                                                                             <input
                                                                                 value={newPdfUrl}
                                                                                 onChange={(e) => {
@@ -965,7 +965,7 @@ export default function Curriculum2() {
                                                                                     }
                                                                                 }}
                                                                                 placeholder="https://..."
-                                                                                className="w-full rounded-lg border border-[#D6C6BC] dark:border-[#374151] px-3 py-2 text-sm"
+                                                                                className="w-full rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] px-3 py-2 text-sm"
                                                                             />
                                                                         </div>
                                                                         <div>
@@ -982,12 +982,12 @@ export default function Curriculum2() {
                                                                             />
                                                                         </div>
                                                                         <div>
-                                                                            <label className="block text-sm font-medium text-[#2D201B] dark:text-[#ededed] mb-2">PDF File Name</label>
+                                                                            <label className="block text-sm font-medium text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] mb-2">PDF File Name</label>
                                                                             <input
                                                                                 value={newPdfFileName}
                                                                                 onChange={(e) => setNewPdfFileName(e.target.value)}
                                                                                 placeholder="e.g. Lesson Notes.pdf"
-                                                                                className="w-full rounded-lg border border-[#D6C6BC] dark:border-[#374151] px-3 py-2 text-sm"
+                                                                                className="w-full rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] px-3 py-2 text-sm"
                                                                             />
                                                                         </div>
                                                                     </div>
@@ -995,20 +995,20 @@ export default function Curriculum2() {
 
                                                                 {lessonAddStep === 4 && (
                                                                     <div className="space-y-4">
-                                                                        <p className="text-sm font-semibold text-[#2D201B] dark:text-[#ededed]">Quiz Setup</p>
+                                                                        <p className="text-sm font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">Quiz Setup</p>
                                                                         <div>
-                                                                            <label className="block text-sm font-medium text-[#2D201B] dark:text-[#ededed] mb-2">Question</label>
+                                                                            <label className="block text-sm font-medium text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] mb-2">Question</label>
                                                                             <input
                                                                                 value={quizDraftQuestion}
                                                                                 onChange={(e) => setQuizDraftQuestion(e.target.value)}
                                                                                 placeholder="Enter question text"
-                                                                                className="w-full rounded-lg border border-[#D6C6BC] dark:border-[#374151] px-3 py-2 text-sm"
+                                                                                className="w-full rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] px-3 py-2 text-sm"
                                                                             />
                                                                         </div>
                                                                         <div className="grid grid-cols-1 gap-3">
                                                                             {quizDraftOptions.map((option, idx) => (
                                                                                 <div key={idx} className="space-y-2">
-                                                                                    <label className="block text-sm text-[#6F5E55] dark:text-[#b89b7d]">Option {idx + 1}</label>
+                                                                                    <label className="block text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]">Option {idx + 1}</label>
                                                                                     <input
                                                                                         value={option}
                                                                                         onChange={(e) => {
@@ -1018,17 +1018,17 @@ export default function Curriculum2() {
                                                                                                 return next;
                                                                                             });
                                                                                         }}
-                                                                                        className="w-full rounded-lg border border-[#D6C6BC] dark:border-[#374151] px-3 py-2 text-sm"
+                                                                                        className="w-full rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] px-3 py-2 text-sm"
                                                                                     />
                                                                                 </div>
                                                                             ))}
                                                                         </div>
                                                                         <div>
-                                                                            <label className="block text-sm font-medium text-[#2D201B] dark:text-[#ededed] mb-2">Correct Answer</label>
+                                                                            <label className="block text-sm font-medium text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] mb-2">Correct Answer</label>
                                                                             <select
                                                                                 value={quizDraftCorrectOption}
                                                                                 onChange={(e) => setQuizDraftCorrectOption(Number(e.target.value))}
-                                                                                className="w-full rounded-lg border border-[#D6C6BC] dark:border-[#374151] px-3 py-2 text-sm"
+                                                                                className="w-full rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] px-3 py-2 text-sm"
                                                                             >
                                                                                 {quizDraftOptions.map((_, idx) => (
                                                                                     <option key={idx} value={idx}>Option {idx + 1}</option>
@@ -1038,7 +1038,7 @@ export default function Curriculum2() {
                                                                         <button
                                                                             type="button"
                                                                             onClick={handleAddQuizQuestion}
-                                                                            className="rounded-lg bg-[#8B4A28] dark:bg-[#b86a3a] px-4 py-2 text-sm text-white hover:bg-[#7A3F22] dark:hover:bg-[#a05a30]"
+                                                                            className="rounded-lg bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] px-4 py-2 text-sm text-white hover:bg-[#7A3F22] dark:hover:bg-[var(--bhn-brand-300)]"
                                                                         >
                                                                             Add Question
                                                                         </button>
@@ -1048,18 +1048,18 @@ export default function Curriculum2() {
                                                                 {lessonAddStep === 5 && (
                                                                     <div className="space-y-4">
                                                                         <div className="space-y-3">
-                                                                            <p className="text-sm font-semibold text-[#2D201B] dark:text-[#ededed]">Quiz Review</p>
-                                                                            <div className="text-sm text-[#6F5E55] dark:text-[#b89b7d]">
+                                                                            <p className="text-sm font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">Quiz Review</p>
+                                                                            <div className="text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]">
                                                                                 {quizQuestions.length === 0 ? (
                                                                                     <p>No quiz questions added yet.</p>
                                                                                 ) : (
                                                                                     <div className="space-y-3">
                                                                                         {quizQuestions.map((question, questionIndex) => (
-                                                                                            <div key={questionIndex} className="rounded-lg border border-[#D6C6BC] dark:border-[#374151] p-3 bg-white">
-                                                                                                <p className="text-sm font-semibold text-[#2D201B] dark:text-[#ededed]">{question.question}</p>
-                                                                                                <div className="mt-2 space-y-1 text-sm text-[#6F5E55] dark:text-[#b89b7d]">
+                                                                                            <div key={questionIndex} className="rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] p-3 bg-[var(--bhn-surface)]">
+                                                                                                <p className="text-sm font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">{question.question}</p>
+                                                                                                <div className="mt-2 space-y-1 text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]">
                                                                                                     {question.options.map((option, optionIndex) => (
-                                                                                                        <div key={optionIndex} className={`rounded-md px-2 py-1 ${question.correctOption === optionIndex ? "bg-[#E9F7EF] text-[#1F7A4D]" : "bg-[#F8F5F2] dark:bg-[#171717]"}`}>
+                                                                                                        <div key={optionIndex} className={`rounded-md px-2 py-1 ${question.correctOption === optionIndex ? "bg-[var(--bhn-success-50)] text-[var(--bhn-success-700)]" : "bg-[var(--bhn-bg)] dark:bg-[var(--bhn-neutral-900)]"}`}>
                                                                                                             {optionIndex + 1}. {option}
                                                                                                         </div>
                                                                                                     ))}
@@ -1067,7 +1067,7 @@ export default function Curriculum2() {
                                                                                                 <button
                                                                                                     type="button"
                                                                                                     onClick={() => handleRemoveQuizQuestion(questionIndex)}
-                                                                                                    className="mt-2 text-sm text-[#A13636] hover:text-[#7A3F22]"
+                                                                                                    className="mt-2 text-sm text-[var(--bhn-error-600)] hover:text-[#7A3F22]"
                                                                                                 >
                                                                                                     Remove question
                                                                                                 </button>
@@ -1079,24 +1079,24 @@ export default function Curriculum2() {
                                                                         </div>
                                                                         <div className="grid grid-cols-2 gap-3">
                                                                             <div>
-                                                                                <label className="block text-sm font-medium text-[#2D201B] dark:text-[#ededed] mb-2">Quiz Duration (min)</label>
+                                                                                <label className="block text-sm font-medium text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] mb-2">Quiz Duration (min)</label>
                                                                                 <input
                                                                                     type="number"
                                                                                     min={0}
                                                                                     value={mcqDuration}
                                                                                     onChange={(e) => setMcqDuration(Number(e.target.value))}
-                                                                                    className="w-full rounded-lg border border-[#D6C6BC] dark:border-[#374151] px-3 py-2 text-sm"
+                                                                                    className="w-full rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] px-3 py-2 text-sm"
                                                                                 />
                                                                             </div>
                                                                             <div>
-                                                                                <label className="block text-sm font-medium text-[#2D201B] dark:text-[#ededed] mb-2">Passing Score (%)</label>
+                                                                                <label className="block text-sm font-medium text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] mb-2">Passing Score (%)</label>
                                                                                 <input
                                                                                     type="number"
                                                                                     min={0}
                                                                                     max={100}
                                                                                     value={mcqPassingScore}
                                                                                     onChange={(e) => setMcqPassingScore(Number(e.target.value))}
-                                                                                    className="w-full rounded-lg border border-[#D6C6BC] dark:border-[#374151] px-3 py-2 text-sm"
+                                                                                    className="w-full rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] px-3 py-2 text-sm"
                                                                                 />
                                                                             </div>
                                                                         </div>
@@ -1105,8 +1105,8 @@ export default function Curriculum2() {
 
                                                                 {lessonAddStep === 6 && (
                                                                     <div className="space-y-4">
-                                                                        <p className="text-sm font-semibold text-[#2D201B] dark:text-[#ededed]">Ready to submit</p>
-                                                                        <div className="text-sm text-[#6F5E55] dark:text-[#b89b7d] space-y-2">
+                                                                        <p className="text-sm font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">Ready to submit</p>
+                                                                        <div className="text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] space-y-2">
                                                                             <p><span className="font-semibold">Title:</span> {newLessonTitle || "—"}</p>
                                                                             <p><span className="font-semibold">Description:</span> {newLessonDescription || "—"}</p>
                                                                             <p><span className="font-semibold">Video:</span> {newLessonVideoUrl ? "Yes" : "No"}</p>
@@ -1121,7 +1121,7 @@ export default function Curriculum2() {
                                                                         <button
                                                                             type="button"
                                                                             onClick={handlePrevLessonStep}
-                                                                            className="rounded-lg border border-[#D6C6BC] dark:border-[#374151] px-4 py-2 text-sm text-[#6F5E55] dark:text-[#b89b7d] hover:bg-[#FAF6F3] dark:hover:bg-[#171717] dark:bg-[#171717]"
+                                                                            className="rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] px-4 py-2 text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] hover:bg-[#FAF6F3] dark:hover:bg-[#171717] dark:bg-[var(--bhn-neutral-900)]"
                                                                         >
                                                                             Back
                                                                         </button>
@@ -1135,7 +1135,7 @@ export default function Curriculum2() {
                                                                                 (lessonAddStep === 2 && !newLessonVideoUrl.trim() && !newLessonVideoFile && !newLessonVideoDuration.trim()) ||
                                                                                 (lessonAddStep === 4 && quizQuestions.length === 0)
                                                                             }
-                                                                            className="rounded-lg bg-[#8B4A28] dark:bg-[#b86a3a] px-4 py-2 text-sm text-white hover:bg-[#7A3F22] dark:hover:bg-[#a05a30] disabled:opacity-50"
+                                                                            className="rounded-lg bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] px-4 py-2 text-sm text-white hover:bg-[#7A3F22] dark:hover:bg-[var(--bhn-brand-300)] disabled:opacity-50"
                                                                         >
                                                                             Continue
                                                                         </button>
@@ -1143,7 +1143,7 @@ export default function Curriculum2() {
                                                                         <button
                                                                             onClick={() => handleAddLesson(module._id || String(module.id ?? moduleIndex))}
                                                                             disabled={isAddingLesson || !newLessonTitle.trim()}
-                                                                            className="rounded-lg bg-[#8B4A28] dark:bg-[#b86a3a] px-4 py-2 text-sm text-white hover:bg-[#7A3F22] dark:hover:bg-[#a05a30] disabled:opacity-50"
+                                                                            className="rounded-lg bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] px-4 py-2 text-sm text-white hover:bg-[#7A3F22] dark:hover:bg-[var(--bhn-brand-300)] disabled:opacity-50"
                                                                         >
                                                                             {isAddingLesson ? "Adding..." : "Submit Lesson"}
                                                                         </button>
@@ -1153,13 +1153,13 @@ export default function Curriculum2() {
                                                                             setOpenLessonModuleId(null);
                                                                             clearLessonForm();
                                                                         }}
-                                                                        className="rounded-lg border border-[#D6C6BC] dark:border-[#374151] px-4 py-2 text-sm text-[#6F5E55] dark:text-[#b89b7d] hover:bg-[#FAF6F3] dark:hover:bg-[#171717] dark:bg-[#171717]"
+                                                                        className="rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] px-4 py-2 text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] hover:bg-[#FAF6F3] dark:hover:bg-[#171717] dark:bg-[var(--bhn-neutral-900)]"
                                                                     >
                                                                         Cancel
                                                                     </button>
                                                                 </div>
                                                                 {lessonAddedMessage && (
-                                                                    <p className="text-sm text-[#1F7A4D] p-3 bg-green-50 rounded">✓ {lessonAddedMessage}</p>
+                                                                    <p className="text-sm text-[var(--bhn-success-700)] p-3 bg-green-50 rounded">✓ {lessonAddedMessage}</p>
                                                                 )}
                                                             </div>
                                                         </div>
@@ -1169,7 +1169,7 @@ export default function Curriculum2() {
                                                                 setOpenLessonModuleId(module._id || String(module.id ?? moduleIndex));
                                                                 setLessonAddStep(1);
                                                             }}
-                                                            className="w-full border border-dashed border-[#D6C6BC] dark:border-[#374151] py-3 rounded-lg text-sm text-[#6F5E55] dark:text-[#b89b7d] hover:bg-[#FAF6F3] dark:hover:bg-[#171717] dark:bg-[#171717] transition flex justify-center items-center gap-2"
+                                                            className="w-full border border-dashed border-[var(--bhn-border)] dark:border-[var(--bhn-border)] py-3 rounded-lg text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] hover:bg-[#FAF6F3] dark:hover:bg-[#171717] dark:bg-[var(--bhn-neutral-900)] transition flex justify-center items-center gap-2"
                                                         >
                                                             <div className="w-5 h-5 rounded-full border flex items-center justify-center">+
                                                             </div>
@@ -1183,14 +1183,14 @@ export default function Curriculum2() {
                                 );
                             })
                         ) : (
-                            <div className="bg-white border border-[#E6DBD3] dark:border-[#374151] rounded-xl flex flex-col items-center justify-center py-6 sm:py-8 px-4 text-center">
-                                <p className="text-[#6F5E55] dark:text-[#b89b7d] text-2sm mb-2 font-serif font-bold">
+                            <div className="bg-[var(--bhn-surface)] border border-[#E6DBD3] dark:border-[var(--bhn-border)] rounded-xl flex flex-col items-center justify-center py-6 sm:py-8 px-4 text-center">
+                                <p className="text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] text-2sm mb-2 font-serif font-bold">
                                     Structure your success
                                 </p>
-                                <p className="text-xs sm:text-sm text-[#9C8F86] mb-4 max-w-md">
+                                <p className="text-xs sm:text-sm text-[var(--bhn-text-soft)] mb-4 max-w-md">
                                     Create modules and lessons to organize your course content for students.
                                 </p>
-                                <button onClick={() => setShowAddModuleInput(true)} className="bg-[#8B4A28] dark:bg-[#b86a3a] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#7A3F22] dark:hover:bg-[#a05a30] transition cursor-pointer">
+                                <button onClick={() => setShowAddModuleInput(true)} className="bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] text-white px-4 py-2 rounded-lg text-sm hover:bg-[#7A3F22] dark:hover:bg-[var(--bhn-brand-300)] transition cursor-pointer">
                                     Add First Module
                                 </button>
                             </div>
@@ -1203,7 +1203,7 @@ export default function Curriculum2() {
                                     value={moduleTitle}
                                     onChange={(e) => setModuleTitle(e.target.value)}
                                     placeholder="Enter module title"
-                                    className="w-full rounded-lg border border-[#D6C6BC] dark:border-[#374151] px-4 py-3 bg-white text-sm text-[#2D201B] dark:text-[#ededed] focus:outline-none focus:border-[#8B4A28] dark:border-[#c9a882]"
+                                    className="w-full rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] px-4 py-3 bg-[var(--bhn-surface)] text-sm text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] focus:outline-none focus:border-[var(--bhn-brand-600)] dark:border-[#c9a882]"
                                 />
                                 <div className="flex gap-3">
                                     <button
@@ -1220,7 +1220,7 @@ export default function Curriculum2() {
                                             }
                                         }}
                                         disabled={isAddingModule}
-                                        className="flex-1 bg-[#8B4A28] dark:bg-[#b86a3a] text-white py-3 rounded-lg text-sm hover:bg-[#7A3F22] dark:hover:bg-[#a05a30] transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                                        className="flex-1 bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] text-white py-3 rounded-lg text-sm hover:bg-[#7A3F22] dark:hover:bg-[var(--bhn-brand-300)] transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                                     >
                                         {isAddingModule ? "Adding..." : "Add Module"}
                                     </button>
@@ -1229,13 +1229,13 @@ export default function Curriculum2() {
                                             setShowAddModuleInput(false);
                                             setModuleTitle("");
                                         }}
-                                        className="flex-1 border border-[#D6C6BC] dark:border-[#374151] py-3 rounded-lg text-sm text-[#6F5E55] dark:text-[#b89b7d] hover:bg-[#FAF6F3] dark:hover:bg-[#171717] dark:bg-[#171717] transition"
+                                        className="flex-1 border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] py-3 rounded-lg text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] hover:bg-[#FAF6F3] dark:hover:bg-[#171717] dark:bg-[var(--bhn-neutral-900)] transition"
                                     >
                                         Cancel
                                     </button>
                                 </div>
                                 {moduleAddedMessage && (
-                                    <p className="text-sm text-[#1F7A4D]">{moduleAddedMessage}</p>
+                                    <p className="text-sm text-[var(--bhn-success-700)]">{moduleAddedMessage}</p>
                                 )}
                             </div>
                         ) : (
@@ -1243,7 +1243,7 @@ export default function Curriculum2() {
                                 onClick={() => {
                                     setShowAddModuleInput(true);
                                 }}
-                                className="w-full border border-dashed border-[#D6C6BC] dark:border-[#374151] py-3 rounded-lg text-[#6F5E55] dark:text-[#b89b7d] hover:bg-[#FAF6F3] dark:hover:bg-[#171717] dark:bg-[#171717] transition"
+                                className="w-full border border-dashed border-[var(--bhn-border)] dark:border-[var(--bhn-border)] py-3 rounded-lg text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] hover:bg-[#FAF6F3] dark:hover:bg-[#171717] dark:bg-[var(--bhn-neutral-900)] transition"
                             >
                                 + Add Module
                             </button>
@@ -1255,7 +1255,7 @@ export default function Curriculum2() {
                     <div className="xl:col-span-4 space-y-6">
 
                         {/* SUMMARY */}
-                        <div className="bg-white border border-[#E6DBD3] dark:border-[#374151] rounded-xl p-5 sm:p-4 flex flex-col justify-between gap-5">
+                        <div className="bg-[var(--bhn-surface)] border border-[#E6DBD3] dark:border-[var(--bhn-border)] rounded-xl p-5 sm:p-4 flex flex-col justify-between gap-5">
 
                             {/* TOP */}
                             <div>
@@ -1269,39 +1269,39 @@ export default function Curriculum2() {
                                         alt="summary"
                                     />
 
-                                    <h3 className="text-lg sm:text-[19px] font-semibold text-[#2D201B] dark:text-[#ededed] font-serif">
+                                    <h3 className="text-lg sm:text-[19px] font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] font-serif">
                                         Course Summary
                                     </h3>
 
                                 </div>
 
                                 {/* DETAILS */}
-                                <div className="text-sm sm:text-[16px] text-[#6F5E55] dark:text-[#b89b7d] space-y-4">
+                                <div className="text-sm sm:text-[16px] text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] space-y-4">
 
                                     <div className="flex justify-between border-b pb-3">
                                         <span>Total Modules</span>
-                                        <span className="font-semibold text-[#2D201B] dark:text-[#ededed]">
+                                        <span className="font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
                                             {totalModules}
                                         </span>
                                     </div>
 
                                     <div className="flex justify-between border-b pb-3">
                                         <span>Total Lessons</span>
-                                        <span className="font-semibold text-[#2D201B] dark:text-[#ededed]">
+                                        <span className="font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
                                             {totalLessons}
                                         </span>
                                     </div>
 
                                     <div className="flex justify-between border-b pb-3">
                                         <span>Est. Duration</span>
-                                        <span className="font-semibold text-[#2D201B] dark:text-[#ededed]">
+                                        <span className="font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
                                             {formattedDuration}
                                         </span>
                                     </div>
 
                                     <div className="flex justify-between pt-2">
                                         <span>Completion</span>
-                                        <span className="font-semibold text-[#8B4A28]">
+                                        <span className="font-semibold text-[var(--bhn-brand-700)]">
                                             {completionRate}%
                                         </span>
                                     </div>
@@ -1317,11 +1317,11 @@ export default function Curriculum2() {
                                                 <button
                                     onClick={handleSaveAndContinue}
                                     disabled={loading}
-                                    className="w-full bg-[#8B4A28] dark:bg-[#b86a3a] text-white py-3 rounded-lg 
+                                    className="w-full bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] text-white py-3 rounded-lg 
                                     text-sm font-medium
                                     transition-all duration-200
-                                    hover:bg-[#7A3F22] dark:hover:bg-[#a05a30]
-                                    active:scale-95 active:bg-[#6A341D]
+                                    hover:bg-[#7A3F22] dark:hover:bg-[var(--bhn-brand-300)]
+                                    active:scale-95 active:bg-[var(--bhn-brand-800)]
                                     flex items-center justify-center gap-2"
                                 >
                                     {loading && (
@@ -1333,7 +1333,7 @@ export default function Curriculum2() {
                                 </button>
 
                                 {/* PREVIEW BUTTON */}
-                                <button onClick={() => alert("Preview coming soon")} className="w-full border border-[#D6C6BC] dark:border-[#374151] mt-3 py-3 rounded-lg text-sm text-[#6F5E55] dark:text-[#b89b7d] hover:bg-[#FAF6F3] dark:hover:bg-[#171717] dark:bg-[#171717] transition">
+                                <button onClick={() => alert("Preview coming soon")} className="w-full border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] mt-3 py-3 rounded-lg text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] hover:bg-[#FAF6F3] dark:hover:bg-[#171717] dark:bg-[var(--bhn-neutral-900)] transition">
                                     Preview Curriculum
                                 </button>
 
@@ -1342,7 +1342,7 @@ export default function Curriculum2() {
                         </div>
 
                         {/* TIPS */}
-                        <div className="bg-[#F3E1D6] dark:bg-[#1a1a1a] border border-[#E5CFC2] dark:border-[#374151] rounded-xl p-5">
+                        <div className="bg-[#F3E1D6] dark:bg-[var(--bhn-neutral-900)] border border-[#E5CFC2] dark:border-[var(--bhn-border)] rounded-xl p-5">
 
                             <div className="flex items-center gap-2 mb-5">
 
@@ -1352,14 +1352,14 @@ export default function Curriculum2() {
                                     alt="tip"
                                 />
 
-                                <h3 className="text-lg sm:text-[21px] font-semibold text-[#2D201B] dark:text-[#ededed] font-serif">
+                                <h3 className="text-lg sm:text-[21px] font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] font-serif">
                                     Instructor Tips
                                 </h3>
 
 
                             </div>
 
-                            <p className="text-sm text-[#6F5E55] dark:text-[#b89b7d] leading-relaxed">
+                            <p className="text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] leading-relaxed">
                                 Break your modules into 5–15 minute chunks to improve
                                 student retention and engagement.
                             </p>

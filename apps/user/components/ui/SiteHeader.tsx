@@ -53,21 +53,21 @@ export default function SiteHeader() {
   };
 
   return (
-    <header className="w-full border-b border-[#E8E2DC] bg-white/95 shadow-[0_1px_0_rgba(31,22,17,.03)] backdrop-blur-xl">
+    <header className="w-full border-b border-[var(--bhn-border)] bg-[color-mix(in_srgb,var(--bhn-surface)_95%,transparent)] shadow-[0_1px_0_var(--bhn-border)] backdrop-blur-xl">
       <div className="mx-auto flex max-w-[1440px] items-center gap-4 px-4 py-3 sm:px-6 lg:gap-7 lg:px-8">
         {/* Logo */}
         <Link href="/" aria-label="Bandhan home" className="shrink-0">
-          <Image src="/Group1.png" alt="Bandhan Events Hub" width={433} height={96} className="h-9 w-auto rounded-lg bg-[#271711] px-2.5 py-1.5 shadow-sm sm:h-10" priority />
+          <Image src="/Group1.png" alt="Bandhan Events Hub" width={433} height={96} className="h-9 w-auto rounded-lg bg-[var(--bhn-brand-600)] px-2.5 py-1.5 shadow-sm sm:h-10" priority />
         </Link>
 
         {/* Center: Search */}
         <form onSubmit={submitSearch} className="relative hidden max-w-2xl flex-1 md:flex">
-          <Search size={19} className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7E736B]" />
+          <Search size={19} className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--bhn-text-muted)]" />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search products, venues, services and courses"
-            className="h-12 w-full rounded-xl border border-[#DDD4CC] bg-[#FBF8F4] pl-12 pr-4 text-sm text-[#1A1612] outline-none transition focus:border-[#8B3A28] focus:bg-white focus:ring-4 focus:ring-[#8B3A28]/10"
+            className="h-12 w-full rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface-2)] pl-12 pr-4 text-sm text-[var(--bhn-text)] outline-none transition focus:border-[var(--bhn-brand-600)] focus:bg-[var(--bhn-surface)] focus:ring-4 focus:ring-[color-mix(in_srgb,var(--bhn-brand-600)_10%,transparent)]"
           />
         </form>
 
@@ -78,36 +78,36 @@ export default function SiteHeader() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`rounded-lg px-3 py-2 font-semibold transition ${isActive(link.href) ? "bg-[#F8ECE7] text-[#7A3323]" : "text-[#5F5750] hover:bg-[#FBF8F4] hover:text-[#7A3323]"}`}
+                className={`rounded-lg px-3 py-2 font-semibold transition ${isActive(link.href) ? "bg-[var(--bhn-surface-2)] text-[var(--bhn-text)]" : "text-[var(--bhn-text-muted)] hover:bg-[var(--bhn-surface-2)] hover:text-[var(--bhn-text)]"}`}
               >
                 {link.label}
               </Link>
             ))}
-            <a href={STUDENT_PORTAL_URL} className="rounded-lg px-3 py-2 font-semibold text-[#5F5750] transition hover:bg-[#FBF8F4] hover:text-[#7A3323]">Courses</a>
+            <a href={STUDENT_PORTAL_URL} className="rounded-lg px-3 py-2 font-semibold text-[var(--bhn-text-muted)] transition hover:bg-[var(--bhn-surface-2)] hover:text-[var(--bhn-text)]">Courses</a>
           </nav>
 
-          <div className="flex items-center gap-1 text-[#5F5750]">
+          <div className="flex items-center gap-1 text-[var(--bhn-text-muted)]">
             {signedIn && (
-              <Link href="/userdashboard/notification" aria-label="Notifications" className="grid h-10 w-10 place-items-center rounded-lg transition hover:bg-[#FBF8F4] hover:text-[#7A3323]">
+              <Link href="/userdashboard/notification" aria-label="Notifications" className="grid h-10 w-10 place-items-center rounded-lg transition hover:bg-[var(--bhn-surface-2)] hover:text-[var(--bhn-text)]">
                 <Bell size={19} />
               </Link>
             )}
-            <Link href="/userdashboard/cart" className="relative grid h-10 w-10 place-items-center rounded-lg transition hover:bg-[#FBF8F4] hover:text-[#7A3323]" aria-label="Cart">
+            <Link href="/userdashboard/cart" className="relative grid h-10 w-10 place-items-center rounded-lg transition hover:bg-[var(--bhn-surface-2)] hover:text-[var(--bhn-text)]" aria-label="Cart">
               <MdOutlineShoppingCart size={22} />
               {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white">
+                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--bhn-error-500)] text-xs text-[var(--bhn-text-on-brand)]">
                   {totalItems}
                 </span>
               )}
             </Link>
             {signedIn ? (
-              <Link href="/userdashboard/dashboard" className="flex h-10 w-10 items-center justify-center rounded-full border border-[#DDD4CC] bg-[#FBF8F4]" aria-label="Profile">
+              <Link href="/userdashboard/dashboard" className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--bhn-border)] bg-[var(--bhn-surface-2)]" aria-label="Profile">
                 <User size={16} />
               </Link>
             ) : (
               <div className="hidden items-center gap-1 text-sm sm:flex">
-                <Link href="/login" className="rounded-lg px-3 py-2 font-semibold text-[#5F5750] hover:bg-[#FBF8F4]">Log in</Link>
-                <Link href="/signup" className="rounded-lg bg-[#7A3323] px-4 py-2.5 font-bold text-white shadow-sm transition hover:bg-[#63281C]">Sign up</Link>
+                <Link href="/login" className="rounded-lg px-3 py-2 font-semibold text-[var(--bhn-text-muted)] hover:bg-[var(--bhn-surface-2)]">Log in</Link>
+                <Link href="/signup" className="rounded-lg bg-[var(--bhn-brand-600)] px-4 py-2.5 font-bold text-[var(--bhn-text-on-brand)] shadow-sm transition hover:bg-[var(--bhn-brand-600)]">Sign up</Link>
               </div>
             )}
           </div>
@@ -115,7 +115,7 @@ export default function SiteHeader() {
           {/* Mobile hamburger */}
           <button
             onClick={() => setMobileMenuOpen((open) => !open)}
-            className="grid h-10 w-10 place-items-center rounded-lg text-[#7A3323] hover:bg-[#F8ECE7] xl:hidden"
+            className="grid h-10 w-10 place-items-center rounded-lg text-[var(--bhn-text)] hover:bg-[var(--bhn-surface-2)] xl:hidden"
             aria-label="Toggle navigation"
           >
             {mobileMenuOpen ? <X size={21} /> : <Menu size={22} />}
@@ -124,26 +124,26 @@ export default function SiteHeader() {
       </div>
 
       {mobileMenuOpen && (
-        <div className="flex flex-col gap-1 border-t border-[#E8E2DC] bg-white px-4 py-4 text-sm xl:hidden">
+        <div className="flex flex-col gap-1 border-t border-[var(--bhn-border)] bg-[var(--bhn-surface)] px-4 py-4 text-sm xl:hidden">
           <form onSubmit={submitSearch} className="relative mb-1 flex md:hidden">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9A8F86]" />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--bhn-text-soft)]" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search..."
-            className="h-11 w-full rounded-xl border border-[#DDD4CC] bg-[#FBF8F4] pl-10 pr-3 text-sm outline-none"
+            className="h-11 w-full rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface-2)] pl-10 pr-3 text-sm outline-none"
             />
           </form>
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className={`block rounded-lg px-3 py-2.5 font-semibold ${isActive(link.href) ? "bg-[#F8ECE7] text-[#7A3323]" : "text-[#5F5750]"}`}
+              className={`block rounded-lg px-3 py-2.5 font-semibold ${isActive(link.href) ? "bg-[var(--bhn-surface-2)] text-[var(--bhn-text)]" : "text-[var(--bhn-text-muted)]"}`}
             >
               {link.label}
             </Link>
           ))}
-          <a href={STUDENT_PORTAL_URL} className="rounded-lg px-3 py-2.5 font-semibold text-[#5F5750]">Courses</a>
+          <a href={STUDENT_PORTAL_URL} className="rounded-lg px-3 py-2.5 font-semibold text-[var(--bhn-text-muted)]">Courses</a>
           <div className="flex gap-3 pt-1">
             <Link href="/login">Login</Link>
             <Link href="/signup">Sign up</Link>

@@ -63,13 +63,13 @@ function ReviewPageContent() {
     const reviews = allReviews.slice((reviewPage - 1) * REVIEWS_PER_PAGE, reviewPage * REVIEWS_PER_PAGE);
 
     return (
-        <div className="min-h-screen bg-[#F7F4F1]">
+        <div className="min-h-screen bg-[var(--bhn-surface-2)]">
             {/* HEADER */}
             <InstructorHeader />
 
             <div className="px-4 sm:px-6 lg:px-6 py-6">
                 {/* TITLE */}
-                <h1 className="text-[32px] sm:text-3xl italic font-serif text-[#2D201B]">
+                <h1 className="text-[32px] sm:text-3xl italic font-serif text-[var(--bhn-text)]">
                     Review Management
                 </h1>
 
@@ -82,7 +82,7 @@ function ReviewPageContent() {
                     sm:gap-5
                     overflow-x-auto
                     border-b
-                    border-[#E6DDD6]
+                    border-[var(--bhn-border)]
                     pb-4
                     mt-6
                     mb-4
@@ -103,8 +103,8 @@ function ReviewPageContent() {
                                 transition-all
                                 duration-200
                                 ${isActive
-                                        ? "font-medium text-[#8A4A26] border-b-2 border-[#8A4A26]"
-                                        : "text-[#7C6C64] hover:text-[#8A4A26]"
+                                        ? "font-medium text-[var(--bhn-brand-700)] border-b-2 border-[var(--bhn-brand-600)]"
+                                        : "text-[var(--bhn-text-soft)] hover:text-[var(--bhn-brand-700)]"
                                     }
                                     `}
                             >
@@ -117,12 +117,12 @@ function ReviewPageContent() {
                 {/* TOP STATS */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
                     {/* RATING CARD */}
-                    <div className="bg-[#F7EDE5] rounded-xl p-5 border border-[#E8DDD5]">
-                        <p className="text-[11px] tracking-[2px] uppercase text-[#7C6C64] font-semibold text-center">
+                    <div className="bg-[#F7EDE5] rounded-xl p-5 border border-[var(--bhn-border)]">
+                        <p className="text-[11px] tracking-[2px] uppercase text-[var(--bhn-text-soft)] font-semibold text-center">
                             Average Rating
                         </p>
 
-                        <h2 className="text-[58px] leading-none text-center italic font-serif text-[#8A4A26] mt-4">
+                        <h2 className="text-[58px] leading-none text-center italic font-serif text-[var(--bhn-brand-700)] mt-4">
                             {Number(stats?.averageRating ?? 0).toFixed(1)}
                         </h2>
 
@@ -131,20 +131,20 @@ function ReviewPageContent() {
                                 <Star
                                     key={star}
                                     size={16}
-                                    fill="#8A4A26"
-                                    className="text-[#8A4A26]"
+                                    fill="var(--bhn-brand-600)"
+                                    className="text-[var(--bhn-brand-700)]"
                                 />
                             ))}
                         </div>
 
-                        <p className="text-sm text-[#7C6C64] text-center mt-3">
+                        <p className="text-sm text-[var(--bhn-text-soft)] text-center mt-3">
                             Based on {stats?.totalReviews ?? 0} reviews
                         </p>
                     </div>
 
                     {/* DISTRIBUTION */}
-                    <div className="lg:col-span-2 bg-[#F7EDE5] rounded-xl p-4 border border-[#E8DDD5]">
-                        <h3 className="text-[18px] font-medium text-[#2D201B] mb-6">
+                    <div className="lg:col-span-2 bg-[#F7EDE5] rounded-xl p-4 border border-[var(--bhn-border)]">
+                        <h3 className="text-[18px] font-medium text-[var(--bhn-text)] mb-6">
                             Rating Distribution
                         </h3>
 
@@ -158,18 +158,18 @@ function ReviewPageContent() {
                                     key={star}
                                     className="flex items-center gap-4 mb-4"
                                 >
-                                    <p className="w-[40px] text-sm text-[#6F5B51]">
+                                    <p className="w-[40px] text-sm text-[var(--bhn-text-soft)]">
                                         {star} Star
                                     </p>
 
-                                    <div className="flex-1 h-[6px] bg-[#E6D8CF] rounded-full overflow-hidden">
+                                    <div className="flex-1 h-[6px] bg-[var(--bhn-border)] rounded-full overflow-hidden">
                                         <div
-                                            className="h-full bg-[#8A4A26] rounded-full"
+                                            className="h-full bg-[var(--bhn-brand-600)] rounded-full"
                                             style={{ width }}
                                         />
                                     </div>
 
-                                    <p className="text-sm text-[#6F5B51] w-[40px] text-right">
+                                    <p className="text-sm text-[var(--bhn-text-soft)] w-[40px] text-right">
                                         {width}
                                     </p>
                                 </div>
@@ -196,8 +196,8 @@ function ReviewPageContent() {
                                 duration-200
                                 active:scale-95
                                 ${activeFilter === item
-                                        ? "bg-[#F5E7DC] border-[#E2C9B9] text-[#8A4A26] shadow-sm"
-                                        : "bg-white border-[#E6DDD6] text-[#6F5B51] hover:bg-[#F7EDE5]"
+                                        ? "bg-[#F5E7DC] border-[#E2C9B9] text-[var(--bhn-brand-700)] shadow-sm"
+                                        : "bg-[var(--bhn-surface)] border-[var(--bhn-border)] text-[var(--bhn-text-soft)] hover:bg-[#F7EDE5]"
                                     }
                           `}
                             >
@@ -210,7 +210,7 @@ function ReviewPageContent() {
                     <div className="relative w-full lg:w-[260px]">
                         <Search
                             size={16}
-                            className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9D8A80]"
+                            className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--bhn-text-soft)]"
                         />
 
                         <input
@@ -223,13 +223,13 @@ function ReviewPageContent() {
                              h-[42px]
                              rounded-lg
                              border
-                             border-[#E6DDD6]
-                             bg-[#F9F6F3]
+                             border-[var(--bhn-border)]
+                             bg-[var(--bhn-surface-3)]
                              pl-10
                              pr-4
                              text-sm
                              outline-none
-                             focus:border-[#8A4A26]
+                             focus:border-[var(--bhn-brand-600)]
                              "
                         />
                     </div>
@@ -237,11 +237,11 @@ function ReviewPageContent() {
 
                 {/* REVIEW LIST */}
                 <div className="space-y-6 mt-4">
-                    {isLoading && <p className="text-sm text-[#7C6C64]">Loading reviews...</p>}
+                    {isLoading && <p className="text-sm text-[var(--bhn-text-soft)]">Loading reviews...</p>}
                     {reviews.map((review, index) => (
                         <div
                             key={review.id || index}
-                            className="bg-white rounded-2xl border border-[#E8DDD5] p-5 sm:p-7"
+                            className="bg-[var(--bhn-surface)] rounded-2xl border border-[var(--bhn-border)] p-5 sm:p-7"
                         >
                             {/* TOP */}
                             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
@@ -253,11 +253,11 @@ function ReviewPageContent() {
                                     />
 
                                     <div>
-                                        <h3 className="text-[17px] font-semibold text-[#2D201B]">
+                                        <h3 className="text-[17px] font-semibold text-[var(--bhn-text)]">
                                             {review.name}
                                         </h3>
 
-                                        <p className="text-sm text-[#8A7A71]">
+                                        <p className="text-sm text-[var(--bhn-text-soft)]">
                                             {review.date}
                                         </p>
                                     </div>
@@ -269,12 +269,12 @@ function ReviewPageContent() {
                                             key={star}
                                             size={14}
                                             fill={
-                                                star <= review.rating ? "#8A4A26" : "transparent"
+                                                star <= review.rating ? "var(--bhn-brand-600)" : "transparent"
                                             }
                                             className={
                                                 star <= review.rating
-                                                    ? "text-[#8A4A26]"
-                                                    : "text-[#C8B8AE]"
+                                                    ? "text-[var(--bhn-brand-700)]"
+                                                    : "text-[var(--bhn-border)]"
                                             }
                                         />
                                     ))}
@@ -282,27 +282,27 @@ function ReviewPageContent() {
                             </div>
 
                             {/* REVIEW TEXT */}
-                            <p className="text-[15px] leading-[28px] text-[#5E4C43] mt-6">
+                            <p className="text-[15px] leading-[28px] text-[var(--bhn-text-muted)] mt-6">
                                 {review.review}
                             </p>
 
                             {/* REPLY */}
                             {review.reply ? (
-                                <div className="bg-[#F8EFE8] rounded-xl p-5 mt-6">
-                                    <p className="text-[11px] tracking-[2px] uppercase text-[#7C6C64] font-semibold mb-3">
+                                <div className="bg-[var(--bhn-surface-3)] rounded-xl p-5 mt-6">
+                                    <p className="text-[11px] tracking-[2px] uppercase text-[var(--bhn-text-soft)] font-semibold mb-3">
                                         Instructor Response
                                     </p>
 
-                                    <p className="text-[14px] leading-[26px] text-[#6A554B] italic">
+                                    <p className="text-[14px] leading-[26px] text-[var(--bhn-text-soft)] italic">
                                         "{review.reply}"
                                     </p>
 
-                                    <p className="text-right text-xs text-[#8A7A71] mt-2">
+                                    <p className="text-right text-xs text-[var(--bhn-text-soft)] mt-2">
                                         ✓ Replied
                                     </p>
                                 </div>
                             ) : (
-                                <div className="bg-[#FAF6F2] rounded-xl p-4 mt-6">
+                                <div className="bg-[var(--bhn-surface-2)] rounded-xl p-4 mt-6">
                                     <textarea
                                         value={replyDrafts[review.id] || ""}
                                         onChange={(event) => setReplyDrafts((current) => ({ ...current, [review.id]: event.target.value }))}
@@ -310,22 +310,22 @@ function ReviewPageContent() {
                                         className="
                                            w-full
                                            min-h-[110px]
-                                           bg-white
+                                           bg-[var(--bhn-surface)]
                                            border
-                                           border-[#E6DDD6]
+                                           border-[var(--bhn-border)]
                                            rounded-lg
                                            p-4
                                            text-sm
                                            outline-none
                                            resize-none
-                                           focus:border-[#8A4A26]
+                                           focus:border-[var(--bhn-brand-600)]
                                         "
                                     />
 
                                     <div className="flex justify-end gap-3 mt-4">
                                         <button
                                             onClick={() => setReplyDrafts((current) => ({ ...current, [review.id]: "" }))}
-                                            className="px-5 h-[40px] rounded-lg border border-[#E6DDD6] text-sm text-[#6F5B51] hover:bg-[#F4ECE6]"
+                                            className="px-5 h-[40px] rounded-lg border border-[var(--bhn-border)] text-sm text-[var(--bhn-text-soft)] hover:bg-[var(--bhn-surface-3)]"
                                         >
                                             Discard
                                         </button>
@@ -337,7 +337,7 @@ function ReviewPageContent() {
                                                 await replyToReview({ reviewId: review.id, instructorResponse }).unwrap();
                                             }}
                                             disabled={isReplying || !replyDrafts[review.id]?.trim()}
-                                            className="px-5 h-[40px] rounded-lg bg-[#8A4A26] hover:bg-[#744024] text-white text-sm disabled:opacity-50"
+                                            className="px-5 h-[40px] rounded-lg bg-[var(--bhn-brand-600)] hover:bg-[var(--bhn-brand-800)] text-white text-sm disabled:opacity-50"
                                         >
                                             {isReplying ? "Posting..." : "Post Response"}
                                         </button>
@@ -362,15 +362,15 @@ function ReviewPageContent() {
                             }
                             return pages.map((page, idx) =>
                                 typeof page === "string" ? (
-                                    <span key={`ellipsis-${idx}`} className="text-[#8A7A71]">...</span>
+                                    <span key={`ellipsis-${idx}`} className="text-[var(--bhn-text-soft)]">...</span>
                                 ) : (
                                     <button
                                         key={page}
                                         onClick={() => setReviewPage(page)}
                                         className={`w-8 h-8 rounded-full text-sm transition-all ${
                                             page === reviewPage
-                                                ? "bg-[#8A4A26] text-white"
-                                                : "border border-[#DCCFC6] text-[#7C6C64] hover:bg-[#F4ECE6]"
+                                                ? "bg-[var(--bhn-brand-600)] text-white"
+                                                : "border border-[#DCCFC6] text-[var(--bhn-text-soft)] hover:bg-[var(--bhn-surface-3)]"
                                         }`}
                                     >
                                         {page}
@@ -386,5 +386,5 @@ function ReviewPageContent() {
 }
 
 export default function ReviewPage() {
-    return <Suspense fallback={<div className="min-h-screen bg-[#F7F4F1]" />}><ReviewPageContent /></Suspense>;
+    return <Suspense fallback={<div className="min-h-screen bg-[var(--bhn-surface-2)]" />}><ReviewPageContent /></Suspense>;
 }

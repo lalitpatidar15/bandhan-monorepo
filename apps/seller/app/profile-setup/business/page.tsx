@@ -88,7 +88,7 @@ export default function BusinessDetailsPage() {
     }, []);
 
     return (
-        <div className="min-h-screen bg-[#F7F2EE] flex flex-col items-center px-4 py-8">
+        <div className="min-h-screen bg-[var(--bhn-surface-2)] flex flex-col items-center px-4 py-8">
 
             {/* Main Wrapper */}
             <div className="w-full max-w-[430px]">
@@ -97,27 +97,27 @@ export default function BusinessDetailsPage() {
                 <div className="mb-4">
 
                     <div className="flex items-center justify-between mb-2">
-                        <p className="text-[12px] text-[#6E625B] font-medium">
+                        <p className="text-[12px] text-[var(--bhn-text-muted)] font-medium">
                             Step 2 of 3
                         </p>
 
-                        <p className="text-[12px] text-[#7A3F23] font-semibold">
+                        <p className="text-[12px] text-[var(--bhn-text)] font-semibold">
                             66% complete
                         </p>
                     </div>
 
-                    <div className="w-full h-[3px] bg-[#DED5CF] rounded-full overflow-hidden">
-                        <div className="w-[66%] h-full bg-[#7A3F23]" />
+                    <div className="w-full h-[3px] bg-[var(--bhn-surface-2)] rounded-full overflow-hidden">
+                        <div className="w-[66%] h-full bg-[var(--bhn-brand-600)]" />
                     </div>
                 </div>
 
                 {/* Card */}
-                <div className="bg-white rounded-[14px] border border-[#EFE7E2] shadow-[0_2px_10px_rgba(0,0,0,0.03)] px-6 sm:px-7 py-8">
+                <div className="bg-[var(--bhn-surface)] rounded-[14px] border border-[var(--bhn-border)] shadow-sm px-6 sm:px-7 py-8">
 
                     {/* Heading */}
                     <div className="text-center mb-4">
                         <h1
-                            className="text-[38px] leading-none text-[#2C211B]"
+                            className="text-[38px] leading-none text-[var(--bhn-text)]"
                             style={{
                                 fontFamily: "Georgia, serif",
                                 fontWeight: 700,
@@ -126,7 +126,7 @@ export default function BusinessDetailsPage() {
                             Business Details
                         </h1>
 
-                        <p className="mt-4 text-[14px] leading-6 text-[#8C817A] max-w-[280px] mx-auto">
+                        <p className="mt-4 text-[14px] leading-6 text-[var(--bhn-text-muted)] max-w-[280px] mx-auto">
                             Help us understand your business better to tailor your
                             experience.
                         </p>
@@ -136,7 +136,7 @@ export default function BusinessDetailsPage() {
                     <div className="space-y-5">
 
                         {error && (
-                            <p className="text-sm text-red-600">
+                            <p className="text-sm text-[var(--bhn-error-600)]">
                                 {error}
                             </p>
                         )}
@@ -148,7 +148,7 @@ export default function BusinessDetailsPage() {
                                 value={businessName}
                                 onChange={(e) => setBusinessName(e.target.value)}
                                 placeholder="e.g. Artisanal Crafts Co."
-                                className="h-[48px] rounded-[4px] border-[#E7DAD2] text-[14px]"
+                                className="h-[48px] rounded-[4px] border-[var(--bhn-border)] text-[14px]"
                             />
                             {fieldErrors.businessName && (
                                 <FieldError>
@@ -164,7 +164,7 @@ export default function BusinessDetailsPage() {
                                 value={gst}
                                 onChange={(e) => setGst(e.target.value)}
                                 placeholder="22AAAA0000A1Z5"
-                                className="h-[48px] rounded-[4px] border-[#E7DAD2] text-[14px]"
+                                className="h-[48px] rounded-[4px] border-[var(--bhn-border)] text-[14px]"
                             />
                             {fieldErrors.gst && (
                                 <FieldError>{fieldErrors.gst}</FieldError>
@@ -181,7 +181,7 @@ export default function BusinessDetailsPage() {
                                     label: cat,
                                     value: cat,
                                 }))}
-                                className="h-[48px] rounded-[4px] border-[#E7DAD2] text-[14px]"
+                                className="h-[48px] rounded-[4px] border-[var(--bhn-border)] text-[14px]"
                             />
                             {fieldErrors.category && (
                                 <FieldError>
@@ -197,7 +197,7 @@ export default function BusinessDetailsPage() {
                                 value={address}
                                 onChange={(e) => setAddress(e.target.value)}
                                 placeholder="Full registered business address"
-                                className="rounded-[4px] border-[#E7DAD2] text-[14px]"
+                                className="rounded-[4px] border-[var(--bhn-border)] text-[14px]"
                             />
                             {fieldErrors.address && (
                                 <FieldError>{fieldErrors.address}</FieldError>
@@ -211,7 +211,7 @@ export default function BusinessDetailsPage() {
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                                 placeholder="Tell buyers about your business"
-                                className="rounded-[4px] border-[#E7DAD2] text-[14px]"
+                                className="rounded-[4px] border-[var(--bhn-border)] text-[14px]"
                             />
                         </div>
 
@@ -222,7 +222,7 @@ export default function BusinessDetailsPage() {
                                 value={panNumber}
                                 onChange={(e) => setPanNumber(e.target.value.toUpperCase())}
                                 placeholder="ABCDE1234F"
-                                className="h-[48px] rounded-[4px] border-[#E7DAD2] text-[14px]"
+                                className="h-[48px] rounded-[4px] border-[var(--bhn-border)] text-[14px]"
                             />
                         </div>
 
@@ -233,7 +233,7 @@ export default function BusinessDetailsPage() {
                                 value={website}
                                 onChange={(e) => setWebsite(e.target.value)}
                                 placeholder="https://example.com"
-                                className="h-[48px] rounded-[4px] border-[#E7DAD2] text-[14px]"
+                                className="h-[48px] rounded-[4px] border-[var(--bhn-border)] text-[14px]"
                             />
                         </div>
 
@@ -242,14 +242,14 @@ export default function BusinessDetailsPage() {
 
                             <Button
                                 onClick={handleSubmit}
-                                className="w-full h-[50px] rounded-[4px] bg-[#7A3F23] hover:bg-[#6b341b] text-white text-[14px] font-semibold transition-all"
+                                className="w-full h-[50px] rounded-[4px] bg-[var(--bhn-brand-600)] hover:bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)] text-[14px] font-semibold transition-all"
                             >
                                 {isSubmitting ? "Saving..." : "Save & Continue"}
                             </Button>
 
                             <button
                                 onClick={() => router.push("/sellerDashboard")}
-                                className="w-full text-center text-[13px] uppercase tracking-[1px] font-medium text-[#6E5A4D] hover:underline pt-1"
+                                className="w-full text-center text-[13px] uppercase tracking-[1px] font-medium text-[var(--bhn-text)] hover:underline pt-1"
                             >
                                 Skip For Now
                             </button>
@@ -265,15 +265,15 @@ export default function BusinessDetailsPage() {
 
                     {/* Secure Data */}
                     <div className="flex flex-col items-center text-center">
-                        <div className="w-12 h-12 rounded-full bg-[#EFE3DA] flex items-center justify-center text-[18px] mb-4">
+                        <div className="w-12 h-12 rounded-full bg-[var(--bhn-surface-2)] flex items-center justify-center text-[18px] mb-4">
                             🛡️
                         </div>
 
-                        <h3 className="text-[16px] font-semibold text-[#2F241D] mb-2">
+                        <h3 className="text-[16px] font-semibold text-[var(--bhn-text)] mb-2">
                             Secure Data
                         </h3>
 
-                        <p className="text-[12px] leading-5 text-[#8A7D75] max-w-[220px]">
+                        <p className="text-[12px] leading-5 text-[var(--bhn-text-muted)] max-w-[220px]">
                             Your business data is encrypted and handled with
                             extreme privacy.
                         </p>
@@ -281,15 +281,15 @@ export default function BusinessDetailsPage() {
 
                     {/* GST */}
                     <div className="flex flex-col items-center text-center">
-                        <div className="w-12 h-12 rounded-full bg-[#EFE3DA] flex items-center justify-center text-[18px] mb-4">
+                        <div className="w-12 h-12 rounded-full bg-[var(--bhn-surface-2)] flex items-center justify-center text-[18px] mb-4">
                             🏛️
                         </div>
 
-                        <h3 className="text-[16px] font-semibold text-[#2F241D] mb-2">
+                        <h3 className="text-[16px] font-semibold text-[var(--bhn-text)] mb-2">
                             GST Compliance
                         </h3>
 
-                        <p className="text-[12px] leading-5 text-[#8A7D75] max-w-[220px]">
+                        <p className="text-[12px] leading-5 text-[var(--bhn-text-muted)] max-w-[220px]">
                             Automatic tax calculations and filing support for
                             registered entities.
                         </p>
@@ -297,15 +297,15 @@ export default function BusinessDetailsPage() {
 
                     {/* Premium */}
                     <div className="flex flex-col items-center text-center">
-                        <div className="w-12 h-12 rounded-full bg-[#EFE3DA] flex items-center justify-center text-[18px] mb-4">
+                        <div className="w-12 h-12 rounded-full bg-[var(--bhn-surface-2)] flex items-center justify-center text-[18px] mb-4">
                             ✨
                         </div>
 
-                        <h3 className="text-[16px] font-semibold text-[#2F241D] mb-2">
+                        <h3 className="text-[16px] font-semibold text-[var(--bhn-text)] mb-2">
                             Premium Perks
                         </h3>
 
-                        <p className="text-[12px] leading-5 text-[#8A7D75] max-w-[220px]">
+                        <p className="text-[12px] leading-5 text-[var(--bhn-text-muted)] max-w-[220px]">
                             Unlock curated business tools specific to your
                             category.
                         </p>

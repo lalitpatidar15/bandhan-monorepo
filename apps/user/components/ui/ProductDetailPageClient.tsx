@@ -12,9 +12,9 @@ export default function ProductDetailPageClient({ id }: { id: string }) {
 
   if (isLoading) {
     return (
-      <main className="min-h-screen bg-[#F6F1EA]">
+      <main className="min-h-screen bg-[var(--bhn-surface-2)]">
         <SiteHeader />
-        <div className="mx-auto max-w-6xl px-4 py-20 text-center text-[#924C2B]"><Loader2 className="h-8 w-8 animate-spin mx-auto" /></div>
+        <div className="mx-auto max-w-6xl px-4 py-20 text-center text-[var(--bhn-text)]"><Loader2 className="h-8 w-8 animate-spin mx-auto" /></div>
         <Footer />
       </main>
     );
@@ -22,9 +22,9 @@ export default function ProductDetailPageClient({ id }: { id: string }) {
 
   if (isError || !product) {
     return (
-      <main className="min-h-screen bg-[#F6F1EA]">
+      <main className="min-h-screen bg-[var(--bhn-surface-2)]">
         <SiteHeader />
-        <div className="mx-auto max-w-6xl px-4 py-20 text-center text-[#6B625A]">Product not found.</div>
+        <div className="mx-auto max-w-6xl px-4 py-20 text-center text-[var(--bhn-text-muted)]">Product not found.</div>
         <Footer />
       </main>
     );
@@ -33,7 +33,7 @@ export default function ProductDetailPageClient({ id }: { id: string }) {
   const productDetail = adaptProductDetail(product, id);
 
   return (
-    <main className="min-h-screen bg-[#F6F1EA]">
+    <main className="min-h-screen bg-[var(--bhn-surface-2)]">
       <SiteHeader />
       <ProductDetailLayout {...productDetail} />
       <Footer />

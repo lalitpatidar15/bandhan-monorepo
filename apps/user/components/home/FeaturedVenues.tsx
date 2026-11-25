@@ -14,7 +14,7 @@ export default function FeaturedVenues() {
       <div className="mx-auto max-w-7xl">
         <div className="flex items-end justify-between mb-8">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--bhn-brand-600)]">Handpicked venues</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--bhn-text)]">Handpicked venues</p>
             <h2 className="mt-2 text-2xl font-bold text-[var(--bhn-text)] sm:text-3xl" style={{ fontFamily: 'var(--bhn-font-display)' }}>Featured venues</h2>
           </div>
           <a href="/venues" className="hidden items-center gap-1 text-sm font-semibold text-[var(--bhn-brand-700)] transition hover:text-[var(--bhn-brand-800)] sm:flex">
@@ -67,7 +67,7 @@ export default function FeaturedVenues() {
                 </div>
                 <div className="bhn-listing-card-footer">
                   <PriceDisplay current={venue.price ?? 0} currency="₹" unit="/ day" size="sm" />
-                  <span className="text-xs font-semibold text-[var(--bhn-brand-600)] ml-auto">View details →</span>
+                  <span className="text-xs font-semibold text-[var(--bhn-text)] ml-auto">View details →</span>
                 </div>
               </a>
             ))}

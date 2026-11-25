@@ -72,17 +72,17 @@ export default function MyCoursesPage() {
             <div className="max-w-[1450px] mx-auto px-4 sm:px-6 lg:px-6 py-6 sm:py-6">
 
                 {/* Breadcrumb */}
-                <p className="text-[11px] uppercase tracking-[2px] text-[#A49A92] dark:text-[#6a5a4a]">
+                <p className="text-[11px] uppercase tracking-[2px] text-[#A49A92] dark:text-[var(--bhn-text-soft)]">
                     Home / My Courses
                 </p>
 
                 {/* Heading */}
                 <div className="mt-4">
-                    <h1 className="text-xl sm:text-3xl font-semibold text-[#241D1A] dark:text-[#ededed]">
+                    <h1 className="text-xl sm:text-3xl font-semibold text-[#241D1A] dark:text-[var(--bhn-neutral-400)]">
                         My Courses
                     </h1>
 
-                    <p className="text-[#7A726D] dark:text-[#b89b7d] mt-2">
+                    <p className="text-[#7A726D] dark:text-[var(--bhn-text-soft)] mt-2">
                         Continue your learning journey.
                     </p>
                 </div>
@@ -133,7 +133,7 @@ export default function MyCoursesPage() {
                                 className="
                                 w-full
                                 h-[48px]
-                                bg-white
+                                bg-[var(--bhn-surface)]
                                 bhn-input
                                 pl-10
                                 pr-4
@@ -205,17 +205,17 @@ export default function MyCoursesPage() {
                                         {course.category}
                                     </p>
 
-                                    <h3 className="mt-1 text-[15px] font-medium text-[#2F2A27] dark:text-[#ededed]">
+                                    <h3 className="mt-1 text-[15px] font-medium text-[#2F2A27] dark:text-[var(--bhn-neutral-400)]">
                                         {course.title}
                                     </h3>
 
-                                    <p className="text-[#8F8782] dark:text-[#7a6a5a] text-sm mt-1">
+                                    <p className="text-[#8F8782] dark:text-[var(--bhn-text-soft)] text-sm mt-1">
                                         by {course.author}
                                     </p>
 
                                     <div className="mt-5">
 
-                                        <p className="text-sm text-[#554D48] dark:text-[#a89080]">
+                                        <p className="text-sm text-[#554D48] dark:text-[var(--bhn-text-soft)]">
                                             {course.progress}% completed
                                         </p>
 
@@ -239,7 +239,7 @@ export default function MyCoursesPage() {
 
                                     </div>
 
-                                    <p className="mt-4 text-[12px] italic text-[#B0A7A2] dark:text-[#6a5a4a]">
+                                    <p className="mt-4 text-[12px] italic text-[#B0A7A2] dark:text-[var(--bhn-text-soft)]">
                                         {course.status === "completed"
                                             ? `Final Grade: ${course.lesson}`
                                             : `Last lesson: ${course.lesson}`}
@@ -285,12 +285,12 @@ export default function MyCoursesPage() {
                                 px-6
                                 py-3
                                 border
-                                border-[#D9CDC6] dark:border-[#374151]
+                                border-[#D9CDC6] dark:border-[var(--bhn-border)]
                                 rounded-lg
-                                bg-white
-                                text-[#4A433F] dark:text-[#a89080]
+                                bg-[var(--bhn-surface)]
+                                text-[#4A433F] dark:text-[var(--bhn-text-soft)]
                                 text-sm
-                                hover:bg-[#F7F4F1]
+                                hover:bg-[var(--bhn-surface-2)]
                               "
                             >
                                 ↻ Load More Courses
@@ -305,12 +305,12 @@ export default function MyCoursesPage() {
                                   px-6
                                   py-3
                                   border
-                                  border-[#D9CDC6] dark:border-[#374151]
+                                  border-[#D9CDC6] dark:border-[var(--bhn-border)]
                                   rounded-lg
-                                  bg-white
-                                  text-[#4A433F] dark:text-[#a89080]
+                                  bg-[var(--bhn-surface)]
+                                  text-[#4A433F] dark:text-[var(--bhn-text-soft)]
                                   text-sm
-                                  hover:bg-[#F7F4F1]
+                                  hover:bg-[var(--bhn-surface-2)]
                                   "
                             >
                                 ↑ Show Less
@@ -319,7 +319,7 @@ export default function MyCoursesPage() {
 
                     </div>
 
-                    <p className="text-sm text-[#A49A92] dark:text-[#6a5a4a]">
+                    <p className="text-sm text-[#A49A92] dark:text-[var(--bhn-text-soft)]">
                         Showing {Math.min(visibleCourses, filteredCourses.length)}
                         {" "}of {filteredCourses.length} courses
                     </p>
@@ -334,7 +334,7 @@ export default function MyCoursesPage() {
                     w-12
                     h-12
                     rounded-full
-                    bg-[#8C4F28] dark:bg-[#b86a3a]
+                    bg-[#8C4F28] dark:bg-[var(--bhn-brand-400)]
                     text-white
                     flex
                     items-center

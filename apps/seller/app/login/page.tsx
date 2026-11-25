@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { FcGoogle } from "react-icons/fc";
 import { apiPost } from "@/lib/api";
 import { Logo } from "@bandhan/ui";
 import { Button } from "@bandhan/ui";
@@ -161,12 +160,6 @@ const handleSubmit = async (e: React.FormEvent) => {
   } finally {
     setIsLoading(false);
   }
-};
-
-  const handleGoogleSignIn = () => {
-    const googleUserName = "GoogleUser";
-    localStorage.setItem("userName", googleUserName);
-    router.replace(`/sellerDashboard`);
   };
 
   return (
@@ -255,23 +248,6 @@ const handleSubmit = async (e: React.FormEvent) => {
               disabled={isLoading}
             >
               {isLoading ? "Signing in..." : "Sign in"}
-            </Button>
-
-            <div className="flex items-center gap-4 py-1">
-              <div className="flex-1 h-px bg-[var(--bhn-border)]" />
-              <span className="text-[var(--bhn-text-soft)] text-sm">Or</span>
-              <div className="flex-1 h-px bg-[var(--bhn-border)]" />
-            </div>
-
-            <Button
-              type="button"
-              variant="secondary"
-              block
-              size="lg"
-              onClick={handleGoogleSignIn}
-              icon={<FcGoogle size={20} />}
-            >
-              Sign In with Google
             </Button>
 
             <p className="text-center text-sm text-[var(--bhn-text-muted)] pt-2">

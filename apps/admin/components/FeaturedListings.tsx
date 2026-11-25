@@ -21,9 +21,9 @@ export default function FeaturedListings() {
           <h2 className="mb-4 text-lg font-semibold">Products ({products.length})</h2>
           <div className="space-y-3">
             {products.map((item) => (
-              <div key={item._id} className="rounded-lg border border-gray-200 p-3">
-                <div className="font-medium text-gray-900">{item.title}</div>
-                <div className="text-xs text-gray-500">{item.category}</div>
+              <div key={item._id} className="rounded-lg border border-[var(--bhn-border)] p-3">
+                <div className="font-medium text-[var(--bhn-text)]">{item.title}</div>
+                <div className="text-xs text-[var(--bhn-text-muted)]">{item.category}</div>
               </div>
             ))}
           </div>
@@ -33,9 +33,9 @@ export default function FeaturedListings() {
           <h2 className="mb-4 text-lg font-semibold">Jobs ({jobs.length})</h2>
           <div className="space-y-3">
             {jobs.map((item) => (
-              <div key={item._id} className="rounded-lg border border-gray-200 p-3">
-                <div className="font-medium text-gray-900">{item.jobTitle}</div>
-                <div className="text-xs text-gray-500">{item.jobCategory}</div>
+              <div key={item._id} className="rounded-lg border border-[var(--bhn-border)] p-3">
+                <div className="font-medium text-[var(--bhn-text)]">{item.jobTitle}</div>
+                <div className="text-xs text-[var(--bhn-text-muted)]">{item.jobCategory}</div>
               </div>
             ))}
           </div>
@@ -45,9 +45,9 @@ export default function FeaturedListings() {
           <h2 className="mb-4 text-lg font-semibold">Courses ({courses.length})</h2>
           <div className="space-y-3">
             {courses.map((item) => (
-              <div key={item._id} className="rounded-lg border border-gray-200 p-3">
-                <div className="font-medium text-gray-900">{item.title}</div>
-                <div className="text-xs text-gray-500">{item.category}</div>
+              <div key={item._id} className="rounded-lg border border-[var(--bhn-border)] p-3">
+                <div className="font-medium text-[var(--bhn-text)]">{item.title}</div>
+                <div className="text-xs text-[var(--bhn-text-muted)]">{item.category}</div>
               </div>
             ))}
           </div>

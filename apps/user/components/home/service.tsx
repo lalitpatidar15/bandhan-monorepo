@@ -56,10 +56,10 @@ export const Service = () => {
             <h3 className="text-lg font-medium mb-2">
               {item.title}
             </h3>
-            <p className="text-sm text-gray-500 mb-3 max-w-[280px]">
+            <p className="text-sm text-[var(--bhn-text-muted)] mb-3 max-w-[280px]">
               {item.desc}
             </p>
-            <button className="text-[#924C2B] font-medium hover:underline">
+            <button className="text-[var(--bhn-text)] font-medium hover:underline">
               Read More →
             </button>
           </Card>

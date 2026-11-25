@@ -115,7 +115,7 @@ export default function ShippingPageClient() {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#F7F5F3]">
+    <div className="flex min-h-screen bg-[var(--bhn-surface-2)]">
       <Sidebar />
       <div className="flex-1 overflow-hidden">
         <div className="p-4 sm:p-6">
@@ -123,23 +123,23 @@ export default function ShippingPageClient() {
           <div className="mt-5">
             <div className="flex flex-col xl:flex-row justify-between gap-5 mt-7">
               <div>
-                <h1 className="text-[38px] leading-none font-serif font-semibold text-[#2D201B]">
+                <h1 className="text-[38px] leading-none font-serif font-semibold text-[var(--bhn-text)]">
                   Shipping & Fulfillment
                 </h1>
-                <p className="text-[#8C8179] text-sm mt-2">
+                <p className="text-[var(--bhn-text-muted)] text-sm mt-2">
                   Direct Shiprocket integration for dispatch, AWB generation, and tracking
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={exportCSV}
-                  className="px-5 py-2.5 border border-[#DED3CA] bg-white rounded-md text-sm text-[#5C5148] hover:bg-[#F8F3EE] transition"
+                  className="px-5 py-2.5 border border-[var(--bhn-border)] bg-[var(--bhn-surface)] rounded-md text-sm text-[var(--bhn-text-muted)] hover:bg-[var(--bhn-surface-2)] transition"
                 >
                   Export CSV
                 </button>
                 <button
                   onClick={() => Promise.all([refetchStats(), refetchShipments()])}
-                  className="px-5 py-2.5 bg-[#C26A3D] text-white rounded-md text-sm hover:bg-[#a8572e] transition"
+                  className="px-5 py-2.5 bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)] rounded-md text-sm hover:bg-[var(--bhn-brand-600)] transition"
                 >
                   Sync Shiprocket Data
                 </button>
@@ -147,40 +147,40 @@ export default function ShippingPageClient() {
             </div>
 
             <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mt-7">
-              <div className="bg-white rounded-xl p-5 border border-[#EEE5DC]">
-                <p className="text-[11px] text-[#988C83] uppercase">Ready To Ship</p>
-                <h2 className="text-[34px] font-semibold text-[#2D201B] mt-2">{stats.ready}</h2>
+              <div className="bg-[var(--bhn-surface)] rounded-xl p-5 border border-[var(--bhn-border)]">
+                <p className="text-[11px] text-[var(--bhn-text-muted)] uppercase">Ready To Ship</p>
+                <h2 className="text-[34px] font-semibold text-[var(--bhn-text)] mt-2">{stats.ready}</h2>
               </div>
-              <div className="bg-white rounded-xl p-5 border border-[#EEE5DC]">
-                <p className="text-[11px] text-[#988C83] uppercase">In Transit</p>
-                <h2 className="text-[34px] font-semibold text-[#2D201B] mt-2">{stats.inTransit}</h2>
+              <div className="bg-[var(--bhn-surface)] rounded-xl p-5 border border-[var(--bhn-border)]">
+                <p className="text-[11px] text-[var(--bhn-text-muted)] uppercase">In Transit</p>
+                <h2 className="text-[34px] font-semibold text-[var(--bhn-text)] mt-2">{stats.inTransit}</h2>
               </div>
-              <div className="bg-white rounded-xl p-5 border border-[#EEE5DC]">
-                <p className="text-[11px] text-[#988C83] uppercase">Out For Delivery</p>
-                <h2 className="text-[34px] font-semibold text-[#2D201B] mt-2">{stats.outForDelivery}</h2>
+              <div className="bg-[var(--bhn-surface)] rounded-xl p-5 border border-[var(--bhn-border)]">
+                <p className="text-[11px] text-[var(--bhn-text-muted)] uppercase">Out For Delivery</p>
+                <h2 className="text-[34px] font-semibold text-[var(--bhn-text)] mt-2">{stats.outForDelivery}</h2>
               </div>
-              <div className="bg-white rounded-xl p-5 border border-[#EEE5DC]">
-                <p className="text-[11px] text-[#988C83] uppercase">Delivered</p>
-                <h2 className="text-[34px] font-semibold text-[#2D201B] mt-2">{stats.delivered}</h2>
+              <div className="bg-[var(--bhn-surface)] rounded-xl p-5 border border-[var(--bhn-border)]">
+                <p className="text-[11px] text-[var(--bhn-text-muted)] uppercase">Delivered</p>
+                <h2 className="text-[34px] font-semibold text-[var(--bhn-text)] mt-2">{stats.delivered}</h2>
               </div>
-              <div className="bg-[#FFF2F2] rounded-xl p-5 border border-[#F5D3D3]">
-                <p className="text-[11px] text-[#D04848] uppercase">Delayed / RTO</p>
-                <h2 className="text-[34px] font-semibold text-[#D04848] mt-2">{stats.delayed}</h2>
+              <div className="bg-[var(--bhn-surface-2)] rounded-xl p-5 border border-[var(--bhn-border)]">
+                <p className="text-[11px] text-[var(--bhn-text)] uppercase">Delayed / RTO</p>
+                <h2 className="text-[34px] font-semibold text-[var(--bhn-text)] mt-2">{stats.delayed}</h2>
               </div>
             </div>
 
-            <div className="bg-[#FFF4E8] rounded-2xl p-5 mt-6">
+            <div className="bg-[var(--bhn-surface-2)] rounded-2xl p-5 mt-6">
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
                 <input
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Filter by Order ID or AWB..."
-                  className="bg-white border border-[#E7DDD4] rounded-md px-4 py-3 text-sm outline-none"
+                  className="bg-[var(--bhn-surface)] border border-[var(--bhn-border)] rounded-md px-4 py-3 text-sm outline-none"
                 />
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="px-4 py-3 rounded-md border border-[#E7DDD4] bg-white text-sm outline-none"
+                  className="px-4 py-3 rounded-md border border-[var(--bhn-border)] bg-[var(--bhn-surface)] text-sm outline-none"
                 >
                   <option value="">All Statuses</option>
                   <option value="Ready To Ship">Ready To Ship</option>
@@ -192,22 +192,22 @@ export default function ShippingPageClient() {
                 <select
                   value={typeFilter}
                   onChange={(e) => setTypeFilter(e.target.value)}
-                  className="px-4 py-3 rounded-md border border-[#E7DDD4] bg-white text-sm outline-none"
+                  className="px-4 py-3 rounded-md border border-[var(--bhn-border)] bg-[var(--bhn-surface)] text-sm outline-none"
                 >
                   <option value="">Delivery Type</option>
                   <option value="PRODUCT">PRODUCT</option>
                   <option value="RENTAL">RENTAL</option>
                   <option value="SERVICE">SERVICE</option>
                 </select>
-                <input type="date" className="px-4 py-3 rounded-md border border-[#E7DDD4] bg-white text-sm outline-none" />
+                <input type="date" className="px-4 py-3 rounded-md border border-[var(--bhn-border)] bg-[var(--bhn-surface)] text-sm outline-none" />
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl mt-6 border border-[#EFE5DC] overflow-hidden">
+            <div className="bg-[var(--bhn-surface)] rounded-2xl mt-6 border border-[var(--bhn-border)] overflow-hidden">
               <div className="hidden lg:block overflow-x-auto">
                 <table className="w-full text-left border-collapse">
-                  <thead className="bg-[#EFE4D9]">
-                    <tr className="text-[#887B70] text-[11px] uppercase">
+                  <thead className="bg-[var(--bhn-surface-2)]">
+                    <tr className="text-[var(--bhn-text-muted)] text-[11px] uppercase">
                       <th className="px-6 py-4">Order & AWB</th>
                       <th className="px-6 py-4">Customer</th>
                       <th className="px-6 py-4">Product / Service</th>
@@ -219,34 +219,34 @@ export default function ShippingPageClient() {
                   <tbody>
                     {shipmentsLoading || statsLoading ? (
                       <tr>
-                        <td colSpan={6} className="text-center py-10 text-gray-500">
+                        <td colSpan={6} className="text-center py-10 text-[var(--bhn-text-muted)]">
                           Fetching live shipments from Shiprocket...
                         </td>
                       </tr>
                     ) : filteredShipments.length === 0 ? (
                       <tr>
-                        <td colSpan={6} className="text-center py-10 text-gray-500">
+                        <td colSpan={6} className="text-center py-10 text-[var(--bhn-text-muted)]">
                           No shipments found.
                         </td>
                       </tr>
                     ) : (
                       filteredShipments.map((item) => (
-                        <tr key={item.id} className="border-t border-[#F1E8DF] hover:bg-[#FCF8F4] transition">
+                        <tr key={item.id} className="border-t border-[var(--bhn-border)] hover:bg-[var(--bhn-surface-2)] transition">
                           <td className="px-6 py-5">
-                            <p className="text-[#C26A3D] font-medium">#SH-{item.orderId}</p>
-                            <p className="text-xs text-gray-500 font-mono mt-0.5">AWB: {item.awbCode !== "-" ? item.awbCode : "Pending"}</p>
+                            <p className="text-[var(--bhn-text)] font-medium">#SH-{item.orderId}</p>
+                            <p className="text-xs text-[var(--bhn-text-muted)] font-mono mt-0.5">AWB: {item.awbCode !== "-" ? item.awbCode : "Pending"}</p>
                           </td>
                           <td className="px-6 py-5">
-                            <p className="font-medium text-[#2D201B]">{item.name}</p>
-                            <p className="text-xs text-[#9A8F86] mt-0.5">{item.location}</p>
+                            <p className="font-medium text-[var(--bhn-text)]">{item.name}</p>
+                            <p className="text-xs text-[var(--bhn-text-soft)] mt-0.5">{item.location}</p>
                           </td>
-                          <td className="px-6 py-5 text-[#4D433C]">
+                          <td className="px-6 py-5 text-[var(--bhn-text-muted)]">
                             <p>{item.product}</p>
-                            <span className="text-[10px] px-2 py-0.5 rounded font-semibold bg-blue-100 text-blue-600">{item.type}</span>
+                            <span className="text-[10px] px-2 py-0.5 rounded font-semibold bg-[var(--bhn-brand-50)] text-[var(--bhn-brand-600)]">{item.type}</span>
                           </td>
-                          <td className="px-6 py-5 text-[#5E534A]">{item.partner}</td>
+                          <td className="px-6 py-5 text-[var(--bhn-text-muted)]">{item.partner}</td>
                           <td className="px-6 py-5">
-                            <span className={`text-xs px-3 py-1 rounded-full font-medium ${item.status.includes("Delivered") ? "bg-green-100 text-green-700" : item.status.includes("Transit") ? "bg-blue-100 text-blue-700" : "bg-amber-100 text-amber-700"}`}>
+                            <span className={`text-xs px-3 py-1 rounded-full font-medium ${item.status.includes("Delivered") ? "bg-[var(--bhn-success-50)] text-[var(--bhn-success-700)]" : item.status.includes("Transit") ? "bg-[var(--bhn-brand-50)] text-[var(--bhn-brand-700)]" : "bg-[var(--bhn-warning-50)] text-[var(--bhn-warning-700)]"}`}>
                               {item.status}
                             </span>
                           </td>
@@ -256,16 +256,16 @@ export default function ShippingPageClient() {
                                 <button
                                   disabled={creatingAwb}
                                   onClick={() => handleCreateAWB(item.orderId)}
-                                  className="px-3 py-1.5 bg-[#284F61] text-white text-xs rounded hover:bg-[#1f3e4d] disabled:opacity-50"
+                                  className="px-3 py-1.5 bg-[var(--bhn-surface-3)] text-[var(--bhn-text-on-brand)] text-xs rounded hover:bg-[var(--bhn-surface-3)] disabled:opacity-50"
                                 >
                                   {creatingAwb ? "Processing..." : "Create AWB"}
                                 </button>
                               ) : (
                                 <>
-                                  <button className="px-2.5 py-1.5 bg-[#FFF4E8] text-[#C26A3D] border border-[#E7DDD4] text-xs rounded hover:bg-[#f3e6d8]">
+                                  <button className="px-2.5 py-1.5 bg-[var(--bhn-surface-2)] text-[var(--bhn-text)] border border-[var(--bhn-border)] text-xs rounded hover:bg-[var(--bhn-surface-2)]">
                                     Track
                                   </button>
-                                  <button className="px-2.5 py-1.5 border border-gray-300 text-gray-700 text-xs rounded hover:bg-gray-100">
+                                  <button className="px-2.5 py-1.5 border border-[var(--bhn-border-strong)] text-[var(--bhn-text)] text-xs rounded hover:bg-[var(--bhn-surface-3)]">
                                     Label
                                   </button>
                                 </>
@@ -281,17 +281,17 @@ export default function ShippingPageClient() {
             </div>
 
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mt-6">
-              <div className="bg-[#F4E3D8] rounded-2xl p-5">
-                <h2 className="text-2xl font-semibold text-[#2D201B]">Shiprocket Courier Efficiency</h2>
-                <p className="text-sm text-[#8E837A] mt-2">On-Time Performance across integrated carriers</p>
-                <div className="w-full h-2 bg-[#E4D6CA] rounded-full mt-4 overflow-hidden">
-                  <div className="h-full bg-[#B56235] rounded-full" style={{ width: "92%" }}></div>
+              <div className="bg-[var(--bhn-surface-2)] rounded-2xl p-5">
+                <h2 className="text-2xl font-semibold text-[var(--bhn-text)]">Shiprocket Courier Efficiency</h2>
+                <p className="text-sm text-[var(--bhn-text-muted)] mt-2">On-Time Performance across integrated carriers</p>
+                <div className="w-full h-2 bg-[var(--bhn-surface-2)] rounded-full mt-4 overflow-hidden">
+                  <div className="h-full bg-[var(--bhn-brand-600)] rounded-full" style={{ width: "92%" }}></div>
                 </div>
               </div>
-              <div className="bg-[#284F61] rounded-2xl p-5 flex items-center justify-between text-white">
+              <div className="bg-[var(--bhn-surface-3)] rounded-2xl p-5 flex items-center justify-between text-[var(--bhn-text-on-brand)]">
                 <div>
                   <h2 className="text-xl font-semibold">Automatic Shipping Label & Pickup</h2>
-                  <p className="text-[#D7E5EA] text-sm mt-1 max-w-[280px]">
+                  <p className="text-[var(--bhn-text-soft)] text-sm mt-1 max-w-[280px]">
                     Schedule direct warehouse pickups via Delhivery, BlueDart, or Shadowfax.
                   </p>
                 </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, useRef, Suspense, type ChangeEvent } from "react";
+import { useEffect, useMemo, useState, useRef, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -45,6 +45,11 @@ type Conversation = {
   serviceName?: string;
   serviceId?: any;
   service?: any;
+  venueId?: any;
+  venue?: any;
+  venueName?: string;
+  venueImage?: string;
+  listingType?: string;
   orderId?: any;
   orderNumber?: string;
   orderStatus?: string;
@@ -69,9 +74,40 @@ type Conversation = {
   price?: number;
   category?: string;
   location?: string;
-  eventType?: string;
+  eventType?: string | string[];
   createdAt?: string;
   updatedAt?: string;
+};
+
+const normalizeListingType = (value: string) => {
+  const normalized = String(value || "").trim().toLowerCase();
+  if (normalized === "services" || normalized === "service") return "service";
+  if (normalized === "venues" || normalized === "venue") return "venue";
+  if (normalized === "products" || normalized === "product") return "product";
+  return normalized;
+};
+
+const getConversationTab = (conversation: any) => {
+  const type = normalizeListingType(conversation?.quoteListingType || conversation?.listingType || "");
+  if (type === "venue" || conversation?.venueId) return "Venues";
+  if (type === "product") return "Orders";
+  if (type === "service" || conversation?.serviceId || conversation?.serviceTitle || conversation?.serviceName) {
+    return "Inquiries";
+  }
+  if (conversation?.productId || conversation?.orderId) return "Orders";
+  return "Inquiries";
+};
+
+// Buyer detail pages are served by the central user app, not the seller app.
+const buyerDetailHref = (type: "service" | "venue", id: string) => {
+  const path = `/explore?type=${type}s/${encodeURIComponent(id)}`;
+  const configuredOrigin = process.env.NEXT_PUBLIC_CENTRAL_LOGIN_URL;
+  if (!configuredOrigin) return path;
+  try {
+    return `${new URL(configuredOrigin).origin}${path}`;
+  } catch {
+    return path;
+  }
 };
 
 function ChatContent() {
@@ -85,6 +121,15 @@ function ChatContent() {
   const queryConversationId = searchParams.get("conversationId") || searchParams.get("convId") || "";
   const queryUserId = searchParams.get("userId") || searchParams.get("buyerId") || "";
   const queryQuoteId = searchParams.get("quoteId") || "";
+  const queryRawListingType = searchParams.get("listingType") || "";
+  const queryListingId = searchParams.get("listingId") || "";
+  const queryServiceId =
+    searchParams.get("serviceId") || (normalizeListingType(queryRawListingType) === "service" ? queryListingId : "");
+  const queryVenueId =
+    searchParams.get("venueId") || (normalizeListingType(queryRawListingType) === "venue" ? queryListingId : "");
+  const queryListingType = normalizeListingType(
+    queryRawListingType || (queryServiceId ? "service" : queryVenueId ? "venue" : "")
+  );
 
   const [mobileChatOpen, setMobileChatOpen] = useState(false);
   const socketRef = useRef<any>(null);
@@ -113,33 +158,60 @@ function ChatContent() {
     [conversations, selectedChatId]
   );
 
-  // Extract Service Context Information safely
+  // Extract service or venue context safely
   const serviceObj = currentConversation?.serviceId || currentConversation?.service || {};
-  const serviceIdValue = serviceObj?._id || currentConversation?.serviceId || "";
-  const serviceTitle =
-    serviceObj?.title ||
-    currentConversation?.serviceTitle ||
-    currentConversation?.serviceName ||
-    currentConversation?.productName ||
-    "Service Inquiry";
-  const serviceCategory = serviceObj?.category || currentConversation?.category || "Service";
-  const servicePrice = serviceObj?.price || currentConversation?.price || currentConversation?.amount || 0;
-  const serviceImage =
-    serviceObj?.images?.[0] ||
-    serviceObj?.image ||
-    currentConversation?.productImage ||
-    "/placeholder.jpg";
-  const serviceLocation = serviceObj?.location || currentConversation?.location || "";
-  const eventTypes = serviceObj?.eventType || currentConversation?.eventType || "";
-  const minGuests = serviceObj?.minGuests || 0;
-  const maxGuests = serviceObj?.maxGuests || 0;
+  const venueObj = currentConversation?.venueId || currentConversation?.venue || {};
+  const rawServiceId = serviceObj?._id || (typeof currentConversation?.serviceId === "string" ? currentConversation.serviceId : "");
+  const rawVenueId = venueObj?._id || (typeof currentConversation?.venueId === "string" ? currentConversation.venueId : "");
+  const listingType = normalizeListingType(
+    currentConversation?.quoteListingType ||
+      currentConversation?.listingType ||
+      queryListingType ||
+      (rawVenueId ? "venue" : rawServiceId ? "service" : "")
+  );
+  const isVenueListing = listingType === "venue" || Boolean(rawVenueId);
+  const listingIdValue = isVenueListing ? rawVenueId : rawServiceId;
+  const listingObj = isVenueListing ? venueObj : serviceObj;
+  const listingTitle = isVenueListing
+    ? venueObj?.name ||
+      venueObj?.title ||
+      currentConversation?.venueName ||
+      currentConversation?.productName ||
+      "Venue Inquiry"
+    : serviceObj?.title ||
+      currentConversation?.serviceTitle ||
+      currentConversation?.serviceName ||
+      currentConversation?.productName ||
+      "Service Inquiry";
+  const listingCategory = isVenueListing
+    ? venueObj?.venueType || venueObj?.category || "Venue"
+    : serviceObj?.category || currentConversation?.category || "Service";
+  const listingPrice = isVenueListing
+    ? venueObj?.pricePerDay || venueObj?.price || currentConversation?.price || currentConversation?.amount || 0
+    : serviceObj?.price || currentConversation?.price || currentConversation?.amount || 0;
+  const listingImage = isVenueListing
+    ? venueObj?.images?.[0] ||
+      venueObj?.image ||
+      currentConversation?.venueImage ||
+      currentConversation?.productImage ||
+      "/placeholder.jpg"
+    : serviceObj?.images?.[0] ||
+      serviceObj?.image ||
+      currentConversation?.productImage ||
+      "/placeholder.jpg";
+  const listingLocation = listingObj?.location || currentConversation?.location || "";
+  const rawEventTypes = listingObj?.eventType || currentConversation?.eventType || "";
+  const eventTypes = Array.isArray(rawEventTypes) ? rawEventTypes.join(", ") : rawEventTypes;
+  const minGuests = isVenueListing ? venueObj?.minGuests || 0 : serviceObj?.minGuests || 0;
+  const maxGuests = isVenueListing ? venueObj?.maxGuests || venueObj?.guests || 0 : serviceObj?.maxGuests || 0;
   const quoteStatus = currentConversation?.quoteStatus || "";
   const quoteEventDate = currentConversation?.quoteEventDate || "";
   const quoteGuestRange = currentConversation?.quoteGuestRange || "";
   const quoteBudget = currentConversation?.quoteBudget ? Number(currentConversation.quoteBudget) : 0;
   const quoteServices = Array.isArray(currentConversation?.quoteServices) ? currentConversation.quoteServices.filter(Boolean) : [];
   const quoteNote = currentConversation?.quoteNote || "";
-  const quoteListingType = currentConversation?.quoteListingType || "";
+  const quoteListingType = listingType;
+  const listingTypeLabel = isVenueListing ? "Venue" : listingType === "product" ? "Product" : "Service";
 
   const customerName = useMemo(() => {
     if (!currentConversation) return "Customer";
@@ -168,14 +240,22 @@ function ChatContent() {
         conv.buyerId?.fullName ||
         conv.buyerId?.name ||
         "Customer",
-      msg: conv.lastMessage || "Service inquiry",
+      msg:
+        conv.lastMessage ||
+        conv.venueName ||
+        conv.venueId?.name ||
+        conv.venueId?.title ||
+        conv.serviceTitle ||
+        conv.serviceName ||
+        conv.productName ||
+        (getConversationTab(conv) === "Venues" ? "Venue inquiry" : "Service inquiry"),
       time: conv.lastMessageAt || conv.updatedAt
         ? new Date(conv.lastMessageAt || conv.updatedAt).toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",
           })
         : "Now",
-      type: conv.serviceId || conv.serviceTitle ? "Inquiries" : "Orders",
+      type: getConversationTab(conv),
       active: true,
       avatar: conv.buyerId?.profilePic || "/matka1.png",
       unread: conv.unreadCountSeller || 0,
@@ -200,37 +280,52 @@ function ChatContent() {
     }
   }, [queryConversationId, chatUsers]);
 
-  useEffect(() => {
-    setConversationCreated(false);
-  }, [queryUserId, queryQuoteId]);
+  const autoCreateKey = [queryUserId, queryQuoteId, queryServiceId, queryVenueId, queryListingId].join("|");
 
   useEffect(() => {
+    setConversationCreated(false);
+  }, [autoCreateKey]);
+
+  useEffect(() => {
+    const hasQuoteFlow = Boolean(queryQuoteId && queryUserId);
+    const hasListingFlow = Boolean(queryUserId && queryListingId && (queryServiceId || queryVenueId));
     if ((!queryConversationId && !queryUserId) || chatUsers.length === 0) return;
 
     const matchingIndexByUser = queryConversationId
       ? chatUsers.findIndex((chat) => chat.conversationId === queryConversationId)
-      : chatUsers.findIndex(
-          (chat) =>
-            String(chat.buyerId) === String(queryUserId) || String(chat.quoteId) === String(queryQuoteId)
-        );
+      : chatUsers.findIndex((chat) => {
+          const conversation: any = conversations.find((c: any) => c._id === chat.id) || {};
+          const matchesBuyer = !queryUserId || String(chat.buyerId) === String(queryUserId);
+          const matchesQuote = hasQuoteFlow && String(chat.quoteId) === String(queryQuoteId);
+          const matchesService =
+            Boolean(queryServiceId) && String(conversation.serviceId?._id || conversation.serviceId || "") === String(queryServiceId);
+          const matchesVenue =
+            Boolean(queryVenueId) && String(conversation.venueId?._id || conversation.venueId || "") === String(queryVenueId);
+          return matchesBuyer && (matchesQuote || matchesService || matchesVenue || (!queryQuoteId && !queryListingId));
+        });
 
     if (matchingIndexByUser >= 0) {
       setSelectedChat(matchingIndexByUser);
       return;
     }
 
-    if (queryQuoteId && queryUserId && !conversationCreated) {
+    if ((hasQuoteFlow || hasListingFlow) && !conversationCreated) {
       setConversationCreated(true);
-      createConversation({ buyerId: queryUserId, quoteId: queryQuoteId })
+      const payload = hasQuoteFlow
+        ? { buyerId: queryUserId, quoteId: queryQuoteId, listingType: queryListingType || undefined }
+        : {
+            buyerId: queryUserId,
+            ...(queryServiceId ? { serviceId: queryServiceId } : {}),
+            ...(queryVenueId ? { venueId: queryVenueId } : {}),
+            listingType: queryListingType || undefined,
+          };
+
+      createConversation(payload)
         .then((result: any) => {
           const newConvId = String(result?.conversation?._id || result?._id || result?.conversationId || "");
           if (newConvId) {
             const idx = chatUsers.findIndex((chat) => chat.conversationId === newConvId);
-            if (idx >= 0) {
-              setSelectedChat(idx);
-            } else {
-              setSelectedChat(0);
-            }
+            setSelectedChat(idx >= 0 ? idx : 0);
             refetchConversations();
           }
         })
@@ -238,7 +333,20 @@ function ChatContent() {
           console.error("Seller chat init failed:", err?.data || err?.message || err);
         });
     }
-  }, [queryConversationId, queryUserId, queryQuoteId, chatUsers, createConversation, conversationCreated, refetchConversations]);
+  }, [
+    queryConversationId,
+    queryUserId,
+    queryQuoteId,
+    queryServiceId,
+    queryVenueId,
+    queryListingId,
+    queryListingType,
+    chatUsers,
+    conversations,
+    createConversation,
+    conversationCreated,
+    refetchConversations,
+  ]);
 
   useEffect(() => {
     void refetchConversations();
@@ -389,37 +497,6 @@ function ChatContent() {
     }
   }, [conversationId, markRead]);
 
-  const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file || selectedChat < 0) return;
-
-    const imageUrl = URL.createObjectURL(file);
-
-    setChatUsers((prev) => {
-      const updated = [...prev];
-      if (!updated[selectedChat]) return prev;
-
-      const currentMsgs = updated[selectedChat].messages || [];
-      updated[selectedChat] = {
-        ...updated[selectedChat],
-        msg: "📷 Image",
-        time: "Now",
-        messages: [
-          ...currentMsgs,
-          {
-            type: "sent",
-            image: imageUrl,
-            time: new Date().toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            }),
-          },
-        ],
-      };
-      return updated;
-    });
-  };
-
   const filteredChats = chatUsers.filter((user) => {
     const matchesSearch = user.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesTab = activeTab === "All" || user.type === activeTab;
@@ -430,40 +507,40 @@ function ChatContent() {
     <div className="flex h-screen overflow-hidden">
       <Sidebar />
 
-      <div className="flex-1 flex flex-col bg-[#F6F6F6] p-3 md:p-6 overflow-hidden">
+      <div className="flex-1 flex flex-col bg-[var(--bhn-surface-2)] p-3 md:p-6 overflow-hidden">
         <SellerHeader />
 
         {toastMessage && (
-          <div className="absolute top-4 right-4 z-50 bg-[#8B3A00] text-white text-sm px-4 py-2 rounded-lg shadow-lg">
+          <div className="absolute top-4 right-4 z-50 bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)] text-sm px-4 py-2 rounded-lg shadow-lg">
             {toastMessage}
           </div>
         )}
 
-        <div className="flex-1 flex bg-white rounded-2xl shadow-sm border border-[#E5D7CC] overflow-hidden mt-4">
+        <div className="flex-1 flex bg-[var(--bhn-surface)] rounded-2xl shadow-sm border border-[var(--bhn-border)] overflow-hidden mt-4">
           
           {/* CHAT LIST PANEL */}
           <div
-            className={`w-full md:w-80 lg:w-96 flex flex-col border-r border-[#E5D7CC] bg-white ${
+            className={`w-full md:w-80 lg:w-96 flex flex-col border-r border-[var(--bhn-border)] bg-[var(--bhn-surface)] ${
               mobileChatOpen ? "hidden md:flex" : "flex"
             }`}
           >
-            <div className="p-4 border-b border-[#E5D7CC] space-y-3">
+            <div className="p-4 border-b border-[var(--bhn-border)] space-y-3">
               <input
                 type="text"
                 placeholder="Search messages or services..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-[#F6F6F6] px-3 py-2 text-sm rounded-lg border border-transparent focus:border-[#8B4A2F] outline-none"
+                className="w-full bg-[var(--bhn-surface-2)] px-3 py-2 text-sm rounded-lg border border-transparent focus:border-[var(--bhn-brand-600)] outline-none"
               />
               <div className="flex gap-2">
-                {["All", "Inquiries", "Orders"].map((tab) => (
+                {["All", "Inquiries", "Venues", "Orders"].map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
                     className={`text-xs px-3 py-1.5 rounded-full font-medium transition ${
                       activeTab === tab
-                        ? "bg-[#8B4A2F] text-white"
-                        : "bg-[#F6F6F6] text-[#7B6B62] hover:bg-[#EADDD3]"
+                        ? "bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)]"
+                        : "bg-[var(--bhn-surface-2)] text-[var(--bhn-text-muted)] hover:bg-[var(--bhn-surface-2)]"
                     }`}
                   >
                     {tab}
@@ -487,8 +564,8 @@ function ChatContent() {
                       }}
                       className={`flex gap-3 px-4 py-4 cursor-pointer border-l-[3px] transition-all ${
                         selectedChat === actualIndex
-                          ? "bg-[#FFFDFC] border-[#8B4A2F]"
-                          : "border-transparent hover:bg-[#F8EEE7]"
+                          ? "bg-[var(--bhn-surface-2)] border-[var(--bhn-brand-600)]"
+                          : "border-transparent hover:bg-[var(--bhn-surface-2)]"
                       }`}
                     >
                       <div className="relative shrink-0">
@@ -500,16 +577,16 @@ function ChatContent() {
                           className="rounded-full object-cover w-12 h-12"
                         />
                         {item.active && (
-                          <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full" />
+                          <span className="absolute bottom-0 right-0 w-3 h-3 bg-[var(--bhn-success-500)] border-2 border-[var(--bhn-surface)] rounded-full" />
                         )}
                       </div>
 
                       <div className="flex-1 min-w-0">
                         <div className="flex justify-between gap-2">
-                          <h3 className="text-sm font-semibold text-[#2D201B] truncate">{item.name}</h3>
-                          <span className="text-[11px] text-[#A08E84]">{item.time}</span>
+                          <h3 className="text-sm font-semibold text-[var(--bhn-text)] truncate">{item.name}</h3>
+                          <span className="text-[11px] text-[var(--bhn-text-soft)]">{item.time}</span>
                         </div>
-                        <p className="text-xs text-[#8B4A20] truncate mt-0.5 font-medium">{item.msg}</p>
+                        <p className="text-xs text-[var(--bhn-text)] truncate mt-0.5 font-medium">{item.msg}</p>
                       </div>
                     </div>
                   );
@@ -517,8 +594,8 @@ function ChatContent() {
               ) : (
                 <div className="flex flex-col items-center justify-center h-full px-6 text-center">
                   <div className="text-3xl mb-2">💬</div>
-                  <h3 className="font-semibold text-base text-[#2D201B]">No Conversations Found</h3>
-                  <p className="text-xs text-[#8F7D74] mt-1">No chats matched your filter.</p>
+                  <h3 className="font-semibold text-base text-[var(--bhn-text)]">No Conversations Found</h3>
+                  <p className="text-xs text-[var(--bhn-text-muted)] mt-1">No chats matched your filter.</p>
                 </div>
               )}
             </div>
@@ -526,16 +603,16 @@ function ChatContent() {
 
           {/* CENTER CHAT PANEL */}
           <div
-            className={`flex-1 flex flex-col bg-[#F8F5F2] h-full ${
+            className={`flex-1 flex flex-col bg-[var(--bhn-surface-2)] h-full ${
               mobileChatOpen ? "flex" : "hidden md:flex"
             }`}
           >
             {/* CHAT HEADER WITH SERVICE NAME */}
-            <div className="flex items-center justify-between p-4 border-b bg-white">
+            <div className="flex items-center justify-between p-4 border-b bg-[var(--bhn-surface)]">
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => setMobileChatOpen(false)}
-                  className="md:hidden text-xl mr-1 text-[#2D201B]"
+                  className="md:hidden text-xl mr-1 text-[var(--bhn-text)]"
                 >
                   ←
                 </button>
@@ -549,11 +626,11 @@ function ChatContent() {
                 />
 
                 <div>
-                  <h2 className="text-[15px] font-semibold text-[#2D201B]">
+                  <h2 className="text-[15px] font-semibold text-[var(--bhn-text)]">
                     {customerName}
                   </h2>
-                  <p className="text-xs text-[#8B4A20] font-medium">
-                    Inquiring about: <span className="font-bold">{serviceTitle}</span>
+                  <p className="text-xs text-[var(--bhn-text)] font-medium">
+                    Inquiring about: <span className="font-bold">{listingTitle}</span>
                   </p>
                 </div>
               </div>
@@ -568,15 +645,15 @@ function ChatContent() {
                     <div
                       className={`max-w-[85%] md:max-w-[60%] px-4 py-3 rounded-2xl text-sm shadow-sm ${
                         isSent
-                          ? "bg-[#8B3A00] text-white rounded-br-sm"
-                          : "bg-[#EDE3DB] text-[#2D201B] rounded-bl-sm"
+                          ? "bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)] rounded-br-sm"
+                          : "bg-[var(--bhn-surface-2)] text-[var(--bhn-text)] rounded-bl-sm"
                       }`}
                     >
                       {msg.image && (
                         <img src={msg.image} alt="" className="w-full max-w-60 rounded-xl mb-2" />
                       )}
                       {msg.text && <p className="leading-6">{msg.text}</p>}
-                      <p className={`text-[10px] mt-2 ${isSent ? "text-orange-100" : "text-gray-400"}`}>
+                      <p className={`text-[10px] mt-2 ${isSent ? "text-[var(--bhn-warning-50)]" : "text-[var(--bhn-text-muted)]"}`}>
                         {msg.createdAt || msg.updatedAt
                           ? new Date(msg.createdAt || msg.updatedAt).toLocaleTimeString([], {
                               hour: "2-digit",
@@ -590,47 +667,53 @@ function ChatContent() {
               })}
             </div>
 
-            {/* QUICK SERVICE RESPONSES & INPUT */}
-            <div className="p-4 bg-[#F5ECE6] border-t border-[#E5D7CC]">
+            {/* QUICK LISTING RESPONSES & INPUT */}
+            <div className="p-4 bg-[var(--bhn-surface-2)] border-t border-[var(--bhn-border)]">
               <div className="flex flex-wrap gap-2 mb-3">
-                {[
-                  "Available on your date!",
-                  "Package details shared below.",
-                  "Customization is available.",
-                  "Please confirm your guest count.",
-                ].map((item) => (
+                {(isVenueListing
+                  ? [
+                      "The venue is available on your date!",
+                      "Venue package details shared below.",
+                      "Setup customization is available.",
+                      "Please confirm your guest count.",
+                    ]
+                  : [
+                      "Available on your date!",
+                      "Package details shared below.",
+                      "Customization is available.",
+                      "Please confirm your guest count.",
+                    ]
+                ).map((item) => (
                   <button
                     key={item}
                     onClick={() => handleSendQuickReply(item)}
-                    className="px-3 py-1.5 rounded-full border border-[#CDBBAF] text-xs text-[#3B2F2A] hover:bg-[#EADDD3] transition bg-white"
+                    className="px-3 py-1.5 rounded-full border border-[var(--bhn-border)] text-xs text-[var(--bhn-text)] hover:bg-[var(--bhn-surface-2)] transition bg-[var(--bhn-surface)]"
                   >
                     {item}
                   </button>
                 ))}
               </div>
 
-              <div className="flex items-center gap-3 bg-[#E8DCD2] rounded-2xl px-4 py-2.5">
-                <label className="cursor-pointer text-lg">
+              <div className="flex items-center gap-3 bg-[var(--bhn-surface-2)] rounded-2xl px-4 py-2.5">
+                <span
+                  className="cursor-not-allowed text-lg opacity-50"
+                  title="Image attachments are not supported yet."
+                  aria-label="Image attachments are not supported yet"
+                >
                   📎
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleImageUpload}
-                  />
-                </label>
+                </span>
 
                 <input
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                   placeholder="Type your response to the customer..."
-                  className="flex-1 bg-transparent outline-none text-sm text-[#2D201B] placeholder:text-[#8A7A70]"
+                  className="flex-1 bg-transparent outline-none text-sm text-[var(--bhn-text)] placeholder:text-[var(--bhn-text-muted)]"
                 />
 
                 <button
                   onClick={sendMessage}
-                  className="w-9 h-9 rounded-xl bg-[#8B3A00] hover:bg-[#6D2E00] text-white flex items-center justify-center transition shrink-0"
+                  className="w-9 h-9 rounded-xl bg-[var(--bhn-brand-600)] hover:bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)] flex items-center justify-center transition shrink-0"
                 >
                   ➤
                 </button>
@@ -638,48 +721,48 @@ function ChatContent() {
             </div>
           </div>
 
-          {/* RIGHT SIDEBAR - SERVICE CONTEXT PANEL */}
+          {/* RIGHT SIDEBAR - LISTING CONTEXT PANEL */}
           <div
-            className={`w-full md:w-[320px] xl:w-80 bg-[#F3E7DF] p-5 border-t md:border-t-0 md:border-l border-[#E5D7CC] overflow-y-auto ${
+            className={`w-full md:w-[320px] xl:w-80 bg-[var(--bhn-surface-2)] p-5 border-t md:border-t-0 md:border-l border-[var(--bhn-border)] overflow-y-auto ${
               mobileChatOpen ? "hidden xl:block" : "hidden md:block"
             }`}
           >
-            <h3 className="font-semibold text-lg mb-4 text-[#2D201B]">
-              Inquired Service
+            <h3 className="font-semibold text-lg mb-4 text-[var(--bhn-text)]">
+              Inquired {listingTypeLabel}
             </h3>
 
-            <div className="bg-[#F7EFE9] border border-[#E5D6CC] rounded-xl p-3 mb-5 shadow-sm">
+            <div className="bg-[var(--bhn-surface-2)] border border-[var(--bhn-border)] rounded-xl p-3 mb-5 shadow-sm">
               <img
-                src={serviceImage}
-                alt={serviceTitle}
+                src={listingImage}
+                alt={listingTitle}
                 className="rounded-md w-full h-36 object-cover mb-3"
               />
 
-              <span className="rounded-full bg-[#8B4A20]/10 px-2 py-0.5 text-[10px] font-semibold text-[#8B4A20] uppercase tracking-wider">
-                {serviceCategory}
+              <span className="rounded-full bg-[color-mix(in_srgb,var(--bhn-brand-600)_10%,transparent)] px-2 py-0.5 text-[10px] font-semibold text-[var(--bhn-text)] uppercase tracking-wider">
+                {listingCategory}
               </span>
 
-              <h4 className="text-sm font-semibold text-[#2b2b2b] mt-1">
-                {serviceTitle}
+              <h4 className="text-sm font-semibold text-[var(--bhn-text)] mt-1">
+                {listingTitle}
               </h4>
 
-              <p className="text-base font-bold text-[#8B3A00] mt-1">
-                ₹{Number(servicePrice).toLocaleString()}
+              <p className="text-base font-bold text-[var(--bhn-text)] mt-1">
+                ₹{Number(listingPrice).toLocaleString()}
               </p>
-              {quoteListingType && (
-                <p className="mt-2 text-[11px] font-semibold uppercase tracking-wider text-[#8B4A20]">
-                  {quoteListingType === "venue" ? "Venue inquiry" : "Service inquiry"}
+              {listingType && (
+                <p className="mt-2 text-[11px] font-semibold uppercase tracking-wider text-[var(--bhn-text)]">
+                  {listingTypeLabel} inquiry
                 </p>
               )}
             </div>
 
-            <p className="text-[11px] font-semibold tracking-wider text-gray-500 mb-2 uppercase">
-              Service Overview
+            <p className="text-[11px] font-semibold tracking-wider text-[var(--bhn-text-muted)] mb-2 uppercase">
+              {listingTypeLabel} Overview
             </p>
 
-            <div className="text-sm text-[#2b2b2b] mb-5 space-y-2 bg-white/50 p-3 rounded-xl border border-[#E5D6CC]">
-              {serviceLocation && (
-                <p className="text-xs">📍 <strong>Location:</strong> {serviceLocation}</p>
+            <div className="text-sm text-[var(--bhn-text)] mb-5 space-y-2 bg-[color-mix(in_srgb,var(--bhn-surface)_50%,transparent)] p-3 rounded-xl border border-[var(--bhn-border)]">
+              {listingLocation && (
+                <p className="text-xs">📍 <strong>Location:</strong> {listingLocation}</p>
               )}
               {eventTypes && (
                 <p className="text-xs">🎉 <strong>Events:</strong> {eventTypes}</p>
@@ -691,25 +774,25 @@ function ChatContent() {
             </div>
 
             {(quoteEventDate || quoteGuestRange || quoteBudget || quoteServices.length || quoteNote || quoteStatus) && (
-              <div className="mb-5 rounded-xl border border-[#E5D6CC] bg-white/70 p-3 text-sm text-[#3A2D27]">
-                <p className="text-[11px] font-semibold tracking-wider text-gray-500 mb-2 uppercase">Quote request details</p>
+              <div className="mb-5 rounded-xl border border-[var(--bhn-border)] bg-[color-mix(in_srgb,var(--bhn-surface)_70%,transparent)] p-3 text-sm text-[var(--bhn-text)]">
+                <p className="text-[11px] font-semibold tracking-wider text-[var(--bhn-text-muted)] mb-2 uppercase">Quote request details</p>
                 {quoteStatus && <p className="text-xs mb-1"><strong>Status:</strong> {quoteStatus}</p>}
                 {quoteEventDate && <p className="text-xs mb-1"><strong>Date:</strong> {quoteEventDate}</p>}
                 {quoteGuestRange && <p className="text-xs mb-1"><strong>Guests:</strong> {quoteGuestRange}</p>}
                 {quoteBudget > 0 && <p className="text-xs mb-1"><strong>Budget:</strong> ₹{quoteBudget.toLocaleString()}</p>}
                 {quoteServices.length > 0 && <p className="text-xs mb-1"><strong>Services:</strong> {quoteServices.join(", ")}</p>}
                 {quoteNote && <p className="text-xs"><strong>Notes:</strong> {quoteNote}</p>}
-                {quoteListingType && <p className="text-xs mt-2"><strong>Inquiry type:</strong> {quoteListingType === "venue" ? "Venue booking" : "Service booking"}</p>}
+                {listingType && <p className="text-xs mt-2"><strong>Inquiry type:</strong> {listingTypeLabel} booking</p>}
               </div>
             )}
 
-            {serviceIdValue && (
+            {listingIdValue && (
               <Link
-                href={quoteListingType === "venue" ? `/products/Venue/${serviceIdValue}` : `/products/Services/${serviceIdValue}`}
+                href={buyerDetailHref(isVenueListing ? "venue" : "service", String(listingIdValue))}
                 target="_blank"
-                className="block text-center w-full bg-[#8B3A00] hover:bg-[#6D2E00] text-white py-2.5 rounded-xl text-xs font-semibold transition shadow-sm"
+                className="block text-center w-full bg-[var(--bhn-brand-600)] hover:bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)] py-2.5 rounded-xl text-xs font-semibold transition shadow-sm"
               >
-                View Full Service
+                View Full {listingTypeLabel}
               </Link>
             )}
           </div>

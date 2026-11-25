@@ -41,34 +41,34 @@ export default function CoursePerformanceDashboard() {
   const [selectedPeriod, setSelectedPeriod] = useState("7D");
 
   const getBadgeStyle = (change: string | undefined) => {
-    if (!change || change === "Stable" || change === "0%") return "bg-[#EFE7E1] text-[#6F5E55]";
-    if (change.startsWith("+")) return "bg-[#DFF6E7] text-[#16A34A]";
-    if (change.startsWith("-")) return "bg-[#FBE7E4] text-[#C2410C]";
-    return "bg-[#EFE7E1] text-[#6F5E55]";
+    if (!change || change === "Stable" || change === "0%") return "bg-[#EFE7E1] text-[var(--bhn-text-soft)]";
+    if (change.startsWith("+")) return "bg-[var(--bhn-success-50)] text-[var(--bhn-success-600)]";
+    if (change.startsWith("-")) return "bg-[var(--bhn-error-50)] text-[var(--bhn-error-600)]";
+    return "bg-[#EFE7E1] text-[var(--bhn-text-soft)]";
   };
 
   const ov = dashboard?.overview;
   const statCards = [
     {
-      icon: <Users size={18} className="text-[#8A4A26]" />,
+      icon: <Users size={18} className="text-[var(--bhn-brand-700)]" />,
       label: "Total Students",
       value: ov?.totalStudents?.toLocaleString() ?? "0",
       badge: ov?.totalStudentsChange ?? "0%",
     },
     {
-      icon: <CheckCircle2 size={18} className="text-[#8A4A26]" />,
+      icon: <CheckCircle2 size={18} className="text-[var(--bhn-brand-700)]" />,
       label: "Completion Rate",
       value: ov?.completionRate != null ? `${ov.completionRate}%` : "0%",
       badge: ov?.completionRateChange ?? "0%",
     },
     {
-      icon: <DollarSign size={18} className="text-[#8A4A26]" />,
+      icon: <DollarSign size={18} className="text-[var(--bhn-brand-700)]" />,
       label: "Total Revenue",
       value: ov?.totalRevenue != null ? `₹${Number(ov.totalRevenue).toLocaleString("en-IN")}` : "₹0",
       badge: ov?.totalRevenueChange ?? "0%",
     },
     {
-      icon: <Star size={18} className="text-[#8A4A26]" />,
+      icon: <Star size={18} className="text-[var(--bhn-brand-700)]" />,
       label: "Average Rating",
       value: ov?.averageRating?.toFixed(2) ?? "0.00",
       badge: ov?.averageRatingChange ?? "Stable",
@@ -115,7 +115,7 @@ export default function CoursePerformanceDashboard() {
   }));
 
   return (
-    <div className="w-full min-h-screen bg-[#F7F3EF] overflow-x-hidden">
+    <div className="w-full min-h-screen bg-[var(--bhn-surface-3)] overflow-x-hidden">
 
       {/* HEADER */}
       <InstructorHeader />
@@ -135,11 +135,11 @@ export default function CoursePerformanceDashboard() {
               leading-tight
               font-serif
               font-semibold
-              text-[#2D201B]
+              text-[var(--bhn-text)]
             ">
               My Uploaded Courses
             </h1>
-            <p className="mt-2 max-w-3xl text-sm sm:text-base text-[#7C6C64]">
+            <p className="mt-2 max-w-3xl text-sm sm:text-base text-[var(--bhn-text-soft)]">
               Review every course you have uploaded, check publishing status, and open performance, students, or reviews.
             </p>
 
@@ -154,7 +154,7 @@ export default function CoursePerformanceDashboard() {
             sm:gap-5
             overflow-x-auto
             border-b
-            border-[#E6DDD6]
+            border-[var(--bhn-border)]
             pb-4
             mb-6
             whitespace-nowrap
@@ -178,8 +178,8 @@ export default function CoursePerformanceDashboard() {
                   flex-shrink-0
 
               ${isActive
-                      ? "text-[#8A4A26] border-b-2 border-[#8A4A26]"
-                      : "text-[#7C6C64] hover:text-[#8A4A26]"
+                      ? "text-[var(--bhn-brand-700)] border-b-2 border-[var(--bhn-brand-600)]"
+                      : "text-[var(--bhn-text-soft)] hover:text-[var(--bhn-brand-700)]"
                     }
             `}
                 >
@@ -190,55 +190,55 @@ export default function CoursePerformanceDashboard() {
           </div>
 
           {/* UPLOADED COURSE LIST */}
-          <div className="bg-white rounded-2xl border border-[#E8DDD5] p-4 sm:p-4 mb-6">
+          <div className="bg-[var(--bhn-surface)] rounded-2xl border border-[var(--bhn-border)] p-4 sm:p-4 mb-6">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-5">
               <div>
-                <h2 className="text-[24px] sm:text-[28px] font-serif font-semibold text-[#2D201B]">
+                <h2 className="text-[24px] sm:text-[28px] font-serif font-semibold text-[var(--bhn-text)]">
                   Uploaded Courses
                 </h2>
-                <p className="text-sm text-[#8F8178] mt-1">
+                <p className="text-sm text-[var(--bhn-text-soft)] mt-1">
                   {uploadedCourses.length} courses available in your instructor library.
                 </p>
               </div>
 
               <button
                 onClick={() => router.push("/instructor/curriculum")}
-                className="h-11 rounded-xl bg-[#8A4A26] px-5 text-sm font-semibold text-white hover:bg-[#713719] transition"
+                className="h-11 rounded-xl bg-[var(--bhn-brand-600)] px-5 text-sm font-semibold text-white hover:bg-[#713719] transition"
               >
                 Add New Course
               </button>
             </div>
 
             <div className="grid gap-4">
-              {isLoading && <p className="text-sm text-[#8F8178]">Loading courses...</p>}
+              {isLoading && <p className="text-sm text-[var(--bhn-text-soft)]">Loading courses...</p>}
               {uploadedCourses.map((course) => (
                 <article
                   key={course.title}
-                  className="rounded-xl border border-[#EFE7E2] bg-[#FCFAF8] p-4"
+                  className="rounded-xl border border-[#EFE7E2] bg-[var(--bhn-surface-2)] p-4"
                 >
                   <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="text-lg font-semibold text-[#2D201B]">
+                        <h3 className="text-lg font-semibold text-[var(--bhn-text)]">
                           {course.title}
                         </h3>
-                        <span className="rounded-full bg-[#F4ECE6] px-3 py-1 text-xs font-semibold text-[#8A4A26]">
+                        <span className="rounded-full bg-[var(--bhn-surface-3)] px-3 py-1 text-xs font-semibold text-[var(--bhn-brand-700)]">
                           {course.category}
                         </span>
                         <span
                           className={`rounded-full px-3 py-1 text-xs font-semibold ${
                             course.status === "Published"
-                              ? "bg-[#DFF6E7] text-[#16A34A]"
+                              ? "bg-[var(--bhn-success-50)] text-[var(--bhn-success-600)]"
                               : course.status === "Draft"
-                                ? "bg-[#EFE7E1] text-[#6F5E55]"
-                                : "bg-[#FFF4D7] text-[#A16207]"
+                                ? "bg-[#EFE7E1] text-[var(--bhn-text-soft)]"
+                                : "bg-[var(--bhn-warning-50)] text-[var(--bhn-warning-600)]"
                           }`}
                         >
                           {course.status}
                         </span>
                       </div>
 
-                      <div className="mt-3 grid gap-3 text-sm text-[#6F5E55] sm:grid-cols-2 lg:grid-cols-5">
+                      <div className="mt-3 grid gap-3 text-sm text-[var(--bhn-text-soft)] sm:grid-cols-2 lg:grid-cols-5">
                         <span>{course.students} students</span>
                         <span>{course.lessons} lessons</span>
                         <span>{course.price} price</span>
@@ -247,13 +247,13 @@ export default function CoursePerformanceDashboard() {
                       </div>
 
                       <div className="mt-4 max-w-xl">
-                        <div className="mb-2 flex justify-between text-xs text-[#8F8178]">
+                        <div className="mb-2 flex justify-between text-xs text-[var(--bhn-text-soft)]">
                           <span>Course completion</span>
                           <span>{course.progress}%</span>
                         </div>
-                        <div className="h-2 overflow-hidden rounded-full bg-[#E8DDD5]">
+                        <div className="h-2 overflow-hidden rounded-full bg-[var(--bhn-border)]">
                           <div
-                            className="h-full rounded-full bg-[#8A4A26]"
+                            className="h-full rounded-full bg-[var(--bhn-brand-600)]"
                             style={{ width: `${course.progress}%` }}
                           />
                         </div>
@@ -263,25 +263,25 @@ export default function CoursePerformanceDashboard() {
                     <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center">
                       <button
                         onClick={() => router.push(`/instructor/performance?courseId=${course.id}`)}
-                        className="h-10 rounded-lg border border-[#DEC9BC] px-3 text-sm font-medium text-[#5D4C44] hover:border-[#8A4A26] hover:text-[#8A4A26]"
+                        className="h-10 rounded-lg border border-[var(--bhn-border)] px-3 text-sm font-medium text-[var(--bhn-text-muted)] hover:border-[var(--bhn-brand-600)] hover:text-[var(--bhn-brand-700)]"
                       >
                         Performance
                       </button>
                       <button
                         onClick={() => router.push(`/instructor/performance/student?courseId=${course.id}`)}
-                        className="h-10 rounded-lg border border-[#DEC9BC] px-3 text-sm font-medium text-[#5D4C44] hover:border-[#8A4A26] hover:text-[#8A4A26]"
+                        className="h-10 rounded-lg border border-[var(--bhn-border)] px-3 text-sm font-medium text-[var(--bhn-text-muted)] hover:border-[var(--bhn-brand-600)] hover:text-[var(--bhn-brand-700)]"
                       >
                         Students
                       </button>
                       <button
                         onClick={() => router.push(`/instructor/performance/review?courseId=${course.id}`)}
-                        className="h-10 rounded-lg border border-[#DEC9BC] px-3 text-sm font-medium text-[#5D4C44] hover:border-[#8A4A26] hover:text-[#8A4A26]"
+                        className="h-10 rounded-lg border border-[var(--bhn-border)] px-3 text-sm font-medium text-[var(--bhn-text-muted)] hover:border-[var(--bhn-brand-600)] hover:text-[var(--bhn-brand-700)]"
                       >
                         Reviews
                       </button>
                       <button
                         onClick={() => router.push(`/instructor/curriculum2/${course.id}`)}
-                        className="h-10 rounded-lg bg-[#8A4A26] px-3 text-sm font-semibold text-white hover:bg-[#713719]"
+                        className="h-10 rounded-lg bg-[var(--bhn-brand-600)] px-3 text-sm font-semibold text-white hover:bg-[#713719]"
                       >
                         Edit
                       </button>
@@ -318,10 +318,10 @@ export default function CoursePerformanceDashboard() {
                   <div
                     key={index}
                     className="
-                      bg-white
+                      bg-[var(--bhn-surface)]
                       rounded-2xl
                       border
-                      border-[#E8DDD5]
+                      border-[var(--bhn-border)]
                       p-5
                     "
                   >
@@ -332,7 +332,7 @@ export default function CoursePerformanceDashboard() {
                         w-10
                         h-10
                         rounded-xl
-                        bg-[#F4ECE6]
+                        bg-[var(--bhn-surface-3)]
                         flex
                         items-center
                         justify-center
@@ -358,7 +358,7 @@ export default function CoursePerformanceDashboard() {
                     <p className="
                       text-xs
                       uppercase
-                      text-[#9B8D84]
+                      text-[var(--bhn-text-soft)]
                       mt-5
                     ">
                       {card.label}
@@ -370,7 +370,7 @@ export default function CoursePerformanceDashboard() {
                       leading-none
                       mt-2
                       font-semibold
-                      text-[#2D201B]
+                      text-[var(--bhn-text)]
                       break-words
                     ">
                       {card.value}
@@ -392,10 +392,10 @@ export default function CoursePerformanceDashboard() {
 
                 {/* ENROLLMENT */}
                 <div className="
-                  bg-white
+                  bg-[var(--bhn-surface)]
                   rounded-2xl
                   border
-                  border-[#E8DDD5]
+                  border-[var(--bhn-border)]
                   p-4
                   sm:p-4
                   w-full
@@ -417,14 +417,14 @@ export default function CoursePerformanceDashboard() {
                         sm:text-[28px]
                         font-serif
                         font-semibold
-                        text-[#2D201B]
+                        text-[var(--bhn-text)]
                       ">
                         Enrollment Trends
                       </h2>
 
                       <p className="
                         text-sm
-                        text-[#9C8E86]
+                        text-[var(--bhn-text-soft)]
                       ">
                         Daily student growth over time
                       </p>
@@ -432,7 +432,7 @@ export default function CoursePerformanceDashboard() {
                     </div>
 
                     <div className="
-                      bg-[#F4ECE6]
+                      bg-[var(--bhn-surface-3)]
                       rounded-xl
                       p-1
                       flex
@@ -451,8 +451,8 @@ export default function CoursePerformanceDashboard() {
                               text-xs
                               rounded-lg
                               ${item === selectedPeriod
-                                ? "bg-white text-[#8A4A26] shadow-sm"
-                                : "text-[#6F5E55]"
+                                ? "bg-[var(--bhn-surface)] text-[var(--bhn-brand-700)] shadow-sm"
+                                : "text-[var(--bhn-text-soft)]"
                               }
                             `}
                           >
@@ -513,13 +513,13 @@ export default function CoursePerformanceDashboard() {
                             className={`
                               w-full
                               rounded-t-md
-                              ${item.value > 0 ? "bg-[#8A4A26]" : "bg-[#E4D6CB]"}
+                              ${item.value > 0 ? "bg-[var(--bhn-brand-600)]" : "bg-[#E4D6CB]"}
                             `}
                           />
                           <span className="
                             text-[10px]
                             sm:text-[11px]
-                            text-[#9C8E86]
+                            text-[var(--bhn-text-soft)]
                             uppercase
                           ">
                             {item.label}
@@ -534,10 +534,10 @@ export default function CoursePerformanceDashboard() {
 
                 {/* ENGAGEMENT */}
                 <div className="
-                  bg-white
+                  bg-[var(--bhn-surface)]
                   rounded-2xl
                   border
-                  border-[#E8DDD5]
+                  border-[var(--bhn-border)]
                   p-4
                 ">
 
@@ -546,14 +546,14 @@ export default function CoursePerformanceDashboard() {
                     sm:text-[28px]
                     font-serif
                     font-semibold
-                    text-[#2D201B]
+                    text-[var(--bhn-text)]
                   ">
                     Engagement
                   </h2>
 
                   <p className="
                     text-sm
-                    text-[#9C8E86]
+                    text-[var(--bhn-text-soft)]
                   ">
                     Average watch time (mins)
                   </p>
@@ -571,7 +571,7 @@ export default function CoursePerformanceDashboard() {
                       sm:h-[210px]
                       rounded-full
                       border-[8px]
-                      border-[#8A4A26]
+                      border-[var(--bhn-brand-600)]
                       flex
                       items-center
                       justify-center
@@ -584,7 +584,7 @@ export default function CoursePerformanceDashboard() {
                           sm:text-[40px]
                           leading-none
                           font-semibold
-                          text-[#2D201B]
+                          text-[var(--bhn-text)]
                         ">
                           {dashboard?.engagement?.averageWatchTime?.toFixed(1) ?? "0.0"}
                         </h2>
@@ -592,7 +592,7 @@ export default function CoursePerformanceDashboard() {
                         <p className="
                           text-sm
                           tracking-wide
-                          text-[#8B7B73]
+                          text-[var(--bhn-text-soft)]
                           mt-2
                         ">
                           MIN/DAY
@@ -622,12 +622,12 @@ export default function CoursePerformanceDashboard() {
                           w-3
                           h-3
                           rounded-full
-                          bg-[#8A4A26]
+                          bg-[var(--bhn-brand-600)]
                         " />
 
                         <span className="
                           text-sm
-                          text-[#6F5E55]
+                          text-[var(--bhn-text-soft)]
                         ">
                           Video Content
                         </span>
@@ -659,12 +659,12 @@ export default function CoursePerformanceDashboard() {
                           w-3
                           h-3
                           rounded-full
-                          bg-[#E8DDD5]
+                          bg-[var(--bhn-border)]
                         " />
 
                         <span className="
                           text-sm
-                          text-[#6F5E55]
+                          text-[var(--bhn-text-soft)]
                         ">
                           Assignments
                         </span>
@@ -694,10 +694,10 @@ export default function CoursePerformanceDashboard() {
               {/* QUICK ACTIONS */}
               <div
                 className="
-                bg-white
+                bg-[var(--bhn-surface)]
                 rounded-2xl
                 border
-                border-[#E8DDD5]
+                border-[var(--bhn-border)]
                 p-4
               "
               >
@@ -708,7 +708,7 @@ export default function CoursePerformanceDashboard() {
       font-serif
       font-semibold
       mb-6
-      text-[#2D201B]
+      text-[var(--bhn-text)]
     "
                 >
                   Quick Actions
@@ -735,16 +735,16 @@ export default function CoursePerformanceDashboard() {
             w-full
             h-14
             border
-            border-[#DEC9BC]
+            border-[var(--bhn-border)]
             rounded-xl
             flex
             items-center
             gap-3
             px-5
-            text-[#5D4C44]
-            hover:border-[#8A4A26]
-            hover:text-[#8A4A26]
-            hover:bg-[#FCF8F5]
+            text-[var(--bhn-text-muted)]
+            hover:border-[var(--bhn-brand-600)]
+            hover:text-[var(--bhn-brand-700)]
+            hover:bg-[var(--bhn-surface-3)]
             transition-all
             duration-200
           "
@@ -753,7 +753,7 @@ export default function CoursePerformanceDashboard() {
                         <Icon
                           size={20}
                           strokeWidth={2}
-                          className="text-[#6E564B]"
+                          className="text-[var(--bhn-text-soft)]"
                         />
 
                         <span
@@ -774,7 +774,7 @@ export default function CoursePerformanceDashboard() {
 
               {/* SUPPORT CARD */}
               <div className="
-                bg-[#F2E5DB]
+                bg-[var(--bhn-border)]
                 rounded-2xl
                 p-4
               ">
@@ -782,14 +782,14 @@ export default function CoursePerformanceDashboard() {
                 <h3 className="
                   text-[18px]
                   font-semibold
-                  text-[#2D201B]
+                  text-[var(--bhn-text)]
                 ">
                   Instructor Support
                 </h3>
 
                 <p className="
                   text-sm
-                  text-[#7B6B63]
+                  text-[var(--bhn-text-soft)]
                   leading-relaxed
                   mt-4
                 ">
@@ -803,7 +803,7 @@ export default function CoursePerformanceDashboard() {
                   w-full
                   h-14
                   rounded-xl
-                  bg-[#8A4A26]
+                  bg-[var(--bhn-brand-600)]
                   text-white
                   font-medium
                   mt-6
@@ -830,10 +830,10 @@ export default function CoursePerformanceDashboard() {
 
             {/* RECENT ACTIVITY */}
             <div className="
-              bg-white
+              bg-[var(--bhn-surface)]
               rounded-2xl
               border
-              border-[#E8DDD5]
+              border-[var(--bhn-border)]
               p-5
               sm:p-5
             ">
@@ -852,7 +852,7 @@ export default function CoursePerformanceDashboard() {
                   leading-none
                   font-serif
                   font-semibold
-                  text-[#2D201B]
+                  text-[var(--bhn-text)]
                 ">
                   Recent Activity
                 </h2>
@@ -861,7 +861,7 @@ export default function CoursePerformanceDashboard() {
                   onClick={() => router.push("/instructor/performance")}
                   className="
                   text-[14px]
-                  text-[#8A4A26]
+                  text-[var(--bhn-brand-700)]
                   font-semibold
                   tracking-wide
                   whitespace-nowrap
@@ -880,25 +880,25 @@ export default function CoursePerformanceDashboard() {
                   const activityIcon = () => {
                     switch (item.type?.toLowerCase()) {
                       case "enrollment":
-                        return <UserPlus size={18} className="text-[#8A4A26]" />;
+                        return <UserPlus size={18} className="text-[var(--bhn-brand-700)]" />;
                       case "review":
-                        return <MessageSquareQuote size={18} className="text-[#B14D45]" />;
+                        return <MessageSquareQuote size={18} className="text-[var(--bhn-error-600)]" />;
                       case "completion":
-                        return <GraduationCap size={18} className="text-[#16A34A]" />;
+                        return <GraduationCap size={18} className="text-[var(--bhn-success-600)]" />;
                       default:
-                        return <MessageSquare size={18} className="text-[#8A4A26]" />;
+                        return <MessageSquare size={18} className="text-[var(--bhn-brand-700)]" />;
                     }
                   };
                   const activityBg = () => {
                     switch (item.type?.toLowerCase()) {
                       case "enrollment":
-                        return "bg-[#F4ECE6]";
+                        return "bg-[var(--bhn-surface-3)]";
                       case "review":
-                        return "bg-[#F6ECEB]";
+                        return "bg-[var(--bhn-surface-3)]";
                       case "completion":
-                        return "bg-[#DDF5E5]";
+                        return "bg-[var(--bhn-success-50)]";
                       default:
-                        return "bg-[#F4ECE6]";
+                        return "bg-[var(--bhn-surface-3)]";
                     }
                   };
                   return (
@@ -932,14 +932,14 @@ export default function CoursePerformanceDashboard() {
                           sm:text-[18px]
                           leading-[28px]
                           font-medium
-                          text-[#2D201B]
+                          text-[var(--bhn-text)]
                         ">
                           {item.message}
                         </p>
 
                         <p className="
                           text-[14px]
-                          text-[#8F8178]
+                          text-[var(--bhn-text-soft)]
                           mt-1
                         ">
                           {item.time}
@@ -957,10 +957,10 @@ export default function CoursePerformanceDashboard() {
             {/* STUDENT SNAPSHOT */}
             <div
               className="
-              bg-[#FDFCFB]
+              bg-[var(--bhn-surface)]
               rounded-[28px]
               border
-              border-[#E9DDD4]
+              border-[var(--bhn-border)]
               px-4
               sm:px-5
               py-7
@@ -986,7 +986,7 @@ export default function CoursePerformanceDashboard() {
                   leading-none
                   font-serif
                   font-semibold
-                  text-[#221815]
+                  text-[var(--bhn-text)]
                  "
                 >
                   Student Snapshot
@@ -998,7 +998,7 @@ export default function CoursePerformanceDashboard() {
                   text-[14px]
                   tracking-wide
                   font-semibold
-                  text-[#9A542D]
+                  text-[var(--bhn-brand-600)]
                   uppercase
                   text-left
               "
@@ -1020,7 +1020,7 @@ export default function CoursePerformanceDashboard() {
                   px-1
                   pb-5
                   border-b
-                  border-[#E8DDD5]
+                  border-[var(--bhn-border)]
                  "
                 >
                   <p
@@ -1028,7 +1028,7 @@ export default function CoursePerformanceDashboard() {
                     text-[13px]
                     tracking-[3px]
               ]     font-semibold
-                    text-[#6E5A50]
+                    text-[var(--bhn-text-soft)]
                     uppercase
                       "
                   >
@@ -1040,7 +1040,7 @@ export default function CoursePerformanceDashboard() {
                     text-[13px]
                     tracking-[3px]
                     font-semibold
-                    text-[#6E5A50]
+                    text-[var(--bhn-text-soft)]
                     uppercase
                  "
                   >
@@ -1052,7 +1052,7 @@ export default function CoursePerformanceDashboard() {
                     text-[13px]
                     tracking-[3px]
                     font-semibold
-                    text-[#6E5A50]
+                    text-[var(--bhn-text-soft)]
                     uppercase
                    "
                   >
@@ -1064,7 +1064,7 @@ export default function CoursePerformanceDashboard() {
                     text-[13px]
                     tracking-[3px]
                     font-semibold
-                    text-[#6E5A50]
+                    text-[var(--bhn-text-soft)]
                     uppercase
                     text-right
                   "
@@ -1094,7 +1094,7 @@ export default function CoursePerformanceDashboard() {
                           py-6
                           border-b
                           last:border-none
-                          border-[#EEE3DB]
+                          border-[var(--bhn-border)]
                         "
                       >
                         {/* STUDENT */}
@@ -1103,23 +1103,23 @@ export default function CoursePerformanceDashboard() {
                             src={student.profileImage || "/bandhan.png"}
                             alt={student.name}
                             className="
-                              w-[52px] h-[52px] rounded-full border border-[#E8DDD5] object-cover shrink-0
+                              w-[52px] h-[52px] rounded-full border border-[var(--bhn-border)] object-cover shrink-0
                             "
                           />
-                          <h3 className="text-[18px] sm:text-[20px] font-medium text-[#2B211D] break-words">
+                          <h3 className="text-[18px] sm:text-[20px] font-medium text-[var(--bhn-text)] break-words">
                             {student.name}
                           </h3>
                         </div>
 
                         {/* PROGRESS */}
                         <div className="w-full md:pr-6">
-                          <div className="w-full h-[8px] bg-[#EFE5DE] rounded-full overflow-hidden">
+                          <div className="w-full h-[8px] bg-[var(--bhn-border)] rounded-full overflow-hidden">
                             <div
-                              className="h-full bg-[#8F4B28] rounded-full"
+                              className="h-full bg-[var(--bhn-brand-600)] rounded-full"
                               style={{ width: `${student.progress ?? 0}%` }}
                             />
                           </div>
-                          <p className="text-[14px] text-[#3B2E28] mt-2 font-medium">
+                          <p className="text-[14px] text-[var(--bhn-text-muted)] mt-2 font-medium">
                             {student.progress ?? 0}%
                           </p>
                         </div>
@@ -1130,8 +1130,8 @@ export default function CoursePerformanceDashboard() {
                             className={`
                               inline-flex items-center justify-center px-4 h-[35px] rounded-full text-[13px] font-semibold
                               ${statusUpper === "ACTIVE" || statusUpper === "COMPLETED"
-                                ? "bg-[#E4F4E8] text-[#1D9A4C]"
-                                : "bg-[#EFE4DB] text-[#7A6455]"
+                                ? "bg-[var(--bhn-success-50)] text-[var(--bhn-success-600)]"
+                                : "bg-[var(--bhn-border)] text-[var(--bhn-text-soft)]"
                               }
                             `}
                           >
@@ -1144,10 +1144,10 @@ export default function CoursePerformanceDashboard() {
                           <button
                             onClick={() => router.push(`/instructor/performance/student?courseId=${activeCourseId}`)}
                             className="
-                              w-10 h-10 flex items-center justify-center rounded-full hover:bg-[#F4ECE6] transition
+                              w-10 h-10 flex items-center justify-center rounded-full hover:bg-[var(--bhn-surface-3)] transition
                             "
                           >
-                            <MoreHorizontal size={24} className="text-[#2B211D]" />
+                            <MoreHorizontal size={24} className="text-[var(--bhn-text)]" />
                           </button>
                         </div>
                       </div>

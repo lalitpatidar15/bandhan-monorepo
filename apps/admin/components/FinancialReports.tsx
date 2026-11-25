@@ -2,14 +2,15 @@
 
 import { useState } from 'react';
 import { DollarSign, TrendingUp, Download, CreditCard } from 'lucide-react';
-import { useGetOrdersQuery, useGetRentalOrdersQuery, useGetSettlementsQuery, useGetAnalyticsQuery, useUpdateSettlementMutation } from '@/lib/adminApi';
+import { useGetOrdersQuery, useGetRentalOrdersQuery, useGetSettlementsQuery, useGetAnalyticsQuery, useUpdateSettlementMutation, useGetPaymentBreakdownQuery } from '@/lib/adminApi';
 import { PageHeader, StatCard, Tabs, Badge, statusTone, Button, Card } from '@bandhan/ui';
 import toast from 'react-hot-toast';
 
 export default function FinancialReports() {
   const [period, setPeriod] = useState('all');
-  const [activeTab, setActiveTab] = useState<'overview' | 'orders' | 'rentals' | 'settlements'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'vendor-split' | 'orders' | 'rentals' | 'settlements'>('overview');
 
+  const { data: breakdown } = useGetPaymentBreakdownQuery();
   const { data: analytics } = useGetAnalyticsQuery();
   const { data: orders = [] } = useGetOrdersQuery();
   const { data: rentalOrders = [] } = useGetRentalOrdersQuery({});
@@ -22,14 +23,15 @@ export default function FinancialReports() {
   const pendingSettlements = settlements.filter((s) => s.status === 'pending');
 
   const stats = [
-    { label: 'Total Revenue', value: `₹${(totalOrderRevenue + totalRentalRevenue).toLocaleString()}`, icon: <DollarSign size={18} /> },
-    { label: 'Order Revenue', value: `₹${totalOrderRevenue.toLocaleString()}`, icon: <TrendingUp size={18} /> },
-    { label: 'Rental Revenue', value: `₹${totalRentalRevenue.toLocaleString()}`, icon: <TrendingUp size={18} /> },
-    { label: 'Commission Collected', value: `₹${totalCommission.toLocaleString()}`, icon: <DollarSign size={18} /> },
+    { label: 'Collected from buyers', value: `₹${(breakdown?.grossCollected ?? 0).toLocaleString()}`, icon: <DollarSign size={18} /> },
+    { label: 'Bandhan earned', value: `₹${(breakdown?.platformEarned ?? 0).toLocaleString()}`, icon: <TrendingUp size={18} /> },
+    { label: 'Payable to vendors', value: `₹${(breakdown?.vendorPayable ?? 0).toLocaleString()}`, icon: <CreditCard size={18} /> },
+    { label: 'Refunded', value: `₹${(breakdown?.refunded ?? 0).toLocaleString()}`, icon: <DollarSign size={18} /> },
   ];
 
   const tabs = [
     { id: 'overview' as const, label: 'Overview' },
+    { id: 'vendor-split' as const, label: 'Vendor split' },
     { id: 'orders' as const, label: 'Orders' },
     { id: 'rentals' as const, label: 'Rentals' },
     { id: 'settlements' as const, label: 'Settlements' },
@@ -70,20 +72,71 @@ export default function FinancialReports() {
       {activeTab === 'overview' && (
         <div className="grid gap-4 lg:grid-cols-2">
           <Card>
-            <h3 className="bhn-card-title mb-3">Revenue Summary</h3>
+            <h3 className="bhn-card-title mb-3">Money movement</h3>
+            <div className="space-y-2 text-xs">
+              <div className="flex justify-between"><span style={{ color: 'var(--bhn-text-muted)' }}>Commission earned</span><span className="font-medium">₹{(breakdown?.commissionCollected ?? 0).toLocaleString()}</span></div>
+              <div className="flex justify-between"><span style={{ color: 'var(--bhn-text-muted)' }}>Buyer service fees</span><span className="font-medium">₹{(breakdown?.platformServiceFees ?? 0).toLocaleString()}</span></div>
+              <div className="flex justify-between"><span style={{ color: 'var(--bhn-text-muted)' }}>Tax collected (pass-through)</span><span className="font-medium">₹{(breakdown?.taxCollected ?? 0).toLocaleString()}</span></div>
+              <div className="flex justify-between"><span style={{ color: 'var(--bhn-text-muted)' }}>Paid bookings</span><span className="font-medium">{breakdown?.paidBookings ?? 0}</span></div>
+              <div className="flex justify-between"><span style={{ color: 'var(--bhn-text-muted)' }}>Pending manual settlements</span><span className="font-medium" style={{ color: 'var(--bhn-warning-600)' }}>{pendingSettlements.length}</span></div>
+            </div>
+          </Card>
+          <Card>
+            <h3 className="bhn-card-title mb-3">Shop activity</h3>
             <div className="space-y-2 text-xs">
               <div className="flex justify-between"><span style={{ color: 'var(--bhn-text-muted)' }}>Total Orders</span><span className="font-medium">{orders.length}</span></div>
               <div className="flex justify-between"><span style={{ color: 'var(--bhn-text-muted)' }}>Total Rentals</span><span className="font-medium">{rentalOrders.length}</span></div>
               <div className="flex justify-between"><span style={{ color: 'var(--bhn-text-muted)' }}>Avg Order Value</span><span className="font-medium">₹{orders.length > 0 ? Math.round(totalOrderRevenue / orders.length).toLocaleString() : 0}</span></div>
-              <div className="flex justify-between"><span style={{ color: 'var(--bhn-text-muted)' }}>Pending Settlements</span><span className="font-medium" style={{ color: 'var(--bhn-warning-600)' }}>{pendingSettlements.length}</span></div>
+              <div className="flex justify-between"><span style={{ color: 'var(--bhn-text-muted)' }}>Avg Booking Value</span><span className="font-medium">₹{(analytics?.averageOrderValue || 0).toLocaleString()}</span></div>
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {activeTab === 'vendor-split' && (
+        <div className="space-y-4">
+          <Card>
+            <h3 className="bhn-card-title mb-3">Distribution by provider type</h3>
+            <div className="bhn-table-wrap">
+              <table className="bhn-table">
+                <thead><tr><th>Provider type</th><th>Orders</th><th>Gross</th><th>Bandhan commission</th><th>Payable to providers</th><th>Refunded</th></tr></thead>
+                <tbody>
+                  {(['product', 'service', 'venue'] as const).map((type) => {
+                    const row = breakdown?.byVendorType?.[type] || { gross: 0, commission: 0, payable: 0, refunded: 0, count: 0 };
+                    return (
+                      <tr key={type}>
+                        <td className="text-xs font-medium capitalize">{type}</td>
+                        <td className="text-xs">{row.count}</td>
+                        <td className="text-xs">₹{row.gross.toLocaleString()}</td>
+                        <td className="text-xs">₹{row.commission.toLocaleString()}</td>
+                        <td className="text-xs font-medium">₹{row.payable.toLocaleString()}</td>
+                        <td className="text-xs">₹{row.refunded.toLocaleString()}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           </Card>
           <Card>
-            <h3 className="bhn-card-title mb-3">Platform Stats</h3>
-            <div className="space-y-2 text-xs">
-              <div className="flex justify-between"><span style={{ color: 'var(--bhn-text-muted)' }}>Bookings (Analytics)</span><span className="font-medium">{analytics?.totalBookings || 0}</span></div>
-              <div className="flex justify-between"><span style={{ color: 'var(--bhn-text-muted)' }}>Avg Booking Value</span><span className="font-medium">₹{(analytics?.averageOrderValue || 0).toLocaleString()}</span></div>
-              <div className="flex justify-between"><span style={{ color: 'var(--bhn-text-muted)' }}>Rating Average</span><span className="font-medium">{analytics?.ratingAverage || 0}</span></div>
+            <h3 className="bhn-card-title mb-3">Provider payouts</h3>
+            <div className="bhn-table-wrap">
+              <table className="bhn-table">
+                <thead><tr><th>Provider</th><th>Type</th><th>Sales</th><th>Commission</th><th>Net payable</th></tr></thead>
+                <tbody>
+                  {(breakdown?.vendors || []).length === 0 ? (
+                    <tr><td colSpan={5} className="py-8 text-center text-xs" style={{ color: 'var(--bhn-text-muted)' }}>No captured payments yet</td></tr>
+                  ) : (breakdown?.vendors || []).map((vendor) => (
+                    <tr key={`${vendor.vendorType}-${vendor.vendorId}`}>
+                      <td className="text-xs"><span className="font-medium">{vendor.vendorName}</span><span className="block" style={{ color: 'var(--bhn-text-muted)' }}>{vendor.vendorEmail}</span></td>
+                      <td className="text-xs capitalize">{vendor.vendorType}</td>
+                      <td className="text-xs">₹{vendor.gross.toLocaleString()}</td>
+                      <td className="text-xs">₹{vendor.commission.toLocaleString()}</td>
+                      <td className="text-xs font-medium">₹{vendor.payable.toLocaleString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </Card>
         </div>

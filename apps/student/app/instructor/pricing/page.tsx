@@ -196,7 +196,7 @@ function PricingPageContent() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F7F3EF] text-[#2D201B] overflow-x-hidden">
+    <div className="min-h-screen bg-[var(--bhn-surface-3)] text-[var(--bhn-text)] overflow-x-hidden">
 
       {/* HEADER */}
       <CurriculumHeader currentStep={4} />
@@ -211,7 +211,7 @@ function PricingPageContent() {
           <div className="space-y-5">
 
             {/* COURSE PRICING */}
-            <div className="bg-white rounded-2xl border border-[#E8DDD5] p-4 sm:p-4">
+            <div className="bg-[var(--bhn-surface)] rounded-2xl border border-[var(--bhn-border)] p-4 sm:p-4">
 
               <h2 className="text-2xl sm:text-[24px] font-serif font-semibold mb-6">
                 Course Pricing
@@ -219,7 +219,7 @@ function PricingPageContent() {
 
               <div>
 
-                <label className="text-sm text-[#7A6C64] mb-2 block">
+                <label className="text-sm text-[var(--bhn-text-muted)] mb-2 block">
                   Basic Price (₹)
                 </label>
 
@@ -233,16 +233,16 @@ function PricingPageContent() {
                   h-12
                   rounded-xl
                   border
-                  border-[#E3D7CF]
+                  border-[var(--bhn-border)]
                   px-4
                   outline-none
                   text-[15px]
-                  placeholder:text-[#B7AAA1]
-                  focus:border-[#8B4A28]
+                  placeholder:text-[var(--bhn-text-soft)]
+                  focus:border-[var(--bhn-brand-600)]
                  "
                 />
 
-                <p className="text-xs text-[#A19188] mt-2">
+                <p className="text-xs text-[var(--bhn-text-soft)] mt-2">
                   Courses between ₹999–₹2,999 perform best
                 </p>
 
@@ -251,7 +251,7 @@ function PricingPageContent() {
             </div>
 
             {/* DISCOUNT */}
-            <div className="bg-white rounded-2xl border border-[#E8DDD5] p-4 sm:p-4">
+            <div className="bg-[var(--bhn-surface)] rounded-2xl border border-[var(--bhn-border)] p-4 sm:p-4">
 
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5">
 
@@ -265,17 +265,17 @@ function PricingPageContent() {
                   <div
                     onClick={() => setEnableDiscount(!enableDiscount)}
                     className={`w-11 h-6 rounded-full relative cursor-pointer transition-all duration-300
-              ${enableDiscount ? "bg-[#8A4A26]" : "bg-[#D8CCC4]"}
+              ${enableDiscount ? "bg-[var(--bhn-brand-600)]" : "bg-[#D8CCC4]"}
             `}
                   >
                     <div
-                      className={`w-5 h-5 bg-white rounded-full absolute top-0.5 transition-all duration-300
+                      className={`w-5 h-5 bg-[var(--bhn-surface)] rounded-full absolute top-0.5 transition-all duration-300
                 ${enableDiscount ? "right-0.5" : "left-0.5"}
               `}
                     />
                   </div>
 
-                  <span className="text-sm text-[#6F5E55]">
+                  <span className="text-sm text-[var(--bhn-text-soft)]">
                     Enable Discount
                   </span>
 
@@ -288,7 +288,7 @@ function PricingPageContent() {
                 {/* Input */}
                 <div>
 
-                  <label className="text-sm text-[#7A6C64] mb-2 block">
+                  <label className="text-sm text-[var(--bhn-text-muted)] mb-2 block">
                     Discount Percentage (%)
                   </label>
 
@@ -303,17 +303,17 @@ function PricingPageContent() {
                     h-12
                     rounded-xl
                     border
-                    border-[#E3D7CF]
+                    border-[var(--bhn-border)]
                     px-4
                     outline-none
                     text-[15px]
-                    placeholder:text-[#B7AAA1]
+                    placeholder:text-[var(--bhn-text-soft)]
                     transition
-                    focus:border-black
+                    focus:border-[var(--bhn-border)]
                     focus:ring-0
                     ${enableDiscount
-                        ? "bg-white text-black"
-                        : "bg-[#F1ECE8] text-gray-400 cursor-not-allowed"
+                        ? "bg-[var(--bhn-surface)] text-black"
+                        : "bg-[var(--bhn-surface-3)] text-gray-400 cursor-not-allowed"
                       }
                       `}
                   />
@@ -323,14 +323,14 @@ function PricingPageContent() {
                 <div
                   className={`rounded-xl min-h-[48px] flex items-center gap-3 px-4 lg:mt-7
                    ${enableDiscount
-                      ? "bg-[#F8F5F2]"
-                      : "bg-[#EFEAE6] opacity-60"
+                      ? "bg-[var(--bhn-bg)]"
+                      : "bg-[var(--bhn-surface-2)] opacity-60"
                     }
                       `}
                 >
-                  <Tag size={16} className="text-[#8A4A26]" />
+                  <Tag size={16} className="text-[var(--bhn-brand-700)]" />
 
-                  <span className="text-sm text-[#6B5A52]">
+                  <span className="text-sm text-[var(--bhn-text-soft)]">
                     {price > 0 ? (
                       `Students will pay ₹${finalPrice}`
                     ) : (
@@ -345,7 +345,7 @@ function PricingPageContent() {
             </div>
 
             {/* EMI OPTION */}
-            <div className="bg-white rounded-2xl border border-[#E8DDD5] p-4 sm:p-4">
+            <div className="bg-[var(--bhn-surface)] rounded-2xl border border-[var(--bhn-border)] p-4 sm:p-4">
 
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5">
 
@@ -374,17 +374,17 @@ function PricingPageContent() {
                       }
                     }}
                     className={`w-11 h-6 rounded-full relative cursor-pointer transition-all duration-300
-              ${enableEMI ? "bg-[#8A4A26]" : "bg-[#EFE7E1]"}
+              ${enableEMI ? "bg-[var(--bhn-brand-600)]" : "bg-[#EFE7E1]"}
             `}
                   >
                     <div
-                      className={`w-5 h-5 bg-white rounded-full absolute top-0.5 border border-[#DDD] transition-all duration-300
+                      className={`w-5 h-5 bg-[var(--bhn-surface)] rounded-full absolute top-0.5 border border-[#DDD] transition-all duration-300
                 ${enableEMI ? "right-0.5" : "left-0.5"}
               `}
                     />
                   </div>
 
-                  <span className="text-sm text-[#6F5E55]">
+                  <span className="text-sm text-[var(--bhn-text-soft)]">
                     Enable EMI
                   </span>
 
@@ -417,13 +417,13 @@ function PricingPageContent() {
                     className={`rounded-xl border h-[78px] flex flex-col items-center justify-center transition cursor-pointer
               
               ${selectedMonth === month && enableEMI
-                        ? "border-[#8A4A26] bg-[#FFF9F6]"
-                        : "border-[#E5DCD6] bg-white"
+                        ? "border-[var(--bhn-brand-600)] bg-[var(--bhn-surface-2)]"
+                        : "border-[#E5DCD6] bg-[var(--bhn-surface)]"
                       }
 
               ${!enableEMI
                         ? "opacity-50 cursor-not-allowed"
-                        : "hover:border-[#8A4A26]"
+                        : "hover:border-[var(--bhn-brand-600)]"
                       }
             `}
                   >
@@ -432,7 +432,7 @@ function PricingPageContent() {
                       {month}
                     </span>
 
-                    <span className="text-xs text-[#9C8E86] tracking-wide">
+                    <span className="text-xs text-[var(--bhn-text-soft)] tracking-wide">
                       MONTHS
                     </span>
 
@@ -445,7 +445,7 @@ function PricingPageContent() {
               {/* Installment */}
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mt-6">
 
-                <span className="text-sm text-[#8A7C74]">
+                <span className="text-sm text-[var(--bhn-text-soft)]">
                   Estimated Installment:
                 </span>
 
@@ -462,7 +462,7 @@ function PricingPageContent() {
             </div>
 
             {/* VISIBILITY */}
-            <div className="bg-white rounded-2xl border border-[#E8DDD5] p-4 sm:p-4">
+            <div className="bg-[var(--bhn-surface)] rounded-2xl border border-[var(--bhn-border)] p-4 sm:p-4">
 
               <h2 className="text-2xl sm:text-[24px] font-serif font-semibold mb-6">
                 Visibility Settings
@@ -490,8 +490,8 @@ function PricingPageContent() {
                       className={`border rounded-xl p-4 flex items-start gap-4 cursor-pointer transition-all duration-300
 
                 ${active
-                          ? "border-[#D7C3B8] bg-[#FFF9F6]"
-                          : "border-[#ECE3DD] bg-white hover:border-[#D7C3B8]"
+                          ? "border-[var(--bhn-border)] bg-[var(--bhn-surface-2)]"
+                          : "border-[#ECE3DD] bg-[var(--bhn-surface)] hover:border-[var(--bhn-border)]"
                         }
               `}
                     >
@@ -501,14 +501,14 @@ function PricingPageContent() {
                         className={`w-4 h-4 rounded-full border mt-1 flex items-center justify-center shrink-0
 
                   ${active
-                            ? "border-[#8A4A26]"
-                            : "border-[#D8CDC6]"
+                            ? "border-[var(--bhn-brand-600)]"
+                            : "border-[var(--bhn-border)]"
                           }
                 `}
                       >
 
                         {active && (
-                          <div className="w-2 h-2 rounded-full bg-[#8A4A26]" />
+                          <div className="w-2 h-2 rounded-full bg-[var(--bhn-brand-600)]" />
                         )}
 
                       </div>
@@ -516,11 +516,11 @@ function PricingPageContent() {
                       {/* Content */}
                       <div>
 
-                        <h4 className="font-medium text-[15px] text-[#2D201B]">
+                        <h4 className="font-medium text-[15px] text-[var(--bhn-text)]">
                           {item.title}
                         </h4>
 
-                        <p className="text-xs text-[#9B8D85] mt-1 leading-relaxed">
+                        <p className="text-xs text-[var(--bhn-text-soft)] mt-1 leading-relaxed">
                           {item.desc}
                         </p>
 
@@ -533,7 +533,7 @@ function PricingPageContent() {
               </div>
 
               {/* Selected Option */}
-              <div className="mt-5 text-sm text-[#8A4A26] font-medium">
+              <div className="mt-5 text-sm text-[var(--bhn-brand-700)] font-medium">
                 Selected: {selected}
               </div>
 
@@ -545,7 +545,7 @@ function PricingPageContent() {
           <div className="space-y-4">
 
             {/* COURSE CARD */}
-            <div className="bg-white rounded-2xl border border-[#E8DDD5] overflow-hidden">
+            <div className="bg-[var(--bhn-surface)] rounded-2xl border border-[var(--bhn-border)] overflow-hidden">
 
               <div
                 className="h-[180px] relative flex items-center justify-center px-4 text-center"
@@ -555,7 +555,7 @@ function PricingPageContent() {
                   <img src={courseThumbnail} alt="" className="absolute inset-0 w-full h-full object-cover" />
                 )}
 
-                <span className="absolute top-3 left-3 text-[10px] bg-white px-2 py-1 rounded font-semibold">
+                <span className="absolute top-3 left-3 text-[10px] bg-[var(--bhn-surface)] px-2 py-1 rounded font-semibold">
                   {courseStatus.toUpperCase()}
                 </span>
 
@@ -571,11 +571,11 @@ function PricingPageContent() {
                   {courseTitle}
                 </h3>
 
-                <p className="text-sm text-[#8D7F77] mt-1">
+                <p className="text-sm text-[var(--bhn-text-soft)] mt-1">
                   {courseCategory}
                 </p>
 
-                <div className="flex flex-wrap gap-4 mt-4 text-xs text-[#8B7B73]">
+                <div className="flex flex-wrap gap-4 mt-4 text-xs text-[var(--bhn-text-soft)]">
                   <span>{courseLessons} Lessons</span>
                   {courseDuration && <span>{courseDuration}</span>}
                 </div>
@@ -585,9 +585,9 @@ function PricingPageContent() {
             </div>
 
             {/* PUBLISH READINESS */}
-            <div className="bg-white rounded-2xl border border-[#E8DDD5] p-5">
+            <div className="bg-[var(--bhn-surface)] rounded-2xl border border-[var(--bhn-border)] p-5">
 
-              <h3 className="text-xs tracking-wide uppercase text-[#9B8C83] mb-4">
+              <h3 className="text-xs tracking-wide uppercase text-[var(--bhn-text-soft)] mb-4">
                 Publish Readiness
               </h3>
 
@@ -607,10 +607,10 @@ function PricingPageContent() {
 
                     <CheckCircle
                       size={18}
-                      className={`${item.done ? "text-[#22C55E]" : "text-[#D0C1B8]"} shrink-0`}
+                      className={`${item.done ? "text-[var(--bhn-success-500)]" : "text-[var(--bhn-border)]"} shrink-0`}
                     />
 
-                    <span className={`text-sm ${item.done ? "text-[#2D201B]" : "text-[#5E514A]"}`}>
+                    <span className={`text-sm ${item.done ? "text-[var(--bhn-text)]" : "text-[var(--bhn-text-soft)]"}`}>
                       {item.label}
                     </span>
 
@@ -623,15 +623,15 @@ function PricingPageContent() {
             </div>
 
             {/* ESTIMATED EARNING */}
-            <div className="bg-[#F3E9E1] rounded-2xl border border-[#E8DDD5] p-5">
+            <div className="bg-[var(--bhn-surface-3)] rounded-2xl border border-[var(--bhn-border)] p-5">
 
               <div className="flex items-center justify-between">
 
-                <h3 className="text-xs tracking-wide uppercase text-[#9B8C83]">
+                <h3 className="text-xs tracking-wide uppercase text-[var(--bhn-text-soft)]">
                   Estimated Earnings
                 </h3>
 
-                <Info size={14} className="text-[#B39D90]" />
+                <Info size={14} className="text-[var(--bhn-text-soft)]" />
 
               </div>
 
@@ -641,11 +641,11 @@ function PricingPageContent() {
                   {estimatedEarning > 0 ? `₹${estimatedEarning}` : "—"}
                 </p>
 
-                <p className="text-sm text-[#8B7D75]">
+                <p className="text-sm text-[var(--bhn-text-soft)]">
                   per sale
                 </p>
 
-                <p className="text-xs text-[#AA9B93] mt-3 leading-relaxed">
+                <p className="text-xs text-[var(--bhn-text-soft)] mt-3 leading-relaxed">
                   This reflects your take-home after the 20% platform fee.
                   {finalPrice > 0 && (
                     <span> Based on ₹{finalPrice} selling price.</span>
@@ -653,11 +653,11 @@ function PricingPageContent() {
                 </p>
 
                 {finalPrice > 0 ? (
-                  <p className="text-xs text-[#AA9B93] mt-2">
+                  <p className="text-xs text-[var(--bhn-text-soft)] mt-2">
                     Estimated fee: ₹{estimatedFee}
                   </p>
                 ) : (
-                  <p className="text-xs text-[#AA9B93] mt-2">
+                  <p className="text-xs text-[var(--bhn-text-soft)] mt-2">
                     Enter a price to calculate fee.
                   </p>
                 )}
@@ -671,7 +671,7 @@ function PricingPageContent() {
               onClick={handlePublish}
               disabled={isSavingSettings || isSavingPricing || isPublishing}
               className="
-              w-full h-14 rounded-xl bg-[#8A4A26] text-white
+              w-full h-14 rounded-xl bg-[var(--bhn-brand-600)] text-white
               font-medium flex items-center justify-center gap-2
               transition-all duration-200
               hover:opacity-95 hover:scale-[1.02]
@@ -691,7 +691,7 @@ function PricingPageContent() {
             </button>
 
             {/* EXTRA BUTTONS */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 text-sm text-[#7D6E66]">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 text-sm text-[var(--bhn-text-soft)]">
 
               <button
                 onClick={async () => {
@@ -700,12 +700,12 @@ function PricingPageContent() {
                     alert("Settings saved as draft.");
                   }
                 }}
-                className="hover:text-[#8A4A26] transition"
+                className="hover:text-[var(--bhn-brand-700)] transition"
               >
                 Save as Draft
               </button>
 
-              <button onClick={() => router.push(`/course-preview?courseId=${encodeURIComponent(courseId)}`)} className="hover:text-[#8A4A26] transition">
+              <button onClick={() => router.push(`/course-preview?courseId=${encodeURIComponent(courseId)}`)} className="hover:text-[var(--bhn-brand-700)] transition">
                 Preview Course
               </button>
 
@@ -718,11 +718,11 @@ function PricingPageContent() {
       </div>
 
       {/* FOOTER */}
-      <footer className="border-t border-[#E6DAD2] mt-4 bg-[#F3E9E1]">
+      <footer className="border-t border-[var(--bhn-border)] mt-4 bg-[var(--bhn-surface-3)]">
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row items-center justify-between gap-5 text-sm text-[#8F7D74] text-center lg:text-left">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex flex-col lg:flex-row items-center justify-between gap-5 text-sm text-[var(--bhn-text-soft)] text-center lg:text-left">
 
-          <h3 className="font-semibold text-[#8A4A26]">
+          <h3 className="font-semibold text-[var(--bhn-brand-700)]">
             Sahara Academy
           </h3>
 
@@ -747,5 +747,5 @@ function PricingPageContent() {
 }
 
 export default function PricingPage() {
-  return <React.Suspense fallback={<div className="min-h-screen bg-[#F7F3EF]" />}><PricingPageContent /></React.Suspense>;
+  return <React.Suspense fallback={<div className="min-h-screen bg-[var(--bhn-surface-3)]" />}><PricingPageContent /></React.Suspense>;
 }

@@ -8,12 +8,12 @@ export default function ReviewsSection() {
   const { data, isLoading, isError, refetch } = useGetFeaturedReviewsQuery(5);
   const reviews = data?.reviews || [];
   return (
-    <section className="bg-white px-4 py-12 sm:px-6 md:py-16">
+    <section className="bg-[var(--bhn-surface)] px-4 py-12 sm:px-6 md:py-16">
       <div className="mx-auto max-w-7xl text-center">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--bhn-brand-600)]">What our customers say</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--bhn-text)]">What our customers say</p>
         <h2 className="mt-2 text-2xl font-bold text-[var(--bhn-text)] sm:text-3xl" style={{ fontFamily: 'var(--bhn-font-display)' }}>Customer reviews</h2>
         {data?.total ? <div className="mx-auto mt-2 flex items-center justify-center gap-1.5 text-sm text-[var(--bhn-text-muted)]">
-          <Star size={16} className="fill-amber-400 text-amber-400" /> <strong className="text-[var(--bhn-text)]">{data.averageRating.toFixed(1)}</strong> average from {data.total.toLocaleString('en-IN')} verified {data.total === 1 ? 'review' : 'reviews'}
+          <Star size={16} className="fill-[var(--bhn-warning-500)] text-[var(--bhn-warning-500)]" /> <strong className="text-[var(--bhn-text)]">{data.averageRating.toFixed(1)}</strong> average from {data.total.toLocaleString('en-IN')} verified {data.total === 1 ? 'review' : 'reviews'}
         </div> : null}
 
         {isLoading ? <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">{Array.from({ length: 5 }).map((_, index) => <Skeleton key={index} height={220} />)}</div> : null}
@@ -22,7 +22,7 @@ export default function ReviewsSection() {
             <article key={review.id} className="flex flex-col rounded-2xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-5 text-left">
               <div className="flex items-center gap-0.5">
                 {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} size={13} className={i < review.rating ? 'fill-amber-400 text-amber-400' : 'fill-gray-200 text-gray-200'} />
+                  <Star key={i} size={13} className={i < review.rating ? 'fill-[var(--bhn-warning-500)] text-[var(--bhn-warning-500)]' : 'fill-[var(--bhn-border)] text-[var(--bhn-text-soft)]'} />
                 ))}
               </div>
               {review.title ? <h3 className="mt-3 text-sm font-bold text-[var(--bhn-text)]">{review.title}</h3> : null}

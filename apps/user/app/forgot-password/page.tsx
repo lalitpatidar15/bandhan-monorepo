@@ -89,11 +89,11 @@ export default function ForgotPasswordPage() {
   return (
     <AuthLayout image="/login.png" position="right" title="Reset your password" logo="/Group1.png">
       <form onSubmit={(e) => e.preventDefault()} className="w-full max-w-md mx-auto flex flex-col gap-3">
-        <Image src="/Group1.png" alt="Bandhan Events Hub" width={433} height={96} className="w-56 h-14 mx-auto rounded-lg bg-[#2A1C16] object-contain px-3 py-1.5" priority />
+        <Image src="/Group1.png" alt="Bandhan Events Hub" width={433} height={96} className="w-56 h-14 mx-auto rounded-lg bg-[var(--bhn-brand-600)] object-contain px-3 py-1.5" priority />
 
         <div className="text-center space-y-1">
           <h1 className="text-xl font-bold">Forgot Password</h1>
-          <p className="text-gray-500 text-sm">
+          <p className="text-[var(--bhn-text-muted)] text-sm">
             {step === 1 && "Enter your email to receive an OTP"}
             {step === 2 && "Enter the 6-digit code sent to your email"}
             {step === 3 && "Create a new password"}
@@ -107,8 +107,8 @@ export default function ForgotPasswordPage() {
               <label className="text-sm font-medium">Email</label>
               <Input name="email" type="email" value={email} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)} placeholder="Enter your email" />
             </div>
-            {error && <p className="text-sm text-red-600 font-medium">{error}</p>}
-            <Button onClick={handleSendOtp} disabled={sending} className="w-full py-2 bg-[#7A3F23] text-white rounded-md hover:opacity-90 transition disabled:opacity-70">
+            {error && <p className="text-sm text-[var(--bhn-error-600)] font-medium">{error}</p>}
+            <Button onClick={handleSendOtp} disabled={sending} className="w-full py-2 bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)] rounded-md hover:opacity-90 transition disabled:opacity-70">
               {sending ? "Sending..." : "Send OTP"}
             </Button>
           </>
@@ -127,16 +127,16 @@ export default function ForgotPasswordPage() {
                   value={digit}
                   onChange={(e) => handleOtpChange(i, e.target.value)}
                   onKeyDown={(e) => handleOtpKeyDown(i, e)}
-                  className="w-12 h-14 text-center text-xl font-bold border border-[#D0D5DD] rounded-lg focus:border-[#7A3F23] focus:outline-none"
+                  className="w-12 h-14 text-center text-xl font-bold border border-[var(--bhn-border)] rounded-lg focus:border-[var(--bhn-brand-600)] focus:outline-none"
                 />
               ))}
             </div>
-            {error && <p className="text-sm text-red-600 font-medium text-center">{error}</p>}
-            <Button onClick={handleVerifyOtp} disabled={verifying} className="w-full py-2 bg-[#7A3F23] text-white rounded-md hover:opacity-90 transition disabled:opacity-70">
+            {error && <p className="text-sm text-[var(--bhn-error-600)] font-medium text-center">{error}</p>}
+            <Button onClick={handleVerifyOtp} disabled={verifying} className="w-full py-2 bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)] rounded-md hover:opacity-90 transition disabled:opacity-70">
               {verifying ? "Verifying..." : "Verify OTP"}
             </Button>
             <p className="text-sm text-center">
-              <button type="button" onClick={handleSendOtp} className="text-[#7A3F23] hover:underline">Resend OTP</button>
+              <button type="button" onClick={handleSendOtp} className="text-[var(--bhn-text)] hover:underline">Resend OTP</button>
             </p>
           </>
         )}
@@ -147,19 +147,19 @@ export default function ForgotPasswordPage() {
             <div className="flex flex-col gap-1">
               <label className="text-sm font-medium">New Password</label>
               <div className="relative">
-                <input type={showPassword ? "text" : "password"} value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="••••••••" className="w-full h-[48px] rounded-lg border border-[#D0D5DD] px-4 pr-10 text-sm focus:border-[#7A3F23] focus:outline-none" />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#98A2B3]">
+                <input type={showPassword ? "text" : "password"} value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="••••••••" className="w-full h-[48px] rounded-lg border border-[var(--bhn-border)] px-4 pr-10 text-sm focus:border-[var(--bhn-brand-600)] focus:outline-none" />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--bhn-text-soft)]">
                   {showPassword ? <AiOutlineEyeInvisible size={20} /> : <AiOutlineEye size={20} />}
                 </button>
               </div>
             </div>
             <div className="flex flex-col gap-1">
               <label className="text-sm font-medium">Confirm Password</label>
-              <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="••••••••" className="w-full h-[48px] rounded-lg border border-[#D0D5DD] px-4 text-sm focus:border-[#7A3F23] focus:outline-none" />
+              <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="••••••••" className="w-full h-[48px] rounded-lg border border-[var(--bhn-border)] px-4 text-sm focus:border-[var(--bhn-brand-600)] focus:outline-none" />
             </div>
-            {error && <p className="text-sm text-red-600 font-medium">{error}</p>}
-            {success && <p className="text-sm text-green-600 font-medium">Password reset successfully! Redirecting...</p>}
-            <Button onClick={handleResetPassword} disabled={resetting || success} className="w-full py-2 bg-[#7A3F23] text-white rounded-md hover:opacity-90 transition disabled:opacity-70">
+            {error && <p className="text-sm text-[var(--bhn-error-600)] font-medium">{error}</p>}
+            {success && <p className="text-sm text-[var(--bhn-success-600)] font-medium">Password reset successfully! Redirecting...</p>}
+            <Button onClick={handleResetPassword} disabled={resetting || success} className="w-full py-2 bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)] rounded-md hover:opacity-90 transition disabled:opacity-70">
               {resetting ? "Resetting..." : success ? "Done!" : "Reset Password"}
             </Button>
           </>
@@ -167,7 +167,7 @@ export default function ForgotPasswordPage() {
 
         <p className="text-sm text-center">
           Remember your password?{" "}
-          <span className="text-[#7A3F23] cursor-pointer hover:underline" onClick={() => router.push("/login")}>Sign in</span>
+          <span className="text-[var(--bhn-text)] cursor-pointer hover:underline" onClick={() => router.push("/login")}>Sign in</span>
         </p>
       </form>
     </AuthLayout>

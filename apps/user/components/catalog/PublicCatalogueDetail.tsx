@@ -162,7 +162,7 @@ export default function PublicCatalogueDetail({ kind, id }: { kind: PublicDiscov
     return (
       <AppShell>
         <div className="flex min-h-[65vh] flex-col items-center justify-center gap-3 px-4" role="status">
-          <LoaderCircle aria-hidden="true" className="h-8 w-8 animate-spin text-[var(--bhn-brand-600)]" />
+          <LoaderCircle aria-hidden="true" className="h-8 w-8 animate-spin text-[var(--bhn-text)]" />
           <p className="text-sm text-[var(--bhn-text-muted)]">Loading listing details…</p>
         </div>
       </AppShell>
@@ -179,10 +179,10 @@ export default function PublicCatalogueDetail({ kind, id }: { kind: PublicDiscov
           <h1 className="mt-5 text-2xl font-bold text-[var(--bhn-text)]">This listing is not available</h1>
           <p className="mt-2 text-sm leading-6 text-[var(--bhn-text-muted)]">It may have been removed, unpublished or is temporarily unavailable.</p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Link href={config.backHref} className="rounded-xl bg-[var(--bhn-brand-700)] px-5 py-2.5 text-sm font-bold text-white hover:bg-[var(--bhn-brand-800)]">
+            <Link href={config.backHref} className="rounded-xl bg-[var(--bhn-brand-700)] px-5 py-2.5 text-sm font-bold text-[var(--bhn-text-on-brand)] hover:bg-[var(--bhn-brand-800)]">
               {config.backLabel}
             </Link>
-            <button type="button" onClick={() => refetch()} className="rounded-xl border border-[var(--bhn-border-strong)] bg-white px-5 py-2.5 text-sm font-bold text-[var(--bhn-text)] hover:bg-[var(--bhn-surface-2)]">
+            <button type="button" onClick={() => refetch()} className="rounded-xl border border-[var(--bhn-border-strong)] bg-[var(--bhn-surface)] px-5 py-2.5 text-sm font-bold text-[var(--bhn-text)] hover:bg-[var(--bhn-surface-2)]">
               Try again
             </button>
           </div>
@@ -222,14 +222,14 @@ export default function PublicCatalogueDetail({ kind, id }: { kind: PublicDiscov
                 {item.category || (kind === "courses" ? "Course" : kind === "jobs" ? "Job" : "Rental")}
               </span>
               {kind === "rentals" ? (
-                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-800">
+                <span className="inline-flex items-center gap-1 rounded-full bg-[var(--bhn-success-50)] px-3 py-1 text-xs font-bold text-[var(--bhn-success-700)]">
                   <CheckCircle2 aria-hidden="true" className="h-3.5 w-3.5" /> Approved listing
                 </span>
               ) : null}
             </div>
             <h1 className="mt-4 text-3xl font-bold leading-tight tracking-tight text-[var(--bhn-text)] sm:text-4xl">{item.title}</h1>
             <p className="mt-3 flex items-center gap-2 text-sm font-semibold text-[var(--bhn-text-muted)]">
-              <Building2 aria-hidden="true" className="h-4 w-4 shrink-0 text-[var(--bhn-brand-600)]" /> {provider(kind, item)}
+              <Building2 aria-hidden="true" className="h-4 w-4 shrink-0 text-[var(--bhn-text)]" /> {provider(kind, item)}
             </p>
 
             <dl className="mt-6 grid grid-cols-2 gap-3">
@@ -245,14 +245,14 @@ export default function PublicCatalogueDetail({ kind, id }: { kind: PublicDiscov
 
             <div className="mt-6 border-t border-[var(--bhn-border)] pt-6">
               {portalAction ? (
-                <a href={portalAction.href} className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[var(--bhn-brand-700)] px-5 py-3 text-sm font-bold text-white transition hover:bg-[var(--bhn-brand-800)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--bhn-brand-500)] focus-visible:ring-offset-2">
+                <a href={portalAction.href} className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[var(--bhn-brand-700)] px-5 py-3 text-sm font-bold text-[var(--bhn-text-on-brand)] transition hover:bg-[var(--bhn-brand-800)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--bhn-brand-500)] focus-visible:ring-offset-2">
                   {portalAction.label} <ArrowRight aria-hidden="true" className="h-4 w-4" />
                 </a>
               ) : (
                 <button
                   type="button"
                   onClick={handleRentalAction}
-                  className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[var(--bhn-brand-700)] px-5 py-3 text-sm font-bold text-white transition hover:bg-[var(--bhn-brand-800)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--bhn-brand-500)] focus-visible:ring-offset-2"
+                  className="flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[var(--bhn-brand-700)] px-5 py-3 text-sm font-bold text-[var(--bhn-text-on-brand)] transition hover:bg-[var(--bhn-brand-800)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--bhn-brand-500)] focus-visible:ring-offset-2"
                 >
                   {isAuthed ? "Continue with this rental" : "Sign in to rent"} <ArrowRight aria-hidden="true" className="h-4 w-4" />
                 </button>
@@ -280,7 +280,7 @@ export default function PublicCatalogueDetail({ kind, id }: { kind: PublicDiscov
             {item.skills?.length ? (
               <div className="mt-4 flex flex-wrap gap-2">
                 {item.skills.map((skill) => (
-                  <span key={skill} className="rounded-full border border-[var(--bhn-border)] bg-white px-3 py-1.5 text-xs font-semibold text-[var(--bhn-text-muted)]">{skill}</span>
+                  <span key={skill} className="rounded-full border border-[var(--bhn-border)] bg-[var(--bhn-surface)] px-3 py-1.5 text-xs font-semibold text-[var(--bhn-text-muted)]">{skill}</span>
                 ))}
               </div>
             ) : (

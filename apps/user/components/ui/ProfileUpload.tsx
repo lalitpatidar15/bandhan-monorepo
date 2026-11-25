@@ -20,26 +20,26 @@ export default function ProfileUpload({
   };
 
   return (
-    <div className="w-full border-1 border-dashed border-gray-300 rounded-xl p-2 flex flex-col items-center justify-center gap-2">
+    <div className="w-full border-1 border-dashed border-[var(--bhn-border-strong)] rounded-xl p-2 flex flex-col items-center justify-center gap-2">
       {/* Avatar wrapper */}
       <div
         onClick={() => fileRef.current?.click()}
         className="relative cursor-pointer group"
       >
         {/* Outer white circle */}
-        <div className="p-1 bg-white rounded-full shadow-sm border">
+        <div className="p-1 bg-[var(--bhn-surface)] rounded-full shadow-sm border">
           {/* Inner avatar circle */}
-          <div className="relative w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden">
+          <div className="relative w-20 h-20 rounded-full bg-[var(--bhn-surface-3)] flex items-center justify-center overflow-hidden">
             {preview ? (
               <Image src={preview} alt="Selected profile preview" fill sizes="80px" unoptimized className="object-cover" />
             ) : (
-              <User size={36} className="text-gray-400" />
+              <User size={36} className="text-[var(--bhn-text-muted)]" />
             )}
           </div>
         </div>
 
         {/* Brown Plus Icon */}
-        <div className="absolute bottom-1 right-1 w-6 h-6 rounded-full bg-amber-700 text-white flex items-center justify-center shadow-md group-hover:scale-110 transition">
+        <div className="absolute bottom-1 right-1 w-6 h-6 rounded-full bg-[var(--bhn-warning-700)] text-[var(--bhn-text-on-brand)] flex items-center justify-center shadow-md group-hover:scale-110 transition">
           <Plus size={12} />
         </div>
       </div>
@@ -52,7 +52,7 @@ export default function ProfileUpload({
         onChange={handleFile}
       />
 
-      <p className="text-gray-500 text-sm">Set profile picture</p>
+      <p className="text-[var(--bhn-text-muted)] text-sm">Set profile picture</p>
     </div>
   );
 }

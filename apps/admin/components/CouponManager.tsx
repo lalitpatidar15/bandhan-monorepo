@@ -84,9 +84,9 @@ export default function CouponManager() {
       )}
 
       {isLoading ? (
-        <div className="py-8 text-center text-sm text-gray-500">Loading...</div>
+        <div className="py-8 text-center text-sm text-[var(--bhn-text-muted)]">Loading...</div>
       ) : coupons.length === 0 ? (
-        <div className="py-8 text-center text-sm text-gray-500">No coupons yet</div>
+        <div className="py-8 text-center text-sm text-[var(--bhn-text-muted)]">No coupons yet</div>
       ) : (
         <div className="overflow-x-auto">
           <table className="admin-table w-full">
@@ -106,14 +106,14 @@ export default function CouponManager() {
                 <tr key={c.id}>
                   <td className="font-mono font-bold text-sm">{c.code}</td>
                   <td>
-                    <span className="admin-badge bg-violet-100 text-violet-700">
+                    <span className="admin-badge bg-[var(--bhn-brand-50)] text-[var(--bhn-brand-700)]">
                       {c.discountType === 'percentage' ? `${c.discountValue}%` : `₹${c.discountValue}`}
                     </span>
                   </td>
                   <td className="text-sm">₹{c.minOrderAmount.toLocaleString()}</td>
                   <td className="text-sm">{c.usedCount}{c.usageLimit > 0 ? `/${c.usageLimit}` : ''}</td>
                   <td><span className={`admin-badge ${c.isActive ? 'admin-badge-active' : 'admin-badge-inactive'}`}>{c.isActive ? 'Active' : 'Inactive'}</span></td>
-                  <td className="text-xs text-gray-500">{c.endDate ? new Date(c.endDate).toLocaleDateString() : 'No expiry'}</td>
+                  <td className="text-xs text-[var(--bhn-text-muted)]">{c.endDate ? new Date(c.endDate).toLocaleDateString() : 'No expiry'}</td>
                   <td className="text-right">
                     <div className="flex justify-end gap-1">
                       <button onClick={() => handleEdit(c)} className="admin-btn admin-btn-secondary"><Edit className="w-3 h-3" /></button>

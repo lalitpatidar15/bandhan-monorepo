@@ -6,6 +6,18 @@ export interface ProductSpecification {
   value?: string | number;
 }
 
+export interface ProductDimensions {
+  length?: number | string;
+  width?: number | string;
+  breadth?: number | string;
+  height?: number | string;
+}
+
+export interface ProductFulfilmentFact {
+  label: string;
+  value: string;
+}
+
 export interface ProductRecord {
   _id?: string;
   id?: string;
@@ -35,6 +47,16 @@ export interface ProductRecord {
   shippingRequired?: boolean;
   shippingCost?: number | string;
   freeShipping?: boolean;
+  weight?: number | string;
+  shippingWeight?: number | string;
+  dimensions?: ProductDimensions;
+  shippingDimensions?: ProductDimensions;
+  originPincode?: number | string;
+  dispatchPincode?: number | string;
+  pickupLocation?: string;
+  dispatchAddress?: string;
+  courierPreference?: string;
+  hsnCode?: string;
   returnPolicy?: string;
   warranty?: string;
   brand?: string;
@@ -59,6 +81,7 @@ export interface ProductDetailViewModel {
   type?: string;
   availability?: string;
   shipping?: string;
+  fulfilmentFacts?: ProductFulfilmentFact[];
   returnPolicy?: string;
   warranty?: string;
   soldCount?: number;
@@ -120,8 +143,42 @@ export function adaptProductDetail(product: ProductRecord, fallbackId = ""): Pro
   let shipping: string | undefined;
   if (product.shippingRequired === false) shipping = "Shipping not required";
   else if (product.freeShipping === true) shipping = "Free shipping";
-  else if (product.shippingRequired === true && shippingCost !== undefined && shippingCost > 0) {
-    shipping = `₹${shippingCost.toLocaleString("en-IN")} shipping`;
+  else if (product.shippingCost !== undefined && Number(product.shippingCost) > 0) {
+    shipping = `₹${shippingCost?.toLocaleString("en-IN") ?? product.shippingCost} shipping`;
+  }
+
+  const fulfilmentFacts: ProductFulfilmentFact[] = [];
+  if (product.shippingRequired !== false) {
+    const packageWeight = optionalNumber(product.weight ?? product.shippingWeight);
+    if (packageWeight !== undefined && packageWeight > 0) {
+      fulfilmentFacts.push({
+        label: "Package weight",
+        value: `${packageWeight.toLocaleString("en-IN", { maximumFractionDigits: 2 })} kg`,
+      });
+    }
+
+    const dimensions = product.dimensions || product.shippingDimensions;
+    const length = optionalNumber(dimensions?.length);
+    const width = optionalNumber(dimensions?.width ?? dimensions?.breadth);
+    const height = optionalNumber(dimensions?.height);
+    if (length !== undefined && width !== undefined && height !== undefined) {
+      const format = (value: number) => value.toLocaleString("en-IN", { maximumFractionDigits: 2 });
+      fulfilmentFacts.push({
+        label: "Package size",
+        value: `${format(length)} × ${format(width)} × ${format(height)} cm`,
+      });
+    }
+
+    const pincode = String(product.originPincode ?? product.dispatchPincode ?? "").replace(/\D/g, "");
+    if (/^\d{6}$/.test(pincode)) {
+      fulfilmentFacts.push({ label: "Dispatch pincode", value: pincode });
+    }
+
+    const pickupLocation = nonEmptyString(product.pickupLocation);
+    if (pickupLocation) fulfilmentFacts.push({ label: "Pickup location", value: pickupLocation });
+
+    const courierPreference = nonEmptyString(product.courierPreference);
+    if (courierPreference) fulfilmentFacts.push({ label: "Courier preference", value: courierPreference });
   }
 
   let type: string | undefined;
@@ -140,8 +197,12 @@ export function adaptProductDetail(product: ProductRecord, fallbackId = ""): Pro
 
   const brand = nonEmptyString(product.brand);
   const sku = nonEmptyString(product.sku);
+  const hsnCode = nonEmptyString(product.hsnCode);
+  const dispatchAddress = nonEmptyString(product.dispatchAddress);
   if (brand) details.push({ label: "Brand", value: brand });
   if (sku) details.push({ label: "SKU", value: sku });
+  if (hsnCode) details.push({ label: "HSN code", value: hsnCode });
+  if (dispatchAddress) details.push({ label: "Dispatch address", value: dispatchAddress });
 
   const images = Array.isArray(product.images)
     ? product.images.filter((image): image is string => Boolean(nonEmptyString(image)))
@@ -170,6 +231,7 @@ export function adaptProductDetail(product: ProductRecord, fallbackId = ""): Pro
     type,
     availability: readableValue(product.stockStatus),
     shipping,
+    fulfilmentFacts,
     returnPolicy: nonEmptyString(product.returnPolicy),
     warranty: nonEmptyString(product.warranty),
     soldCount: soldCount !== undefined && soldCount > 0 ? soldCount : undefined,
@@ -184,24 +246,24 @@ export const productApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getProducts: builder.query<ProductListResponse, Record<string, unknown> | void>({
       query: (params) => ({
-        url: "/public/catalog/products",
+        url: "/products",
         params: params || undefined,
       }),
       providesTags: ["Vendors"],
     }),
     getProductById: builder.query<ProductResponse, string>({
-      query: (id) => `/public/catalog/products/${encodeURIComponent(id)}`,
+      query: (id) => `/products/${encodeURIComponent(id)}`,
       providesTags: (result, error, id) => [{ type: "Vendors", id }],
     }),
     getSimilarProducts: builder.query<ProductListResponse, { category: string; exclude: string; limit?: number }>({
       query: ({ category, exclude, limit = 4 }) => ({
-        url: "/public/catalog/products",
+        url: "/products",
         params: { category, exclude, limit },
       }),
       providesTags: ["Vendors"],
     }),
     getProductCategories: builder.query<{ success: boolean; data: string[] }, void>({
-      query: () => ({ url: "/public/catalog/products", params: { limit: 48 } }),
+      query: () => ({ url: "/products/categories", params: { limit: 48 } }),
       transformResponse: (response: ProductListResponse) => ({
         success: response.success,
         data: [...new Set((response.data || []).map((product) => product.category).filter((category): category is string => Boolean(category)))],

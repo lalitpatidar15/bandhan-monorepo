@@ -46,11 +46,11 @@ export const Button = ({
 
   const variants = {
     primary:
-      "bg-[#6D2D09] text-white hover:bg-[#8B4512] disabled:bg-[#c8a79a]",
+      "bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)] hover:bg-[var(--bhn-brand-600)] disabled:bg-[var(--bhn-surface-2)]",
     secondary:
-      "bg-[#fdf3f1] text-[#4d2016] border border-[#7a3323] hover:bg-[#fce7e3] disabled:bg-[#fdf3f1]",
+      "bg-[var(--bhn-surface-2)] text-[var(--bhn-text)] border border-[var(--bhn-brand-600)] hover:bg-[var(--bhn-surface-2)] disabled:bg-[var(--bhn-surface-2)]",
     outline:
-      "border border-[#E7E1D8] text-[#1C1A16] hover:bg-[#F8F4EF] disabled:border-gray-300",
+      "border border-[var(--bhn-border)] text-[var(--bhn-text)] hover:bg-[var(--bhn-surface-2)] disabled:border-[var(--bhn-border-strong)]",
     custom: "",
   };
 

@@ -184,19 +184,19 @@ export function ExploreGrid({
 
   return (
     <div className="w-full min-w-0">
-      <div className="mb-7 flex flex-col gap-2 border-b border-[#E5DED7] pb-7 sm:flex-row sm:items-end sm:justify-between">
+      <div className="mb-7 flex flex-col gap-2 border-b border-[var(--bhn-border)] pb-7 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="mb-3 text-[11px] font-extrabold uppercase tracking-[0.22em] text-[#8B3A28]">
+          <p className="mb-3 text-[11px] font-extrabold uppercase tracking-[0.22em] text-[var(--bhn-text)]">
             Curated for every celebration
           </p>
-          <h1 className="font-display text-3xl font-bold tracking-[-0.035em] text-[#1A1612] sm:text-4xl">{typeTitle[viewMode]}</h1>
-          <p className="mt-2 max-w-2xl text-base leading-7 text-[#6B625A]">{description[viewMode]}</p>
-          <p className="mt-3 text-sm font-semibold text-[#443C36]">{filteredData.length.toLocaleString("en-IN")} {filteredData.length === 1 ? "result" : "results"}</p>
+          <h1 className="font-display text-3xl font-bold tracking-[-0.035em] text-[var(--bhn-text)] sm:text-4xl">{typeTitle[viewMode]}</h1>
+          <p className="mt-2 max-w-2xl text-base leading-7 text-[var(--bhn-text-muted)]">{description[viewMode]}</p>
+          <p className="mt-3 text-sm font-semibold text-[var(--bhn-text-muted)]">{filteredData.length.toLocaleString("en-IN")} {filteredData.length === 1 ? "result" : "results"}</p>
         </div>
       </div>
 
       <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-3 border-b border-[#DCD4CC] pb-4 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-3 border-b border-[var(--bhn-border)] pb-4 md:flex-row md:items-center md:justify-between">
           <div className="grid grid-cols-3 gap-6" aria-label="Marketplace type">
             {(["services", "products", "venues"] as ExploreType[]).map((mode) => (
               <button
@@ -206,7 +206,7 @@ export function ExploreGrid({
                   setCurrentPage(1);
                   onViewModeChange(mode);
                 }}
-                className={`relative min-h-10 px-1 text-sm font-bold capitalize transition-colors after:absolute after:inset-x-0 after:bottom-[-17px] after:h-0.5 ${viewMode === mode ? "text-[#7A3323] after:bg-[#8B3A28]" : "text-[#756B63] after:bg-transparent hover:text-[#7A3323]"}`}
+                className={`relative min-h-10 px-1 text-sm font-bold capitalize transition-colors after:absolute after:inset-x-0 after:bottom-[-17px] after:h-0.5 ${viewMode === mode ? "text-[var(--bhn-text)] after:bg-[var(--bhn-brand-600)]" : "text-[var(--bhn-text-muted)] after:bg-transparent hover:text-[var(--bhn-text)]"}`}
                 aria-pressed={viewMode === mode}
               >
                 {mode}
@@ -214,7 +214,7 @@ export function ExploreGrid({
             ))}
           </div>
           <div className="flex items-center gap-3">
-            <label htmlFor="explore-sort" className="shrink-0 text-xs font-bold uppercase tracking-[0.14em] text-[#7E736B]">Sort by</label>
+            <label htmlFor="explore-sort" className="shrink-0 text-xs font-bold uppercase tracking-[0.14em] text-[var(--bhn-text-muted)]">Sort by</label>
             <select
               id="explore-sort"
               value={sortBy}
@@ -222,7 +222,7 @@ export function ExploreGrid({
                 setCurrentPage(1);
                 setSortBy(e.target.value);
               }}
-              className="h-11 min-w-0 flex-1 rounded-lg border border-[#DCD3CB] bg-white px-3 text-sm font-semibold text-[#302923] outline-none focus:border-[#8B3A28] md:w-auto md:min-w-[210px]"
+              className="h-11 min-w-0 flex-1 rounded-lg border border-[var(--bhn-border)] bg-[var(--bhn-surface)] px-3 text-sm font-semibold text-[var(--bhn-text)] outline-none focus:border-[var(--bhn-brand-600)] md:w-auto md:min-w-[210px]"
             >
               <option value="recommended">Recommended</option>
               <option value="price-low">Price: Low to High</option>
@@ -244,7 +244,7 @@ export function ExploreGrid({
               return (
                 <article
                   key={item.id}
-                  className="group cursor-pointer overflow-hidden rounded-xl border border-[#E4DDD6] bg-white transition duration-200 hover:-translate-y-1 hover:border-[#D2C4BA] hover:shadow-[0_16px_35px_rgba(42,28,22,.10)] focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-[var(--bhn-brand-300)]"
+                  className="group cursor-pointer overflow-hidden rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] transition duration-200 hover:-translate-y-1 hover:border-[var(--bhn-border)] hover:shadow-md focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-[var(--bhn-brand-300)]"
                   role="link"
                   tabIndex={0}
                   aria-label={`View ${item.title}`}
@@ -253,7 +253,7 @@ export function ExploreGrid({
                     if (event.key === "Enter") router.push(item.href);
                   }}
                 >
-                  <div className="relative aspect-[16/10] overflow-hidden bg-[#F6F2ED]">
+                  <div className="relative aspect-[16/10] overflow-hidden bg-[var(--bhn-surface-2)]">
                     <Image
                       src={item.image}
                       alt={item.title}
@@ -273,25 +273,25 @@ export function ExploreGrid({
                         e.preventDefault();
                         handleWishlistToggle();
                       }}
-                      className="absolute top-2 right-2 bhn-btn bhn-btn-icon bhn-btn-ghost bg-white/90 shadow-sm"
+                      className="absolute top-2 right-2 bhn-btn bhn-btn-icon bhn-btn-ghost bg-[color-mix(in_srgb,var(--bhn-surface)_90%,transparent)] shadow-sm"
                       aria-label="Add to wishlist"
                     >
-                      <Heart size={16} className="text-[var(--bhn-brand-600)]" />
+                      <Heart size={16} className="text-[var(--bhn-text)]" />
                     </button>
                   </div>
 
                   <div className="px-4 pb-3 pt-3.5">
                     <div className="flex items-center justify-between gap-3">
-                      <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#8B3A28]">{item.category}</span>
+                      <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--bhn-text)]">{item.category}</span>
                       {item.rating > 0 ? (
-                        <span className="inline-flex items-center gap-1 rounded-md bg-emerald-700 px-2 py-1 text-xs font-bold text-white" aria-label={`${item.rating} out of 5 stars`}>
+                        <span className="inline-flex items-center gap-1 rounded-md bg-[var(--bhn-success-700)] px-2 py-1 text-xs font-bold text-[var(--bhn-text-on-brand)]" aria-label={`${item.rating} out of 5 stars`}>
                           {item.rating.toFixed(1)} <Star size={11} fill="currentColor" />
                         </span>
                       ) : null}
                     </div>
-                    <h3 className="mt-1.5 truncate text-[15px] font-bold leading-6 text-[#211B17] transition-colors group-hover:text-[#7A3323]">{item.title}</h3>
+                    <h3 className="mt-1.5 truncate text-[15px] font-bold leading-6 text-[var(--bhn-text)] transition-colors group-hover:text-[var(--bhn-text)]">{item.title}</h3>
                     {item.location && (
-                      <p className="mt-1 flex flex-wrap items-center gap-3 text-xs text-[#756B63]">
+                      <p className="mt-1 flex flex-wrap items-center gap-3 text-xs text-[var(--bhn-text-muted)]">
                         <span className="flex items-center gap-1">
                           <MapPin size={14} />
                           {item.location}
@@ -308,15 +308,15 @@ export function ExploreGrid({
                       </p>
                     )}
                     {isInCart ? (
-                      <span className="mt-1 inline-flex w-fit items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700">
+                      <span className="mt-1 inline-flex w-fit items-center gap-1.5 rounded-full bg-[var(--bhn-success-50)] px-2.5 py-1 text-xs font-bold text-[var(--bhn-success-700)]">
                         <Check size={13} /> Added to cart
                       </span>
                     ) : null}
                   </div>
 
-                  <div className="flex min-h-14 items-center border-t border-[#EEE8E2] px-4 py-3">
+                  <div className="flex min-h-14 items-center border-t border-[var(--bhn-border)] px-4 py-3">
                     <div className="bhn-price">
-                      <span className="text-lg font-extrabold tracking-tight text-[#63281C]">{item.price}</span>
+                      <span className="text-lg font-extrabold tracking-tight text-[var(--bhn-text)]">{item.price}</span>
                     </div>
                     <div className="ml-auto flex items-center gap-2">
                       <button
@@ -325,7 +325,7 @@ export function ExploreGrid({
                           e.stopPropagation();
                           handleCompareToggle(item);
                         }}
-                        className={`inline-flex min-h-9 items-center gap-1.5 rounded-md px-2 text-xs font-bold transition-colors hover:bg-[#F8ECE7] ${isInCompare ? "bg-[#F8ECE7] text-[#7A3323]" : "text-[#6B625A]"}`}
+                        className={`inline-flex min-h-9 items-center gap-1.5 rounded-md px-2 text-xs font-bold transition-colors hover:bg-[var(--bhn-surface-2)] ${isInCompare ? "bg-[var(--bhn-surface-2)] text-[var(--bhn-text)]" : "text-[var(--bhn-text-muted)]"}`}
                         aria-label={isInCompare ? "Remove from compare" : "Add to compare"}
                       >
                         <Scale size={15} /> {isInCompare ? "Comparing" : "Compare"}

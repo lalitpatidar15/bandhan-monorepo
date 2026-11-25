@@ -31,6 +31,7 @@ import NotificationManager from '@/components/NotificationManager';
 import FinancialReports from '@/components/FinancialReports';
 import AuditLogs from '@/components/AuditLogs';
 import Merchants from '@/components/Merchants';
+import SellerVerifications from '@/components/SellerVerifications';
 import Venues from '@/components/Venues';
 import Services from '@/components/Services';
 import Jobs from '@/components/Jobs';
@@ -127,6 +128,9 @@ export default function AdminDashboardPage() {
 
       case 'merchants':
         return <Merchants />;
+
+      case 'seller-verifications':
+        return <SellerVerifications />;
 
       case 'venues':
         return <Venues />;

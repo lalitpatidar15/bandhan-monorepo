@@ -20,8 +20,10 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
   const [apiReachable, setApiReachable] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const raw = process.env.NEXT_PUBLIC_API_URL || 'https://bandhan-backend-gykw.onrender.com/api';
-    const origin = raw.replace(/\/api\/?$/, '');
+    // Use the exact same endpoint resolution as lib/adminApi.ts.
+    const raw = process.env.NEXT_PUBLIC_API_URL || 'https://bandhan-api.vercel.app';
+    const base = raw.endsWith('/api') ? raw : `${raw.replace(/\/$/, '')}/api`;
+    const origin = base.replace(/\/api\/?$/, '');
     fetch(`${origin}/health`)
       .then((res) => setApiReachable(res.ok))
       .catch(() => setApiReachable(false));
@@ -114,9 +116,9 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
         </div>
         <div className="grid grid-cols-2 gap-3 text-xs">
           <div>
-            <p style={{ color: 'var(--bhn-text-muted)' }}>API URL</p>
-            <p className="font-mono" style={{ color: 'var(--bhn-brand-700)' }}>
-              {process.env.NEXT_PUBLIC_API_URL}
+            <p style={{ color: 'var(--bhn-text-muted)' }}>API endpoint</p>
+            <p className="font-semibold" style={{ color: 'var(--bhn-text)' }}>
+              {process.env.NEXT_PUBLIC_API_URL ? 'Configured' : 'Default endpoint'}
             </p>
           </div>
           <div>

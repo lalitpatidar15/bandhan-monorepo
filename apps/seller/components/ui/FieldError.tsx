@@ -6,6 +6,6 @@ export default function FieldError({
   children: React.ReactNode;
 }) {
   return (
-    <p className="text-sm text-red-600 mt-2">{children}</p>
+    <p className="text-sm text-[var(--bhn-error-600)] mt-2">{children}</p>
   );
 }

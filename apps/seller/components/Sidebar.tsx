@@ -1,8 +1,9 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { PortalSidebar, type PortalSidebarSection } from '@bandhan/ui';
 import { useRouter, usePathname } from 'next/navigation';
-import { LayoutDashboard, Package, RotateCcw, ShoppingCart, Handshake, MapPin, MessageSquare, Star, Wallet } from 'lucide-react';
+import { LayoutDashboard, Package, RotateCcw, ShoppingCart, Handshake, MapPin, MessageSquare, ShieldCheck, Star, Truck, Wallet } from 'lucide-react';
 import { useGetSellerQuotesQuery } from '@/lib/store/api/chatApi';
 import { centralLoginUrl, clearSellerSession } from '@/lib/session';
 
@@ -21,8 +22,10 @@ export default function Sidebar() {
         { label: 'Orders', href: '/orders', icon: <ShoppingCart size={16} /> },
         { label: 'Rental Orders', href: '/rental-orders', icon: <RotateCcw size={16} /> },
         { label: 'Inventory', href: '/inventory', icon: <Package size={16} /> },
+        { label: 'Shipping', href: '/shipping', icon: <Truck size={16} /> },
         { label: 'Services', href: '/services', icon: <Handshake size={16} /> },
         { label: 'Venues', href: '/venues', icon: <MapPin size={16} /> },
+        { label: 'Verification', href: '/profile-setup/verification', icon: <ShieldCheck size={16} /> },
       ],
     },
     {
@@ -40,7 +43,11 @@ export default function Sidebar() {
     window.location.assign(centralLoginUrl());
   };
 
-  const userName = typeof window !== 'undefined' ? localStorage.getItem('userName') || 'Seller' : 'Seller';
+  // Read the session after mount so SSR and the first client render agree.
+  const [userName, setUserName] = useState('Seller');
+  useEffect(() => {
+    setUserName(localStorage.getItem('userName') || 'Seller');
+  }, []);
 
   return (
     <PortalSidebar
@@ -52,7 +59,7 @@ export default function Sidebar() {
       onLogout={handleLogout}
       actions={
         <div className="flex flex-col gap-2">
-          <button onClick={() => router.push('/inventory/add-product')} className="w-full rounded-xl bg-[var(--bhn-brand-600)] px-3 py-2 text-xs font-semibold text-white transition hover:bg-[var(--bhn-brand-700)]">
+          <button onClick={() => router.push('/inventory/add-product')} className="w-full rounded-xl bg-[var(--bhn-brand-600)] px-3 py-2 text-xs font-semibold text-[var(--bhn-text-on-brand)] transition hover:bg-[var(--bhn-brand-700)]">
             <span className="hidden md:inline">Add Product</span>
             <span className="md:hidden">+</span>
           </button>

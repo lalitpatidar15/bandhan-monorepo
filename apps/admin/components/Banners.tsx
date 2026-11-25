@@ -73,30 +73,30 @@ export default function Banners() {
       )}
 
       {isLoading ? (
-        <div className="py-8 text-center text-sm text-gray-500">Loading...</div>
+        <div className="py-8 text-center text-sm text-[var(--bhn-text-muted)]">Loading...</div>
       ) : banners.length === 0 ? (
-        <div className="py-8 text-center text-sm text-gray-500">No banners yet</div>
+        <div className="py-8 text-center text-sm text-[var(--bhn-text-muted)]">No banners yet</div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {banners.map((b) => (
             <div key={b.id} className="card overflow-hidden p-0">
-              <div className="relative h-36 bg-gray-100">
+              <div className="relative h-36 bg-[var(--bhn-surface-3)]">
                 {b.image ? (
                   <img src={b.image} alt={b.title} className="h-full w-full object-cover" />
                 ) : (
-                  <div className="flex h-full items-center justify-center text-gray-400">
+                  <div className="flex h-full items-center justify-center text-[var(--bhn-text-muted)]">
                     <ImageIcon size={32} />
                   </div>
                 )}
                 <div className="absolute right-2 top-2 flex gap-1">
-                  <button onClick={() => handleEdit(b)} className="admin-btn admin-btn-secondary bg-white/90"><Edit className="w-3 h-3" /></button>
-                  <button onClick={() => { if (confirm('Delete this banner?')) deleteBanner(b.id); }} className="admin-btn admin-btn-danger bg-white/90"><Trash2 className="w-3 h-3" /></button>
+                  <button onClick={() => handleEdit(b)} className="admin-btn admin-btn-secondary bg-[color-mix(in_srgb,var(--bhn-surface)_90%,transparent)]"><Edit className="w-3 h-3" /></button>
+                  <button onClick={() => { if (confirm('Delete this banner?')) deleteBanner(b.id); }} className="admin-btn admin-btn-danger bg-[color-mix(in_srgb,var(--bhn-surface)_90%,transparent)]"><Trash2 className="w-3 h-3" /></button>
                 </div>
               </div>
               <div className="p-3">
-                <h3 className="text-sm font-semibold text-gray-800">{b.title}</h3>
-                {b.subtitle && <p className="mt-0.5 text-xs text-gray-500">{b.subtitle}</p>}
-                {b.buttonText && <span className="mt-2 inline-block admin-badge bg-violet-100 text-violet-700">{b.buttonText}</span>}
+                <h3 className="text-sm font-semibold text-[var(--bhn-text)]">{b.title}</h3>
+                {b.subtitle && <p className="mt-0.5 text-xs text-[var(--bhn-text-muted)]">{b.subtitle}</p>}
+                {b.buttonText && <span className="mt-2 inline-block admin-badge bg-[var(--bhn-brand-50)] text-[var(--bhn-brand-700)]">{b.buttonText}</span>}
               </div>
             </div>
           ))}

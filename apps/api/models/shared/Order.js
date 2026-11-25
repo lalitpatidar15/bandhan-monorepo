@@ -74,6 +74,8 @@ const orderSchema = new mongoose.Schema(
 
     amount: Number,
 
+    refundedAmount: { type: Number, default: 0 },
+
     orderId: String,
 
     productName: String,

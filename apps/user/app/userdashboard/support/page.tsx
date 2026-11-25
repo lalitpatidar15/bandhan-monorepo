@@ -44,28 +44,28 @@ export default function SupportPage() {
   };
 
   const STATUS: Record<string, string> = {
-    open: 'bg-amber-100 text-amber-700',
-    in_progress: 'bg-blue-100 text-blue-700',
-    waiting_user: 'bg-purple-100 text-purple-700',
-    closed: 'bg-gray-100 text-gray-600',
+    open: 'bg-[var(--bhn-warning-50)] text-[var(--bhn-warning-700)]',
+    in_progress: 'bg-[var(--bhn-brand-50)] text-[var(--bhn-brand-700)]',
+    waiting_user: 'bg-[var(--bhn-brand-50)] text-[var(--bhn-brand-700)]',
+    closed: 'bg-[var(--bhn-surface-3)] text-[var(--bhn-text)]',
   };
 
   return (
     <DashboardLayout>
       <div className="mx-auto max-w-3xl px-4 py-6">
-        <h1 className="text-xl font-bold text-[#1C1A16]">Support Centre</h1>
-        <p className="text-sm text-gray-500">Search FAQs or raise a ticket with our team.</p>
+        <h1 className="text-xl font-bold text-[var(--bhn-text)]">Support Centre</h1>
+        <p className="text-sm text-[var(--bhn-text-muted)]">Search FAQs or raise a ticket with our team.</p>
 
         <div className="surface mt-4 space-y-3 p-4">
-          <h3 className="font-semibold text-[#1C1A16]">Raise a ticket</h3>
+          <h3 className="font-semibold text-[var(--bhn-text)]">Raise a ticket</h3>
           <Input label="Subject" value={subject} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSubject(e.target.value)} />
           <div className="space-y-1">
-            <label className="text-xs text-gray-500">Description</label>
+            <label className="text-xs text-[var(--bhn-text-muted)]">Description</label>
             <textarea
               rows={3}
               value={description}
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDescription(e.target.value)}
-              className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm focus:border-[#924C2B] focus:outline-none"
+              className="w-full rounded-md border border-[var(--bhn-border)] px-3 py-2 text-sm focus:border-[var(--bhn-brand-600)] focus:outline-none"
             />
           </div>
           <Button variant="primary" loading={saving} onClick={raise} icon={<Send className="h-4 w-4" />}>
@@ -73,28 +73,28 @@ export default function SupportPage() {
           </Button>
         </div>
 
-        <h3 className="mt-6 font-semibold text-[#1C1A16]">Your tickets</h3>
+        <h3 className="mt-6 font-semibold text-[var(--bhn-text)]">Your tickets</h3>
         {isLoading ? (
-          <p className="mt-3 text-gray-500">Loading…</p>
+          <p className="mt-3 text-[var(--bhn-text-muted)]">Loading…</p>
         ) : tickets.length === 0 ? (
-          <div className="mt-3 rounded-xl border border-dashed border-[#E7E1D8] bg-white p-8 text-center">
-            <LifeBuoy className="mx-auto h-8 w-8 text-gray-300" />
-            <p className="mt-2 text-sm text-gray-500">No tickets raised yet.</p>
+          <div className="mt-3 rounded-xl border border-dashed border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-8 text-center">
+            <LifeBuoy className="mx-auto h-8 w-8 text-[var(--bhn-text-soft)]" />
+            <p className="mt-2 text-sm text-[var(--bhn-text-muted)]">No tickets raised yet.</p>
           </div>
         ) : (
           <div className="mt-3 space-y-3">
             {tickets.map((t) => (
               <div key={t.id} className="surface p-4">
                 <div className="flex items-center justify-between">
-                  <p className="font-semibold text-[#1C1A16]">{t.subject}</p>
-                  <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${STATUS[t.status] || 'bg-gray-100'}`}>
+                  <p className="font-semibold text-[var(--bhn-text)]">{t.subject}</p>
+                  <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${STATUS[t.status] || 'bg-[var(--bhn-surface-3)]'}`}>
                     {t.status.replace('_', ' ')}
                   </span>
                 </div>
-                <p className="mt-1 text-xs text-gray-400">
+                <p className="mt-1 text-xs text-[var(--bhn-text-muted)]">
                   {new Date(t.createdAt).toLocaleDateString()}
                 </p>
-                <p className="mt-1 text-sm text-gray-600">{t.message}</p>
+                <p className="mt-1 text-sm text-[var(--bhn-text)]">{t.message}</p>
               </div>
             ))}
           </div>

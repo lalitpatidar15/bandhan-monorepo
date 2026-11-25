@@ -24,7 +24,7 @@ const Input: React.FC<InputProps> = ({
   return (
     <div className="flex flex-col gap-1 w-full">
       {label && (
-        <label className="text-sm font-medium text-gray-700">
+        <label className="text-sm font-medium text-[var(--bhn-text)]">
           {label}
         </label>
       )}
@@ -36,7 +36,7 @@ const Input: React.FC<InputProps> = ({
         value={value}
         onChange={onChange}
         required={required}
-        className={`border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500 ${className}`}
+        className={`border border-[var(--bhn-border-strong)] rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-[var(--bhn-brand-500)] ${className}`}
       />
     </div>
   );

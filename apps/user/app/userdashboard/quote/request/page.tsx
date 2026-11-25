@@ -193,19 +193,19 @@ function RequestQuotePageContent() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F7F1EB]">
+    <div className="min-h-screen bg-[var(--bhn-surface-2)]">
       {/* HEADER */}
-      <header className="bg-[#FAF6F2] border-b border-[#E7DACC]">
+      <header className="bg-[var(--bhn-surface-2)] border-b border-[var(--bhn-border)]">
         <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-[#B85C2D]" />
-              <span className="font-bold text-[#B85C2D]">
+              <div className="w-8 h-8 rounded-full bg-[var(--bhn-brand-600)]" />
+              <span className="font-bold text-[var(--bhn-text)]">
                 Bandhan EventHub
               </span>
             </div>
 
-            <div className="hidden md:flex items-center bg-white border rounded-full px-4 h-10 w-[280px]">
+            <div className="hidden md:flex items-center bg-[var(--bhn-surface)] border rounded-full px-4 h-10 w-[280px]">
               <Search size={16} />
               <input
                 placeholder="Search venues, services..."
@@ -215,13 +215,13 @@ function RequestQuotePageContent() {
           </div>
 
           <div className="hidden lg:flex gap-4 text-sm">
-            <Link href="/products/Venue" className="hover:text-[#B85C2D]">
+            <Link href="/products/Venue" className="hover:text-[var(--bhn-text)]">
               Venues
             </Link>
-            <Link href="/products/service-listing" className="hover:text-[#B85C2D]">
+            <Link href="/products/service-listing" className="hover:text-[var(--bhn-text)]">
               Services
             </Link>
-            <Link href="/userdashboard/feed" className="hover:text-[#B85C2D]">
+            <Link href="/userdashboard/feed" className="hover:text-[var(--bhn-text)]">
               Community
             </Link>
           </div>
@@ -241,31 +241,31 @@ function RequestQuotePageContent() {
       </header>
 
 <div className="max-w-6xl w-full mx-auto px-4 py-5">
-        <div className="text-sm text-gray-500 mb-3">
+        <div className="text-sm text-[var(--bhn-text-muted)] mb-3">
           Services / Event Decor /
-          <span className="text-[#B85C2D]"> Request Quote</span>
+          <span className="text-[var(--bhn-text)]"> Request Quote</span>
         </div>
 
         <h1 className="text-center text-lg font-serif font-bold">
           Request a Quote
         </h1>
 
-        <p className="text-center text-gray-500 mt-2 text-sm">
+        <p className="text-center text-[var(--bhn-text-muted)] mt-2 text-sm">
           Tell us about your event and get the best deals.
         </p>
 
         {/* PROGRESS */}
         <div className="max-w-xl mx-auto mt-3">
-          <div className="h-2 bg-[#E6D9CC] rounded-full overflow-hidden">
+          <div className="h-2 bg-[var(--bhn-surface-2)] rounded-full overflow-hidden">
             <div
-              className="h-full bg-[#B85C2D] transition-all duration-500"
+              className="h-full bg-[var(--bhn-brand-600)] transition-all duration-500"
               style={{
                 width: `${progress}%`,
               }}
             />
           </div>
 
-          <div className="text-right text-xs text-[#B85C2D] mt-2">
+          <div className="text-right text-xs text-[var(--bhn-text)] mt-2">
             {progress}% Complete
           </div>
         </div>
@@ -273,7 +273,7 @@ function RequestQuotePageContent() {
         <div className="grid grid-cols-1 gap-4 mt-3 lg:grid-cols-[1fr_320px]">
           {/* LEFT */}
           <div className="space-y-4">
-            <div className="bg-[#F4E7DA] rounded-xl p-3 border border-[#E3D4C5]">
+            <div className="bg-[var(--bhn-surface-2)] rounded-xl p-3 border border-[var(--bhn-border)]">
               <h2 className="font-semibold text-base mb-3">
                 Event Details
               </h2>
@@ -287,7 +287,7 @@ function RequestQuotePageContent() {
                       eventType: e.target.value,
                     })
                   }
-                  className="h-10 rounded-lg border px-3 bg-white text-sm"
+                  className="h-10 rounded-lg border px-3 bg-[var(--bhn-surface)] text-sm"
                 >
                   <option>Event Ceremony</option>
                   <option>Reception</option>
@@ -306,7 +306,7 @@ function RequestQuotePageContent() {
                       eventDate: e.target.value,
                     })
                   }
-                  className="h-10 rounded-lg border px-3 bg-white text-sm"
+                  className="h-10 rounded-lg border px-3 bg-[var(--bhn-surface)] text-sm"
                 />
               </div>
 
@@ -320,11 +320,11 @@ function RequestQuotePageContent() {
                     location: e.target.value,
                   })
                 }
-                className="w-full mt-3 h-10 rounded-lg border px-3 bg-white text-sm"
+                className="w-full mt-3 h-10 rounded-lg border px-3 bg-[var(--bhn-surface)] text-sm"
               />
 
               <div className="mt-3">
-                <p className="text-xs text-gray-600 mb-2">
+                <p className="text-xs text-[var(--bhn-text)] mb-2">
                   Approximate Guest Count
                 </p>
 
@@ -340,8 +340,8 @@ function RequestQuotePageContent() {
                       }
                       className={`h-10 rounded-lg border transition-all text-sm ${
                         formData.guestCount === item
-                          ? "bg-[#B85C2D] text-white border-[#B85C2D]"
-                          : "bg-white"
+                          ? "bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)] border-[var(--bhn-brand-600)]"
+                          : "bg-[var(--bhn-surface)]"
                       }`}
                     >
                       {item}
@@ -352,7 +352,7 @@ function RequestQuotePageContent() {
             </div>
 
             {/* SERVICES */}
-            <div className="bg-[#F4E7DA] rounded-xl p-3 border border-[#E3D4C5]">
+            <div className="bg-[var(--bhn-surface-2)] rounded-xl p-3 border border-[var(--bhn-border)]">
               <h2 className="font-semibold text-base mb-3">
                 Services Required
               </h2>
@@ -368,14 +368,14 @@ function RequestQuotePageContent() {
                       onClick={() => toggleService(service.name)}
                       className={`rounded-xl p-3 border transition-all text-left ${
                         active
-                          ? "bg-white border-[#B85C2D] shadow-md"
-                          : "bg-white border-[#DCC9B8]"
+                          ? "bg-[var(--bhn-surface)] border-[var(--bhn-brand-600)] shadow-md"
+                          : "bg-[var(--bhn-surface)] border-[var(--bhn-border)]"
                       }`}
                     >
                       <Icon
                         size={18}
                         className={`mb-2 ${
-                          active ? "text-[#B85C2D]" : ""
+                          active ? "text-[var(--bhn-text)]" : ""
                         }`}
                       />
 
@@ -384,7 +384,7 @@ function RequestQuotePageContent() {
                       </div>
 
                       {active && (
-                        <div className="mt-2 flex items-center gap-1 text-[#B85C2D] text-xs">
+                        <div className="mt-2 flex items-center gap-1 text-[var(--bhn-text)] text-xs">
                           <CheckCircle2 size={14} />
                           Selected
                         </div>
@@ -396,13 +396,13 @@ function RequestQuotePageContent() {
             </div>
 
             {/* BUDGET */}
-            <div className="bg-[#F4E7DA] rounded-xl p-3 border border-[#E3D4C5]">
+            <div className="bg-[var(--bhn-surface-2)] rounded-xl p-3 border border-[var(--bhn-border)]">
               <div className="flex justify-between items-center">
                 <h2 className="font-semibold text-base">
                   Planned Budget
                 </h2>
 
-                <span className="text-[#B85C2D] font-semibold text-sm">
+                <span className="text-[var(--bhn-text)] font-semibold text-sm">
                   ₹{formData.budget.toLocaleString()}
                 </span>
               </div>
@@ -420,10 +420,10 @@ function RequestQuotePageContent() {
                       budget: Number(e.target.value),
                     })
                   }
-                  className="w-full accent-[#B85C2D]"
+                  className="w-full accent-[var(--bhn-brand-600)]"
                 />
 
-                <div className="flex justify-between text-sm mt-2 text-gray-500">
+                <div className="flex justify-between text-sm mt-2 text-[var(--bhn-text-muted)]">
                   <span>₹10,000</span>
                   <span>₹10,00,000</span>
                 </div>
@@ -438,7 +438,7 @@ function RequestQuotePageContent() {
                     requirements: e.target.value,
                   })
                 }
-                className="w-full mt-3 h-24 rounded-xl border p-3 bg-white resize-none text-sm"
+                className="w-full mt-3 h-24 rounded-xl border p-3 bg-[var(--bhn-surface)] resize-none text-sm"
               />
             </div>
 
@@ -447,45 +447,45 @@ function RequestQuotePageContent() {
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting || submitted}
-                className="w-full sm:w-auto bg-[#8B4513] text-white px-4 py-2.5 rounded-xl hover:opacity-90 transition disabled:cursor-not-allowed disabled:opacity-60 text-sm"
+                className="w-full sm:w-auto bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)] px-4 py-2.5 rounded-xl hover:opacity-90 transition disabled:cursor-not-allowed disabled:opacity-60 text-sm"
               >
                 {isSubmitting ? "Submitting…" : "Get Quotes"}
               </button>
 
               <button
                 onClick={saveDraft}
-                className="w-full sm:w-auto bg-white border px-4 py-2.5 rounded-xl text-sm"
+                className="w-full sm:w-auto bg-[var(--bhn-surface)] border px-4 py-2.5 rounded-xl text-sm"
               >
                 Save for Later
               </button>
             </div>
 
             {saved && (
-              <div className="p-3 rounded-xl bg-green-100 text-green-700 border border-green-300 text-sm">
+              <div className="p-3 rounded-xl bg-[var(--bhn-success-50)] text-[var(--bhn-success-700)] border border-[var(--bhn-success-500)] text-sm">
                 Draft saved successfully.
               </div>
             )}
 
             {error && (
-              <div className="p-3 rounded-xl bg-red-100 text-red-700 border border-red-300 text-sm">
+              <div className="p-3 rounded-xl bg-[var(--bhn-error-50)] text-[var(--bhn-error-700)] border border-[var(--bhn-error-500)] text-sm">
                 {error}
               </div>
             )}
 
             {submitted && (
-              <div className="p-3 rounded-xl bg-blue-100 text-blue-700 border border-blue-300 text-sm">
+              <div className="p-3 rounded-xl bg-[var(--bhn-brand-50)] text-[var(--bhn-brand-700)] border border-[var(--bhn-brand-100)] text-sm">
                 <p>Quote request submitted successfully.</p>
                 {conversationId ? (
                   <Link
                     href={`/userdashboard/inbox?conversationId=${conversationId}`}
-                    className="mt-3 block w-full max-w-xs rounded-lg bg-[#924C2B] px-3 py-2 text-center text-xs font-semibold text-white sm:inline-flex sm:w-auto"
+                    className="mt-3 block w-full max-w-xs rounded-lg bg-[var(--bhn-brand-600)] px-3 py-2 text-center text-xs font-semibold text-[var(--bhn-text-on-brand)] sm:inline-flex sm:w-auto"
                   >
                     Open Inbox
                   </Link>
                 ) : (
                   <Link
                     href="/userdashboard/quote"
-                    className="mt-3 block w-full max-w-xs rounded-lg bg-[#924C2B] px-3 py-2 text-center text-xs font-semibold text-white sm:inline-flex sm:w-auto"
+                    className="mt-3 block w-full max-w-xs rounded-lg bg-[var(--bhn-brand-600)] px-3 py-2 text-center text-xs font-semibold text-[var(--bhn-text-on-brand)] sm:inline-flex sm:w-auto"
                   >
                     View My Quotes
                   </Link>
@@ -496,7 +496,7 @@ function RequestQuotePageContent() {
 
           {/* RIGHT SIDEBAR */}
           <div>
-            <div className="bg-[#F4E7DA] rounded-xl p-3 border border-[#E3D4C5]">
+            <div className="bg-[var(--bhn-surface-2)] rounded-xl p-3 border border-[var(--bhn-border)]">
               <h2 className="font-semibold text-base mb-3">
                 Contact Information
               </h2>
@@ -512,7 +512,7 @@ function RequestQuotePageContent() {
                       fullName: e.target.value,
                     })
                   }
-                  className="w-full h-10 rounded-lg border px-3 bg-white text-sm"
+                  className="w-full h-10 rounded-lg border px-3 bg-[var(--bhn-surface)] text-sm"
                 />
 
                 <input
@@ -525,7 +525,7 @@ function RequestQuotePageContent() {
                       phone: e.target.value,
                     })
                   }
-                  className="w-full h-10 rounded-lg border px-3 bg-white text-sm"
+                  className="w-full h-10 rounded-lg border px-3 bg-[var(--bhn-surface)] text-sm"
                 />
 
                 <input
@@ -539,17 +539,17 @@ function RequestQuotePageContent() {
                       email: e.target.value,
                     })
                   }
-                  className="w-full h-10 rounded-lg border px-3 bg-white text-sm"
+                  className="w-full h-10 rounded-lg border px-3 bg-[var(--bhn-surface)] text-sm"
                 />
               </div>
 
-              <div className="bg-white rounded-xl mt-4 p-3">
-                <div className="flex items-center gap-2 text-[#B85C2D] font-medium">
+              <div className="bg-[var(--bhn-surface)] rounded-xl mt-4 p-3">
+                <div className="flex items-center gap-2 text-[var(--bhn-text)] font-medium">
                   <MapPin size={16} />
                   Bandhan Guarantee
                 </div>
 
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm text-[var(--bhn-text-muted)] mt-1">
                   Trusted vendors only
                 </p>
 
@@ -559,12 +559,12 @@ function RequestQuotePageContent() {
                   className="w-full h-32 object-cover rounded-xl mt-3"
                 />
 
-                <p className="text-xs mt-2 text-gray-600">
+                <p className="text-xs mt-2 text-[var(--bhn-text)]">
                   Join 10k+ users who planned their dream events.
                 </p>
               </div>
 
-              <div className="mt-3 p-3 bg-white rounded-xl">
+              <div className="mt-3 p-3 bg-[var(--bhn-surface)] rounded-xl">
                 <h3 className="font-semibold text-sm mb-2">
                   Quote Summary
                 </h3>
@@ -599,19 +599,19 @@ function RequestQuotePageContent() {
       </div>
 
       {/* FOOTER */}
-      <footer className="bg-[#534942] text-white mt-4">
+      <footer className="bg-[var(--bhn-surface-3)] text-[var(--bhn-text-on-brand)] mt-4">
         <div className="max-w-6xl mx-auto px-4 py-5 flex flex-col md:flex-row justify-between gap-3">
           <div>
             <h3 className="text-lg font-serif">
               Bandhan
             </h3>
 
-            <p className="text-xs text-gray-300 mt-1">
+            <p className="text-xs text-[var(--bhn-text-soft)] mt-1">
               Your trusted event planning partner.
             </p>
           </div>
 
-          <div className="flex gap-3 text-xs text-gray-300">
+          <div className="flex gap-3 text-xs text-[var(--bhn-text-soft)]">
             <span>Privacy Policy</span>
             <span>Terms of Service</span>
             <span>Contact Support</span>

@@ -38,7 +38,7 @@ export default function Jobs() {
       case 'active': return 'admin-badge-active';
       case 'closed': case 'rejected': return 'admin-badge-inactive';
       case 'pending': case 'draft': return 'admin-badge-pending';
-      default: return 'bg-gray-100 text-gray-600';
+      default: return 'bg-[var(--bhn-surface-3)] text-[var(--bhn-text)]';
     }
   };
   const submit = async () => {
@@ -62,7 +62,7 @@ export default function Jobs() {
             <option value="closed">Closed</option>
           </select>
           <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-gray-400" />
+            <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-[var(--bhn-text-muted)]" />
             <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search jobs..." className="admin-input pl-8 w-56" />
           </div>
         </div>
@@ -79,13 +79,13 @@ export default function Jobs() {
           <input className="admin-input" type="number" placeholder="Minimum salary" value={form.salaryMin} onChange={(e) => setForm({ ...form, salaryMin: e.target.value })}/><input className="admin-input" type="number" placeholder="Maximum salary" value={form.salaryMax} onChange={(e) => setForm({ ...form, salaryMax: e.target.value })}/>
           <input className="admin-input" placeholder="Location" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })}/><input className="admin-input" type="number" placeholder="Openings" value={form.openings} onChange={(e) => setForm({ ...form, openings: e.target.value })}/>
           <input className="admin-input md:col-span-2" placeholder="Role summary" value={form.aboutRole} onChange={(e) => setForm({ ...form, aboutRole: e.target.value })}/>
-        </div>{(!jobCategories.length || !jobTypes.length || !experienceLevels.length) && <p className="text-xs text-amber-700">Add the missing job options in Settings before publishing a job.</p>}<button disabled={isCreating || !jobCategories.length || !jobTypes.length || !experienceLevels.length} onClick={submit} className="admin-btn admin-btn-primary">{isCreating ? 'Creating...' : 'Create Job'}</button>
+        </div>{(!jobCategories.length || !jobTypes.length || !experienceLevels.length) && <p className="text-xs text-[var(--bhn-warning-700)]">Add the missing job options in Settings before publishing a job.</p>}<button disabled={isCreating || !jobCategories.length || !jobTypes.length || !experienceLevels.length} onClick={submit} className="admin-btn admin-btn-primary">{isCreating ? 'Creating...' : 'Create Job'}</button>
       </div>}
 
       {isLoading ? (
-        <div className="py-8 text-center text-sm text-gray-500">Loading...</div>
+        <div className="py-8 text-center text-sm text-[var(--bhn-text-muted)]">Loading...</div>
       ) : filtered.length === 0 ? (
-        <div className="card py-8 text-center text-sm text-gray-500">No jobs found</div>
+        <div className="card py-8 text-center text-sm text-[var(--bhn-text-muted)]">No jobs found</div>
       ) : (
         <div className="overflow-x-auto">
           <table className="admin-table w-full">
@@ -106,9 +106,9 @@ export default function Jobs() {
                   <td className="text-xs font-medium">{j.jobTitle}</td>
                   <td className="text-xs">{j.companyName || '—'}</td>
                   <td className="text-xs">{j.jobCategory}</td>
-                  <td className="text-xs flex items-center gap-1"><MapPin className="w-3 h-3 text-gray-400" /> {j.location || 'Remote'}</td>
+                  <td className="text-xs flex items-center gap-1"><MapPin className="w-3 h-3 text-[var(--bhn-text-muted)]" /> {j.location || 'Remote'}</td>
                   <td className="text-xs">{j.salary || '—'}</td>
-                  <td className="text-xs flex items-center gap-1"><Users className="w-3 h-3 text-gray-400" /> {j.applicantCount}</td>
+                  <td className="text-xs flex items-center gap-1"><Users className="w-3 h-3 text-[var(--bhn-text-muted)]" /> {j.applicantCount}</td>
                   <td><span className={`admin-badge ${statusColor(j.status)}`}>{j.status}</span></td>
                 </tr>
               ))}

@@ -8,6 +8,7 @@ function buildShiprocketOrderPayload(orderData = {}) {
   const firstName = nameParts[0] || 'Customer';
   const lastName = nameParts.slice(1).join(' ') || 'User';
   const shippingAddress = orderData.shippingAddress || {};
+  const packageDimensions = orderData.dimensions || {};
   const orderItems = Array.isArray(orderData.items) && orderData.items.length > 0
     ? orderData.items.map((item) => ({
         name: String(item.title || item.name || 'Product'),
@@ -20,7 +21,7 @@ function buildShiprocketOrderPayload(orderData = {}) {
   return {
     order_id: String(orderData._id || orderData.orderId || `ORD-${Date.now()}`),
     order_date: new Date().toISOString().slice(0, 19).replace('T', ' '),
-    pickup_location: 'Primary',
+    pickup_location: String(orderData.pickupLocation || 'Primary'),
     billing_customer_name: firstName,
     billing_last_name: lastName,
     billing_address: String(shippingAddress.street || 'Street Address'),
@@ -43,10 +44,10 @@ function buildShiprocketOrderPayload(orderData = {}) {
     order_items: orderItems,
     payment_method: String(orderData.paymentMethod || 'Prepaid').toUpperCase() === 'COD' ? 'COD' : 'Prepaid',
     sub_total: Number(orderData.amount || 0),
-    length: Number(orderData.length || 10),
-    breadth: Number(orderData.breadth || 10),
-    height: Number(orderData.height || 10),
-    weight: Number(orderData.weight || 0.5),
+    length: Number(packageDimensions.length ?? orderData.length ?? 10),
+    breadth: Number(packageDimensions.width ?? packageDimensions.breadth ?? orderData.breadth ?? 10),
+    height: Number(packageDimensions.height ?? orderData.height ?? 10),
+    weight: Number(orderData.weight ?? 0.5),
   };
 }
 

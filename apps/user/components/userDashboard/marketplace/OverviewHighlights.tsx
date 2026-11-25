@@ -10,11 +10,11 @@ const highlights = [
     label: "Explore Directory",
     href: "/services", 
     icon: Layers,
-    tone: "bg-white",
-    textColor: "text-[#1C1A16]",
-    descColor: "text-[#6B625A]",
-    btnColor: "text-[#C2652A]",
-    iconBox: "bg-[#F6EDE6] text-[#924C2B]",
+    tone: "bg-[var(--bhn-surface)]",
+    textColor: "text-[var(--bhn-text)]",
+    descColor: "text-[var(--bhn-text-muted)]",
+    btnColor: "text-[var(--bhn-text)]",
+    iconBox: "bg-[var(--bhn-surface-2)] text-[var(--bhn-text)]",
   },
   {
     title: "Plan Event",
@@ -22,11 +22,11 @@ const highlights = [
     label: "Start Planning",
     href: "/plan",
     icon: Briefcase,
-    tone: "bg-[#8B4A2F]", // सॉलिड ब्राउन बैकग्राउंड
-    textColor: "text-white",
-    descColor: "text-orange-100/80",
-    btnColor: "text-orange-100",
-    iconBox: "bg-white text-[#8B4A2F]",
+    tone: "bg-[var(--bhn-brand-600)]", // सॉलिड ब्राउन बैकग्राउंड
+    textColor: "text-[var(--bhn-text-on-brand)]",
+    descColor: "text-[var(--bhn-warning-50)]",
+    btnColor: "text-[var(--bhn-warning-50)]",
+    iconBox: "bg-[var(--bhn-surface)] text-[var(--bhn-text)]",
   },
   {
     title: "View Orders",
@@ -34,11 +34,11 @@ const highlights = [
     label: "Active Projects",
     href: "/orders",
     icon: Package,
-    tone: "bg-white",
-    textColor: "text-[#1C1A16]",
-    descColor: "text-[#6B625A]",
-    btnColor: "text-[#C2652A]",
-    iconBox: "bg-[#F6EDE6] text-[#924C2B]",
+    tone: "bg-[var(--bhn-surface)]",
+    textColor: "text-[var(--bhn-text)]",
+    descColor: "text-[var(--bhn-text-muted)]",
+    btnColor: "text-[var(--bhn-text)]",
+    iconBox: "bg-[var(--bhn-surface-2)] text-[var(--bhn-text)]",
   },
 ];
 
@@ -47,11 +47,11 @@ export function OverviewHighlights() {
     <section className="w-full py-4 sm:py-8">
       {/* HEADER SECTION */}
       <div className="max-w-4xl mb-4 px-1">
-        <h1 className="text-xl sm:text-xl md:text-2xl font-serif font-semibold leading-tight text-[#1C1A16]">
+        <h1 className="text-xl sm:text-xl md:text-2xl font-serif font-semibold leading-tight text-[var(--bhn-text)]">
           Welcome back, Jane! Let’s create something beautiful today.
         </h1>
 
-        <p className="mt-4 max-w-2xl text-sm sm:text-base leading-relaxed text-[#6B625A]">
+        <p className="mt-4 max-w-2xl text-sm sm:text-base leading-relaxed text-[var(--bhn-text-muted)]">
           Your next milestone deserves an atmosphere that feels like home.
           Browse our curated marketplace for the finest event partners.
         </p>
@@ -64,7 +64,7 @@ export function OverviewHighlights() {
           return (
             <Card 
               key={item.title} 
-              className={`group flex flex-col justify-between border border-[#E7E1D8] ${item.tone} p-4 sm:p-5 rounded-[24px] sm:rounded-[32px] shadow-sm hover:shadow-md transition-all duration-300 active:scale-[0.98] cursor-pointer`}
+              className={`group flex flex-col justify-between border border-[var(--bhn-border)] ${item.tone} p-4 sm:p-5 rounded-[24px] sm:rounded-[32px] shadow-sm hover:shadow-md transition-all duration-300 active:scale-[0.98] cursor-pointer`}
             >
               <div>
                 {/* ICON BOX */}

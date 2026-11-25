@@ -86,13 +86,13 @@ function StudentsPageContent() {
     ];
 
     return (
-        <div className="min-h-screen bg-[#F6F3F0]">
+        <div className="min-h-screen bg-[var(--bhn-surface-3)]">
             {/* Header */}
             <InstructorHeader />
 
             <div className="px-4 sm:px-6 lg:px-5 py-5">
                 {/* Tabs */}
-                <div className="flex items-center gap-4 border-b border-[#E7DED8] mb-6 overflow-x-auto whitespace-nowrap scrollbar-hide">
+                <div className="flex items-center gap-4 border-b border-[var(--bhn-border)] mb-6 overflow-x-auto whitespace-nowrap scrollbar-hide">
                     {tabs.map((tab) => {
                         const active = pathname === tab.path.split("?")[0];
 
@@ -101,8 +101,8 @@ function StudentsPageContent() {
                                 key={tab.name}
                                 onClick={() => router.push(tab.path)}
                                 className={`pb-3 text-sm sm:text-[15px] transition-all duration-200 ${active
-                                    ? "text-[#8A4A26] border-b-2 border-[#8A4A26] font-medium"
-                                    : "text-[#7C6C64] hover:text-[#8A4A26]"
+                                    ? "text-[var(--bhn-brand-700)] border-b-2 border-[var(--bhn-brand-600)] font-medium"
+                                    : "text-[var(--bhn-text-soft)] hover:text-[var(--bhn-brand-700)]"
                                     }`}
                             >
                                 {tab.name}
@@ -113,53 +113,53 @@ function StudentsPageContent() {
 
                 {/* Stats */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                    <div className="bg-white rounded-xl border border-[#EEE5DE] p-5">
-                        <p className="text-xs text-[#8A817A] uppercase">
+                    <div className="bg-[var(--bhn-surface)] rounded-xl border border-[var(--bhn-border)] p-5">
+                        <p className="text-xs text-[var(--bhn-text-soft)] uppercase">
                             Total Students
                         </p>
-                        <h2 className="text-xl font-semibold text-[#2D201B] mt-2">
+                        <h2 className="text-xl font-semibold text-[var(--bhn-text)] mt-2">
                             {overview?.totalStudents ?? 0}
                         </h2>
                     </div>
 
-                    <div className="bg-white rounded-xl border border-[#EEE5DE] p-5">
-                        <p className="text-xs text-[#8A817A] uppercase">
+                    <div className="bg-[var(--bhn-surface)] rounded-xl border border-[var(--bhn-border)] p-5">
+                        <p className="text-xs text-[var(--bhn-text-soft)] uppercase">
                             Active
                         </p>
-                        <h2 className="text-xl font-semibold text-[#8B4A28] mt-2">
+                        <h2 className="text-xl font-semibold text-[var(--bhn-brand-700)] mt-2">
                             {overview?.activeStudents ?? 0}
                         </h2>
                     </div>
 
-                    <div className="bg-white rounded-xl border border-[#EEE5DE] p-5">
-                        <p className="text-xs text-[#8A817A] uppercase">
+                    <div className="bg-[var(--bhn-surface)] rounded-xl border border-[var(--bhn-border)] p-5">
+                        <p className="text-xs text-[var(--bhn-text-soft)] uppercase">
                             Completed
                         </p>
-                        <h2 className="text-xl font-semibold text-[#2D201B] mt-2">
+                        <h2 className="text-xl font-semibold text-[var(--bhn-text)] mt-2">
                             {overview?.completedStudents ?? 0}
                         </h2>
                     </div>
 
-                    <div className="bg-white rounded-xl border border-[#EEE5DE] p-5">
-                        <p className="text-xs text-[#8A817A] uppercase">
+                    <div className="bg-[var(--bhn-surface)] rounded-xl border border-[var(--bhn-border)] p-5">
+                        <p className="text-xs text-[var(--bhn-text-soft)] uppercase">
                             Avg Completion
                         </p>
-                        <h2 className="text-xl font-semibold text-[#2D201B] mt-2">
+                        <h2 className="text-xl font-semibold text-[var(--bhn-text)] mt-2">
                             {overview?.averageCompletion ?? 0}%
                         </h2>
                     </div>
                 </div>
 
                 {/* Table Section */}
-                <div className="bg-white rounded-2xl border border-[#EEE5DE] overflow-hidden">
-                    {isLoading && <p className="p-4 text-sm text-[#7C6C64]">Loading students...</p>}
+                <div className="bg-[var(--bhn-surface)] rounded-2xl border border-[var(--bhn-border)] overflow-hidden">
+                    {isLoading && <p className="p-4 text-sm text-[var(--bhn-text-soft)]">Loading students...</p>}
                     {/* Filters */}
-                    <div className="p-4 flex flex-col xl:flex-row xl:items-center gap-4 justify-between border-b border-[#F1E8E2]">
+                    <div className="p-4 flex flex-col xl:flex-row xl:items-center gap-4 justify-between border-b border-[var(--bhn-border)]">
                         {/* Search */}
                         <div className="relative w-full xl:max-w-xs">
                             <Search
                                 size={16}
-                                className="absolute left-3 top-1/2 -translate-y-1/2 text-[#A89A90]"
+                                className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--bhn-text-soft)]"
                             />
 
                             <input
@@ -167,14 +167,14 @@ function StudentsPageContent() {
                                 placeholder="Search students..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full h-11 rounded-lg border border-[#E7DED8] bg-white pl-10 pr-4 text-sm outline-none focus:border-[#8A4A26]"
+                                className="w-full h-11 rounded-lg border border-[var(--bhn-border)] bg-[var(--bhn-surface)] pl-10 pr-4 text-sm outline-none focus:border-[var(--bhn-brand-600)]"
                             />
                         </div>
 
                         {/* Filters */}
                         <div className="flex flex-wrap items-center gap-3">
                             {/* Status Buttons */}
-                            <div className="flex items-center border border-[#E7DED8] rounded-lg overflow-hidden flex-wrap">
+                            <div className="flex items-center border border-[var(--bhn-border)] rounded-lg overflow-hidden flex-wrap">
 
                                 {["All", "In Progress", "Completed"].map((item) => (
 
@@ -189,8 +189,8 @@ function StudentsPageContent() {
                                          transition
                                          whitespace-nowrap
                                          ${activeFilter === item
-                                                ? "bg-[#F8F2ED] text-[#8A4A26]"
-                                                : "text-[#6D625B] hover:bg-[#FAF6F2]"
+                                                ? "bg-[#F8F2ED] text-[var(--bhn-brand-700)]"
+                                                : "text-[var(--bhn-text-soft)] hover:bg-[var(--bhn-surface-3)]"
                                             }
                                      `}
                                     >
@@ -203,17 +203,17 @@ function StudentsPageContent() {
 
                             {/* Progress */}
                             <div className="flex items-center gap-3">
-                                <p className="text-sm text-[#6D625B]">Progress:</p>
+                                <p className="text-sm text-[var(--bhn-text-soft)]">Progress:</p>
 
-                                <div className="w-20 sm:w-28 h-1.5 rounded-full bg-[#E6DDD6]">
-                                    <div className="w-1/2 h-full rounded-full bg-[#8A4A26]" />
+                                <div className="w-20 sm:w-28 h-1.5 rounded-full bg-[var(--bhn-border)]">
+                                    <div className="w-1/2 h-full rounded-full bg-[var(--bhn-brand-600)]" />
                                 </div>
 
-                                <p className="text-sm text-[#6D625B]">0-100%</p>
+                                <p className="text-sm text-[var(--bhn-text-soft)]">0-100%</p>
                             </div>
 
                             {/* Sort */}
-                            <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="h-10 px-3 rounded-lg border border-[#E7DED8] text-sm text-[#6D625B] outline-none">
+                            <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="h-10 px-3 rounded-lg border border-[var(--bhn-border)] text-sm text-[var(--bhn-text-soft)] outline-none">
                                 <option>Recently Active</option>
                                 <option>Newest</option>
                                 <option>Oldest</option>
@@ -224,8 +224,8 @@ function StudentsPageContent() {
                     {/* Desktop Table */}
                     <div className="hidden lg:block overflow-x-auto">
                         <table className="w-full">
-                            <thead className="bg-[#F7EFE8]">
-                                <tr className="text-left text-xs text-[#7B6F67] uppercase">
+                            <thead className="bg-[var(--bhn-surface-3)]">
+                                <tr className="text-left text-xs text-[var(--bhn-text-soft)] uppercase">
                                     <th className="px-6 py-4">Student</th>
                                     <th className="px-6 py-4">Progress</th>
                                     <th className="px-6 py-4">Last Active</th>
@@ -239,7 +239,7 @@ function StudentsPageContent() {
                                 {filteredStudents.map((student, index) => (
                                     <tr
                                         key={index}
-                                        className="border-t border-[#F1E8E2]"
+                                        className="border-t border-[var(--bhn-border)]"
                                     >
                                         {/* Student */}
                                         <td className="px-6 py-5">
@@ -251,11 +251,11 @@ function StudentsPageContent() {
                                                 />
 
                                                 <div>
-                                                    <p className="text-sm font-medium text-[#2D201B]">
+                                                    <p className="text-sm font-medium text-[var(--bhn-text)]">
                                                         {student.name}
                                                     </p>
 
-                                                    <p className="text-xs text-[#8A817A]">
+                                                    <p className="text-xs text-[var(--bhn-text-soft)]">
                                                         {student.email}
                                                     </p>
                                                 </div>
@@ -265,13 +265,13 @@ function StudentsPageContent() {
                                         {/* Progress */}
                                         <td className="px-6 py-5">
                                             <div className="flex items-center gap-3">
-                                                <span className="text-sm font-medium text-[#8A4A26]">
+                                                <span className="text-sm font-medium text-[var(--bhn-brand-700)]">
                                                     {student.progress}%
                                                 </span>
 
-                                                <div className="w-24 h-1.5 rounded-full bg-[#E8DFD8]">
+                                                <div className="w-24 h-1.5 rounded-full bg-[var(--bhn-border)]">
                                                     <div
-                                                        className="h-full rounded-full bg-[#8A4A26]"
+                                                        className="h-full rounded-full bg-[var(--bhn-brand-600)]"
                                                         style={{
                                                             width: `${student.progress}%`,
                                                         }}
@@ -281,12 +281,12 @@ function StudentsPageContent() {
                                         </td>
 
                                         {/* Last Active */}
-                                        <td className="px-6 py-5 text-sm text-[#6D625B]">
+                                        <td className="px-6 py-5 text-sm text-[var(--bhn-text-soft)]">
                                             {student.lastActive}
                                         </td>
 
                                         {/* Lessons */}
-                                        <td className="px-6 py-5 text-sm text-[#2D201B]">
+                                        <td className="px-6 py-5 text-sm text-[var(--bhn-text)]">
                                             {student.lessons}
                                         </td>
 
@@ -294,8 +294,8 @@ function StudentsPageContent() {
                                         <td className="px-6 py-5">
                                             <span
                                                 className={`px-3 py-1 rounded-full text-xs font-medium ${student.status === "Completed"
-                                                    ? "bg-[#EFE7E1] text-[#8A817A]"
-                                                    : "bg-[#F8E8DD] text-[#8A4A26]"
+                                                    ? "bg-[#EFE7E1] text-[var(--bhn-text-soft)]"
+                                                    : "bg-[#F8E8DD] text-[var(--bhn-brand-700)]"
                                                     }`}
                                             >
                                                 {student.status}
@@ -304,16 +304,16 @@ function StudentsPageContent() {
 
                                         {/* Actions */}
                                         <td className="px-6 py-5">
-                                            <div className="flex items-center justify-center gap-4 text-[#8A817A]">
+                                            <div className="flex items-center justify-center gap-4 text-[var(--bhn-text-soft)]">
                                                 <Eye
                                                     size={16}
-                                                    className="cursor-pointer hover:text-[#8A4A26]"
+                                                    className="cursor-pointer hover:text-[var(--bhn-brand-700)]"
                                                     onClick={() => alert(`Viewing student: ${student.name}`)}
                                                 />
 
                                                 <Mail
                                                     size={16}
-                                                    className="cursor-pointer hover:text-[#8A4A26]"
+                                                    className="cursor-pointer hover:text-[var(--bhn-brand-700)]"
                                                     onClick={() => alert(`Sending email to: ${student.email}`)}
                                                 />
                                             </div>
@@ -329,7 +329,7 @@ function StudentsPageContent() {
                         {filteredStudents.map((student, index) => (
                             <div
                                 key={index}
-                                className="border border-[#EEE5DE] rounded-xl p-4"
+                                className="border border-[var(--bhn-border)] rounded-xl p-4"
                             >
                                 <div className="flex items-center gap-3">
                                     <img
@@ -339,11 +339,11 @@ function StudentsPageContent() {
                                     />
 
                                     <div>
-                                        <h3 className="font-medium text-[#2D201B]">
+                                        <h3 className="font-medium text-[var(--bhn-text)]">
                                             {student.name}
                                         </h3>
 
-                                        <p className="text-xs text-[#8A817A]">
+                                        <p className="text-xs text-[var(--bhn-text-soft)]">
                                             {student.email}
                                         </p>
                                     </div>
@@ -353,14 +353,14 @@ function StudentsPageContent() {
                                     <div>
                                         <div className="flex justify-between text-sm mb-1">
                                             <span>Progress</span>
-                                            <span className="text-[#8A4A26] font-medium">
+                                            <span className="text-[var(--bhn-brand-700)] font-medium">
                                                 {student.progress}%
                                             </span>
                                         </div>
 
-                                        <div className="w-full h-2 rounded-full bg-[#E8DFD8]">
+                                        <div className="w-full h-2 rounded-full bg-[var(--bhn-border)]">
                                             <div
-                                                className="h-full rounded-full bg-[#8A4A26]"
+                                                className="h-full rounded-full bg-[var(--bhn-brand-600)]"
                                                 style={{
                                                     width: `${student.progress}%`,
                                                 }}
@@ -369,7 +369,7 @@ function StudentsPageContent() {
                                     </div>
 
                                     <div className="flex justify-between text-sm">
-                                        <span className="text-[#8A817A]">
+                                        <span className="text-[var(--bhn-text-soft)]">
                                             Lessons
                                         </span>
 
@@ -377,7 +377,7 @@ function StudentsPageContent() {
                                     </div>
 
                                     <div className="flex justify-between text-sm">
-                                        <span className="text-[#8A817A]">
+                                        <span className="text-[var(--bhn-text-soft)]">
                                             Last Active
                                         </span>
 
@@ -387,16 +387,16 @@ function StudentsPageContent() {
                                     <div className="flex items-center justify-between">
                                         <span
                                             className={`px-3 py-1 rounded-full text-xs font-medium ${student.status === "Completed"
-                                                ? "bg-[#EFE7E1] text-[#8A817A]"
-                                                : "bg-[#F8E8DD] text-[#8A4A26]"
+                                                ? "bg-[#EFE7E1] text-[var(--bhn-text-soft)]"
+                                                : "bg-[#F8E8DD] text-[var(--bhn-brand-700)]"
                                                 }`}
                                         >
                                             {student.status}
                                         </span>
 
-                                        <div className="flex items-center gap-4 text-[#8A817A]">
-                                            <Eye size={18} className="cursor-pointer hover:text-[#8A4A26]" onClick={() => alert(`Viewing student: ${student.name}`)} />
-                                            <Mail size={18} className="cursor-pointer hover:text-[#8A4A26]" onClick={() => alert(`Sending email to: ${student.email}`)} />
+                                        <div className="flex items-center gap-4 text-[var(--bhn-text-soft)]">
+                                            <Eye size={18} className="cursor-pointer hover:text-[var(--bhn-brand-700)]" onClick={() => alert(`Viewing student: ${student.name}`)} />
+                                            <Mail size={18} className="cursor-pointer hover:text-[var(--bhn-brand-700)]" onClick={() => alert(`Sending email to: ${student.email}`)} />
                                         </div>
                                     </div>
                                 </div>
@@ -405,8 +405,8 @@ function StudentsPageContent() {
                     </div>
 
                     {/* Footer */}
-                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-5 border-t border-[#F1E8E2]">
-                        <p className="text-sm text-[#7C6C64]">
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-5 border-t border-[var(--bhn-border)]">
+                        <p className="text-sm text-[var(--bhn-text-soft)]">
                             Showing {startRecord}-{endRecord} of {totalStudents} students
                         </p>
 
@@ -414,22 +414,22 @@ function StudentsPageContent() {
                             <button
                                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                                 disabled={currentPage <= 1}
-                                className="w-8 h-8 rounded-md border border-[#E7DED8] flex items-center justify-center disabled:opacity-40"
+                                className="w-8 h-8 rounded-md border border-[var(--bhn-border)] flex items-center justify-center disabled:opacity-40"
                             >
                                 <ChevronLeft size={16} />
                             </button>
 
                             {getPageNumbers().map((page, i) =>
                                 typeof page === "string" ? (
-                                    <span key={`ellipsis-${i}`} className="px-1 text-[#7C6C64]">...</span>
+                                    <span key={`ellipsis-${i}`} className="px-1 text-[var(--bhn-text-soft)]">...</span>
                                 ) : (
                                     <button
                                         key={page}
                                         onClick={() => setCurrentPage(page)}
                                         className={`w-8 h-8 rounded-md text-sm ${
                                             page === currentPage
-                                                ? "bg-[#8A4A26] text-white"
-                                                : "text-[#7C6C64] hover:bg-[#F4ECE6]"
+                                                ? "bg-[var(--bhn-brand-600)] text-white"
+                                                : "text-[var(--bhn-text-soft)] hover:bg-[var(--bhn-surface-3)]"
                                         }`}
                                     >
                                         {page}
@@ -440,7 +440,7 @@ function StudentsPageContent() {
                             <button
                                 onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                                 disabled={currentPage >= totalPages}
-                                className="w-8 h-8 rounded-md border border-[#E7DED8] flex items-center justify-center disabled:opacity-40"
+                                className="w-8 h-8 rounded-md border border-[var(--bhn-border)] flex items-center justify-center disabled:opacity-40"
                             >
                                 <ChevronRight size={16} />
                             </button>
@@ -449,7 +449,7 @@ function StudentsPageContent() {
                 </div>
 
                 {/* Floating Button */}
-                <button onClick={() => alert("Add new student")} className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-[#8A4A26] text-white shadow-lg flex items-center justify-center hover:scale-105 transition">
+                <button onClick={() => alert("Add new student")} className="fixed bottom-6 right-6 w-14 h-14 rounded-full bg-[var(--bhn-brand-600)] text-white shadow-lg flex items-center justify-center hover:scale-105 transition">
                     +
                 </button>
             </div>
@@ -458,5 +458,5 @@ function StudentsPageContent() {
 }
 
 export default function StudentsPage() {
-    return <Suspense fallback={<div className="min-h-screen bg-[#F6F3F0]" />}><StudentsPageContent /></Suspense>;
+    return <Suspense fallback={<div className="min-h-screen bg-[var(--bhn-surface-3)]" />}><StudentsPageContent /></Suspense>;
 }

@@ -62,9 +62,9 @@ export default function Categories() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Category Name" className="admin-input" />
             <input value={form.subcategories} onChange={(e) => setForm({ ...form, subcategories: e.target.value })} placeholder="Subcategories (comma-separated)" className="admin-input" />
-            <fieldset className="rounded-lg border border-gray-200 px-3 py-2">
-              <legend className="px-1 text-xs font-medium text-gray-700">Use in listing types</legend>
-              <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-gray-700">{['products', 'services', 'venues', 'courses', 'jobs'].map((scope) => <label key={scope} className="flex items-center gap-1"><input type="checkbox" checked={form.scopes.includes(scope)} onChange={() => setForm({ ...form, scopes: form.scopes.includes(scope) ? form.scopes.filter((item) => item !== scope) : [...form.scopes, scope] })} />{scope}</label>)}</div>
+            <fieldset className="rounded-lg border border-[var(--bhn-border)] px-3 py-2">
+              <legend className="px-1 text-xs font-medium text-[var(--bhn-text)]">Use in listing types</legend>
+              <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-[var(--bhn-text)]">{['products', 'services', 'venues', 'courses', 'jobs'].map((scope) => <label key={scope} className="flex items-center gap-1"><input type="checkbox" checked={form.scopes.includes(scope)} onChange={() => setForm({ ...form, scopes: form.scopes.includes(scope) ? form.scopes.filter((item) => item !== scope) : [...form.scopes, scope] })} />{scope}</label>)}</div>
             </fieldset>
             <select value={String(form.isActive)} onChange={(e) => setForm({ ...form, isActive: e.target.value === 'true' })} className="admin-input">
               <option value="true">Active</option>
@@ -78,9 +78,9 @@ export default function Categories() {
       )}
 
       {isLoading ? (
-        <div className="py-8 text-center text-sm text-gray-500">Loading...</div>
+        <div className="py-8 text-center text-sm text-[var(--bhn-text-muted)]">Loading...</div>
       ) : categories.length === 0 ? (
-        <div className="py-8 text-center text-sm text-gray-500">No categories yet</div>
+        <div className="py-8 text-center text-sm text-[var(--bhn-text-muted)]">No categories yet</div>
       ) : (
         <div className="overflow-x-auto">
           <table className="admin-table w-full">
@@ -97,10 +97,10 @@ export default function Categories() {
               {categories.map((cat) => (
                 <tr key={cat.id}>
                   <td className="font-medium text-sm">{cat.name}</td>
-                  <td className="text-xs text-gray-600">
+                  <td className="text-xs text-[var(--bhn-text)]">
                     {cat.subcategories.length > 0 ? cat.subcategories.join(', ') : '—'}
                   </td>
-                  <td className="text-xs text-gray-600">{cat.scopes?.join(', ') || 'products'}</td>
+                  <td className="text-xs text-[var(--bhn-text)]">{cat.scopes?.join(', ') || 'products'}</td>
                   <td><span className={`admin-badge ${cat.isActive ? 'admin-badge-active' : 'admin-badge-inactive'}`}>{cat.isActive ? 'Active' : 'Inactive'}</span></td>
                   <td className="text-right">
                     <div className="flex justify-end gap-1">

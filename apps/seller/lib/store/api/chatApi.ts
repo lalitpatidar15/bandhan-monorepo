@@ -35,6 +35,7 @@ interface Conversation {
   productImage?: string;
   shippingAddress?: Record<string, any>;
   quoteId?: string;
+  listingType?: string;
   quoteStatus?: string;
   quoteEventDate?: string;
   quoteGuestRange?: string;
@@ -45,6 +46,42 @@ interface Conversation {
   quotePhone?: string;
   quoteEmail?: string;
   productId?: string;
+  serviceId?: string | {
+    _id?: string;
+    title?: string;
+    name?: string;
+    image?: string;
+    images?: string[];
+    category?: string;
+    location?: string;
+    eventType?: string | string[];
+    minGuests?: number;
+    maxGuests?: number;
+  };
+  serviceName?: string;
+  serviceTitle?: string;
+  serviceImage?: string;
+  venueId?: string | {
+    _id?: string;
+    name?: string;
+    title?: string;
+    image?: string;
+    images?: string[];
+    venueType?: string;
+    category?: string;
+    location?: string;
+    pricePerDay?: number;
+    price?: number;
+    minGuests?: number;
+    maxGuests?: number;
+    guests?: number;
+  };
+  venueName?: string;
+  venueImage?: string;
+  category?: string;
+  price?: number;
+  location?: string;
+  eventType?: string | string[];
   sellerId?: string;
   buyerId?: string;
   sellerName?: string;
@@ -146,15 +183,6 @@ export const chatApi = createApi({
       invalidatesTags: [{ type: "Chat", id: "LIST" }],
     }),
 
-    uploadChatImage: builder.mutation<{ success: boolean; url: string }, FormData>({
-      query: (formData) => ({
-        url: "/chat/upload",
-        method: "POST",
-        body: formData,
-      }),
-      invalidatesTags: [{ type: "Chat", id: "LIST" }],
-    }),
-
     markConversationRead: builder.mutation<Conversation, { conversationId: string }>({
       query: ({ conversationId }) => ({
         url: `/chat/seen/${conversationId}`,
@@ -201,7 +229,6 @@ export const {
   useGetMessagesQuery,
   useSendMessageMutation,
   useCreateConversationMutation,
-  useUploadChatImageMutation,
   useMarkConversationReadMutation,
   useGetSellerQuotesQuery,
   useApproveSellerQuoteMutation,

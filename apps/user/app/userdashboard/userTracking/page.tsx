@@ -178,40 +178,40 @@ function OrderTrackingContent({
     <>
       <Header variant="cart" />
 
-      <div className="min-h-screen bg-[#F8F3EE]">
+      <div className="min-h-screen bg-[var(--bhn-surface-2)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-4 lg:px-5 py-4">
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3 mb-4">
             <div>
-              <p className="text-sm text-[#8B7E72]">
+              <p className="text-sm text-[var(--bhn-text-muted)]">
                 Orders / Order Tracking
               </p>
 
-              <h1 className="text-xl md:text-xl font-serif text-[#2F241D] mt-2">
+              <h1 className="text-xl md:text-xl font-serif text-[var(--bhn-text)] mt-2">
                 Order #{pageOrderData.orderNumber}
               </h1>
 
-              <p className="text-sm text-[#8B7E72] mt-2">
+              <p className="text-sm text-[var(--bhn-text-muted)] mt-2">
                 Placed on {pageOrderData.placedDate}
               </p>
             </div>
 
-            <div className="bg-[#EFE4D7] rounded-2xl px-4 py-5 min-w-[170px]">
-              <p className="text-xs tracking-widest text-[#8B7E72]">
+            <div className="bg-[var(--bhn-surface-2)] rounded-2xl px-4 py-5 min-w-[170px]">
+              <p className="text-xs tracking-widest text-[var(--bhn-text-muted)]">
                 TOTAL AMOUNT
               </p>
 
-              <p className="text-xl font-semibold text-[#8B4A20] mt-2">
+              <p className="text-xl font-semibold text-[var(--bhn-text)] mt-2">
                 {pageOrderData.totalAmount}
               </p>
             </div>
           </div>
 
           {!orderId && (
-            <Card className="bg-white rounded-xl p-4 border border-[#EADFD3]">
-              <p className="text-sm text-[#8B7E72]">Please open this page from an order detail page to see tracking information.</p>
+            <Card className="bg-[var(--bhn-surface)] rounded-xl p-4 border border-[var(--bhn-border)]">
+              <p className="text-sm text-[var(--bhn-text-muted)]">Please open this page from an order detail page to see tracking information.</p>
               <button
                 type="button"
-                className="mt-3 inline-flex items-center rounded-full bg-[#924C2B] px-4 py-2 text-sm text-white hover:bg-[#7a3f24]"
+                className="mt-3 inline-flex items-center rounded-full bg-[var(--bhn-brand-600)] px-4 py-2 text-sm text-[var(--bhn-text-on-brand)] hover:bg-[var(--bhn-brand-600)]"
                 onClick={() => router.push('/userdashboard/orders')}
               >
                 View your orders
@@ -220,22 +220,22 @@ function OrderTrackingContent({
           )}
 
           {orderId && isLoading && (
-            <Card className="bg-white rounded-xl p-4 border border-[#EADFD3]">
-              <p className="text-sm text-[#8B7E72]">Loading tracking details…</p>
+            <Card className="bg-[var(--bhn-surface)] rounded-xl p-4 border border-[var(--bhn-border)]">
+              <p className="text-sm text-[var(--bhn-text-muted)]">Loading tracking details…</p>
             </Card>
           )}
 
           {error && (
-            <Card className="bg-white rounded-xl p-4 border border-[#EADFD3]">
-              <p className="text-sm text-red-600">
+            <Card className="bg-[var(--bhn-surface)] rounded-xl p-4 border border-[var(--bhn-border)]">
+              <p className="text-sm text-[var(--bhn-error-600)]">
                 {(error as any)?.data?.message || "Tracking is not available for this order yet."}
               </p>
             </Card>
           )}
 
           {data && data.success === false && (
-            <Card className="bg-white rounded-xl p-4 border border-[#EADFD3] mb-4">
-              <div className="flex items-center gap-2 text-amber-800">
+            <Card className="bg-[var(--bhn-surface)] rounded-xl p-4 border border-[var(--bhn-border)] mb-4">
+              <div className="flex items-center gap-2 text-[var(--bhn-warning-700)]">
                 <AlertCircle size={18} />
                 <p className="text-sm font-medium">{data.message || "Tracking is not available for this order yet."}</p>
               </div>
@@ -245,13 +245,13 @@ function OrderTrackingContent({
           {data && (
             <div className="grid grid-cols-1 xl:grid-cols-[1fr_340px] gap-4">
               <div className="space-y-4">
-                <Card className="bg-white rounded-xl p-4 md:p-3 border border-[#EADFD3]">
-                  <h3 className="text-lg font-semibold text-[#4A3527] mb-4">
+                <Card className="bg-[var(--bhn-surface)] rounded-xl p-4 md:p-3 border border-[var(--bhn-border)]">
+                  <h3 className="text-lg font-semibold text-[var(--bhn-text)] mb-4">
                     Order Journey
                   </h3>
 
                   <div className="relative">
-                    <div className="absolute top-3 left-0 right-0 h-[2px] bg-[#E8D6C6]" />
+                    <div className="absolute top-3 left-0 right-0 h-[2px] bg-[var(--bhn-surface-2)]" />
 
                     <div className="grid grid-cols-4 gap-2 relative">
                       {pageTimeline.map((item: TimelineItem, index: number) => {
@@ -265,12 +265,12 @@ function OrderTrackingContent({
                             <div
                               className={`w-10 h-10 md:w-12 md:h-9 rounded-full flex items-center justify-center z-10 ${
                                 item.status === "done"
-                                  ? "bg-[#8B4A20] text-white"
+                                  ? "bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)]"
                                   : item.status === "active"
-                                  ? "bg-white border-2 border-[#C56A31] text-[#C56A31]"
+                                  ? "bg-[var(--bhn-surface)] border-2 border-[var(--bhn-brand-600)] text-[var(--bhn-text)]"
                                   : item.status === "cancelled"
-                                  ? "bg-red-100 text-red-600"
-                                  : "bg-[#F3E8DE] text-[#B29A88]"
+                                  ? "bg-[var(--bhn-error-50)] text-[var(--bhn-error-600)]"
+                                  : "bg-[var(--bhn-surface-2)] text-[var(--bhn-text-soft)]"
                               }`}
                             >
                               <Icon size={18} />
@@ -278,13 +278,13 @@ function OrderTrackingContent({
 
                             <p
                               className={`mt-3 text-xs md:text-sm font-medium ${
-                                item.status === "active" ? "text-[#C56A31]" : ""
+                                item.status === "active" ? "text-[var(--bhn-text)]" : ""
                               }`}
                             >
                               {item.title}
                             </p>
 
-                            <p className="text-[10px] md:text-xs text-[#8B7E72] mt-1">
+                            <p className="text-[10px] md:text-xs text-[var(--bhn-text-muted)] mt-1">
                               {item.date}
                             </p>
                           </div>
@@ -295,18 +295,18 @@ function OrderTrackingContent({
                 </Card>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Card className="bg-[#FBF6F0] rounded-xl p-4 border border-[#EADFD3]">
+                  <Card className="bg-[var(--bhn-surface-2)] rounded-xl p-4 border border-[var(--bhn-border)]">
                     <div className="flex items-center gap-2 mb-5">
                       <CalendarDays
                         size={18}
-                        className="text-[#C56A31]"
+                        className="text-[var(--bhn-text)]"
                       />
                       <h4 className="font-semibold">
                         Shipment Schedule
                       </h4>
                     </div>
 
-                    <p className="text-xs text-[#8B7E72]">
+                    <p className="text-xs text-[var(--bhn-text-muted)]">
                       ESTIMATED DELIVERY
                     </p>
 
@@ -315,7 +315,7 @@ function OrderTrackingContent({
                     </p>
 
                     <div className="mt-4">
-                      <p className="text-xs text-[#8B7E72]">
+                      <p className="text-xs text-[var(--bhn-text-muted)]">
                         AWB CODE
                       </p>
 
@@ -325,11 +325,11 @@ function OrderTrackingContent({
                     </div>
                   </Card>
 
-                  <Card className="bg-[#FBF6F0] rounded-xl p-4 border border-[#EADFD3]">
+                  <Card className="bg-[var(--bhn-surface-2)] rounded-xl p-4 border border-[var(--bhn-border)]">
                     <div className="flex items-center gap-2 mb-5">
                       <MapPin
                         size={18}
-                        className="text-[#C56A31]"
+                        className="text-[var(--bhn-text)]"
                       />
                       <h4 className="font-semibold">
                         Shipping Details
@@ -340,7 +340,7 @@ function OrderTrackingContent({
                       {pageOrderData.venueName}
                     </p>
 
-                    <p className="text-sm text-[#8B7E72] mt-2">
+                    <p className="text-sm text-[var(--bhn-text-muted)] mt-2">
                       {pageOrderData.venueAddressLine1}
                       <br />
                       {pageOrderData.venueAddressLine2}
@@ -356,27 +356,27 @@ function OrderTrackingContent({
                   </Card>
                 </div>
 
-                <Card className="bg-white rounded-xl p-4 border border-[#EADFD3]">
+                <Card className="bg-[var(--bhn-surface)] rounded-xl p-4 border border-[var(--bhn-border)]">
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-lg font-semibold text-[#4A3527]">Items</h3>
-                    <span className="text-xs text-[#8B7E72]">{pageItems.length} items</span>
+                    <h3 className="text-lg font-semibold text-[var(--bhn-text)]">Items</h3>
+                    <span className="text-xs text-[var(--bhn-text-muted)]">{pageItems.length} items</span>
                   </div>
 
                   <div className="space-y-3">
                     {pageItems.map((item: RentalItem) => (
-                      <div key={item.id} className="flex items-center gap-3 border-b border-[#EADFD3] pb-3 last:border-0 last:pb-0">
+                      <div key={item.id} className="flex items-center gap-3 border-b border-[var(--bhn-border)] pb-3 last:border-0 last:pb-0">
                         <img
                           src={item.image}
                           alt={item.title}
-                          className="h-16 w-16 rounded-lg bg-[#F3ECE4] object-cover"
+                          className="h-16 w-16 rounded-lg bg-[var(--bhn-surface-2)] object-cover"
                         />
                         <div className="flex-1">
-                          <p className="font-semibold text-[#1C1A16]">{item.title}</p>
-                          <p className="text-sm text-[#8B7E72]">{item.subtitle}</p>
+                          <p className="font-semibold text-[var(--bhn-text)]">{item.title}</p>
+                          <p className="text-sm text-[var(--bhn-text-muted)]">{item.subtitle}</p>
                         </div>
                         <div className="text-right">
-                          <p className="font-semibold text-[#1C1A16]">{item.amount}</p>
-                          <p className="text-xs text-[#8B7E72]">{item.tier}</p>
+                          <p className="font-semibold text-[var(--bhn-text)]">{item.amount}</p>
+                          <p className="text-xs text-[var(--bhn-text-muted)]">{item.tier}</p>
                         </div>
                       </div>
                     ))}
@@ -385,16 +385,16 @@ function OrderTrackingContent({
               </div>
 
               <div className="space-y-4">
-                <Card className="bg-white rounded-xl p-4 border border-[#EADFD3]">
-                  <h3 className="text-lg font-semibold text-[#4A3527] mb-4">Contact Information</h3>
-                  <div className="space-y-2 text-sm text-[#534438]">
+                <Card className="bg-[var(--bhn-surface)] rounded-xl p-4 border border-[var(--bhn-border)]">
+                  <h3 className="text-lg font-semibold text-[var(--bhn-text)] mb-4">Contact Information</h3>
+                  <div className="space-y-2 text-sm text-[var(--bhn-text)]">
                     <p><strong>Buyer:</strong> {orderContact.name}</p>
                     <p><strong>Email:</strong> {orderContact.email}</p>
                     <p><strong>Phone:</strong> {orderContact.phone}</p>
                   </div>
                 </Card>
 
-                <div className="bg-gradient-to-b from-[#8B4A20] to-[#6E3214] rounded-xl p-4 text-white">
+                <div className="bg-gradient-to-b from-[var(--bhn-brand-600)] to-[var(--bhn-brand-600)] rounded-xl p-4 text-[var(--bhn-text-on-brand)]">
                   <h3 className="text-xl font-semibold mb-5">
                     Manage Order
                   </h3>
@@ -405,7 +405,7 @@ function OrderTrackingContent({
                         href={pageOrderData.trackingUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="w-full bg-white text-[#6E3214] rounded-xl py-3 font-medium flex items-center justify-center gap-2 hover:scale-[1.02] transition"
+                        className="w-full bg-[var(--bhn-surface)] text-[var(--bhn-text)] rounded-xl py-3 font-medium flex items-center justify-center gap-2 hover:scale-[1.02] transition"
                       >
                         <Truck size={16} />
                         Track on Shiprocket
@@ -415,7 +415,7 @@ function OrderTrackingContent({
                     <button
                       onClick={() => onContactSupport?.() || router.push('/userdashboard/support')}
                       type="button"
-                      className="w-full bg-white text-[#6E3214] rounded-xl py-3 font-medium flex items-center justify-center gap-2 hover:scale-[1.02] transition"
+                      className="w-full bg-[var(--bhn-surface)] text-[var(--bhn-text)] rounded-xl py-3 font-medium flex items-center justify-center gap-2 hover:scale-[1.02] transition"
                     >
                       <Phone size={16} />
                       Contact Support
@@ -435,31 +435,31 @@ function OrderTrackingContent({
                 </div>
 
                 {pageOrderData.statusDescription && (
-                  <Card className="bg-[#F4EADF] rounded-2xl p-3 border border-[#E4D3C4]">
+                  <Card className="bg-[var(--bhn-surface-2)] rounded-2xl p-3 border border-[var(--bhn-border)]">
                     <div className="flex gap-3">
                       <AlertCircle
-                        className="text-[#C56A31] flex-shrink-0"
+                        className="text-[var(--bhn-text)] flex-shrink-0"
                         size={18}
                       />
-                      <p className="text-sm text-[#6F5F52]">
+                      <p className="text-sm text-[var(--bhn-text-muted)]">
                         {pageOrderData.statusDescription}
                       </p>
                     </div>
                   </Card>
                 )}
 
-                <Card className="bg-white rounded-xl p-3 border border-[#EADFD3]">
+                <Card className="bg-[var(--bhn-surface)] rounded-xl p-3 border border-[var(--bhn-border)]">
                   <div className="flex items-center gap-2 mb-3">
                     <Clock3
                       size={18}
-                      className="text-[#C56A31]"
+                      className="text-[var(--bhn-text)]"
                     />
                     <h4 className="font-semibold">
                       Status Overview
                     </h4>
                   </div>
 
-                  <p className="text-[#C56A31] font-semibold uppercase">
+                  <p className="text-[var(--bhn-text)] font-semibold uppercase">
                     {pageOrderData.statusText}
                   </p>
                 </Card>
@@ -474,7 +474,7 @@ function OrderTrackingContent({
 
 export default function OrderTrackingPage(props: OrderTrackingPageProps) {
   return (
-    <Suspense fallback={<div className="p-8 text-center text-sm text-[#8B7E72]">Loading...</div>}>
+    <Suspense fallback={<div className="p-8 text-center text-sm text-[var(--bhn-text-muted)]">Loading...</div>}>
       <OrderTrackingContent {...props} />
     </Suspense>
   );

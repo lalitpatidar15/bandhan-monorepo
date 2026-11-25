@@ -82,7 +82,7 @@ export default function LeadSections() {
             ["4.8/5", "Client satisfaction"],
           ].map(([value, label]) => (
             <div key={label}>
-              <strong className="block font-serif text-3xl text-[var(--bhn-brand-600)] sm:text-4xl">
+              <strong className="block font-serif text-3xl text-[var(--bhn-text)] sm:text-4xl">
                 {value}
               </strong>
               <span className="mt-1 block text-sm text-[var(--bhn-text-muted)]">{label}</span>
@@ -94,7 +94,7 @@ export default function LeadSections() {
       <section className="bg-[var(--bhn-surface-2)] px-4 py-14 sm:px-6 md:py-20">
         <div className="mx-auto max-w-7xl">
           <div className="mx-auto mb-9 max-w-2xl text-center">
-            <p className="text-sm font-semibold uppercase text-[var(--bhn-brand-600)]">Every occasion</p>
+            <p className="text-sm font-semibold uppercase text-[var(--bhn-text)]">Every occasion</p>
             <h2 className="mt-2 font-serif text-4xl leading-tight text-[var(--bhn-text)] sm:text-5xl">
               One planning partner for every kind of event.
             </h2>
@@ -117,7 +117,7 @@ export default function LeadSections() {
                   sizes="(min-width: 768px) 33vw, 100vw"
                   className="object-cover transition duration-500 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[color-mix(in_srgb,var(--bhn-text)_80%,transparent)] via-[color-mix(in_srgb,var(--bhn-text)_20%,transparent)] to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-6 text-[var(--bhn-text-on-brand)]">
                   <h3 className="font-serif text-3xl">{eventType.title}</h3>
                   <p className="mt-2 text-sm leading-6 opacity-85">
@@ -126,7 +126,7 @@ export default function LeadSections() {
                   <button
                     type="button"
                     onClick={openContact}
-                    className="mt-5 font-medium text-[var(--bhn-brand-300)] hover:text-white"
+                    className="mt-5 font-medium text-[var(--bhn-brand-300)] hover:text-[var(--bhn-text-on-brand)]"
                   >
                     Plan this event →
                   </button>
@@ -166,7 +166,7 @@ export default function LeadSections() {
             ].map(([Icon, title, description]) => {
               const FeatureIcon = Icon as typeof ShieldCheck;
               return (
-                <div key={title as string} className="rounded-[var(--bhn-radius)] border border-white/10 bg-white/5 p-5">
+                <div key={title as string} className="rounded-[var(--bhn-radius)] border border-[color-mix(in_srgb,var(--bhn-surface)_10%,transparent)] bg-[color-mix(in_srgb,var(--bhn-surface)_5%,transparent)] p-5">
                   <FeatureIcon className="text-[var(--bhn-brand-300)]" size={24} />
                   <h3 className="mt-4 text-lg font-semibold">{title as string}</h3>
                   <p className="mt-2 text-sm leading-6 opacity-65">{description as string}</p>
@@ -181,7 +181,7 @@ export default function LeadSections() {
         <div className="mx-auto max-w-7xl">
           <div className="mb-9 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="text-sm font-semibold uppercase text-[var(--bhn-brand-600)]">Real experiences</p>
+              <p className="text-sm font-semibold uppercase text-[var(--bhn-text)]">Real experiences</p>
               <h2 className="mt-2 font-serif text-4xl text-[var(--bhn-text)] sm:text-5xl">
                 Clients remember the celebration, not the planning stress.
               </h2>
@@ -216,7 +216,7 @@ export default function LeadSections() {
       <section id="faqs" className="scroll-mt-24 bg-[var(--bhn-surface)] px-4 py-14 sm:px-6 md:py-20">
         <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.75fr_1.25fr]">
           <div>
-            <p className="text-sm font-semibold uppercase text-[var(--bhn-brand-600)]">Questions</p>
+            <p className="text-sm font-semibold uppercase text-[var(--bhn-text)]">Questions</p>
             <h2 className="mt-2 font-serif text-4xl leading-tight text-[var(--bhn-text)] sm:text-5xl">
               A clear start to your planning journey.
             </h2>

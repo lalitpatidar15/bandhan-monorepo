@@ -36,7 +36,7 @@
 
 @layer components {
   .surface {
-    @apply rounded-xl border bg-white border-[#ece4da] shadow-sm;
+    @apply rounded-xl border bg-white border-[var(--bhn-border)] shadow-sm;
   }
   .btn-brand {
     @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-white transition;
@@ -47,7 +47,7 @@
   }
   .btn-brand-outline {
     @apply inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm font-semibold transition;
-    border-color: var(--bhn-brand-600);
+    border-color: var(--bhn-text);
     color: var(--bhn-brand-700);
   }
   .btn-brand-outline:hover {
@@ -139,7 +139,7 @@ a {
   padding: .45rem .75rem;
   border: 1px solid var(--bhn-brand-200);
   border-radius: var(--bhn-radius-full);
-  color: #fff;
+  color: var(--bhn-text-soft);
   background: rgba(30,15,9,.38);
   backdrop-filter: blur(10px);
   font-size: .75rem;
@@ -149,7 +149,7 @@ a {
 }
 .bhn-home-hero h1 {
   margin: 1.25rem 0 0;
-  color: #fff;
+  color: var(--bhn-text-soft);
   font-size: clamp(2.75rem, 5vw, 4.5rem);
   font-weight: 700;
   letter-spacing: -.045em;
@@ -176,13 +176,13 @@ a {
   font-weight: 750;
   transition: transform var(--bhn-transition), background var(--bhn-transition), box-shadow var(--bhn-transition);
 }
-.bhn-home-primary { color: var(--bhn-brand-950); background: #fff; box-shadow: var(--bhn-shadow-md); }
+.bhn-home-primary { color: var(--bhn-brand-950); background: var(--bhn-surface-2); box-shadow: var(--bhn-shadow-md); }
 .bhn-home-primary:hover { background: var(--bhn-brand-50); box-shadow: var(--bhn-shadow-lg); transform: translateY(-1px); }
-.bhn-home-secondary { color: #fff; border: 1px solid rgba(255,255,255,.55); background: rgba(30,15,9,.35); backdrop-filter: blur(10px); }
-.bhn-home-secondary:hover { border-color: #fff; background: rgba(30,15,9,.62); }
+.bhn-home-secondary { color: var(--bhn-text-soft); border: 1px solid rgba(255,255,255,.55); background: rgba(30,15,9,.35); backdrop-filter: blur(10px); }
+.bhn-home-secondary:hover { border-color: var(--bhn-border); background: rgba(30,15,9,.62); }
 .bhn-home-discovery { display: flex; flex-wrap: wrap; gap: .6rem .75rem; margin-top: 1.75rem; color: rgba(255,255,255,.72); font-size: .875rem; }
-.bhn-home-discovery a { padding-bottom: .1rem; border-bottom: 1px solid rgba(255,255,255,.45); color: #fff; font-weight: 700; }
-.bhn-home-discovery a:hover { border-color: #fff; }
+.bhn-home-discovery a { padding-bottom: .1rem; border-bottom: 1px solid rgba(255,255,255,.45); color: var(--bhn-text-soft); font-weight: 700; }
+.bhn-home-discovery a:hover { border-color: var(--bhn-border); }
 .bhn-home-journey-wrap { padding-bottom: clamp(2.5rem, 5vw, 4.5rem); }
 @media (max-width: 560px) {
   .bhn-home-hero { min-height: 37rem; }

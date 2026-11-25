@@ -77,22 +77,22 @@ const handleShare = async () => {
       {/* HEADER */}
       <div className="mb-4 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex items-center gap-4">
-          <div className="h-14 w-14 rounded-full bg-[#F2E6D5] grid place-items-center text-xl font-bold text-[#C2652A]">
+          <div className="h-14 w-14 rounded-full bg-[var(--bhn-surface-2)] grid place-items-center text-xl font-bold text-[var(--bhn-text)]">
             L
           </div>
           <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-[#8B7E72]">
+            <p className="text-xs uppercase tracking-[0.3em] text-[var(--bhn-text-muted)]">
               Venue Details
             </p>
-            <h1 className="text-2xl font-semibold text-[#1C1A16]">
+            <h1 className="text-2xl font-semibold text-[var(--bhn-text)]">
               {venue.name}
             </h1>
-            <p className="mt-2 text-sm text-[#6B625A]">
+            <p className="mt-2 text-sm text-[var(--bhn-text-muted)]">
               {venue.location} • {venue.guests}
             </p>
-            <div className="flex flex-wrap items-center gap-4 mt-3 text-sm text-[#6B625A]">
-              <span className="inline-flex items-center gap-2 text-[#C2652A] font-semibold">
-                <Star size={16} className="fill-[#C2652A]" />
+            <div className="flex flex-wrap items-center gap-4 mt-3 text-sm text-[var(--bhn-text-muted)]">
+              <span className="inline-flex items-center gap-2 text-[var(--bhn-text)] font-semibold">
+                <Star size={16} className="fill-[var(--bhn-brand-600)]" />
                 {venue.rating}
               </span>
               <span>120 reviews</span>
@@ -109,13 +109,13 @@ const handleShare = async () => {
     className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition
     ${
       saved
-        ? "border-[#C2652A] bg-[#FFF4EC] text-[#C2652A]"
-        : "border-[#E7E1D8] bg-white text-[#1C1A16] hover:bg-[#F8F4EF]"
+        ? "border-[var(--bhn-brand-600)] bg-[var(--bhn-surface-2)] text-[var(--bhn-text)]"
+        : "border-[var(--bhn-border)] bg-[var(--bhn-surface)] text-[var(--bhn-text)] hover:bg-[var(--bhn-surface-2)]"
     }`}
   >
     <Heart
       size={16}
-      className={saved ? "fill-[#C2652A]" : ""}
+      className={saved ? "fill-[var(--bhn-brand-600)]" : ""}
     />
 
     {saved ? "Saved" : "Save"}
@@ -124,11 +124,11 @@ const handleShare = async () => {
   {/* SHARE */}
   <button
     onClick={handleShare}
-    className="inline-flex items-center gap-2 rounded-full border border-[#E7E1D8] bg-white px-4 py-2 text-sm text-[#1C1A16] transition hover:bg-[#F8F4EF]"
+    className="inline-flex items-center gap-2 rounded-full border border-[var(--bhn-border)] bg-[var(--bhn-surface)] px-4 py-2 text-sm text-[var(--bhn-text)] transition hover:bg-[var(--bhn-surface-2)]"
   >
     <Share2 size={16} />
 
-    <span className="text-[#6B625A]">
+    <span className="text-[var(--bhn-text-muted)]">
       Share
     </span>
   </button>
@@ -147,29 +147,29 @@ const handleShare = async () => {
           <Card className="p-5 rounded-[32px]">
             <div className="flex flex-col gap-5">
               <div>
-                <h2 className="text-xl font-semibold text-[#1C1A16]">
+                <h2 className="text-xl font-semibold text-[var(--bhn-text)]">
                   A Legacy of Refinement
                 </h2>
-                <p className="mt-4 text-[13px] leading-7 text-[#6B625A]">
+                <p className="mt-4 text-[13px] leading-7 text-[var(--bhn-text-muted)]">
                   {venue.description}
                 </p>
               </div>
 
-              <div className="bg-[#F7EFE7] border border-[#E7E1D8] rounded-3xl p-4">
+              <div className="bg-[var(--bhn-surface-2)] border border-[var(--bhn-border)] rounded-3xl p-4">
                 {/* Header */}
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-semibold text-[#1C1A16]">
+                  <h3 className="text-sm font-semibold text-[var(--bhn-text)]">
                     Investment Options
                   </h3>
 
                   {/* Tabs */}
-                  <div className="flex bg-[#EFE6DB] rounded-full p-1 text-xs">
+                  <div className="flex bg-[var(--bhn-surface-2)] rounded-full p-1 text-xs">
                     <button
                       onClick={() => setActiveTab("full")}
                       className={`px-4 py-1 rounded-full ${
                         activeTab === "full"
-                          ? "bg-white text-[#C2652A] border border-[#E7E1D8]"
-                          : "text-[#6B625A]"
+                          ? "bg-[var(--bhn-surface)] text-[var(--bhn-text)] border border-[var(--bhn-border)]"
+                          : "text-[var(--bhn-text-muted)]"
                       }`}
                     >
                       Full Day Rental
@@ -179,8 +179,8 @@ const handleShare = async () => {
                       onClick={() => setActiveTab("evening")}
                       className={`px-4 py-1 rounded-full ${
                         activeTab === "evening"
-                          ? "bg-white text-[#C2652A] border border-[#E7E1D8]"
-                          : "text-[#6B625A]"
+                          ? "bg-[var(--bhn-surface)] text-[var(--bhn-text)] border border-[var(--bhn-border)]"
+                          : "text-[var(--bhn-text-muted)]"
                       }`}
                     >
                       Evening Event
@@ -192,11 +192,11 @@ const handleShare = async () => {
                 <div className="mt-6 grid md:grid-cols-2 gap-4 text-sm">
                   {/* INCLUDED */}
                   <div>
-                    <p className="text-xs tracking-[0.2em] text-[#C2652A] mb-3">
+                    <p className="text-xs tracking-[0.2em] text-[var(--bhn-text)] mb-3">
                       INCLUDED
                     </p>
 
-                    <ul className="space-y-2 text-[#6B625A]">
+                    <ul className="space-y-2 text-[var(--bhn-text-muted)]">
                       <li>• 12-hour exclusive venue access</li>
                       <li>• Luxury bridal & groom suites</li>
                       <li>• Tables, mahogany chairs & linens</li>
@@ -206,11 +206,11 @@ const handleShare = async () => {
 
                   {/* PREMIUM ADD-ONS */}
                   <div>
-                    <p className="text-xs tracking-[0.2em] text-[#C2652A] mb-3">
+                    <p className="text-xs tracking-[0.2em] text-[var(--bhn-text)] mb-3">
                       PREMIUM ADD-ONS
                     </p>
 
-                    <ul className="space-y-2 text-[#6B625A]">
+                    <ul className="space-y-2 text-[var(--bhn-text-muted)]">
                       <li>• Valet parking service</li>
                       <li>• Custom floral installation</li>
                       <li>• Late-night strike crew</li>

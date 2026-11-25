@@ -30,6 +30,7 @@ const formatBooking = (booking) => {
     contactPerson: booking.contactPerson || "",
     alternateMobile: booking.alternateMobile || "",
     status: booking.status,
+    paymentStatus: booking.paymentStatus || "pending",
     totalPrice: booking.pricing?.total || 0,
     items: booking.items,
     createdAt: booking.createdAt,

@@ -123,10 +123,10 @@ export default function Commissions() {
           </thead>
           <tbody>
             {rules.map((rule) => (
-              <tr key={rule.id} className="border-b hover:bg-gray-50">
-                <td className="px-4 py-3 font-medium text-gray-900">{rule.category}</td>
-                <td className="px-4 py-3 text-gray-700">{rule.type}</td>
-                <td className="px-4 py-3 text-gray-700">{rule.type === 'percentage' ? `${rule.value}%` : `₹${rule.value}`}</td>
+              <tr key={rule.id} className="border-b hover:bg-[var(--bhn-surface-2)]">
+                <td className="px-4 py-3 font-medium text-[var(--bhn-text)]">{rule.category}</td>
+                <td className="px-4 py-3 text-[var(--bhn-text)]">{rule.type}</td>
+                <td className="px-4 py-3 text-[var(--bhn-text)]">{rule.type === 'percentage' ? `${rule.value}%` : `₹${rule.value}`}</td>
                 <td className="px-4 py-3">
                   <button
                     onClick={() => toggleStatus(rule.id, rule.isActive)}
@@ -136,7 +136,7 @@ export default function Commissions() {
                   </button>
                 </td>
                 <td className="px-4 py-3">
-                  <button onClick={() => removeRule(rule.id)} className="text-red-600 hover:text-red-800">
+                  <button onClick={() => removeRule(rule.id)} className="text-[var(--bhn-error-600)] hover:text-[var(--bhn-error-700)]">
                     <Trash2 className="h-4 w-4" />
                   </button>
                 </td>

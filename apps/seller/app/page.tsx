@@ -1,10 +1,5 @@
-
-import SignupPage from "./signup/page";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return (
-    <div >
-      <SignupPage/>
-    </div>
-  );
+  redirect("/login");
 }

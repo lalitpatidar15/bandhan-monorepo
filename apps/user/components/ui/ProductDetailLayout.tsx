@@ -33,7 +33,7 @@ import {
   useAddToWishlistMutation,
   useRemoveFromWishlistMutation,
 } from "@/store/api/wishlistApi";
-import { useGetSimilarProductsQuery } from "@/store/api/productApi";
+import { useGetSimilarProductsQuery, type ProductFulfilmentFact } from "@/store/api/productApi";
 import type { CreateProductReviewRequest, ProductReview } from "@/types/review";
 import toast from "react-hot-toast";
 import {
@@ -65,6 +65,7 @@ type Props = {
   type?: string;
   availability?: string;
   shipping?: string;
+  fulfilmentFacts?: ProductFulfilmentFact[];
   returnPolicy?: string;
   warranty?: string;
   soldCount?: number;
@@ -288,10 +289,24 @@ export default function ProductDetailLayout(props: Props) {
   if (props.type) productFacts.push({ label: "Type", value: props.type });
   if (props.availability) productFacts.push({ label: "Availability", value: props.availability });
 
-  const fulfilmentFacts: Array<{ label: string; value: string }> = [];
+  const fulfilmentFacts: ProductFulfilmentFact[] = [];
   if (props.shipping) fulfilmentFacts.push({ label: "Shipping", value: props.shipping });
+  for (const fact of props.fulfilmentFacts || []) {
+    if (fact.label !== "Shipping" && !fulfilmentFacts.some((existing) => existing.label === fact.label)) {
+      fulfilmentFacts.push(fact);
+    }
+  }
   if (props.returnPolicy) fulfilmentFacts.push({ label: "Returns", value: props.returnPolicy });
   if (props.warranty) fulfilmentFacts.push({ label: "Warranty", value: props.warranty });
+  const summaryFacts = fulfilmentFacts.slice(0, 3);
+
+  const fulfilmentIcon = (label: string) => {
+    if (label === "Shipping" || label === "Courier preference") return Truck;
+    if (label === "Returns") return RotateCcw;
+    if (label === "Warranty") return ShieldCheck;
+    if (label === "Package weight" || label === "Package size") return Package;
+    return MapPin;
+  };
 
   const similarProducts = (similarProductsData?.data || []).filter((product) => {
     const similarId = String(product._id || product.id || "");
@@ -308,7 +323,7 @@ export default function ProductDetailLayout(props: Props) {
   if (props.soldCount !== undefined && props.soldCount > 0) activitySummary.push(`${props.soldCount} sold`);
 
   return (
-    <div className="min-h-screen w-full bg-[#FBFAF8] py-6 sm:py-9">
+    <div className="min-h-screen w-full bg-[var(--bhn-surface-2)] py-6 sm:py-9">
       <div className="mx-auto max-w-[1440px] space-y-10 px-4 sm:px-6 lg:px-8">
         
         {/* Breadcrumb Navigation */}
@@ -332,17 +347,17 @@ export default function ProductDetailLayout(props: Props) {
               showThumbnails={images.length > 1}
               aspectRatio="4:3"
               enableZoom
-              className="rounded-xl border border-[#E3DCD5] bg-white shadow-[0_8px_28px_rgba(42,28,22,.06)]"
+              className="rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] shadow-sm"
             />
           </div>
 
           {/* Right Column: Title, Price, Buy Form */}
           <div className="flex flex-col justify-start lg:sticky lg:top-24">
             <div className="flex items-center justify-between gap-4">
-              <p className="text-xs font-bold uppercase tracking-[0.15em] text-[var(--bhn-brand-600)]">{props.providerName || props.category || "Bandhan seller"}</p>
-              {props.availability ? <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-bold text-emerald-700">{props.availability}</span> : null}
+              <p className="text-xs font-bold uppercase tracking-[0.15em] text-[var(--bhn-text)]">{props.providerName || props.category || "Bandhan seller"}</p>
+              {props.availability ? <span className="rounded-full bg-[var(--bhn-success-50)] px-2.5 py-1 text-xs font-bold text-[var(--bhn-success-700)]">{props.availability}</span> : null}
             </div>
-            <h1 className="mt-3 font-display text-3xl font-bold leading-[1.08] tracking-[-0.04em] text-[#1A1612] sm:text-[2.65rem]">
+            <h1 className="mt-3 font-display text-3xl font-bold leading-[1.08] tracking-[-0.04em] text-[var(--bhn-text)] sm:text-[2.65rem]">
               {props.title}
             </h1>
 
@@ -364,7 +379,7 @@ export default function ProductDetailLayout(props: Props) {
                     key={mode}
                     type="button"
                     onClick={() => setPurchaseMode(mode)}
-                    className={`min-h-11 rounded-lg text-sm font-extrabold uppercase tracking-[0.08em] transition-colors ${purchaseMode === mode ? "bg-white text-[var(--bhn-brand-700)] shadow-sm" : "text-[var(--bhn-text-muted)] hover:text-[var(--bhn-text)]"}`}
+                    className={`min-h-11 rounded-lg text-sm font-extrabold uppercase tracking-[0.08em] transition-colors ${purchaseMode === mode ? "bg-[var(--bhn-surface)] text-[var(--bhn-brand-700)] shadow-sm" : "text-[var(--bhn-text-muted)] hover:text-[var(--bhn-text)]"}`}
                     aria-pressed={purchaseMode === mode}
                   >
                     {mode}
@@ -386,7 +401,7 @@ export default function ProductDetailLayout(props: Props) {
 
             {purchaseMode === "rent" ? (
               <div className="mt-6 border-y border-[var(--bhn-border)] py-5">
-                <div className="mb-3 flex items-center gap-2"><CalendarDays size={17} className="text-[var(--bhn-brand-600)]" /><h2 className="text-sm font-bold text-[var(--bhn-text)]">Select event dates</h2></div>
+                <div className="mb-3 flex items-center gap-2"><CalendarDays size={17} className="text-[var(--bhn-text)]" /><h2 className="text-sm font-bold text-[var(--bhn-text)]">Select event dates</h2></div>
                 <div className="grid grid-cols-2 gap-3">
                   <label className="text-xs font-semibold text-[var(--bhn-text-muted)]">From
                     <input type="date" min={new Date().toISOString().slice(0, 10)} value={rentalStart} onChange={(event) => setRentalStart(event.target.value)} className="bhn-input mt-1.5 w-full" />
@@ -402,7 +417,7 @@ export default function ProductDetailLayout(props: Props) {
             {/* Quantity Selector */}
             <div className="mt-5 flex items-center justify-between border-b border-[var(--bhn-border)] pb-5">
               <label className="text-sm font-bold text-[var(--bhn-text)]">Quantity</label>
-              <div className="inline-flex items-center rounded-xl border border-[var(--bhn-border)] bg-white p-1">
+              <div className="inline-flex items-center rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-1">
                 <Button
                   variant="ghost"
                   size="icon"
@@ -426,7 +441,7 @@ export default function ProductDetailLayout(props: Props) {
             </div>
 
             {/* Action Buttons: Row 1 */}
-            <div className="mt-7 grid grid-cols-2 gap-3 max-sm:sticky max-sm:bottom-0 max-sm:z-20 max-sm:-mx-4 max-sm:border-t max-sm:border-[var(--bhn-border)] max-sm:bg-white max-sm:p-4">
+            <div className="mt-7 grid grid-cols-2 gap-3 max-sm:sticky max-sm:bottom-0 max-sm:z-20 max-sm:-mx-4 max-sm:border-t max-sm:border-[var(--bhn-border)] max-sm:bg-[var(--bhn-surface)] max-sm:p-4">
               <Button
                 variant={isInCart ? "secondary" : "primary"}
                 size="sm"
@@ -472,14 +487,14 @@ export default function ProductDetailLayout(props: Props) {
               </Button>
             </div>
 
-            {fulfilmentFacts.length > 0 && (
+            {summaryFacts.length > 0 && (
               <div className="mt-5 border-y border-[var(--bhn-border)] py-4">
                 <div
                   className="grid gap-2 text-center text-[10px] font-medium text-[var(--bhn-text-muted)] sm:text-[11px]"
-                  style={{ gridTemplateColumns: `repeat(${fulfilmentFacts.length}, minmax(0, 1fr))` }}
+                  style={{ gridTemplateColumns: `repeat(${summaryFacts.length}, minmax(0, 1fr))` }}
                 >
-                  {fulfilmentFacts.map((fact) => {
-                    const Icon = fact.label === "Shipping" ? Truck : fact.label === "Returns" ? RotateCcw : ShieldCheck;
+                  {summaryFacts.map((fact) => {
+                    const Icon = fulfilmentIcon(fact.label);
                     return (
                       <div key={fact.label} className="flex min-w-0 flex-col items-center justify-center gap-1 px-1">
                         <Icon size={17} className="text-[var(--bhn-brand-500)]" />
@@ -488,12 +503,17 @@ export default function ProductDetailLayout(props: Props) {
                     );
                   })}
                 </div>
+                {fulfilmentFacts.length > summaryFacts.length ? (
+                  <p className="mt-3 text-center text-[10px] text-[var(--bhn-text-soft)]">
+                    +{fulfilmentFacts.length - summaryFacts.length} more delivery detail{fulfilmentFacts.length - summaryFacts.length === 1 ? "" : "s"} below
+                  </p>
+                ) : null}
               </div>
             )}
 
             <div className="mt-5 grid gap-3 text-sm text-[var(--bhn-text-muted)] sm:grid-cols-2">
-              {props.location ? <p className="flex items-center gap-2"><MapPin size={16} className="text-[var(--bhn-brand-600)]" />{props.location}</p> : null}
-              {props.providerName ? <p className="flex items-center gap-2"><Store size={16} className="text-[var(--bhn-brand-600)]" />Sold by {props.providerName}</p> : null}
+              {props.location ? <p className="flex items-center gap-2"><MapPin size={16} className="text-[var(--bhn-text)]" />{props.location}</p> : null}
+              {props.providerName ? <p className="flex items-center gap-2"><Store size={16} className="text-[var(--bhn-text)]" />Sold by {props.providerName}</p> : null}
             </div>
 
             {overviewDetails.length > 0 && (
@@ -645,7 +665,7 @@ export default function ProductDetailLayout(props: Props) {
                       value={comment}
                       onChange={(e) => setComment(e.target.value)}
                       placeholder="Write your review..."
-                      className="mt-3 w-full rounded-xl border border-[var(--bhn-border)] bg-white p-3 text-sm outline-none focus:border-[var(--bhn-brand-500)]"
+                      className="mt-3 w-full rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-3 text-sm outline-none focus:border-[var(--bhn-brand-500)]"
                     />
                     <Button
                       variant="primary"
@@ -699,7 +719,7 @@ export default function ProductDetailLayout(props: Props) {
                     <Link
                       key={similarId}
                       href={`/listings/product/${encodeURIComponent(similarId)}`}
-                      className="bhn-card-hover group overflow-hidden rounded-2xl border border-[var(--bhn-border)] bg-white transition hover:-translate-y-0.5 hover:shadow-md"
+                      className="bhn-card-hover group overflow-hidden rounded-2xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] transition hover:-translate-y-0.5 hover:shadow-md"
                     >
                       <div className="aspect-[4/3] overflow-hidden bg-[var(--bhn-brand-50)] p-3">
                         {similarImage ? (

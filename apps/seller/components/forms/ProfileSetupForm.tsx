@@ -213,14 +213,14 @@ export default function ProfileSetupForm() {
     };
 
     return (
-        <div className="min-h-screen w-full bg-[#F7F1EB] px-4 py-6 sm:px-6 lg:px-5 flex flex-col items-center">
+        <div className="min-h-screen w-full bg-[var(--bhn-surface-2)] px-4 py-6 sm:px-6 lg:px-5 flex flex-col items-center">
             {/* MAIN WRAPPER */}
             <div className="w-full max-w-[420px]">
                 {/* STEP HEADER */}
                 <div className="mb-6">
                     <div className="flex items-center justify-between mb-2">
                         <p
-                            className="text-[15px] sm:text-[16px] font-medium text-[#2D221C]"
+                            className="text-[15px] sm:text-[16px] font-medium text-[var(--bhn-text)]"
                             style={{
                                 fontFamily: "Georgia, serif",
                             }}
@@ -228,14 +228,14 @@ export default function ProfileSetupForm() {
                             Step 1 of 3: Basic Info
                         </p>
 
-                        <span className="text-[11px] font-semibold tracking-wide text-[#B46A35] uppercase">
+                        <span className="text-[11px] font-semibold tracking-wide text-[var(--bhn-text)] uppercase">
                             33% Complete
                         </span>
                     </div>
 
                     {/* Progress */}
-                    <div className="w-full h-[3px] bg-[#E9DDD3] rounded-full overflow-hidden">
-                        <div className="w-[33%] h-full bg-[#9A4F2B]" />
+                    <div className="w-full h-[3px] bg-[var(--bhn-surface-2)] rounded-full overflow-hidden">
+                        <div className="w-[33%] h-full bg-[var(--bhn-brand-600)]" />
                     </div>
                 </div>
 
@@ -244,7 +244,7 @@ export default function ProfileSetupForm() {
                     {/* HEADING */}
                     <div className="text-center">
                         <h1
-                            className="text-[34px] leading-tight text-[#3A2B22]"
+                            className="text-[34px] leading-tight text-[var(--bhn-text)]"
                             style={{
                                 fontFamily: "Georgia, serif",
                                 fontWeight: 500,
@@ -253,7 +253,7 @@ export default function ProfileSetupForm() {
                             Welcome to Bandhan
                         </h1>
 
-                        <p className="mt-3 text-[14px] leading-6 text-[#9B8B81] font-normal">
+                        <p className="mt-3 text-[14px] leading-6 text-[var(--bhn-text-muted)] font-normal">
                             Let’s start by personalizing your
                             planning experience.
                         </p>
@@ -267,7 +267,7 @@ export default function ProfileSetupForm() {
                                 onClick={() =>
                                     fileInputRef.current?.click()
                                 }
-                                className="relative w-[92px] h-[92px] rounded-full border border-dashed border-[#D6B8A6] bg-[#F5EADF] flex items-center justify-center overflow-hidden cursor-pointer hover:opacity-90 transition"
+                                className="relative w-[92px] h-[92px] rounded-full border border-dashed border-[var(--bhn-border)] bg-[var(--bhn-surface-2)] flex items-center justify-center overflow-hidden cursor-pointer hover:opacity-90 transition"
                             >
                                 {profileImage ? (
                                     <Image
@@ -277,7 +277,7 @@ export default function ProfileSetupForm() {
                                         className="object-cover"
                                     />
                                 ) : (
-                                    <span className="text-[34px] text-[#7B5B49] font-light">
+                                    <span className="text-[34px] text-[var(--bhn-text)] font-light">
                                         +
                                     </span>
                                 )}
@@ -297,16 +297,16 @@ export default function ProfileSetupForm() {
                                 onClick={() =>
                                     fileInputRef.current?.click()
                                 }
-                                className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-[#8A4B2A] flex items-center justify-center border-[3px] border-white shadow-sm cursor-pointer"
+                                className="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-[var(--bhn-brand-600)] flex items-center justify-center border-[3px] border-[var(--bhn-surface)] shadow-sm cursor-pointer"
                             >
                                 <Camera
                                     size={13}
-                                    className="text-white"
+                                    className="text-[var(--bhn-text-on-brand)]"
                                 />
                             </div>
                         </div>
 
-                        <p className="mt-4 text-[11px] tracking-[1.5px] font-semibold text-[#9B8B81] uppercase">
+                        <p className="mt-4 text-[11px] tracking-[1.5px] font-semibold text-[var(--bhn-text-muted)] uppercase">
                             Upload Profile Photo
                         </p>
                     </div>
@@ -314,7 +314,7 @@ export default function ProfileSetupForm() {
                     {/* FORM */}
                     <div className="mt-4 space-y-5">
                         {error && (
-                            <p className="text-sm text-red-600">{error}</p>
+                            <p className="text-sm text-[var(--bhn-error-600)]">{error}</p>
                         )}
 
                         <div>
@@ -324,7 +324,7 @@ export default function ProfileSetupForm() {
                                 value={fullName}
                                 onChange={(e) => setFullName(e.target.value)}
                                 placeholder="Eg Elara Vance"
-                                className="h-[54px] rounded-lg border-[#E8D8CC] text-[14px] placeholder:text-[#C7B9AF]"
+                                className="h-[54px] rounded-lg border-[var(--bhn-border)] text-[14px] placeholder:text-[var(--bhn-text-soft)]"
                               />
                             {fieldErrors?.fullName && (
                                 <FieldError>{fieldErrors.fullName}</FieldError>
@@ -338,7 +338,7 @@ export default function ProfileSetupForm() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="Eg. you@company.com"
-                                className="h-[54px] rounded-lg border-[#E8D8CC] text-[14px] placeholder:text-[#C7B9AF]"
+                                className="h-[54px] rounded-lg border-[var(--bhn-border)] text-[14px] placeholder:text-[var(--bhn-text-soft)]"
                             />
                             {fieldErrors?.email && (
                                 <FieldError>{fieldErrors.email}</FieldError>
@@ -346,7 +346,7 @@ export default function ProfileSetupForm() {
                         </div>
 
                         <div>
-                            <label className="block text-[10px] tracking-[1.4px] uppercase font-semibold text-[#8D7B70] mb-2">
+                            <label className="block text-[10px] tracking-[1.4px] uppercase font-semibold text-[var(--bhn-text-muted)] mb-2">
                                 Contact Number
                             </label>
 
@@ -368,7 +368,7 @@ export default function ProfileSetupForm() {
                                     value={phone}
                                     onChange={(e) => setPhone(e.target.value)}
                                     placeholder="1234567890"
-                                    className="flex-1 h-[54px] rounded-lg border-[#E8D8CC] text-[14px] placeholder:text-[#C7B9AF]"
+                                    className="flex-1 h-[54px] rounded-lg border-[var(--bhn-border)] text-[14px] placeholder:text-[var(--bhn-text-soft)]"
                                 />
                             </div>
                             {fieldErrors?.phone && (
@@ -383,7 +383,7 @@ export default function ProfileSetupForm() {
                                 value={address}
                                 onChange={(e) => setAddress(e.target.value)}
                                 textarea
-                                className="rounded-lg border-[#E8D8CC] text-[14px] placeholder:text-[#C7B9AF]"
+                                className="rounded-lg border-[var(--bhn-border)] text-[14px] placeholder:text-[var(--bhn-text-soft)]"
                             />
                             {fieldErrors?.address && (
                                 <FieldError>{fieldErrors.address}</FieldError>
@@ -392,7 +392,7 @@ export default function ProfileSetupForm() {
 
                         {/* GST NUMBER */}
                         <div>
-                            <label className="block text-[10px] tracking-[1.4px] uppercase font-semibold text-[#8D7B70] mb-2">
+                            <label className="block text-[10px] tracking-[1.4px] uppercase font-semibold text-[var(--bhn-text-muted)] mb-2">
                                 GST Number
                             </label>
 
@@ -405,10 +405,10 @@ export default function ProfileSetupForm() {
                                     setGstNumber(e.target.value.toUpperCase())
                                 }
                                 placeholder="22ABCDE1234F1Z5"
-                                className="w-full h-[54px] rounded-lg border border-[#E8D8CC] bg-white px-4 text-[14px] text-[#3A2B22] placeholder:text-[#C7B9AF] focus:outline-none focus:border-[#A35B35] transition"
+                                className="w-full h-[54px] rounded-lg border border-[var(--bhn-border)] bg-[var(--bhn-surface)] px-4 text-[14px] text-[var(--bhn-text)] placeholder:text-[var(--bhn-text-soft)] focus:outline-none focus:border-[var(--bhn-brand-600)] transition"
                             />
                             {fieldErrors?.gstNumber && (
-                                <p className="text-sm text-red-600 mt-2">
+                                <p className="text-sm text-[var(--bhn-error-600)] mt-2">
                                     {fieldErrors.gstNumber}
                                 </p>
                             )}
@@ -417,14 +417,14 @@ export default function ProfileSetupForm() {
                         {/* BUTTON */}
                         <Button
                             onClick={handleSubmit}
-                            className="w-full h-[54px] mt-2 rounded-lg bg-[#8B4A27] hover:bg-[#733b1d] text-white text-[13px] tracking-[1.5px] uppercase font-semibold"
+                            className="w-full h-[54px] mt-2 rounded-lg bg-[var(--bhn-brand-600)] hover:bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)] text-[13px] tracking-[1.5px] uppercase font-semibold"
                         >
                             Save & Continue
                         </Button>
 
                         <button
                             onClick={() => router.push("/sellerDashboard")}
-                            className="w-full text-center text-[13px] uppercase tracking-[1px] font-medium text-[#6E5A4D] hover:underline pt-1"
+                            className="w-full text-center text-[13px] uppercase tracking-[1px] font-medium text-[var(--bhn-text)] hover:underline pt-1"
                         >
                             Skip For Now
                         </button>
@@ -437,7 +437,7 @@ export default function ProfileSetupForm() {
                         icon={
                             <ShieldCheck
                                 size={18}
-                                className="text-[#B46A35]"
+                                className="text-[var(--bhn-text)]"
                             />
                         }
                         title="Private & Secure"
@@ -447,7 +447,7 @@ export default function ProfileSetupForm() {
                         icon={
                             <Sparkles
                                 size={18}
-                                className="text-[#B46A35]"
+                                className="text-[var(--bhn-text)]"
                             />
                         }
                         title="Personalized Flow"

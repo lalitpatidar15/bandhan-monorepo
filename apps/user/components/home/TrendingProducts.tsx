@@ -15,7 +15,7 @@ export default function TrendingProducts() {
       <div className="mx-auto max-w-7xl">
         <div className="flex items-end justify-between mb-8">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--bhn-brand-600)]">What's hot right now</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--bhn-text)]">What's hot right now</p>
             <h2 className="mt-2 text-2xl font-bold text-[var(--bhn-text)] sm:text-3xl" style={{ fontFamily: 'var(--bhn-font-display)' }}>Trending products</h2>
           </div>
           <a href="/explore?type=products" className="hidden items-center gap-1 text-sm font-semibold text-[var(--bhn-brand-700)] transition hover:text-[var(--bhn-brand-800)] sm:flex">

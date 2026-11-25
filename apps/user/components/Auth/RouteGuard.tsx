@@ -47,7 +47,7 @@ export default function RouteGuard({ children }: { children: React.ReactNode }) 
   }, [hasValidSession, hydrated, pathname, protectedRoute, router]);
 
   if (protectedRoute && !hasValidSession) {
-    return <div className="min-h-screen bg-[#FAF5EE]" aria-label="Checking authentication" />;
+    return <div className="min-h-screen bg-[var(--bhn-surface-2)]" aria-label="Checking authentication" />;
   }
   return children;
 }

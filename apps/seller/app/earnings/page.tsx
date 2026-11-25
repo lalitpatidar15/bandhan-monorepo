@@ -49,44 +49,10 @@ const parseAmount = (value: unknown): number => {
 
 const formatCurrency = (value: number) => `₹${value.toLocaleString("en-IN")}`;
 
-const getFallbackTransactions = () =>
-  [
-    {
-      id: "101",
-      service: "Product Sale",
-      customer: "Asha Patel",
-      amount: 4800,
-      commission: 480,
-      net: 4320,
-      status: "Completed",
-      date: new Date().toISOString(),
-    },
-    {
-      id: "102",
-      service: "Service Booking",
-      customer: "Rohan Mehta",
-      amount: 6200,
-      commission: 620,
-      net: 5580,
-      status: "Pending",
-      date: new Date(Date.now() - 86400000).toISOString(),
-    },
-    {
-      id: "103",
-      service: "Product Sale",
-      customer: "Pooja Singh",
-      amount: 7800,
-      commission: 780,
-      net: 7020,
-      status: "Completed",
-      date: new Date(Date.now() - 2 * 86400000).toISOString(),
-    },
-  ] as EarningsTransaction[];
-
 export default function EarningsPage() {
   const router = useRouter();
 
-  const [userName, setUserName] = useState("Amit Soni");
+  const [userName, setUserName] = useState("");
   const [open, setOpen] = useState(false);
   const [summary, setSummary] = useState({
     totalEarnings: 0,
@@ -96,9 +62,8 @@ export default function EarningsPage() {
     commission: 0,
     totalOrders: 0,
   });
-  const [transactions, setTransactions] = useState<EarningsTransaction[]>(
-    getFallbackTransactions()
-  );
+  const [transactions, setTransactions] = useState<EarningsTransaction[]>([]);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
     const name = localStorage.getItem("userName");
@@ -171,14 +136,14 @@ export default function EarningsPage() {
           } as EarningsTransaction;
         });
 
-        setTransactions(
-          normalizedTransactions.length > 0
-            ? normalizedTransactions
-            : getFallbackTransactions()
-        );
+        setTransactions(normalizedTransactions);
+        setLoadError(null);
       } catch (error) {
         console.error("Failed to load earnings", error);
-        setTransactions(getFallbackTransactions());
+        setTransactions([]);
+        setLoadError(
+          "We couldn't load your earnings. Check your connection and try again."
+        );
       }
     };
 
@@ -535,7 +500,7 @@ export default function EarningsPage() {
 
               <p className="text-[16px] text-[var(--bhn-text-muted)] mt-1 leading-5">
                 Your earnings increased
-                <span className="text-[var(--bhn-brand-600)] font-medium"> 12% </span>
+                <span className="text-[var(--bhn-text)] font-medium"> 12% </span>
                 this week.
               </p>
             </div>
@@ -644,11 +609,22 @@ export default function EarningsPage() {
                   ))
                 ) : (
                   <tr>
-                    <td
-                      colSpan={8}
-                      className="text-center py-8 text-[var(--bhn-text-soft)] text-sm"
-                    >
-                      No transactions available for this period.
+                    <td colSpan={8}>
+                      {loadError ? (
+                        <div className="py-6 text-center">
+                          <p className="text-sm text-[var(--bhn-error-600)]">
+                            {loadError}
+                          </p>
+                          <p className="mt-2 text-xs text-[var(--bhn-text-soft)]">
+                            We couldn&apos;t reach the earnings service.
+                          </p>
+                        </div>
+                      ) : (
+                        <p className="text-center py-8 text-[var(--bhn-text-soft)] text-sm">
+                          No transactions yet. Once a customer pays for an
+                          order, rental or booking, it will appear here.
+                        </p>
+                      )}
                     </td>
                   </tr>
                 )}
@@ -736,7 +712,8 @@ export default function EarningsPage() {
               ))
             ) : (
               <p className="text-center py-6 text-[var(--bhn-text-soft)] text-sm">
-                No transactions available for this period.
+                {loadError ||
+                  "No transactions yet. Once a customer pays for an order, rental or booking, it will appear here."}
               </p>
             )}
           </div>
@@ -765,7 +742,7 @@ export default function EarningsPage() {
                   onClick={() => setCurrentPage(page)}
                   className={`w-8 h-8 rounded-lg text-sm transition ${
                     currentPage === page
-                      ? "bg-[var(--bhn-brand-600)] text-white"
+                      ? "bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)]"
                       : "bg-[var(--bhn-surface-2)] text-[var(--bhn-brand-700)] hover:bg-[var(--bhn-brand-100)]"
                   }`}
                 >

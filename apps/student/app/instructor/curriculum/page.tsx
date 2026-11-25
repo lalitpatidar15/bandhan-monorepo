@@ -65,16 +65,16 @@ export default function CurriculumPage() {
 
     if (isBasicInfoLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-[#F8F5F2] dark:bg-[#171717]">
-                <p className="text-base text-[#2D201B] dark:text-[#ededed]">Loading curriculum data...</p>
+            <div className="min-h-screen flex items-center justify-center bg-[var(--bhn-bg)] dark:bg-[var(--bhn-neutral-900)]">
+                <p className="text-base text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">Loading curriculum data...</p>
             </div>
         );
     }
 
     if (basicInfoError) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-[#F8F5F2] dark:bg-[#171717]">
-                <p className="text-base text-red-600">Unable to load curriculum data. Please refresh.</p>
+            <div className="min-h-screen flex items-center justify-center bg-[var(--bhn-bg)] dark:bg-[var(--bhn-neutral-900)]">
+                <p className="text-base text-[var(--bhn-error-600)]">Unable to load curriculum data. Please refresh.</p>
             </div>
         );
     }
@@ -124,7 +124,7 @@ export default function CurriculumPage() {
     };
 
     return (
-        <div className="min-h-screen bg-[#F8F5F2] dark:bg-[#171717] flex flex-col">
+        <div className="min-h-screen bg-[var(--bhn-bg)] dark:bg-[var(--bhn-neutral-900)] flex flex-col">
 
             {/* HEADER */}
             <CurriculumHeader currentStep={1} />
@@ -132,7 +132,7 @@ export default function CurriculumPage() {
             <div className="flex-1 px-4 sm:px-6 lg:px-6 py-6 sm:py-8">
 
                 {/* TITLE */}
-                <h2 className="text-2xl sm:text-xl lg:text-2xl font-semibold text-[#2D201B] dark:text-[#ededed] mb-6 font-serif">
+                <h2 className="text-2xl sm:text-xl lg:text-2xl font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] mb-6 font-serif">
                     Design Your Curriculum
                 </h2>
 
@@ -142,15 +142,15 @@ export default function CurriculumPage() {
                     <div className="xl:col-span-8 space-y-6">
 
                         {/* GENERAL INFO */}
-                        <div className="bg-white p-4 sm:p-4 rounded-xl border border-[#2C2323]">
+                        <div className="bg-[var(--bhn-surface)] p-4 sm:p-4 rounded-xl border border-[#2C2323]">
 
-                            <h3 className="text-xl sm:text-[22px] font-semibold text-[#2D201B] dark:text-[#ededed] mb-6 font-serif">
+                            <h3 className="text-xl sm:text-[22px] font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] mb-6 font-serif">
                                 General Information
                             </h3>
 
                             {/* Course Title */}
                             <div className="mb-5">
-                                <label className="block text-[15px] sm:text-[16px] text-[#4B3A33] dark:text-[#a89080] mb-2">
+                                <label className="block text-[15px] sm:text-[16px] text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)] mb-2">
                                     Course Title
                                 </label>
 
@@ -159,13 +159,13 @@ export default function CurriculumPage() {
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
                                     placeholder="e.g. Complete UI/UX Design Mastery"
-                                    className="w-full h-[52px] px-4 rounded-lg border border-[#E2D3C8] dark:border-[#374151] bg-[#F9F5F2] dark:bg-[#171717] text-sm text-[#2D201B] dark:text-[#ededed] placeholder:text-[#9C8F86] focus:outline-none focus:border-black transition"
+                                    className="w-full h-[52px] px-4 rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] bg-[var(--bhn-surface-2)] dark:bg-[var(--bhn-neutral-900)] text-sm text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] placeholder:text-[var(--bhn-text-soft)] focus:outline-none focus:border-[var(--bhn-border)] transition"
                                 />
                             </div>
 
                             {/* Subtitle */}
                             <div className="mb-5">
-                                <label className="block text-[15px] sm:text-[16px] text-[#4B3A33] dark:text-[#a89080] mb-2">
+                                <label className="block text-[15px] sm:text-[16px] text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)] mb-2">
                                     Subtitle
                                 </label>
 
@@ -174,7 +174,7 @@ export default function CurriculumPage() {
                                     value={subtitle}
                                     onChange={(e) => setSubtitle(e.target.value)}
                                     placeholder="Summarize your course value in one sentence"
-                                    className="w-full h-[52px] px-4 rounded-lg border border-[#E2D3C8] dark:border-[#374151] bg-[#F9F5F2] dark:bg-[#171717] text-sm text-[#2D201B] dark:text-[#ededed] placeholder:text-[#9C8F86] focus:outline-none focus:border-black transition"
+                                    className="w-full h-[52px] px-4 rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] bg-[var(--bhn-surface-2)] dark:bg-[var(--bhn-neutral-900)] text-sm text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] placeholder:text-[var(--bhn-text-soft)] focus:outline-none focus:border-[var(--bhn-border)] transition"
                                 />
                             </div>
 
@@ -182,14 +182,14 @@ export default function CurriculumPage() {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
 
                                 <div>
-                                    <label className="block text-[15px] sm:text-[16px] text-[#4B3A33] dark:text-[#a89080] mb-2">
+                                    <label className="block text-[15px] sm:text-[16px] text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)] mb-2">
                                         Category
                                     </label>
 
                                     <select
                                         value={category}
                                         onChange={(e) => setCategory(e.target.value)}
-                                        className="w-full h-[52px] px-4 rounded-lg border border-[#E2D3C8] dark:border-[#374151] bg-[#F9F5F2] dark:bg-[#171717] text-sm text-[#2D201B] dark:text-[#ededed] focus:outline-none focus:border-black transition"
+                                        className="w-full h-[52px] px-4 rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] bg-[var(--bhn-surface-2)] dark:bg-[var(--bhn-neutral-900)] text-sm text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] focus:outline-none focus:border-[var(--bhn-border)] transition"
                                     >
                                         <option value="">Select category</option>
                                         {categories.map((cat) => (
@@ -199,14 +199,14 @@ export default function CurriculumPage() {
                                 </div>
 
                                 <div>
-                                    <label className="block text-[15px] sm:text-[16px] text-[#4B3A33] dark:text-[#a89080] mb-2">
+                                    <label className="block text-[15px] sm:text-[16px] text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)] mb-2">
                                         Level
                                     </label>
 
                                     <select
                                         value={level}
                                         onChange={(e) => setLevel(e.target.value)}
-                                        className="w-full h-[52px] px-4 rounded-lg border border-[#E2D3C8] dark:border-[#374151] bg-[#F9F5F2] dark:bg-[#171717] text-sm text-[#2D201B] dark:text-[#ededed] focus:outline-none focus:border-black transition"
+                                        className="w-full h-[52px] px-4 rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] bg-[var(--bhn-surface-2)] dark:bg-[var(--bhn-neutral-900)] text-sm text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] focus:outline-none focus:border-[var(--bhn-border)] transition"
                                     >
                                         <option value="">Select level</option>
                                         {levels.map((lvl) => (
@@ -220,20 +220,20 @@ export default function CurriculumPage() {
                         </div>
 
                         {/* DESCRIPTION */}
-                        <div className="bg-white p-4 sm:p-4 rounded-xl border border-[#E6DBD3] dark:border-[#374151]">
+                        <div className="bg-[var(--bhn-surface)] p-4 sm:p-4 rounded-xl border border-[#E6DBD3] dark:border-[var(--bhn-border)]">
                             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-4">
-                                <h3 className="text-xl sm:text-[22px] font-semibold text-[#2D201B] dark:text-[#ededed] font-serif">
+                                <h3 className="text-xl sm:text-[22px] font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] font-serif">
                                     Course Description
                                 </h3>
 
-                                <span className="text-xs sm:text-[13px] text-[#8A7A71] dark:text-[#7a6a5a]">
+                                <span className="text-xs sm:text-[13px] text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]">
                                     Character Count : {text.length}/3000
                                 </span>
                             </div>
 
-                            <div className="border border-[#D9C8BD] rounded-xl overflow-hidden">
+                            <div className="border border-[var(--bhn-border)] rounded-xl overflow-hidden">
                                 {/* Toolbar */}
-                                <div className="flex flex-wrap items-center gap-4 px-4 py-3 bg-[#E8DDD5] text-[#5C4A42] dark:text-[#a89080] text-sm">
+                                <div className="flex flex-wrap items-center gap-4 px-4 py-3 bg-[var(--bhn-border)] text-[#5C4A42] dark:text-[var(--bhn-text-soft)] text-sm">
 
                                     {/* Bold */}
                                     <button
@@ -243,7 +243,7 @@ export default function CurriculumPage() {
                                                 bold: !prev.bold,
                                             }))
                                         }
-                                        className={`font-bold px-2 py-1 rounded ${style.bold ? "bg-[#C8B1A4] dark:bg-[#2a2a2a]" : ""
+                                        className={`font-bold px-2 py-1 rounded ${style.bold ? "bg-[var(--bhn-border)] dark:bg-[var(--bhn-neutral-900)]" : ""
                                             }`}
                                     >
                                         B
@@ -257,7 +257,7 @@ export default function CurriculumPage() {
                                                 italic: !prev.italic,
                                             }))
                                         }
-                                        className={`italic px-2 py-1 rounded ${style.italic ? "bg-[#C8B1A4] dark:bg-[#2a2a2a]" : ""
+                                        className={`italic px-2 py-1 rounded ${style.italic ? "bg-[var(--bhn-border)] dark:bg-[var(--bhn-neutral-900)]" : ""
                                             }`}
                                     >
                                         I
@@ -271,19 +271,19 @@ export default function CurriculumPage() {
                                                 underline: !prev.underline,
                                             }))
                                         }
-                                        className={`underline px-2 py-1 rounded ${style.underline ? "bg-[#C8B1A4] dark:bg-[#2a2a2a]" : ""
+                                        className={`underline px-2 py-1 rounded ${style.underline ? "bg-[var(--bhn-border)] dark:bg-[var(--bhn-neutral-900)]" : ""
                                             }`}
                                     >
                                         U
                                     </button>
 
                                     {/* Align */}
-                                    <button onClick={() => alert("Coming soon")} className="px-2 py-1 rounded hover:bg-[#C8B1A4] dark:hover:bg-[#2a2a2a] dark:bg-[#2a2a2a]">
+                                    <button onClick={() => alert("Coming soon")} className="px-2 py-1 rounded hover:bg-[var(--bhn-border)] dark:hover:bg-[#2a2a2a] dark:bg-[var(--bhn-neutral-900)]">
                                         ≡
                                     </button>
 
                                     {/* Link */}
-                                    <button onClick={() => alert("Coming soon")} className="px-2 py-1 rounded hover:bg-[#C8B1A4] dark:hover:bg-[#2a2a2a] dark:bg-[#2a2a2a]">
+                                    <button onClick={() => alert("Coming soon")} className="px-2 py-1 rounded hover:bg-[var(--bhn-border)] dark:hover:bg-[#2a2a2a] dark:bg-[var(--bhn-neutral-900)]">
                                         🔗
                                     </button>
                                 </div>
@@ -294,7 +294,7 @@ export default function CurriculumPage() {
                                     value={text}
                                     onChange={(e) => setText(e.target.value)}
                                     placeholder="Describe what makes your course unique..."
-                                    className={`w-full h-[180px] sm:h-[200px] p-4 bg-[#F4ECE6] dark:bg-[#1a1a1a] text-sm text-[#2D201B] dark:text-[#ededed] placeholder:text-[#8A7A71] dark:text-[#7a6a5a] focus:outline-none resize-none
+                                    className={`w-full h-[180px] sm:h-[200px] p-4 bg-[var(--bhn-surface-3)] dark:bg-[var(--bhn-neutral-900)] text-sm text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] placeholder:text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] focus:outline-none resize-none
                                     ${style.bold ? "font-bold" : ""}
                                     ${style.italic ? "italic" : ""}
                                     ${style.underline ? "underline" : ""}
@@ -304,9 +304,9 @@ export default function CurriculumPage() {
                         </div>
 
                         {/* THUMBNAIL */}
-                        <div className="bg-white p-4 sm:p-4 rounded-xl border border-[#E6DBD3] dark:border-[#374151]">
+                        <div className="bg-[var(--bhn-surface)] p-4 sm:p-4 rounded-xl border border-[#E6DBD3] dark:border-[var(--bhn-border)]">
 
-                            <h3 className="mb-5 text-lg sm:text-xl md:text-[22px] font-semibold text-[#2D201B] dark:text-[#ededed] font-serif">
+                            <h3 className="mb-5 text-lg sm:text-xl md:text-[22px] font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] font-serif">
                                 Course Thumbnail
                             </h3>
 
@@ -334,37 +334,37 @@ export default function CurriculumPage() {
                                      md:h-[160px]
                                      border-2
                                      border-dashed
-                                     border-[#D8B7A3] dark:border-[#374151]
+                                     border-[#D8B7A3] dark:border-[var(--bhn-border)]
                                      rounded-xl
                                      flex
                                      flex-col
                                      items-center
                                      justify-center
-                                     bg-[#FAF6F3] dark:bg-[#171717]
+                                     bg-[#FAF6F3] dark:bg-[var(--bhn-neutral-900)]
                                      text-center
                                      px-4
                                      py-6
                                      cursor-pointer
-                                     hover:bg-[#F5ECE6] dark:hover:bg-[#1a1a1a]
+                                     hover:bg-[var(--bhn-surface-3)] dark:hover:bg-[var(--bhn-neutral-900)]
                                      active:scale-[0.99]
                                      transition-all
                                        "
                                 >
                                     <UploadCloud
-                                        className="text-[#8B4A28] dark:text-[#c9a882] mb-3 shrink-0"
+                                        className="text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)] mb-3 shrink-0"
                                         size={22}
                                     />
 
-                                    <p className="text-sm sm:text-base font-medium text-[#2D201B] dark:text-[#ededed]">
+                                    <p className="text-sm sm:text-base font-medium text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
                                         Drag & Drop Thumbnail
                                     </p>
 
-                                    <p className="text-xs sm:text-sm text-[#8A7A71] dark:text-[#7a6a5a] mt-1 leading-relaxed">
+                                    <p className="text-xs sm:text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mt-1 leading-relaxed">
                                         Recommended: 16:9, min 1280x720px
                                     </p>
                                 </div>
                                 {/* Preview */}
-                                <div className="w-full sm:w-[220px] md:w-[140px] h-[180px] sm:h-[200px] md:h-[110px] rounded-xl overflow-hidden bg-[#6F625B] flex items-center justify-center mx-auto">
+                                <div className="w-full sm:w-[220px] md:w-[140px] h-[180px] sm:h-[200px] md:h-[110px] rounded-xl overflow-hidden bg-[var(--bhn-brand-800)] flex items-center justify-center mx-auto">
 
                                     <img
                                         src={thumbnail || "/Preview.png"}
@@ -379,22 +379,22 @@ export default function CurriculumPage() {
                         </div>
 
                         {/* KEY DETAILS */}
-                        <div className="bg-white p-4 sm:p-4 rounded-xl border border-[#E6DBD3] dark:border-[#374151] space-y-5">
-                            <h3 className="text-xl sm:text-[22px] font-semibold text-[#2D201B] dark:text-[#ededed] font-serif">
+                        <div className="bg-[var(--bhn-surface)] p-4 sm:p-4 rounded-xl border border-[#E6DBD3] dark:border-[var(--bhn-border)] space-y-5">
+                            <h3 className="text-xl sm:text-[22px] font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] font-serif">
                                 Key Details
                             </h3>
 
                             {/* Top Fields */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                 <div>
-                                    <label className="block text-[15px] text-[#6F5E55] dark:text-[#b89b7d] mb-1">
+                                    <label className="block text-[15px] text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mb-1">
                                         Language
                                     </label>
 
                                     <select
                                         value={language}
                                         onChange={(e) => setLanguage(e.target.value)}
-                                        className="w-full h-[48px] px-4 rounded-lg border border-[#E0CFC5] dark:border-[#374151] bg-[#F5EDEA] dark:bg-[#1a1a1a] text-[#2D201B] dark:text-[#ededed] focus:outline-none focus:border-black"
+                                        className="w-full h-[48px] px-4 rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] bg-[#F5EDEA] dark:bg-[var(--bhn-neutral-900)] text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] focus:outline-none focus:border-[var(--bhn-border)]"
                                     >
                                         {languages.map((lang) => (
                                             <option key={lang} value={lang}>{lang}</option>
@@ -403,36 +403,36 @@ export default function CurriculumPage() {
                                 </div>
 
                                 <div>
-                                    <label className="block text-[15px] text-[#6F5E55] dark:text-[#b89b7d] mb-1">
+                                    <label className="block text-[15px] text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mb-1">
                                         Estimated Duration (Hrs)
                                     </label>
 
                                     <input
                                         value={estimatedDuration}
                                         onChange={(e) => setEstimatedDuration(e.target.value)}
-                                        className="w-full h-[48px] px-4 rounded-lg border border-[#E0CFC5] dark:border-[#374151] bg-[#F5EDEA] dark:bg-[#1a1a1a] text-[#2D201B] dark:text-[#ededed] focus:outline-none focus:border-black"
+                                        className="w-full h-[48px] px-4 rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] bg-[#F5EDEA] dark:bg-[var(--bhn-neutral-900)] text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] focus:outline-none focus:border-[var(--bhn-border)]"
                                     />
                                 </div>
                             </div>
 
                             {/* Skills */}
                             <div>
-                                <label className="block text-[15px] text-[#6F5E55] dark:text-[#b89b7d] mb-2">
+                                <label className="block text-[15px] text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mb-2">
                                     Skills students will learn
                                 </label>
 
-                                <div className="flex flex-wrap items-center gap-2 px-3 py-2 min-h-[48px] rounded-lg border border-[#E0CFC5] dark:border-[#374151] bg-[#F5EDEA] dark:bg-[#1a1a1a]">
+                                <div className="flex flex-wrap items-center gap-2 px-3 py-2 min-h-[48px] rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] bg-[#F5EDEA] dark:bg-[var(--bhn-neutral-900)]">
 
                                     {skills.map((skill) => (
                                         <span
                                             key={skill}
-                                            className="flex items-center gap-1 bg-[#EBC8B3] dark:bg-[#2a2018] text-[#2D201B] dark:text-[#ededed] text-xs px-3 py-1 rounded-full"
+                                            className="flex items-center gap-1 bg-[var(--bhn-brand-300)] dark:bg-[var(--bhn-neutral-900)] text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] text-xs px-3 py-1 rounded-full"
                                         >
                                             {skill}
 
                                             <span
                                                 onClick={() => removeSkill(skill)}
-                                                className="cursor-pointer text-[#6F5E55] dark:text-[#b89b7d]"
+                                                className="cursor-pointer text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]"
                                             >
                                                 ×
                                             </span>
@@ -444,11 +444,11 @@ export default function CurriculumPage() {
                                         onChange={(e) => setInput(e.target.value)}
                                         onKeyDown={handleKeyDown}
                                         placeholder="Add more..."
-                                        className="bg-transparent outline-none text-sm text-[#6F5E55] dark:text-[#b89b7d] flex-1 min-w-[120px]"
+                                        className="bg-transparent outline-none text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] flex-1 min-w-[120px]"
                                     />
                                 </div>
 
-                                <p className="text-xs text-[#8A7A71] dark:text-[#7a6a5a] mt-2">
+                                <p className="text-xs text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mt-2">
                                     Press Enter to add skill
                                 </p>
                             </div>
@@ -491,7 +491,7 @@ export default function CurriculumPage() {
                                     }
                                 }}
                                 disabled={isCreating}
-                                className="border border-[#8B4A28] text-[#8B4A28] dark:text-[#c9a882] px-6 py-3 rounded-lg w-full sm:w-auto"
+                                className="border border-[#8B4A28] text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)] px-6 py-3 rounded-lg w-full sm:w-auto"
                             >
                                 {isCreating ? "Saving..." : "Save as Draft"}
                             </button>
@@ -532,10 +532,10 @@ export default function CurriculumPage() {
                                     }
                                 }}
                                 disabled={isCreating}
-                                className="bg-[#8B4A28] dark:bg-[#b86a3a] text-white px-6 py-3 rounded-lg 
+                                className="bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] text-white px-6 py-3 rounded-lg 
                                 transition-all duration-150 
-                                hover:bg-[#7A3F22] dark:hover:bg-[#a05a30] 
-                                active:scale-95 active:bg-[#6A341D]
+                                hover:bg-[#7A3F22] dark:hover:bg-[var(--bhn-brand-300)] 
+                                active:scale-95 active:bg-[var(--bhn-brand-800)]
                                 w-full sm:w-auto"
                             >
                                 {isCreating ? "Saving..." : "Save & Continue"}
@@ -549,11 +549,11 @@ export default function CurriculumPage() {
                     <div className="xl:col-span-4 space-y-6">
 
                         {/* LIVE PREVIEW */}
-                        <div className="bg-white rounded-xl border border-[#E6DBD3] dark:border-[#374151] overflow-hidden">
+                        <div className="bg-[var(--bhn-surface)] rounded-xl border border-[#E6DBD3] dark:border-[var(--bhn-border)] overflow-hidden">
 
-                            <div className="flex justify-between items-center px-4 py-3 border-b border-[#EFE4DC] dark:border-[#374151]">
+                            <div className="flex justify-between items-center px-4 py-3 border-b border-[#EFE4DC] dark:border-[var(--bhn-border)]">
 
-                                <span className="text-xs sm:text-[13px] tracking-wide text-[#8A7A71] dark:text-[#7a6a5a] font-medium">
+                                <span className="text-xs sm:text-[13px] tracking-wide text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] font-medium">
                                     LIVE PREVIEW
                                 </span>
 
@@ -573,16 +573,16 @@ export default function CurriculumPage() {
 
                             <div className="px-4 pb-4">
 
-                                <h3 className="text-[16px] sm:text-[17px] font-semibold text-[#2D201B] dark:text-[#ededed] leading-snug font-serif">
+                                <h3 className="text-[16px] sm:text-[17px] font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] leading-snug font-serif">
                                     {title.trim() || "Complete UI/UX Design Mastery"}
                                 </h3>
 
-                                <p className="text-sm text-[#8A7A71] dark:text-[#7a6a5a] mt-1">
+                                <p className="text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] mt-1">
                                     {subtitle.trim() || "Add a course subtitle to describe your value proposition."}
                                 </p>
 
                                 <div className="mt-3">
-                                    <p className="text-xs uppercase tracking-[0.18em] text-[#8B5E3C] dark:text-[#c9a882] font-medium">
+                                    <p className="text-xs uppercase tracking-[0.18em] text-[#8B5E3C] dark:text-[var(--bhn-brand-400)] font-medium">
                                         {category || "Category"} • {level || "Level"}
                                     </p>
                                 </div>
@@ -592,22 +592,22 @@ export default function CurriculumPage() {
                         </div>
 
                         {/* CREATION TIPS */}
-                        <div className="bg-[#F3E1D6] dark:bg-[#1a1a1a] border border-[#E5CFC2] dark:border-[#374151] rounded-xl p-5 sm:p-4">
+                        <div className="bg-[#F3E1D6] dark:bg-[var(--bhn-neutral-900)] border border-[#E5CFC2] dark:border-[var(--bhn-border)] rounded-xl p-5 sm:p-4">
 
                             <div className="flex items-center gap-2 mb-4">
 
-                                <span className="text-[#8B4A28] dark:text-[#c9a882] text-lg">💡</span>
+                                <span className="text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)] text-lg">💡</span>
 
-                                <h4 className="text-lg sm:text-[20px] font-semibold text-[#2D201B] dark:text-[#ededed] font-serif">
+                                <h4 className="text-lg sm:text-[20px] font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] font-serif">
                                     Creation Tips
                                 </h4>
 
                             </div>
 
-                            <ul className="space-y-4 text-sm text-[#6B5B52] dark:text-[#b89b7d]">
+                            <ul className="space-y-4 text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]">
 
                                 <li className="flex gap-3">
-                                    <span className="text-[#8B4A28] dark:text-[#c9a882] mt-[2px]">✔</span>
+                                    <span className="text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)] mt-[2px]">✔</span>
 
                                     <p>
                                         Clear titles increase enrollments by 40%.
@@ -616,7 +616,7 @@ export default function CurriculumPage() {
                                 </li>
 
                                 <li className="flex gap-3">
-                                    <span className="text-[#8B4A28] dark:text-[#c9a882] mt-[2px]">✔</span>
+                                    <span className="text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)] mt-[2px]">✔</span>
 
                                     <p>
                                         16:9 thumbnails perform better across
@@ -625,7 +625,7 @@ export default function CurriculumPage() {
                                 </li>
 
                                 <li className="flex gap-3">
-                                    <span className="text-[#8B4A28] dark:text-[#c9a882] mt-[2px]">✔</span>
+                                    <span className="text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)] mt-[2px]">✔</span>
 
                                     <p>
                                         Adding tags like “Figma” helps your course
@@ -638,37 +638,37 @@ export default function CurriculumPage() {
                         </div>
 
                         {/* PROGRESS */}
-                        <div className="bg-[#EFE4DC] dark:bg-[#2a2a2a] p-5 rounded-xl border border-[#E2D3C8] dark:border-[#374151] w-full">
+                        <div className="bg-[var(--bhn-border)] dark:bg-[var(--bhn-neutral-900)] p-5 rounded-xl border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] w-full">
 
-                            <h4 className="font-bold text-[#2D201B] dark:text-[#ededed] mb-4 tracking-wide uppercase text-sm font-serif">
+                            <h4 className="font-bold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] mb-4 tracking-wide uppercase text-sm font-serif">
                                 Progress Checklist
                             </h4>
 
                             <ul className="space-y-3 text-sm">
 
-                                <li className="flex items-center gap-3 font-medium text-[#2D201B] dark:text-[#ededed]">
-                                    <span className={`flex items-center justify-center w-5 h-5 rounded-full ${titleAdded ? "bg-[#8B4A2B] dark:bg-[#b86a3a] text-white" : "border border-[#D6C6BC] dark:border-[#374151] text-transparent"} text-xs`}>
+                                <li className="flex items-center gap-3 font-medium text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
+                                    <span className={`flex items-center justify-center w-5 h-5 rounded-full ${titleAdded ? "bg-[#8B4A2B] dark:bg-[var(--bhn-brand-400)] text-white" : "border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] text-transparent"} text-xs`}>
                                         {titleAdded ? "✓" : ""}
                                     </span>
                                     Title added
                                 </li>
 
-                                <li className="flex items-center gap-3 font-medium text-[#2D201B] dark:text-[#ededed]">
-                                    <span className={`flex items-center justify-center w-5 h-5 rounded-full ${categorySelected ? "bg-[#8B4A2B] dark:bg-[#b86a3a] text-white" : "border border-[#D6C6BC] dark:border-[#374151] text-transparent"} text-xs`}>
+                                <li className="flex items-center gap-3 font-medium text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
+                                    <span className={`flex items-center justify-center w-5 h-5 rounded-full ${categorySelected ? "bg-[#8B4A2B] dark:bg-[var(--bhn-brand-400)] text-white" : "border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] text-transparent"} text-xs`}>
                                         {categorySelected ? "✓" : ""}
                                     </span>
                                     Category selected
                                 </li>
 
-                                <li className={`flex items-center gap-3 ${descriptionCompleted ? "font-medium text-[#2D201B] dark:text-[#ededed]" : "text-[#B7A79E]"}`}>
-                                    <span className={`flex items-center justify-center w-5 h-5 rounded-full ${descriptionCompleted ? "bg-[#8B4A2B] dark:bg-[#b86a3a] text-white" : "border border-[#D6C6BC] dark:border-[#374151] text-transparent"} text-xs`}>
+                                <li className={`flex items-center gap-3 ${descriptionCompleted ? "font-medium text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]" : "text-[var(--bhn-text-soft)]"}`}>
+                                    <span className={`flex items-center justify-center w-5 h-5 rounded-full ${descriptionCompleted ? "bg-[#8B4A2B] dark:bg-[var(--bhn-brand-400)] text-white" : "border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] text-transparent"} text-xs`}>
                                         {descriptionCompleted ? "✓" : ""}
                                     </span>
                                     Description completed
                                 </li>
 
-                                <li className={`flex items-center gap-3 ${thumbnailUploaded ? "font-medium text-[#2D201B] dark:text-[#ededed]" : "text-[#B7A79E]"}`}>
-                                    <span className={`flex items-center justify-center w-5 h-5 rounded-full ${thumbnailUploaded ? "bg-[#8B4A2B] dark:bg-[#b86a3a] text-white" : "border border-[#D6C6BC] dark:border-[#374151] text-transparent"} text-xs`}>
+                                <li className={`flex items-center gap-3 ${thumbnailUploaded ? "font-medium text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]" : "text-[var(--bhn-text-soft)]"}`}>
+                                    <span className={`flex items-center justify-center w-5 h-5 rounded-full ${thumbnailUploaded ? "bg-[#8B4A2B] dark:bg-[var(--bhn-brand-400)] text-white" : "border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] text-transparent"} text-xs`}>
                                         {thumbnailUploaded ? "✓" : ""}
                                     </span>
                                     Thumbnail uploaded
@@ -685,7 +685,7 @@ export default function CurriculumPage() {
             </div>
 
             {/* FOOTER */}
-            <div className="w-full bg-[#E9E1DB] dark:bg-[#374151] px-4 sm:px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-[#6F5C53] dark:text-[#b89b7d]">
+            <div className="w-full bg-[#E9E1DB] dark:bg-[#374151] px-4 sm:px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]">
 
                 <div className="flex flex-col sm:flex-row items-center gap-2 text-center md:text-left">
                     <AcademyLogo className="h-6 w-auto object-contain" />

@@ -161,7 +161,7 @@ export default function QuizPage() {
 
     if (isLoading) {
         return (
-            <div className="bg-[var(--bhn-bg)] dark:bg-[#171717] min-h-screen flex items-center justify-center">
+            <div className="bg-[var(--bhn-bg)] dark:bg-[var(--bhn-neutral-900)] min-h-screen flex items-center justify-center">
                 <Loader size={24} className="animate-spin text-[var(--bhn-brand-500)] dark:text-[var(--bhn-brand-400)]" />
             </div>
         );
@@ -169,10 +169,10 @@ export default function QuizPage() {
 
     if (isError || !quiz) {
         return (
-            <div className="bg-[var(--bhn-bg)] dark:bg-[#171717] min-h-screen flex items-center justify-center px-4">
-                <div className="max-w-md text-center bg-white rounded-3xl border border-[var(--bhn-border)] dark:border-[#374151] p-5 shadow-sm">
-                    <p className="text-xl font-semibold text-[var(--bhn-text)] dark:text-[#a89080] mb-3">Unable to load quiz</p>
-                    <p className="text-sm text-[var(--bhn-text-muted)] dark:text-[#b89b7d] mb-6">There was a problem fetching the quiz data. Please try again or contact support.</p>
+            <div className="bg-[var(--bhn-bg)] dark:bg-[var(--bhn-neutral-900)] min-h-screen flex items-center justify-center px-4">
+                <div className="max-w-md text-center bg-[var(--bhn-surface)] rounded-3xl border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] p-5 shadow-sm">
+                    <p className="text-xl font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-text-soft)] mb-3">Unable to load quiz</p>
+                    <p className="text-sm text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)] mb-6">There was a problem fetching the quiz data. Please try again or contact support.</p>
                     <button
                         onClick={() => router.back()}
                         className="bhn-btn bhn-btn-primary"
@@ -185,24 +185,24 @@ export default function QuizPage() {
     }
 
     return (
-        <div className="min-h-screen bg-[var(--bhn-bg)] dark:bg-[#171717] flex flex-col">
+        <div className="min-h-screen bg-[var(--bhn-bg)] dark:bg-[var(--bhn-neutral-900)] flex flex-col">
 
             {/* HEADER */}
-            <div className="min-h-[72px] border-b border-[var(--bhn-border)] dark:border-[#374151] bg-[var(--bhn-bg)] dark:bg-[#171717] px-4 sm:px-6 lg:px-5 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="min-h-[72px] border-b border-[var(--bhn-border)] dark:border-[var(--bhn-border)] bg-[var(--bhn-bg)] dark:bg-[var(--bhn-neutral-900)] px-4 sm:px-6 lg:px-5 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
 
                 {/* LEFT */}
                 <div className="flex flex-wrap items-center gap-4 sm:gap-5 lg:gap-4">
 
                     <AcademyLogo className="h-7 sm:h-8 w-auto object-contain" />
 
-                    <button onClick={() => router.back()} className="text-sm text-[var(--bhn-text)] dark:text-[#ededed] border-b-2 border-[var(--bhn-brand-500)] dark:border-[var(--bhn-brand-400)] pb-1 cursor-pointer">
+                    <button onClick={() => router.back()} className="text-sm text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] border-b-2 border-[var(--bhn-brand-500)] dark:border-[var(--bhn-brand-400)] pb-1 cursor-pointer">
                         Exit Quiz
                     </button>
 
                 </div>
 
                 {/* RIGHT */}
-                <div className="flex items-center gap-4 sm:gap-5 text-[var(--bhn-text-muted)] dark:text-[#b89b7d]">
+                <div className="flex items-center gap-4 sm:gap-5 text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)]">
 
                     <button onClick={() => alert('Notifications')} className="cursor-pointer">
                         <Bell size={18} />
@@ -222,17 +222,17 @@ export default function QuizPage() {
                 {/* TOP TEXT */}
                 <div className="w-full max-w-[700px]">
 
-                    <p className="text-xs sm:text-sm md:text-[15px] tracking-[2px] uppercase text-[var(--bhn-text-soft)] dark:text-[#7a6a5a] font-semibold">
+                    <p className="text-xs sm:text-sm md:text-[15px] tracking-[2px] uppercase text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] font-semibold">
                         Assessment
                     </p>
 
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-2">
 
-                        <h1 className="text-[28px] sm:text-[32px] md:text-[35px] leading-tight font-bold text-[var(--bhn-text)] dark:text-[#ededed]">
+                        <h1 className="text-[28px] sm:text-[32px] md:text-[35px] leading-tight font-bold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
                             {quiz?.title ?? "Quiz"}
                         </h1>
 
-                        <p className="text-sm text-[var(--bhn-text-muted)] dark:text-[#7a6a5a] whitespace-nowrap">
+                        <p className="text-sm text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)] whitespace-nowrap">
                             Question {currentQuestion + 1} of {totalQuestions || 1}
                         </p>
 
@@ -251,12 +251,12 @@ export default function QuizPage() {
                 </div>
 
                 {/* QUESTION CARD */}
-                <div className="w-full max-w-[700px] bg-white rounded-2xl border border-[var(--bhn-border)] dark:border-[#374151] shadow-sm mt-6 sm:mt-4 overflow-hidden">
+                <div className="w-full max-w-[700px] bg-[var(--bhn-surface)] rounded-2xl border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] shadow-sm mt-6 sm:mt-4 overflow-hidden">
 
                     <div className="p-4 sm:p-4 md:p-5">
 
                         {/* QUESTION */}
-                        <h2 className="text-[24px] sm:text-[30px] md:text-[35px] leading-[36px] sm:leading-[42px] md:leading-[48px] font-semibold text-[var(--bhn-text)] dark:text-[#a89080]">
+                        <h2 className="text-[24px] sm:text-[30px] md:text-[35px] leading-[36px] sm:leading-[42px] md:leading-[48px] font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-text-soft)]">
                             {current?.question || ""}
                         </h2>
 
@@ -272,7 +272,7 @@ export default function QuizPage() {
                                         onClick={() => handleSelectOption(option._id)}
                                         className={`w-full flex items-start sm:items-center gap-4 sm:gap-5 px-4 sm:px-6 py-4 sm:py-5 rounded-xl border transition-all duration-200 text-left ${active
                                             ? "border-[var(--bhn-brand-500)] dark:border-[var(--bhn-brand-400)] bg-[var(--bhn-brand-50)]"
-                                            : "border-[var(--bhn-border)] dark:border-[#374151] bg-white hover:border-[var(--bhn-border-strong)]"
+                                            : "border-[var(--bhn-border)] dark:border-[var(--bhn-border)] bg-[var(--bhn-surface)] hover:border-[var(--bhn-border-strong)]"
                                             }`}
                                     >
 
@@ -280,7 +280,7 @@ export default function QuizPage() {
                                         <div
                                             className={`w-7 h-7 rounded-full border-2 flex-shrink-0 flex items-center justify-center ${active
                                                     ? "border-[var(--bhn-brand-500)] dark:border-[var(--bhn-brand-400)]"
-                                                    : "border-[var(--bhn-border-strong)] dark:border-[#374151]"
+                                                    : "border-[var(--bhn-border-strong)] dark:border-[var(--bhn-border)]"
                                                 }`}
                                         >
                                             {active && (
@@ -290,8 +290,8 @@ export default function QuizPage() {
                                         {/* TEXT */}
                                         <p
                                             className={`text-base sm:text-lg leading-relaxed ${active
-                                                ? "text-[var(--bhn-text)] dark:text-[#ededed] font-medium"
-                                                : "text-[var(--bhn-text-muted)] dark:text-[#a89080]"
+                                                ? "text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] font-medium"
+                                                : "text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)]"
                                                 }`}
                                         >
                                             {option.text}
@@ -306,9 +306,9 @@ export default function QuizPage() {
                     </div>
 
                     {/* FOOTER */}
-                    <div className="bg-[var(--bhn-brand-50)] dark:bg-[#1a1a1a] border-t border-[var(--bhn-border)] dark:border-[#374151] px-4 sm:px-6 md:px-5 py-4 sm:py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div className="bg-[var(--bhn-brand-50)] dark:bg-[var(--bhn-neutral-900)] border-t border-[var(--bhn-border)] dark:border-[var(--bhn-border)] px-4 sm:px-6 md:px-5 py-4 sm:py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
 
-                        <button onClick={() => alert('Report submitted. Our team will review the issue.')} className="text-sm text-[var(--bhn-text-soft)] dark:text-[#7a6a5a] cursor-pointer">
+                        <button onClick={() => alert('Report submitted. Our team will review the issue.')} className="text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] cursor-pointer">
                             ⚑ Report Issue
                         </button>
 
@@ -320,7 +320,7 @@ export default function QuizPage() {
                                         setCurrentQuestion((prev) => prev + 1);
                                     }
                                 }}
-                                className="flex-1 sm:flex-none px-5 sm:px-6 py-3 rounded-lg border border-[var(--bhn-border)] dark:border-[#374151] text-[var(--bhn-text-muted)] dark:text-[#7a6a5a] bg-white text-sm font-medium cursor-pointer hover:bg-[var(--bhn-surface-2)] dark:bg-[#171717] transition"
+                                className="flex-1 sm:flex-none px-5 sm:px-6 py-3 rounded-lg border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)] bg-[var(--bhn-surface)] text-sm font-medium cursor-pointer hover:bg-[var(--bhn-surface-2)] dark:bg-[var(--bhn-neutral-900)] transition"
                             >
                                 Skip
                             </button>
@@ -371,7 +371,7 @@ export default function QuizPage() {
                 </div>
 
                 {/* HINT */}
-                <div className="w-full max-w-[700px] mt-6 sm:mt-4 bg-[var(--bhn-brand-50)] dark:bg-[#1a1a1a] border border-[var(--bhn-border)] dark:border-[#374151] rounded-xl p-4 sm:p-5">
+                <div className="w-full max-w-[700px] mt-6 sm:mt-4 bg-[var(--bhn-brand-50)] dark:bg-[var(--bhn-neutral-900)] border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] rounded-xl p-4 sm:p-5">
 
                     <div className="flex items-start gap-3">
 
@@ -381,11 +381,11 @@ export default function QuizPage() {
 
                         <div>
 
-                            <h3 className="text-sm font-semibold text-[var(--bhn-brand-800)] dark:text-[#a89080]">
+                            <h3 className="text-sm font-semibold text-[var(--bhn-brand-800)] dark:text-[var(--bhn-text-soft)]">
                                 Study Hint
                             </h3>
 
-                            <p className="text-sm text-[var(--bhn-text-muted)] dark:text-[#7a6a5a] mt-1 leading-relaxed">
+                            <p className="text-sm text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)] mt-1 leading-relaxed">
                                 {quiz?.hint || ""}
                             </p>
 
@@ -401,45 +401,45 @@ export default function QuizPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-4 px-4 sm:px-6 lg:px-5 pb-6 sm:pb-8">
 
                 {/* CARD 1 */}
-                <div onClick={() => router.push('/student/quiz-history')} className="bg-[var(--bhn-brand-50)] dark:bg-[#1a1a1a] rounded-2xl p-5 sm:p-4 min-h-[120px] cursor-pointer">
+                <div onClick={() => router.push('/student/quiz-history')} className="bg-[var(--bhn-brand-50)] dark:bg-[var(--bhn-neutral-900)] rounded-2xl p-5 sm:p-4 min-h-[120px] cursor-pointer">
 
                     <Clock3 className="text-[var(--bhn-brand-500)] dark:text-[var(--bhn-brand-400)]" size={20} />
 
-                    <h3 className="mt-4 sm:mt-5 font-semibold text-[var(--bhn-brand-800)] dark:text-[#ededed]">
+                    <h3 className="mt-4 sm:mt-5 font-semibold text-[var(--bhn-brand-800)] dark:text-[var(--bhn-neutral-400)]">
                         Quiz History
                     </h3>
 
-                    <p className="text-sm text-[var(--bhn-text-muted)] dark:text-[#b89b7d] mt-2 leading-relaxed">
+                    <p className="text-sm text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)] mt-2 leading-relaxed">
                         View your previous attempts and improvement charts.
                     </p>
 
                 </div>
 
                 {/* CARD 2 */}
-                <div onClick={() => router.push('/student/discussion')} className="bg-[var(--bhn-brand-50)] dark:bg-[#1a1a1a] rounded-2xl p-5 sm:p-4 min-h-[120px] cursor-pointer">
+                <div onClick={() => router.push('/student/discussion')} className="bg-[var(--bhn-brand-50)] dark:bg-[var(--bhn-neutral-900)] rounded-2xl p-5 sm:p-4 min-h-[120px] cursor-pointer">
 
                     <MessageSquare className="text-[var(--bhn-brand-500)] dark:text-[var(--bhn-brand-400)]" size={20} />
 
-                    <h3 className="mt-4 sm:mt-5 font-semibold text-[var(--bhn-brand-800)] dark:text-[#ededed]">
+                    <h3 className="mt-4 sm:mt-5 font-semibold text-[var(--bhn-brand-800)] dark:text-[var(--bhn-neutral-400)]">
                         Discussion
                     </h3>
 
-                    <p className="text-sm text-[var(--bhn-text-muted)] dark:text-[#b89b7d] mt-2 leading-relaxed">
+                    <p className="text-sm text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)] mt-2 leading-relaxed">
                         12 students are currently discussing this question.
                     </p>
 
                 </div>
 
                 {/* CARD 3 */}
-                <div onClick={() => router.push('/student/reference-material')} className="bg-[var(--bhn-brand-50)] dark:bg-[#1a1a1a] rounded-2xl p-5 sm:p-4 min-h-[120px] cursor-pointer">
+                <div onClick={() => router.push('/student/reference-material')} className="bg-[var(--bhn-brand-50)] dark:bg-[var(--bhn-neutral-900)] rounded-2xl p-5 sm:p-4 min-h-[120px] cursor-pointer">
 
                     <GraduationCap className="text-[var(--bhn-brand-500)] dark:text-[var(--bhn-brand-400)]" size={20} />
 
-                    <h3 className="mt-4 sm:mt-5 font-semibold text-[var(--bhn-brand-800)] dark:text-[#ededed]">
+                    <h3 className="mt-4 sm:mt-5 font-semibold text-[var(--bhn-brand-800)] dark:text-[var(--bhn-neutral-400)]">
                         Reference Material
                     </h3>
 
-                    <p className="text-sm text-[var(--bhn-text-muted)] dark:text-[#b89b7d] mt-2 leading-relaxed">
+                    <p className="text-sm text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)] mt-2 leading-relaxed">
                         Review Module 3: Ethical Design Frameworks.
                     </p>
 

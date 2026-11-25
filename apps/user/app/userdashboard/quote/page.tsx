@@ -24,9 +24,9 @@ const partyId = (party?: QuoteParty) =>
   typeof party === "string" ? party : party?._id;
 
 const statusClass: Record<string, string> = {
-  pending: "bg-amber-100 text-amber-800",
-  approved: "bg-emerald-100 text-emerald-800",
-  rejected: "bg-red-100 text-red-800",
+  pending: "bg-[var(--bhn-warning-50)] text-[var(--bhn-warning-700)]",
+  approved: "bg-[var(--bhn-success-50)] text-[var(--bhn-success-700)]",
+  rejected: "bg-[var(--bhn-error-50)] text-[var(--bhn-error-700)]",
 };
 
 const normalizeStatus = (status?: string) => String(status || "").trim().toLowerCase();
@@ -59,33 +59,33 @@ export default function QuoteListPage() {
       <div className="mx-auto max-w-5xl space-y-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-bold text-[#1C1A16]">My Quotations</h1>
-            <p className="mt-1 text-sm text-[#6B625A]">
+            <h1 className="text-2xl font-bold text-[var(--bhn-text)]">My Quotations</h1>
+            <p className="mt-1 text-sm text-[var(--bhn-text-muted)]">
               Review your quote requests and provider responses.
             </p>
           </div>
           <Link
             href="/userdashboard/quote/request"
-            className="rounded-xl bg-[#924C2B] px-4 py-2.5 text-sm font-semibold text-white"
+            className="rounded-xl bg-[var(--bhn-brand-600)] px-4 py-2.5 text-sm font-semibold text-[var(--bhn-text-on-brand)]"
           >
             Request a quote
           </Link>
         </div>
 
         {isLoading ? (
-          <div className="rounded-xl bg-white p-5 text-sm">Loading quotations…</div>
+          <div className="rounded-xl bg-[var(--bhn-surface)] p-5 text-sm">Loading quotations…</div>
         ) : null}
 
         {isError ? (
-          <div className="rounded-xl border border-red-200 bg-red-50 p-5 text-sm text-red-700">
+          <div className="rounded-xl border border-[var(--bhn-error-500)] bg-[var(--bhn-error-50)] p-5 text-sm text-[var(--bhn-error-700)]">
             Unable to load your quotations. Please try again.
           </div>
         ) : null}
 
         {!isLoading && !isError && quotes.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-[#D8C8BE] bg-white p-8 text-center">
+          <div className="rounded-xl border border-dashed border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-8 text-center">
             <p className="font-semibold">No quotations yet</p>
-            <p className="mt-1 text-sm text-[#6B625A]">
+            <p className="mt-1 text-sm text-[var(--bhn-text-muted)]">
               Request a quote from a service, venue, or product listing to see it here.
             </p>
           </div>
@@ -114,17 +114,17 @@ export default function QuoteListPage() {
             return (
               <div
                 key={quote._id}
-                className="rounded-xl border border-[#E7E1D8] bg-white p-5 transition hover:border-[#B66A43] hover:shadow-sm"
+                className="rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-5 transition hover:border-[var(--bhn-brand-600)] hover:shadow-sm"
               >
                 <Link href={`/userdashboard/quote/${quote._id}`} className="block">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
-                      <p className="font-semibold text-[#1C1A16]">{serviceName}</p>
-                      <p className="mt-1 text-sm text-[#6B625A]">
+                      <p className="font-semibold text-[var(--bhn-text)]">{serviceName}</p>
+                      <p className="mt-1 text-sm text-[var(--bhn-text-muted)]">
                         {quote.eventType || "Event"} · {quote.location || "Location"} ·{" "}
                         {quote.eventDate || "Date pending"}
                       </p>
-                      <p className="mt-2 text-sm font-medium text-[#924C2B]">
+                      <p className="mt-2 text-sm font-medium text-[var(--bhn-text)]">
                         Budget: ₹{Number(quote.budget || quote.price || 0).toLocaleString("en-IN")}
                       </p>
                     </div>
@@ -136,7 +136,7 @@ export default function QuoteListPage() {
                       {quote?.status || "Pending"}
                     </span>
                   </div>
-                  <p className="mt-3 text-xs text-[#8D817A]">
+                  <p className="mt-3 text-xs text-[var(--bhn-text-muted)]">
                     Requested {quote.createdAt ? new Date(quote.createdAt).toLocaleDateString("en-GB") : "Date unavailable"}
                   </p>
                 </Link>
@@ -144,14 +144,14 @@ export default function QuoteListPage() {
                 {canOpenInbox && !isRejected ? (
                   <Link
                     href={inboxHref}
-                    className="mt-4 inline-flex rounded-lg bg-[#924C2B] px-3 py-2 text-xs font-semibold text-white"
+                    className="mt-4 inline-flex rounded-lg bg-[var(--bhn-brand-600)] px-3 py-2 text-xs font-semibold text-[var(--bhn-text-on-brand)]"
                   >
                     Open Inbox · {sellerName}
                   </Link>
                 ) : null}
 
                 {isRejected ? (
-                  <div className="mt-4 inline-flex rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs font-semibold text-red-600">
+                  <div className="mt-4 inline-flex rounded-lg border border-[var(--bhn-error-500)] bg-[var(--bhn-error-50)] px-3 py-2 text-xs font-semibold text-[var(--bhn-error-600)]">
                     Quote Rejected - Chat Closed
                   </div>
                 ) : null}

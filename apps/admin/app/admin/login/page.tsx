@@ -8,8 +8,8 @@ import { Logo, Field, Input, Button, Alert } from '@bandhan/ui';
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState('admin@bandhan.com');
-  const [password, setPassword] = useState('admin@123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [login, { isLoading: loading }] = useLoginMutation();
 
@@ -94,21 +94,6 @@ export default function AdminLoginPage() {
             {loading ? 'Logging in...' : 'Sign In'}
           </Button>
         </form>
-
-        <div
-          className="mt-4 rounded-lg border p-4"
-          style={{ background: 'var(--bhn-brand-50)', borderColor: 'var(--bhn-brand-200)' }}
-        >
-          <p className="mb-2 text-sm font-medium" style={{ color: 'var(--bhn-brand-800)' }}>
-            Demo Credentials:
-          </p>
-          <p className="text-xs" style={{ color: 'var(--bhn-brand-700)' }}>
-            Email: <span className="font-mono">admin@bandhan.com</span>
-          </p>
-          <p className="text-xs" style={{ color: 'var(--bhn-brand-700)' }}>
-            Password: <span className="font-mono">admin@123</span>
-          </p>
-        </div>
 
         <div className="mt-8 text-center text-sm" style={{ color: 'var(--bhn-text-muted)' }}>
           <p>&copy; 2026 Bandhan Platform. All rights reserved.</p>

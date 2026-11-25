@@ -48,14 +48,14 @@ export default function RentalOrders() {
     <div>
       <div className="flex justify-between items-center mb-4">
         <h1 className="admin-page-heading">Rental Orders</h1>
-        <span className="admin-badge bg-violet-100 text-violet-700">{filtered.length} total</span>
+        <span className="admin-badge bg-[var(--bhn-brand-50)] text-[var(--bhn-brand-700)]">{filtered.length} total</span>
       </div>
 
       <div className="card mb-4">
         <div className="flex items-center gap-3">
           <div className="flex items-center flex-1">
-            <Search className="w-4 h-4 text-gray-400 mr-2" />
-            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search by rental ID, customer, or product..." className="flex-1 outline-none text-sm text-gray-700" />
+            <Search className="w-4 h-4 text-[var(--bhn-text-muted)] mr-2" />
+            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search by rental ID, customer, or product..." className="flex-1 outline-none text-sm text-[var(--bhn-text)]" />
           </div>
           <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="admin-input" style={{ width: 'auto' }}>
             <option value="">All Statuses</option>
@@ -67,26 +67,26 @@ export default function RentalOrders() {
       </div>
 
       {isLoading ? (
-        <div className="py-8 text-center text-sm text-gray-500">Loading...</div>
+        <div className="py-8 text-center text-sm text-[var(--bhn-text-muted)]">Loading...</div>
       ) : filtered.length === 0 ? (
-        <div className="py-8 text-center text-sm text-gray-500">No rental orders found</div>
+        <div className="py-8 text-center text-sm text-[var(--bhn-text-muted)]">No rental orders found</div>
       ) : (
         <div className="space-y-3">
           {filtered.map((r) => (
             <div key={r.id} className="card">
               <div className="flex items-center justify-between p-1 cursor-pointer" onClick={() => setExpandedId(expandedId === r.id ? null : r.id)}>
                 <div className="flex items-center gap-3">
-                  <Package size={18} className="text-violet-600" />
+                  <Package size={18} className="text-[var(--bhn-brand-600)]" />
                   <div>
-                    <p className="text-sm font-semibold text-gray-800">{r.rentalId}</p>
-                    <p className="text-xs text-gray-500">{r.customerName} · {r.productTitle}</p>
+                    <p className="text-sm font-semibold text-[var(--bhn-text)]">{r.rentalId}</p>
+                    <p className="text-xs text-[var(--bhn-text-muted)]">{r.customerName} · {r.productTitle}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className={`admin-badge ${STATUS_BADGE[r.rentalStatus] || 'admin-badge-pending'}`}>
                     {r.rentalStatus.replace(/_/g, ' ')}
                   </span>
-                  <span className="text-sm font-bold text-gray-800">₹{r.totalAmount.toLocaleString()}</span>
+                  <span className="text-sm font-bold text-[var(--bhn-text)]">₹{r.totalAmount.toLocaleString()}</span>
                   {expandedId === r.id ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                 </div>
               </div>
@@ -94,18 +94,18 @@ export default function RentalOrders() {
               {expandedId === r.id && (
                 <div className="border-t mt-2 pt-3 space-y-3">
                   <div className="grid grid-cols-2 gap-3 text-sm">
-                    <div><span className="text-gray-500">Seller:</span> <span className="font-medium">{r.sellerName}</span></div>
-                    <div><span className="text-gray-500">Product:</span> <span className="font-medium">{r.productTitle}</span></div>
-                    <div><span className="text-gray-500">Rental Period:</span> <span className="font-medium">{new Date(r.rentalStart).toLocaleDateString()} – {new Date(r.rentalEnd).toLocaleDateString()}</span></div>
-                    <div><span className="text-gray-500">Duration:</span> <span className="font-medium">{r.rentalDurationDays} days</span></div>
-                    <div><span className="text-gray-500">Daily Rate:</span> <span className="font-medium">₹{r.dailyRate.toLocaleString()}</span></div>
-                    <div><span className="text-gray-500">Security Deposit:</span> <span className="font-medium">₹{r.securityDeposit.toLocaleString()}</span></div>
-                    <div><span className="text-gray-500">Payment:</span> <span className="font-medium">{r.paymentStatus}</span></div>
-                    <div><span className="text-gray-500">Created:</span> <span className="font-medium">{r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—'}</span></div>
+                    <div><span className="text-[var(--bhn-text-muted)]">Seller:</span> <span className="font-medium">{r.sellerName}</span></div>
+                    <div><span className="text-[var(--bhn-text-muted)]">Product:</span> <span className="font-medium">{r.productTitle}</span></div>
+                    <div><span className="text-[var(--bhn-text-muted)]">Rental Period:</span> <span className="font-medium">{new Date(r.rentalStart).toLocaleDateString()} – {new Date(r.rentalEnd).toLocaleDateString()}</span></div>
+                    <div><span className="text-[var(--bhn-text-muted)]">Duration:</span> <span className="font-medium">{r.rentalDurationDays} days</span></div>
+                    <div><span className="text-[var(--bhn-text-muted)]">Daily Rate:</span> <span className="font-medium">₹{r.dailyRate.toLocaleString()}</span></div>
+                    <div><span className="text-[var(--bhn-text-muted)]">Security Deposit:</span> <span className="font-medium">₹{r.securityDeposit.toLocaleString()}</span></div>
+                    <div><span className="text-[var(--bhn-text-muted)]">Payment:</span> <span className="font-medium">{r.paymentStatus}</span></div>
+                    <div><span className="text-[var(--bhn-text-muted)]">Created:</span> <span className="font-medium">{r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '—'}</span></div>
                   </div>
 
                   <div className="flex items-center gap-2 border-t pt-3">
-                    <span className="text-xs font-semibold text-gray-500">Update Status:</span>
+                    <span className="text-xs font-semibold text-[var(--bhn-text-muted)]">Update Status:</span>
                     {STATUSES.filter(Boolean).map((s) => (
                       <button
                         key={s}

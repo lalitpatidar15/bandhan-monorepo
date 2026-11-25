@@ -10,11 +10,11 @@ export default function FeaturedServices() {
   const services = (data?.services || []).slice(0, 4);
 
   return (
-    <section className="bg-white px-4 py-12 sm:px-6 md:py-16">
+    <section className="bg-[var(--bhn-surface)] px-4 py-12 sm:px-6 md:py-16">
       <div className="mx-auto max-w-7xl">
         <div className="flex items-end justify-between mb-8">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--bhn-brand-600)]">Verified professionals</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--bhn-text)]">Verified professionals</p>
             <h2 className="mt-2 text-2xl font-bold text-[var(--bhn-text)] sm:text-3xl" style={{ fontFamily: 'var(--bhn-font-display)' }}>Featured services</h2>
           </div>
           <a href="/explore?type=services" className="hidden items-center gap-1 text-sm font-semibold text-[var(--bhn-brand-700)] transition hover:text-[var(--bhn-brand-800)] sm:flex">
@@ -54,7 +54,7 @@ export default function FeaturedServices() {
                 </div>
                 <div className="bhn-listing-card-footer">
                   <PriceDisplay current={service.price ?? 0} currency="₹" unit="+" size="sm" />
-                  <span className="text-xs font-semibold text-[var(--bhn-brand-600)] ml-auto">Enquire →</span>
+                  <span className="text-xs font-semibold text-[var(--bhn-text)] ml-auto">Enquire →</span>
                 </div>
               </a>
             ))}

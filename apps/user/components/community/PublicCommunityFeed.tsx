@@ -196,7 +196,7 @@ export default function PublicCommunityFeed() {
                 <p className="mt-1 text-xs leading-5 text-[var(--bhn-text-muted)]">Your account is only needed to post, like or comment.</p>
               </div>
             </div>
-            <button type="button" onClick={() => gate()} className="min-h-10 shrink-0 rounded-xl bg-[var(--bhn-brand-700)] px-4 py-2 text-sm font-bold text-white hover:bg-[var(--bhn-brand-800)]">
+            <button type="button" onClick={() => gate()} className="min-h-10 shrink-0 rounded-xl bg-[var(--bhn-brand-700)] px-4 py-2 text-sm font-bold text-[var(--bhn-text-on-brand)] hover:bg-[var(--bhn-brand-800)]">
               Sign in to join
             </button>
           </div>
@@ -221,7 +221,7 @@ export default function PublicCommunityFeed() {
                     type="button"
                     onClick={handleCreatePost}
                     disabled={isCreating || !postText.trim()}
-                    className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-[var(--bhn-brand-700)] px-4 py-2 text-sm font-bold text-white hover:bg-[var(--bhn-brand-800)] disabled:cursor-not-allowed disabled:opacity-50"
+                    className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-[var(--bhn-brand-700)] px-4 py-2 text-sm font-bold text-[var(--bhn-text-on-brand)] hover:bg-[var(--bhn-brand-800)] disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {isCreating ? <LoaderCircle aria-hidden="true" className="h-4 w-4 animate-spin" /> : <Send aria-hidden="true" className="h-4 w-4" />}
                     {isCreating ? "Publishing…" : "Publish post"}
@@ -234,14 +234,14 @@ export default function PublicCommunityFeed() {
 
         {isLoading ? (
           <div className="flex min-h-64 flex-col items-center justify-center gap-3" role="status">
-            <LoaderCircle aria-hidden="true" className="h-7 w-7 animate-spin text-[var(--bhn-brand-600)]" />
+            <LoaderCircle aria-hidden="true" className="h-7 w-7 animate-spin text-[var(--bhn-text)]" />
             <p className="text-sm text-[var(--bhn-text-muted)]">Loading community posts…</p>
           </div>
         ) : isError ? (
-          <div className="rounded-2xl border border-red-200 bg-red-50 px-5 py-10 text-center">
-            <h2 className="text-lg font-bold text-red-900">The community feed is unavailable</h2>
-            <p className="mt-2 text-sm text-red-700">Please check your connection and try again.</p>
-            <button type="button" onClick={() => refetch()} className="mt-5 inline-flex min-h-10 items-center gap-2 rounded-xl bg-[var(--bhn-brand-700)] px-4 py-2 text-sm font-bold text-white hover:bg-[var(--bhn-brand-800)]">
+          <div className="rounded-2xl border border-[var(--bhn-error-500)] bg-[var(--bhn-error-50)] px-5 py-10 text-center">
+            <h2 className="text-lg font-bold text-[var(--bhn-error-700)]">The community feed is unavailable</h2>
+            <p className="mt-2 text-sm text-[var(--bhn-error-700)]">Please check your connection and try again.</p>
+            <button type="button" onClick={() => refetch()} className="mt-5 inline-flex min-h-10 items-center gap-2 rounded-xl bg-[var(--bhn-brand-700)] px-4 py-2 text-sm font-bold text-[var(--bhn-text-on-brand)] hover:bg-[var(--bhn-brand-800)]">
               <RefreshCw aria-hidden="true" className="h-4 w-4" /> Try again
             </button>
           </div>
@@ -275,7 +275,7 @@ export default function PublicCommunityFeed() {
                   <img src={post.image} alt={`Shared by ${post.user}`} loading="lazy" className="max-h-[560px] w-full border-y border-[var(--bhn-border)] object-cover" />
                 ) : null}
                 {post.video ? (
-                  <video controls preload="metadata" className="max-h-[560px] w-full border-y border-[var(--bhn-border)] bg-black" aria-label={`Video shared by ${post.user}`}>
+                  <video controls preload="metadata" className="max-h-[560px] w-full border-y border-[var(--bhn-border)] bg-[var(--bhn-text)]" aria-label={`Video shared by ${post.user}`}>
                     <source src={post.video} />
                   </video>
                 ) : null}
@@ -324,13 +324,13 @@ export default function PublicCommunityFeed() {
                             }}
                             maxLength={1000}
                             placeholder="Write a comment…"
-                            className="h-10 min-w-0 flex-1 rounded-xl border border-[var(--bhn-border-strong)] bg-white px-3 text-xs text-[var(--bhn-text)] outline-none placeholder:text-[var(--bhn-text-soft)] focus:border-[var(--bhn-brand-500)] focus:ring-2 focus:ring-[var(--bhn-brand-100)]"
+                            className="h-10 min-w-0 flex-1 rounded-xl border border-[var(--bhn-border-strong)] bg-[var(--bhn-surface)] px-3 text-xs text-[var(--bhn-text)] outline-none placeholder:text-[var(--bhn-text-soft)] focus:border-[var(--bhn-brand-500)] focus:ring-2 focus:ring-[var(--bhn-brand-100)]"
                           />
                           <button
                             type="button"
                             onClick={() => handleComment(post.id)}
                             disabled={pendingCommentId === post.id || !String(commentDrafts[post.id] || "").trim()}
-                            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--bhn-brand-700)] text-white hover:bg-[var(--bhn-brand-800)] disabled:cursor-not-allowed disabled:opacity-50"
+                            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--bhn-brand-700)] text-[var(--bhn-text-on-brand)] hover:bg-[var(--bhn-brand-800)] disabled:cursor-not-allowed disabled:opacity-50"
                             aria-label="Send comment"
                           >
                             {pendingCommentId === post.id ? <LoaderCircle aria-hidden="true" className="h-4 w-4 animate-spin" /> : <Send aria-hidden="true" className="h-4 w-4" />}

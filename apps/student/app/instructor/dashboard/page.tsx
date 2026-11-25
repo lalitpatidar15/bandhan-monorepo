@@ -15,26 +15,21 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { PageHeader, StatCard, Badge, statusTone } from "@bandhan/ui";
-import { useGetInstructorOverviewQuery } from "@/app/redux/instructor-services/DashboardApi";
+import { useGetInstructorOverviewQuery, useGetInstructorPageResourcesQuery } from "@/app/redux/instructor-services/DashboardApi";
 import { useEffect, useState } from "react";
 
 export default function InstructorDashboard() {
-  const { data, isLoading, isError } = useGetInstructorOverviewQuery();
-  const overview = data?.data?.overview;
+  const { data: overviewData, isLoading, isError } = useGetInstructorOverviewQuery();
+  const overview = overviewData?.data?.overview;
   const [tasks, setTasks] = useState<string[]>([]);
   const [todayEvents, setTodayEvents] = useState<Array<{title:string;time?:string;slots?:number;questions?:number;type:string}>>([]);
 
   useEffect(() => {
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || "https://bandhan-api.vercel.app/api";
-    fetch(`${apiBase}/instructor/page-resources`)
-      .then(res => res.json())
-      .then(json => {
-        if (json?.success && json?.data) {
-          setTasks(json.data.tasks || []);
-          setTodayEvents(json.data.todaySchedule || []);
-        }
-      })
-      .catch(() => {});
+    const { data, isLoading: resourcesLoading, isError: resourcesError } = useGetInstructorPageResourcesQuery();
+    if (data && data.success && data.data) {
+      setTasks(data.data.tasks || []);
+      setTodayEvents(data.data.todaySchedule || []);
+    }
   }, []);
   const stats = [
     {

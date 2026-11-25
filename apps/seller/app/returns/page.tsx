@@ -74,7 +74,6 @@ export default function ReturnsPage() {
             const status = error?.status || error?.response?.status || 500;
             const msg = error?.data?.message || error?.response?.data?.message || error?.message || 'Failed to load returns';
             console.error('Failed to load returns:', { status, msg, error });
-            // Optionally show a non-blocking alert in dev; in production keep quiet
             if (process.env.NODE_ENV !== 'production') alert(`Failed to load returns (${status}): ${msg}`);
             setAllRequests([]);
         } finally {
@@ -225,7 +224,7 @@ export default function ReturnsPage() {
     };
 
     return (
-        <div className="flex min-h-screen bg-[#F8F5F2]">
+        <div className="flex min-h-screen bg-[var(--bhn-bg)]">
             <Sidebar />
 
             <div className="flex-1 w-full overflow-hidden">
@@ -235,10 +234,10 @@ export default function ReturnsPage() {
                     {/* HEADING */}
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5 mb-6">
                         <div className="w-full">
-                            <h1 className="text-[28px] sm:text-[34px] lg:text-[40px] font-serif font-semibold text-[#2D201B] leading-tight">
+                            <h1 className="text-lg sm:text-base lg:text-xl font-serif font-semibold text-[var(--bhn-text)] leading-tight">
                                 Returns & Refunds
                             </h1>
-                            <p className="text-gray-500 text-sm sm:text-[15px] mt-2 max-w-[620px] leading-6">
+                            <p className="text-[var(--bhn-text-muted)] text-sm sm:text-[15px] mt-2 max-w-[620px] leading-6">
                                 Manage your post-purchase workflows. Review return requests, process refunds, and track customer satisfaction trends.
                             </p>
                         </div>
@@ -264,46 +263,46 @@ export default function ReturnsPage() {
                                 title: "TOTAL REQUESTS",
                                 value: String(summary.totalRequests),
                                 sub: "Live from returns API",
-                                subColor: "text-gray-500",
+                                subColor: "text-[var(--bhn-text-muted)]",
                             },
                             {
                                 title: "PENDING APPROVALS",
                                 value: String(summary.pending),
                                 sub: "Requires immediate action",
-                                subColor: "text-orange-500",
+                                subColor: "text-[var(--bhn-text)]",
                             },
                             {
                                 title: "APPROVED RETURNS",
                                 value: String(summary.approved),
                                 sub: "Approved by seller",
-                                subColor: "text-gray-400",
+                                subColor: "text-[var(--bhn-text-muted)]",
                             },
                             {
                                 title: "REJECTED",
                                 value: String(summary.rejected),
                                 sub: "Policy non-compliance",
-                                subColor: "text-gray-400",
+                                subColor: "text-[var(--bhn-text-muted)]",
                             },
                             {
                                 title: "REFUNDED AMOUNT",
                                 value: `₹${summary.refundedAmount.toLocaleString("en-IN")}`,
                                 sub: "YTD financial impact",
-                                subColor: "text-gray-400",
-                                bg: "bg-[#F6E8DF]",
+                                subColor: "text-[var(--bhn-text-muted)]",
+                                bg: "bg-[var(--bhn-brand-50)]",
                             },
                         ].map((item, i) => (
-                            <div key={i} className={`${item.bg || "bg-white"} rounded-2xl p-5 border border-[#EEE6DF]`}>
-                                <p className="text-[11px] text-gray-400 tracking-wide">{item.title}</p>
-                                <h2 className="text-[28px] font-semibold text-[#2D201B] mt-2">{item.value}</h2>
+                            <div key={i} className={`${item.bg || "bg-[var(--bhn-surface)]"} rounded-2xl p-5 border border-[var(--bhn-border)]`}>
+                                <p className="text-[11px] text-[var(--bhn-text-muted)] tracking-wide">{item.title}</p>
+                                <h2 className="text-[28px] font-semibold text-[var(--bhn-text)] mt-2">{item.value}</h2>
                                 <p className={`text-xs mt-2 ${item.subColor}`}>{item.sub}</p>
                             </div>
                         ))}
                     </div>
 
                     {/* FILTERS */}
-                    <div className="bg-[#F6EBDD] rounded-2xl p-4 mb-6">
+                    <div className="bg-[var(--bhn-surface-2)] rounded-2xl p-4 mb-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-4">
-                            <div className="flex items-center bg-white border rounded-lg px-4">
+                            <div className="flex items-center bg-[var(--bhn-surface)] border rounded-lg px-4">
                                 <Image src="/image9.png" width={15} height={15} alt="search" />
                                 <input
                                     type="text"
@@ -317,7 +316,7 @@ export default function ReturnsPage() {
                             <select
                                 value={statusFilter}
                                 onChange={(e) => setStatusFilter(e.target.value)}
-                                className="bg-white border rounded-lg px-4 py-3 text-sm outline-none"
+                                className="bg-[var(--bhn-surface)] border rounded-lg px-4 py-3 text-sm outline-none"
                             >
                                 <option value="All">All Statuses</option>
                                 <option value="Pending">Pending</option>
@@ -329,7 +328,7 @@ export default function ReturnsPage() {
                             <select
                                 value={reasonFilter}
                                 onChange={(e) => setReasonFilter(e.target.value)}
-                                className="bg-white border rounded-lg px-4 py-3 text-sm outline-none"
+                                className="bg-[var(--bhn-surface)] border rounded-lg px-4 py-3 text-sm outline-none"
                             >
                                 <option value="All">All Reasons</option>
                                 <option value="Damaged">Damaged</option>
@@ -342,26 +341,26 @@ export default function ReturnsPage() {
                                 type="date"
                                 value={dateFilter}
                                 onChange={(e) => setDateFilter(e.target.value)}
-                                className="bg-white border rounded-lg px-4 py-3 text-sm outline-none"
+                                className="bg-[var(--bhn-surface)] border rounded-lg px-4 py-3 text-sm outline-none"
                             />
 
                             <button onClick={clearFilters} className="bhn-btn bhn-btn-secondary">
                                 Clear Filters
                             </button>
 
-                            <button onClick={loadReturns} className="bg-[#8B4A2F] text-white rounded-lg px-4 py-3 text-sm hover:bg-[#6d3a25]">
+                            <button onClick={loadReturns} className="bhn-btn bhn-btn-primary">
                                 Refresh
                             </button>
                         </div>
                     </div>
 
                     {/* TABLE CONTAINER */}
-                    <div className="bg-white rounded-2xl border border-[#EEE6DF] overflow-hidden">
+                    <div className="bg-[var(--bhn-surface)] rounded-2xl border border-[var(--bhn-border)] overflow-hidden">
                         {/* TOP BAR */}
-                        <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4 px-4 sm:px-6 py-5 border-b border-[#F1E7DF]">
+                        <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4 px-4 sm:px-6 py-5 border-b border-[var(--bhn-border)]">
                             <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-                                <h2 className="text-sm font-semibold text-[#2D201B]">Request Queue</h2>
-                                <span className="w-fit text-xs bg-[#FFE5D6] text-[#D26B2E] px-3 py-1 rounded-full font-medium">
+                                <h2 className="text-sm font-semibold text-[var(--bhn-text)]">Request Queue</h2>
+                                <span className="w-fit text-xs bg-[var(--bhn-brand-50)] text-[var(--bhn-text)] px-3 py-1 rounded-full font-medium">
                                     {summary.pending} Actions Required
                                 </span>
                             </div>
@@ -371,7 +370,7 @@ export default function ReturnsPage() {
                                 <button
                                     onClick={() => handleBulkAction("Approved")}
                                     disabled={selectedRows.length === 0}
-                                    className="h-[38px] px-4 rounded-lg border border-[#E8DDD4] bg-white text-sm font-medium text-gray-600 hover:bg-[#F8F5F2] disabled:opacity-50 transition"
+                                    className="h-[38px] px-4 rounded-lg border border-[var(--bhn-border)] bg-[var(--bhn-surface)] text-sm font-medium text-[var(--bhn-text-muted)] hover:bg-[var(--bhn-brand-50)] disabled:opacity-50 transition"
                                 >
                                     ✔ Bulk Approve ({selectedRows.length})
                                 </button>
@@ -379,14 +378,14 @@ export default function ReturnsPage() {
                                 <button
                                     onClick={() => handleBulkAction("Rejected")}
                                     disabled={selectedRows.length === 0}
-                                    className="h-[38px] px-4 rounded-lg border border-[#E8DDD4] bg-white text-sm font-medium text-gray-600 hover:bg-[#F8F5F2] disabled:opacity-50 transition"
+                                    className="h-[38px] px-4 rounded-lg border border-[var(--bhn-border)] bg-[var(--bhn-surface)] text-sm font-medium text-[var(--bhn-text-muted)] hover:bg-[var(--bhn-brand-50)] disabled:opacity-50 transition"
                                 >
                                     ✖ Bulk Reject ({selectedRows.length})
                                 </button>
 
                                 <button
                                     onClick={exportCSV}
-                                    className="h-[38px] px-4 rounded-lg bg-[#8B4A2F] text-white text-sm font-medium hover:bg-[#6E3B25] transition"
+                                    className="h-[38px] px-4 rounded-lg bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)] text-sm font-medium hover:bg-[var(--bhn-brand-500)] transition"
                                 >
                                     ⬇ Export CSV
                                 </button>
@@ -396,77 +395,75 @@ export default function ReturnsPage() {
                         {/* MOBILE CARDS */}
                         <div className="block lg:hidden">
                             {loading ? (
-                                <p className="p-5 text-center text-sm text-gray-400">Loading requests...</p>
+                                <p className="p-5 text-center text-sm text-[var(--bhn-text-muted)]">Loading requests...</p>
                             ) : filteredRequests.length === 0 ? (
-                                <p className="p-5 text-center text-sm text-gray-400">No requests found</p>
-                            ) : (
-                                filteredRequests.map((item) => (
-                                    <div key={item.id} className="p-4 border-b border-[#F2EAE4]">
-                                        <div className="flex items-start justify-between gap-3">
-                                            <div>
-                                                <p className="text-sm font-semibold text-[#8B4A2F]">#RET-{item.id}</p>
-                                                <h3 className="font-semibold text-[#2D201B] mt-1">{item.name}</h3>
-                                                <p className="text-xs text-gray-400 mt-1">Order: {item.order}</p>
-                                            </div>
-                                            <input
-                                                type="checkbox"
-                                                checked={selectedRows.includes(item.id)}
-                                                onChange={() => handleSelect(item.id)}
-                                                className="mt-1"
-                                            />
+                                <p className="p-5 text-center text-sm text-[var(--bhn-text-muted)]">No requests found</p>
+                            ) : filteredRequests.map((item) => (
+                                <div key={item.id} className="p-4 border-b border-[var(--bhn-border)]">
+                                    <div className="flex items-start justify-between gap-3">
+                                        <div>
+                                            <p className="text-sm font-semibold text-[var(--bhn-text)]">#RET-{item.id}</p>
+                                            <h3 className="font-semibold text-[var(--bhn-text)] mt-1">{item.name}</h3>
+                                            <p className="text-xs text-[var(--bhn-text-muted)] mt-1">Order: {item.order}</p>
                                         </div>
-
-                                        <div className="mt-4">
-                                            <p className="text-sm text-gray-700 leading-6">{item.product}</p>
-                                            <p className="text-xs text-gray-400 mt-1">SKU: {item.sku}</p>
-                                        </div>
-
-                                        <div className="flex flex-wrap items-center gap-2 mt-4">
-                                            <span className="text-[10px] px-2 py-1 rounded font-semibold bg-gray-100 text-gray-700">
-                                                {item.type}
-                                            </span>
-                                            <span className="text-xs px-3 py-1 rounded-full font-medium bg-orange-100 text-orange-600">
-                                                ● {item.status}
-                                            </span>
-                                        </div>
-
-                                        <div className="mt-3">
-                                            <p className="text-xs text-gray-500">Reason: "{item.reason}"</p>
-                                        </div>
-
-                                        <div className="flex items-center justify-between mt-4">
-                                            <div>
-                                                <p className="text-sm font-semibold text-[#2D201B]">{item.amount}</p>
-                                                <p className="text-xs text-gray-400 mt-1">{item.date}</p>
-                                            </div>
-
-                                            {item.status === "Pending" && (
-                                                <div className="flex gap-2">
-                                                    <button
-                                                        onClick={() => updateReturnStatus(item.id, "Approved")}
-                                                        className="px-2 py-1 bg-[#8B4A2F] text-white rounded text-xs"
-                                                    >
-                                                        Approve
-                                                    </button>
-                                                    <button
-                                                        onClick={() => updateReturnStatus(item.id, "Rejected")}
-                                                        className="px-2 py-1 border text-[#8B4A2F] rounded text-xs"
-                                                    >
-                                                        Reject
-                                                    </button>
-                                                </div>
-                                            )}
-                                        </div>
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedRows.includes(item.id)}
+                                            onChange={() => handleSelect(item.id)}
+                                            className="mt-1"
+                                        />
                                     </div>
-                                ))
-                            )}
+
+                                    <div className="mt-4">
+                                        <p className="text-sm text-[var(--bhn-text-muted)] leading-6">{item.product}</p>
+                                        <p className="text-xs text-[var(--bhn-text-muted)] mt-1">SKU: {item.sku}</p>
+                                    </div>
+
+                                    <div className="flex flex-wrap items-center gap-2 mt-4">
+                                        <span className="text-[10px] px-2 py-1 rounded font-medium bg-[var(--bhn-brand-50)] text-[var(--bhn-text)]">
+                                            {item.type}
+                                        </span>
+                                        <span className="text-xs px-3 py-1 rounded-full font-medium bg-[var(--bhn-error-50)] text-[var(--bhn-error-700)]">
+                                            ● {item.status}
+                                        </span>
+                                    </div>
+
+                                    <div className="mt-3">
+                                        <p className="text-xs text-[var(--bhn-text-muted)]">Reason: "{item.reason}"</p>
+                                    </div>
+
+                                    <div className="flex items-center justify-between mt-4">
+                                        <div>
+                                            <p className="text-sm font-semibold text-[var(--bhn-text)]">{item.amount}</p>
+                                            <p className="text-xs text-[var(--bhn-text-muted)] mt-1">{item.date}</p>
+                                        </div>
+
+                                        {item.status === "Pending" && (
+                                            <div className="flex gap-2">
+                                                <button
+                                                    onClick={() => updateReturnStatus(item.id, "Approved")}
+                                                    className="px-2 py-1 bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)] rounded text-xs"
+                                                >
+                                                    Approve
+                                                </button>
+                                                <button
+                                                    onClick={() => updateReturnStatus(item.id, "Rejected")}
+                                                    className="px-2 py-1 border text-[var(--bhn-text)] rounded text-xs"
+                                                >
+                                                    Reject
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
                         </div>
 
                         {/* DESKTOP TABLE */}
                         <div className="hidden lg:block overflow-x-auto">
                             <table className="w-full">
-                                <thead className="bg-[#F7F3EF]">
-                                    <tr className="text-[11px] uppercase tracking-wide text-gray-400">
+                                <thead className="bg-[var(--bhn-neutral-50)]">
+                                    <tr className="text-[11px] uppercase tracking-wide text-[var(--bhn-text-muted)]">
                                         <th className="px-6 py-4 text-left">
                                             <input
                                                 type="checkbox"
@@ -488,96 +485,90 @@ export default function ReturnsPage() {
                                 <tbody>
                                     {loading ? (
                                         <tr>
-                                            <td colSpan={9} className="px-6 py-8 text-center text-sm text-gray-400">
+                                            <td colSpan={9} className="px-6 py-8 text-center text-sm text-[var(--bhn-text-muted)]">
                                                 Loading requests...
                                             </td>
                                         </tr>
                                     ) : filteredRequests.length === 0 ? (
                                         <tr>
-                                            <td colSpan={9} className="px-6 py-8 text-center text-sm text-gray-400">
+                                            <td colSpan={9} className="px-6 py-8 text-center text-sm text-[var(--bhn-text-muted)]">
                                                 No returns match your filter criteria.
                                             </td>
-                                        </tr>
-                                    ) : (
-                                        filteredRequests.map((item) => (
-                                            <tr key={item.id} className="border-t hover:bg-[#FCFAF8] transition">
-                                                <td className="px-6 py-5">
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={selectedRows.includes(item.id)}
-                                                        onChange={() => handleSelect(item.id)}
-                                                    />
-                                                </td>
-                                                <td className="px-6 py-5 whitespace-nowrap text-[#8B4A2F] font-medium">
-                                                    #RET-{item.id}
-                                                </td>
-                                                <td className="px-6 py-5">
-                                                    <div className="font-medium text-[#2D201B]">{item.name}</div>
-                                                    <div className="text-xs text-gray-400 mt-1">Order: {item.order}</div>
-                                                </td>
-                                                <td className="px-6 py-5">
-                                                    <div className="text-sm text-gray-700">{item.product}</div>
-                                                    <div className="text-xs text-gray-400 mt-1">SKU: {item.sku}</div>
-                                                </td>
-                                                <td className="px-6 py-5">
-                                                    <span className="text-[10px] px-2 py-1 rounded font-semibold bg-gray-100 text-gray-700">
-                                                        {item.type}
-                                                    </span>
-                                                    <div className="text-xs text-gray-400 mt-2">"{item.reason}"</div>
-                                                </td>
-                                                <td className="px-6 py-5 font-medium whitespace-nowrap">{item.amount}</td>
-                                                <td className="px-6 py-5 whitespace-nowrap text-gray-500">{item.date}</td>
-                                                <td className="px-6 py-5">
-                                                    <span
-                                                        className={`text-xs px-3 py-1 rounded-full font-medium inline-flex items-center gap-2 ${
-                                                            item.status === "Pending"
-                                                                ? "bg-orange-100 text-orange-600"
-                                                                : item.status === "Approved"
-                                                                ? "bg-blue-100 text-blue-600"
-                                                                : item.status === "Refunded"
-                                                                ? "bg-green-100 text-green-600"
-                                                                : "bg-red-100 text-red-600"
-                                                        }`}
-                                                    >
-                                                        ● {item.status}
-                                                    </span>
-                                                </td>
-                                                <td className="px-6 py-5">
-                                                    {item.status === "Pending" ? (
-                                                        <div className="flex items-center gap-2">
-                                                            <button
-                                                                onClick={() => updateReturnStatus(item.id, "Approved")}
-                                                                className="rounded-md bg-[#8B4A2F] px-2 py-1 text-xs text-white hover:bg-[#6E3B25]"
-                                                            >
-                                                                Approve
-                                                            </button>
-                                                            <button
-                                                                onClick={() => updateReturnStatus(item.id, "Rejected")}
-                                                                className="rounded-md border border-[#8B4A2F] px-2 py-1 text-xs text-[#8B4A2F] hover:bg-[#F8F5F2]"
-                                                            >
-                                                                Reject
-                                                            </button>
-                                                        </div>
-                                                    ) : item.status === "Approved" ? (
-                                                        <button
-                                                            onClick={() => updateReturnStatus(item.id, "Refunded")}
-                                                            className="rounded-md border border-[#8B4A2F] px-2 py-1 text-xs text-[#8B4A2F] hover:bg-[#F8F5F2]"
-                                                        >
-                                                            Mark Refunded
-                                                        </button>
-                                                    ) : (
-                                                        <span className="text-xs text-gray-400">-</span>
-                                                    )}
-                                                </td>
                                             </tr>
-                                        ))
-                                    )}
+                                    ) : filteredRequests.map((item) => (
+                                        <tr key={item.id} className="border-t hover:bg-[var(--bhn-neutral-50)] transition">
+                                            <td className="px-6 py-5">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={selectedRows.includes(item.id)}
+                                                    onChange={() => handleSelect(item.id)}
+                                                />
+                                            </td>
+                                            <td className="px-6 py-5 whitespace-nowrap text-[var(--bhn-text)] font-medium">
+                                                #RET-{item.id}
+                                            </td>
+                                            <td className="px-6 py-5">
+                                                <div className="font-medium text-[var(--bhn-text)]">{item.name}</div>
+                                                <div className="text-xs text-[var(--bhn-text-muted)] mt-1">Order: {item.order}</div>
+                                            </td>
+                                            <td className="px-6 py-5">
+                                                <span className="text-[10px] px-2 py-1 rounded font-medium bg-[var(--bhn-brand-50)] text-[var(--bhn-text)]">
+                                                    {item.type}
+                                                </span>
+                                                <div className="text-xs text-[var(--bhn-text-muted)] mt-2">"{item.reason}"</div>
+                                            </td>
+                                            <td className="px-6 py-5 font-medium whitespace-nowrap">{item.amount}</td>
+                                            <td className="px-6 py-5 whitespace-nowrap text-[var(--bhn-text-muted)]">{item.date}</td>
+                                            <td className="px-6 py-5">
+                                                <span
+                                                    className={`text-xs px-3 py-1 rounded-full font-medium inline-flex items-center gap-2 ${
+                                                        item.status === "Pending"
+                                                            ? "bg-[var(--bhn-brand-50)] text-[var(--bhn-text)]"
+                                                            : item.status === "Approved"
+                                                                ? "bg-[var(--bhn-success-50)] text-[var(--bhn-success-700)]"
+                                                                : item.status === "Refunded"
+                                                                    ? "bg-[var(--bhn-error-50)] text-[var(--bhn-error-700)]"
+                                                                    : "bg-[var(--bhn-neutral-100)] text-[var(--bhn-text-muted)]"
+                                                    }`}
+                                                >
+                                                    ● {item.status}
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-5">
+                                                {item.status === "Pending" ? (
+                                                    <div className="flex items-center gap-2">
+                                                        <button
+                                                            onClick={() => updateReturnStatus(item.id, "Approved")}
+                                                            className="rounded-md bg-[var(--bhn-brand-600)] px-2 py-1 text-xs text-[var(--bhn-text-on-brand)] hover:bg-[var(--bhn-brand-500)]"
+                                                        >
+                                                            Approve
+                                                        </button>
+                                                        <button
+                                                            onClick={() => updateReturnStatus(item.id, "Rejected")}
+                                                            className="rounded-md border text-[var(--bhn-text)] px-2 py-1 text-xs text-[var(--bhn-text)] hover:bg-[var(--bhn-neutral-50)]"
+                                                        >
+                                                            Reject
+                                                        </button>
+                                                    </div>
+                                                ) : item.status === "Approved" ? (
+                                                    <button
+                                                        onClick={() => updateReturnStatus(item.id, "Refunded")}
+                                                        className="rounded-md border border-[var(--bhn-brand-600)] px-2 py-1 text-xs text-[var(--bhn-text)] hover:bg-[var(--bhn-neutral-50)]"
+                                                    >
+                                                        Mark Refunded
+                                                    </button>
+                                                ) : (
+                                                    <span className="text-xs text-[var(--bhn-text-muted)]">-</span>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    ))}
                                 </tbody>
                             </table>
                         </div>
 
                         {/* FOOTER */}
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-4 sm:px-6 py-4 border-t text-sm text-gray-500">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-4 sm:px-6 py-4 border-t text-sm text-[var(--bhn-text-muted)]">
                             <p className="text-center sm:text-left">
                                 Showing 1–{filteredRequests.length} of {allRequests.length} results
                             </p>
@@ -586,9 +577,9 @@ export default function ReturnsPage() {
 
                     {/* ASSISTANT SECTION */}
                     <div className="grid grid-cols-1 xl:grid-cols-[2fr_1fr] gap-6 mt-6">
-                        <div className="rounded-2xl bg-gradient-to-r from-black to-[#35180F] p-5 text-white">
+                        <div className="rounded-2xl bg-[var(--bhn-neutral-950)] p-5 text-[var(--bhn-text-on-brand)]">
                             <h2 className="text-2xl font-semibold mb-3">Refund Policy Assistant</h2>
-                            <p className="text-sm text-gray-300 leading-7 max-w-[620px]">
+                            <p className="text-sm text-[var(--bhn-neutral-400)] leading-7 max-w-[620px]">
                                 Our AI analyzed your recent returns. 65% of "Damaged" claims are for the Fragile Ceramics category. Consider upgrading your packaging material.
                             </p>
                             <button className="mt-6 bhn-btn bhn-btn-secondary">
@@ -596,27 +587,26 @@ export default function ReturnsPage() {
                             </button>
                         </div>
 
-                        <div className="bg-[#F3E8DF] rounded-2xl p-4">
-                            <h2 className="text-2xl font-semibold text-[#2D201B] mb-5">Quick Support</h2>
+                        <div className="bg-[var(--bhn-neutral-50)] rounded-2xl p-4">
+                            <h2 className="text-2xl font-semibold text-[var(--bhn-text)] mb-5">Quick Support</h2>
                             <div className="space-y-5">
                                 <div className="flex gap-3">
                                     <span>📖</span>
                                     <div>
                                         <p className="font-medium text-sm">Return Guidelines</p>
-                                        <p className="text-xs text-gray-500 mt-1">Updated for Festive Season</p>
+                                        <p className="text-xs text-[var(--bhn-text-muted)] mt-1">Updated for Festive Season</p>
                                     </div>
                                 </div>
                                 <div className="flex gap-3">
                                     <span>💳</span>
                                     <div>
                                         <p className="font-medium text-sm">Payout Cycles</p>
-                                        <p className="text-xs text-gray-500 mt-1">Refund settlement timelines</p>
+                                        <p className="text-xs text-[var(--bhn-text-muted)] mt-1">Refund settlement timelines</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

@@ -74,13 +74,11 @@ export default function ReviewsRatingsPage() {
   const [replying, setReplying] = useState(false);
 
   useEffect(() => {
-
     const name = localStorage.getItem("userName");
 
     if (name) {
       setUserName(name);
     }
-
   }, []);
 
   useEffect(() => {
@@ -223,7 +221,7 @@ export default function ReviewsRatingsPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#F8F3EF]">
+    <div className="flex min-h-screen bg-[var(--bhn-bg)]">
 
       {/* SIDEBAR */}
       <Sidebar />
@@ -242,7 +240,7 @@ export default function ReviewsRatingsPage() {
             {/* SEARCH */}
             <div className="relative w-full lg:w-[360px]">
 
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#B19C8F] text-sm">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--bhn-text-muted)] text-sm">
                 🔍
               </span>
 
@@ -254,23 +252,21 @@ export default function ReviewsRatingsPage() {
                 className="
                   w-full
                   h-[44px]
-                  pl-11
-                  pr-4
-                  rounded-xl
-                  bg-[#F5ECE5]
-                  border
-                  border-[#E6D9D0]
+                  pl-3 pr-4
+                  rounded-lg
+                  bg-[var(--bhn-surface)]
+                  border border-[var(--bhn-border)]
                   outline-none
                   text-[13px]
-                  text-[#6F625A]
-                  placeholder:text-[#B19C8F]
+                  text-[var(--bhn-text-muted)]
+                  placeholder:text-[var(--bhn-text-muted-soft)]
                   transition-all
                   duration-200
 
-                  focus:bg-white
-                  focus:border-[#8B4A2F]
+                  focus:bg-[var(--bhn-surface)]
+                  focus:border-[var(--bhn-brand-500)]
                   focus:ring-4
-                  focus:ring-[#EBDCD1]
+                  focus:ring-[var(--bhn-brand-100)]
                   focus:shadow-sm
                 "
               />
@@ -278,7 +274,7 @@ export default function ReviewsRatingsPage() {
             </div>
 
             {/* RIGHT */}
-            <div className="flex items-center justify-end gap-5">
+            <div className="flex items-center justify-end gap-3">
 
               {/* NOTIFICATION */}
               <button
@@ -286,13 +282,9 @@ export default function ReviewsRatingsPage() {
                   w-10
                   h-10
                   rounded-full
-                  border
-                  border-[#E9DDD5]
-                  bg-white
-                  flex
-                  items-center
-                  justify-center
-                  hover:bg-[#F7EEE8]
+                  border border-[var(--bhn-border)]
+                  bg-[var(--bhn-surface)]
+                  flex items-center justify-center hover:bg-[var(--bhn-brand-50)]
                   transition
                 "
               >
@@ -303,11 +295,11 @@ export default function ReviewsRatingsPage() {
               <div className="flex items-center gap-3">
 
                 <div className="text-right">
-                  <h3 className="text-[13px] font-medium text-[#2D201B]">
+                  <h3 className="text-[13px] font-medium text-[var(--bhn-text)]">
                     {userName}
                   </h3>
 
-                  <p className="text-[11px] text-[#9D8D83]">
+                  <p className="text-[11px] text-[var(--bhn-text-muted)]">
                     Seller
                   </p>
                 </div>
@@ -317,7 +309,7 @@ export default function ReviewsRatingsPage() {
                   width={38}
                   height={38}
                   alt=""
-                  className="rounded-full border border-[#E9DDD5]"
+                  className="rounded-full border border-[var(--bhn-border)]"
                 />
 
               </div>
@@ -333,16 +325,16 @@ export default function ReviewsRatingsPage() {
           <div className="mb-6">
 
             <h1
-              className="text-[30px] sm:text-[40px] leading-none text-[#2E221D]"
+              className="text-[30px] sm:text-[40px] leading-none text-[var(--bhn-text)]"
               style={{
-                fontFamily: "Cormorant Garamond, serif",
+                fontFamily: "var(--bhn-font-display)",
                 fontWeight: 500,
               }}
             >
               Reviews & Ratings
             </h1>
 
-            <p className="text-[13px] sm:text-[14px] text-[#9B8B80] mt-2">
+            <p className="text-[13px] sm:text-[14px] text-[var(--bhn-text-muted)] mt-2">
               Monitor customer feedback and improve your services
             </p>
 
@@ -355,29 +347,29 @@ export default function ReviewsRatingsPage() {
           <div className="grid grid-cols-1 xl:grid-cols-[280px_1fr] gap-5 mb-6">
 
             {/* LEFT CARD */}
-            <div className="bg-[#F3E7DE] rounded-[18px] p-5 relative overflow-hidden min-h-[220px]">
+            <div className="bg-[var(--bhn-neutral-50)] rounded-xl p-5 relative overflow-hidden min-h-[220px]">
 
-              <div className="absolute right-4 top-0 text-[120px] text-[#E8D6CB] opacity-40">
+              <div className="absolute right-4 top-0 text-[120px] text-[var(--bhn-neutral-100)] opacity-40">
                 ★
               </div>
 
-              <p className="uppercase tracking-[2px] text-[12px] text-[#A08D80] mb-5">
+              <p className="uppercase tracking-[2px] text-[12px] text-[var(--bhn-text-muted)] mb-5">
                 Average Rating
               </p>
 
               <div className="flex items-end gap-2">
 
-                <h2 className="text-[58px] leading-none font-semibold text-[#7C3F1F]">
+                <h2 className="text-[48px] leading-none font-semibold text-[var(--bhn-text)]">
                   {summary.averageRating || "0.0"}
                 </h2>
 
-                <span className="text-[#A48C7B] mb-2 text-[18px]">
+                <span className="text-[var(--bhn-text-muted)] mb-2 text-[18px]">
                   / 5.0
                 </span>
 
               </div>
 
-              <div className="text-[#F97316] text-[20px] mt-4">
+              <div className="text-[var(--bhn-error-600)] text-[20px] mt-4">
                 {"★".repeat(Math.round(summary.averageRating || 0))}
                 {"☆".repeat(5 - Math.round(summary.averageRating || 0))}
               </div>
@@ -385,15 +377,15 @@ export default function ReviewsRatingsPage() {
             </div>
 
             {/* RIGHT CARD */}
-            <div className="bg-white border border-[#EEE3DB] rounded-[18px] p-5 sm:p-4">
+            <div className="bg-[var(--bhn-surface)] border border-[var(--bhn-border)] rounded-xl p-5 sm:p-4">
 
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-6">
 
-                <h3 className="uppercase tracking-[2px] text-[12px] text-[#8D7C70]">
+                <h3 className="uppercase tracking-[2px] text-[12px] text-[var(--bhn-text-muted)]">
                   Rating Distribution
                 </h3>
 
-                <p className="text-[12px] text-[#B09E92]">
+                <p className="text-[12px] text-[var(--bhn-text-muted)]">
                   Based on {summary.totalReviews} total reviews
                 </p>
 
@@ -412,29 +404,29 @@ export default function ReviewsRatingsPage() {
                     : 0;
                 return (
 
-                <div
-                  key={i}
-                  className="flex items-center gap-3 mb-4"
-                >
+                  <div
+                    key={i}
+                    className="flex items-center gap-3 mb-4"
+                  >
 
-                  <span className="w-[65px] text-[13px] text-[#6B5D55]">
-                    {item.star}
-                  </span>
+                    <span className="w-[60px] text-[13px] text-[var(--bhn-text-muted)]">
+                      {item.star}
+                    </span>
 
-                  <div className="flex-1 h-[7px] bg-[#ECE2DB] rounded-full overflow-hidden">
+                    <div className="flex-1 h-[6px] bg-[var(--bhn-neutral-100)] rounded-full overflow-hidden">
 
-                    <div
-                      className="h-full bg-[#7C3F1F] rounded-full"
-                      style={{ width: `${pct}%` }}
-                    />
+                      <div
+                        className="h-full bg-[var(--bhn-brand-600)] rounded-full"
+                        style={{ width: `${pct}%` }}
+                      />
+
+                    </div>
+
+                    <span className="text-[12px] text-[var(--bhn-text-muted)] w-[30px] text-right">
+                      {pct}%
+                    </span>
 
                   </div>
-
-                  <span className="text-[12px] text-[#A08E83] w-[35px] text-right">
-                    {pct}%
-                  </span>
-
-                </div>
 
                 );
               })}
@@ -453,10 +445,12 @@ export default function ReviewsRatingsPage() {
             <div className="flex flex-wrap gap-3">
 
               {[
+
                 "All Reviews",
                 "5 Stars",
                 "4 Stars",
                 "Needs Response",
+
               ].map((item) => (
 
                 <button
@@ -467,17 +461,17 @@ export default function ReviewsRatingsPage() {
                     px-4
                     rounded-full
                     text-[13px]
-                    border
                     transition-all
                     duration-200
 
                     ${activeFilter === item
-                      ? "bg-[#7C3F1F] text-white border-[#7C3F1F]"
-                      : "bg-[#F7EEE8] text-[#7B6D63] border-[#E7D8CD] hover:bg-[#EFE2D8]"
+                      ? "bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)] border-[var(--bhn-brand-600)]"
+                      : "bg-[var(--bhn-neutral-50)] text-[var(--bhn-text-muted)] border border-[var(--bhn-border)] hover:bg-[var(--bhn-neutral-100)]"
                     }
                   `}
                 >
                   {item}
+
                 </button>
 
               ))}
@@ -492,14 +486,13 @@ export default function ReviewsRatingsPage() {
                 h-[40px]
                 px-4
                 rounded-xl
-                bg-white
-                border
-                border-[#E7D8CD]
+                bg-[var(--bhn-surface)]
+                border border-[var(--bhn-border)]
                 text-[13px]
-                text-[#7B6D63]
+                text-[var(--bhn-text-muted)]
                 outline-none
                 cursor-pointer
-                hover:border-[#CDB6A7]
+                hover:border-[var(--bhn-brand-500)]
                 transition-all
                 w-full
                 sm:w-auto
@@ -519,13 +512,13 @@ export default function ReviewsRatingsPage() {
           <div className="space-y-5">
 
             {loading && (
-              <p className="text-center text-[#A08F84] text-sm py-10">
+              <p className="text-center text-[var(--bhn-text-muted)] text-sm py-10">
                 Loading reviews...
               </p>
             )}
 
             {!loading && filteredReviews.length === 0 && (
-              <p className="text-center text-[#A08F84] text-sm py-10">
+              <p className="text-center text-[var(--bhn-text-muted)] text-sm py-10">
                 No reviews found.
               </p>
             )}
@@ -535,22 +528,18 @@ export default function ReviewsRatingsPage() {
               <div
                 key={item._id}
                 className="
-        bg-white
-        border
-        border-[#EEE4DC]
-        rounded-[16px]
-        px-4
-        py-5
-        sm:px-5
-        hover:shadow-sm
-        transition-all
-      "
+          bg-[var(--bhn-surface)]
+          border border-[var(--bhn-border)]
+          rounded-xl px-4 py-5 sm:px-5
+          hover:shadow-sm
+          transition-all
+        "
               >
 
                 <div className="flex flex-col lg:flex-row gap-5 lg:gap-6">
 
                   {/* LEFT PROFILE */}
-                  <div className="flex lg:flex-col items-start lg:items-center gap-3 lg:w-[110px] shrink-0">
+                  <div className="flex lg:flex-col items-start lg:items-center gap-3 lg:w-[100px] shrink-0">
 
                     <div className="relative">
 
@@ -559,39 +548,39 @@ export default function ReviewsRatingsPage() {
                         <img
                           src={item.avatar}
                           alt=""
-                          className="w-[54px] h-[54px] rounded-full object-cover"
+                          className="w-[50px] h-[50px] rounded-full object-cover"
                         />
 
                       ) : (
 
-                        <div className="w-[54px] h-[54px] rounded-full bg-[#E7DDD7] flex items-center justify-center text-[#7A6A60] text-[16px] font-medium">
+                        <div className="w-[50px] h-[50px] rounded-full bg-[var(--bhn-neutral-200)] flex items-center justify-center text-[var(--bhn-text-muted)] text-[14px] font-medium">
                           {item.initials || initialsOf(item.name)}
                         </div>
 
                       )}
 
                       {/* ONLINE DOT */}
-                      <span className="absolute bottom-0 right-0 w-[12px] h-[12px] bg-[#22C55E] border-2 border-white rounded-full"></span>
+                      <span className="absolute bottom-0 right-0 w-[10px] h-[10px] bg-[var(--bhn-success-600)] border-2 border-[var(--bhn-surface)] rounded-full"></span>
 
                     </div>
 
                     <div className="lg:text-center">
 
-                      <h4 className="text-[15px] leading-[18px] font-medium text-[#2E221D]">
+                      <h4 className="text-[14px] leading-[18px] font-medium text-[var(--bhn-text)]">
                         {item.name}
                       </h4>
 
                       {item.email || item.phone ? (
-                        <p className="text-[11px] text-[#9D8D83] mt-1">
+                        <p className="text-[11px] text-[var(--bhn-text-muted)] mt-1">
                           {item.email ? item.email : item.phone}
                         </p>
                       ) : (
-                        <p className="text-[11px] text-[#9D8D83] mt-1">
+                        <p className="text-[11px] text-[var(--bhn-text-muted)] mt-1">
                           {getCustomerName(item)}
                         </p>
                       )}
 
-                      <p className="text-[10px] text-[#B6A59A] mt-2 flex items-center gap-1 lg:justify-center">
+                      <p className="text-[10px] text-[var(--bhn-text-soft)] mt-2 flex items-center gap-1 lg:justify-center">
                         🗓 {item.date}
                       </p>
 
@@ -608,12 +597,12 @@ export default function ReviewsRatingsPage() {
                       <div>
 
                         {/* STARS */}
-                        <div className="flex items-center gap-[2px] text-[#F97316] text-[14px]">
+                        <div className="flex items-center gap-[2px] text-[var(--bhn-error-600)] text-[14px]">
                           {renderStars(item.rating)}
                         </div>
 
                         {/* TITLE */}
-                        <h3 className="text-[24px] leading-[32px] text-[#2E221D] mt-2 font-medium">
+                        <h3 className="text-[22px] leading-[30px] text-[var(--bhn-text)] mt-2 font-medium">
                           {item.title}
                         </h3>
 
@@ -621,15 +610,15 @@ export default function ReviewsRatingsPage() {
 
                       {/* PRODUCT TAG */}
                       <span className="
-              h-fit
-              px-3
-              py-1
-              rounded-full
-              bg-[#F3E6DC]
-              text-[#8B5E3C]
-              text-[10px]
-              whitespace-nowrap
-            ">
+            h-fit
+            px-3
+            py-1
+            rounded-full
+            bg-[var(--bhn-brand-50)]
+            text-[var(--bhn-text)]
+            text-[10px]
+            whitespace-nowrap
+          ">
                         {item.product}
                       </span>
 
@@ -637,12 +626,12 @@ export default function ReviewsRatingsPage() {
 
                     {/* REVIEW TEXT */}
                     <p className="
-            text-[14px]
-            sm:text-[15px]
-            leading-[28px]
-            text-[#7D6E64]
+            text-[13px]
+            sm:text-[14px]
+            leading-[26px]
+            text-[var(--bhn-text-muted)]
             mt-3
-            max-w-[850px]
+            max-w-[800px]
           ">
                       {item.review}
                     </p>
@@ -651,33 +640,30 @@ export default function ReviewsRatingsPage() {
                     {item.responded ? (
 
                       <>
+
                         <div className="
-                mt-5
-                bg-[#FAF5F0]
-                border
-                border-[#EFE5DD]
-                rounded-[12px]
-                px-4
-                py-4
-              ">
+              mt-5
+              bg-[var(--bhn-neutral-50)]
+              border border-[var(--bhn-border)]
+              rounded-[10px]
+              px-4 py-4
+            ">
 
                           <p className="
                   uppercase
                   tracking-[1px]
                   text-[10px]
-                  text-[#B39F92]
+                  text-[var(--bhn-text-muted)]
                   mb-2
-                  flex
-                  items-center
-                  gap-2
+                  flex items-center gap-2
                 ">
                             ↪ You Responded
                           </p>
 
                           <p className="
-                  text-[14px]
-                  leading-[26px]
-                  text-[#7B6B61]
+                  text-[13px]
+                  leading-[24px]
+                  text-[var(--bhn-text-muted)]
                 ">
                             “{item.reply}”
                           </p>
@@ -694,7 +680,7 @@ export default function ReviewsRatingsPage() {
                             className="
                   text-[12px]
                   font-semibold
-                  text-[#8B4A2F]
+                  text-[var(--bhn-text)]
                   hover:underline
                 "
                           >
@@ -702,6 +688,7 @@ export default function ReviewsRatingsPage() {
                           </button>
 
                         </div>
+
                       </>
 
                     ) : (
@@ -714,24 +701,22 @@ export default function ReviewsRatingsPage() {
                             setReplyText("");
                           }}
                           className="
-                  h-[38px]
-                  px-5
-                  rounded-[10px]
-                  bg-[#8B4A2F]
-                  hover:bg-[#6F3A23]
-                  text-white
-                  text-[12px]
-                  font-medium
-                  transition-all
-                  flex
-                  items-center
-                  gap-2
-                "
+                h-[36px]
+                px-4
+                rounded-[8px]
+                bg-[var(--bhn-brand-600)]
+                hover:bg-[var(--bhn-brand-500)]
+                text-[var(--bhn-text-on-brand)]
+                text-[12px]
+                font-medium
+                transition-all
+                flex items-center gap-2
+              "
                         >
                           💬 Reply to Review
                         </button>
 
-                        <button className="text-[#A59286] text-xl">
+                        <button className="text-[var(--bhn-text-muted)] text-xl">
                           ⋯
                         </button>
 
@@ -739,38 +724,42 @@ export default function ReviewsRatingsPage() {
 
                     )}
 
-                    {replyTo === item._id && (
-                      <div className="mt-4 bg-[#FBF7F3] border border-[#EDE2D8] rounded-[12px] p-4">
-                        <textarea
-                          value={replyText}
-                          onChange={(e) => setReplyText(e.target.value)}
-                          placeholder="Write a response..."
-                          className="w-full h-[80px] bg-white border border-[#E7D8CD] rounded-lg p-3 text-[13px] outline-none resize-none"
-                        />
-                        <div className="flex items-center gap-3 mt-3">
-                          <button
-                            onClick={() => submitReply(item._id)}
-                            disabled={replying}
-                            className="h-[36px] px-5 rounded-[10px] bg-[#8B4A2F] hover:bg-[#6F3A23] text-white text-[12px] font-medium disabled:opacity-60"
-                          >
-                            {replying ? "Posting..." : "Post Reply"}
-                          </button>
-                          <button
-                            onClick={() => {
-                              setReplyTo(null);
-                              setReplyText("");
-                            }}
-                            className="text-[12px] text-[#B19D90] hover:text-[#7B6D63]"
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
-                    )}
+                  {replyTo === item._id && (
 
-                  </div>
+                    <div className="mt-4 bg-[var(--bhn-neutral-50)] border border-[var(--bhn-border)] rounded-[10px] p-4">
+
+                      <textarea
+                        value={replyText}
+                        onChange={(e) => setReplyText(e.target.value)}
+                        placeholder="Write a response..."
+                        className="w-full h-[70px] bg-[var(--bhn-surface)] border border-[var(--bhn-border)] rounded-lg p-3 text-[12px] outline-none resize-none"
+                      />
+                      <div className="flex items-center gap-3 mt-3">
+                        <button
+                          onClick={() => submitReply(item._id)}
+                          disabled={replying}
+                          className="h-[34px] px-4 rounded-[8px] bg-[var(--bhn-brand-600)] hover:bg-[var(--bhn-brand-500)] text-[var(--bhn-text-on-brand)] text-[11px] font-medium disabled:opacity-60"
+                        >
+                          {replying ? "Posting..." : "Post Reply"}
+                        </button>
+                        <button
+                          onClick={() => {
+                            setReplyTo(null);
+                            setReplyText("");
+                          }}
+                          className="text-[11px] text-[var(--bhn-text-muted)] hover:text-[var(--bhn-text-soft)]"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+
+                    </div>
+
+                  )}
 
                 </div>
+
+              </div>
 
               </div>
 
@@ -784,7 +773,7 @@ export default function ReviewsRatingsPage() {
 
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-4">
 
-              <p className="text-[12px] text-[#A08F84] text-center sm:text-left">
+              <p className="text-[11px] text-[var(--bhn-text-muted)] text-center sm:text-left">
                 Showing {filteredReviews.length} of {summary.totalReviews} reviews
               </p>
 
@@ -796,10 +785,9 @@ export default function ReviewsRatingsPage() {
                   w-8
                   h-8
                   rounded-full
-                  border
-                  border-[#E6D8CD]
-                  text-[#8B7A70]
-                  hover:bg-[#F3E7DE]
+                  border border-[var(--bhn-border)]
+                  text-[var(--bhn-text-muted)]
+                  hover:bg-[var(--bhn-neutral-50)]
                 "
               >
                 ‹
@@ -814,12 +802,12 @@ export default function ReviewsRatingsPage() {
                     w-8
                     h-8
                     rounded-full
-                    text-[12px]
+                    text-[11px]
                     transition-all
 
                     ${currentPage === page
-                      ? "bg-[#7C3F1F] text-white"
-                      : "text-[#8B7A70] hover:bg-[#F3E7DE]"
+                      ? "bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)]"
+                      : "text-[var(--bhn-text-muted)] hover:bg-[var(--bhn-neutral-50)]"
                     }
                   `}
                 >
@@ -834,10 +822,9 @@ export default function ReviewsRatingsPage() {
                   w-8
                   h-8
                   rounded-full
-                  border
-                  border-[#E6D8CD]
-                  text-[#8B7A70]
-                  hover:bg-[#F3E7DE]
+                  border border-[var(--bhn-border)]
+                  text-[var(--bhn-text-muted)]
+                  hover:bg-[var(--bhn-neutral-50)]
                 "
               >
                 ›

@@ -8,11 +8,9 @@ import {
     Clock3,
     CircleDollarSign,
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useGetInstructorOverviewQuery, useGetInstructorPageResourcesQuery } from "@/app/redux/instructor-services/DashboardApi";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useGetInstructorOverviewQuery } from "@/app/redux/instructor-services/DashboardApi";
-import AcademyLogo from "@/components/common/AcademyLogo";
-import { StatCard } from "@bandhan/ui";
 
 export default function AnalyticsPage() {
     const router = useRouter();
@@ -22,14 +20,11 @@ export default function AnalyticsPage() {
     const [pageData, setPageData] = useState<any>({});
 
     useEffect(() => {
-        const apiBase = process.env.NEXT_PUBLIC_API_URL || "https://bandhan-api.vercel.app/api";
-        fetch(`${apiBase}/instructor/page-resources`)
-            .then(res => res.json())
-            .then(json => { if (json?.success && json?.data) setPageData(json.data); })
-            .catch(() => {});
+        const { data: resourcesData, isLoading: resourcesLoading, isError: resourcesError } = useGetInstructorPageResourcesQuery();
+        if (resourcesData && resourcesData.success && resourcesData.data) {
+            setPageData(resourcesData.data);
+        }
     }, []);
-
-    const pd = pageData;
 
     return (
         <div className="min-h-screen bg-[var(--bhn-bg)]">
@@ -126,13 +121,13 @@ export default function AnalyticsPage() {
                     <div className="bhn-card p-4">
 
                         <div className="flex items-center justify-between">
-                            <h2 className="text-[22px] font-serif text-[#2D201B] dark:text-[#ededed]">
+                            <h2 className="text-[22px] font-serif text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
                                 Enrollment Trend
                             </h2>
 
                             <MoreHorizontal
                                 size={22}
-                                className="text-[#7B6A61] dark:text-[#b89b7d]"
+                                className="text-[#7B6A61] dark:text-[var(--bhn-text-soft)]"
                             />
                         </div>
 
@@ -154,7 +149,7 @@ export default function AnalyticsPage() {
                                       C500 45, 580 40, 680 80
                                       "
                                     fill="none"
-                                    stroke="#8B4A28"
+                                    stroke="var(--bhn-brand-600)"
                                     strokeWidth="4"
                                     strokeLinecap="round"
                                 />
@@ -162,7 +157,7 @@ export default function AnalyticsPage() {
                             </svg>
 
                             {/* LABELS */}
-                            <div className="absolute bottom-0 left-0 right-0 flex justify-between text-[11px] text-[#8B7B70] dark:text-[#7a6a5a] px-1">
+                            <div className="absolute bottom-0 left-0 right-0 flex justify-between text-[11px] text-[#8B7B70] dark:text-[var(--bhn-text-soft)] px-1">
                                 {["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"].map(
                                     (day) => (
                                         <span key={day}>{day}</span>
@@ -179,11 +174,11 @@ export default function AnalyticsPage() {
 
                         <div className="flex items-center justify-between">
 
-                            <h2 className="text-[22px] font-serif text-[#2D201B] dark:text-[#ededed]">
+                            <h2 className="text-[22px] font-serif text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
                                 Weekly Revenue
                             </h2>
 
-                            <p className="text-[11px] uppercase tracking-[2px] text-[#8A7A71] dark:text-[#7a6a5a]">
+                            <p className="text-[11px] uppercase tracking-[2px] text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]">
                                 Total: {pd.totalRevenueFormatted || "₹0k"}
                             </p>
 
@@ -198,13 +193,13 @@ export default function AnalyticsPage() {
                                 >
 
                                     <div
-                                        className="w-8 sm:w-10 rounded-t-xl bg-[#ECA476] dark:bg-[#2a2018]"
+                                        className="w-8 sm:w-10 rounded-t-xl bg-[#ECA476] dark:bg-[var(--bhn-neutral-900)]"
                                         style={{
                                             height: `${height * 2}px`,
                                         }}
                                     />
 
-                                    <p className="text-[11px] text-[#8B7B70] dark:text-[#7a6a5a]">
+                                    <p className="text-[11px] text-[#8B7B70] dark:text-[var(--bhn-text-soft)]">
                                         WK {i + 1}
                                     </p>
 
@@ -223,11 +218,11 @@ export default function AnalyticsPage() {
 
                     {/* AVG WATCH TIME */}
                     <div className="bhn-card p-4">
-                        <h3 className="text-[22px] font-semibold text-[#2D201B] dark:text-[#ededed] mb-2 font-serif">
+                        <h3 className="text-[22px] font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] mb-2 font-serif">
                             Avg Watch Time
                         </h3>
 
-                        <p className="text-[14px] text-[#9B8B82] dark:text-[#7a6a5a] leading-[18px]">
+                        <p className="text-[14px] text-[#9B8B82] dark:text-[var(--bhn-text-soft)] leading-[18px]">
                             Course content retention and student focus span.
                         </p>
 
@@ -236,11 +231,11 @@ export default function AnalyticsPage() {
                             {/* LEFT CONTENT */}
                             <div>
                                 <div className="flex items-end gap-1">
-                                    <h2 className="text-[52px] leading-none font-semibold text-[#8A4A26] dark:text-[#c9a882]">
+                                    <h2 className="text-[52px] leading-none font-semibold text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)]">
                                         {pd.watchTime ?? 0}
                                     </h2>
 
-                                    <span className="text-[18px] mb-1 text-[#6A5B53] dark:text-[#b89b7d]">
+                                    <span className="text-[18px] mb-1 text-[#6A5B53] dark:text-[var(--bhn-text-soft)]">
                                         min
                                     </span>
 
@@ -259,8 +254,8 @@ export default function AnalyticsPage() {
                                          w-[14px]
                                         rounded-t-md
                                        ${i === 5
-                                                ? "bg-[#8A4A26] dark:bg-[#b86a3a]"
-                                                : "bg-[#EADFD7] dark:bg-[#2a2a2a]"
+                                                ? "bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)]"
+                                                : "bg-[#EADFD7] dark:bg-[var(--bhn-neutral-900)]"
                                             }
                                         `}
                                         style={{ height: `${h}px` }}
@@ -273,11 +268,11 @@ export default function AnalyticsPage() {
                     {/* DROP-OFF RATE */}
                     <div className="bhn-card p-4">
 
-                        <h3 className="text-[22px] font-semibold text-[#2D201B] dark:text-[#ededed] font-serif">
+                        <h3 className="text-[22px] font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] font-serif">
                             Drop-off Rate
                         </h3>
 
-                        <p className="text-[14px] text-[#9B8B82] dark:text-[#7a6a5a] mt-2">
+                        <p className="text-[14px] text-[#9B8B82] dark:text-[var(--bhn-text-soft)] mt-2">
                             Percentage of users leaving after first 5 lessons.
                         </p>
 
@@ -285,29 +280,29 @@ export default function AnalyticsPage() {
                         <div className="mt-4">
 
                             <div className="flex items-center justify-between mb-2">
-                                <span className="text-[12px] text-[#8B7A70] dark:text-[#7a6a5a]">
+                                <span className="text-[12px] text-[#8B7A70] dark:text-[var(--bhn-text-soft)]">
                                     High Drop
                                 </span>
 
-                                <span className="text-[12px] text-[#8B7A70] dark:text-[#7a6a5a]">
+                                <span className="text-[12px] text-[#8B7A70] dark:text-[var(--bhn-text-soft)]">
                                     Low Drop
                                 </span>
                             </div>
 
-                            <div className="w-full h-[10px] rounded-full bg-[#F1E7E1] dark:bg-[#1a1a1a] overflow-hidden">
-                                <div className="h-full bg-[#8A4A26] dark:bg-[#b86a3a] rounded-full" style={{width: `${pd.dropOffRate ?? 0}%`}} />
+                            <div className="w-full h-[10px] rounded-full bg-[#F1E7E1] dark:bg-[var(--bhn-neutral-900)] overflow-hidden">
+                                <div className="h-full bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] rounded-full" style={{width: `${pd.dropOffRate ?? 0}%`}} />
                             </div>
                         </div>
 
                         {/* WARNING BOX */}
-                        <div className="mt-7 bg-[#FBF5F1] dark:bg-[#1a1a1a] border border-[#F0E3DB] dark:border-[#374151] rounded-xl p-4 flex items-start gap-3">
+                        <div className="mt-7 bg-[#FBF5F1] dark:bg-[var(--bhn-neutral-900)] border border-[#F0E3DB] dark:border-[var(--bhn-border)] rounded-xl p-4 flex items-start gap-3">
 
-                            <div className="w-5 h-5 rounded-full border border-[#C7A999] dark:border-[#374151] flex items-center justify-center text-[11px] text-[#8A4A26] dark:text-[#c9a882] mt-[2px]">
+                            <div className="w-5 h-5 rounded-full border border-[#C7A999] dark:border-[var(--bhn-border)] flex items-center justify-center text-[11px] text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)] mt-[2px]">
                                 !
                             </div>
 
                             <div>
-                                <p className="text-[13px] text-[#6D5A50] dark:text-[#b89b7d] font-medium">
+                                <p className="text-[13px] text-[#6D5A50] dark:text-[var(--bhn-text-soft)] font-medium">
                                     {pd.dropOffLesson || "No significant drop-off detected"}
                                 </p>
                             </div>
@@ -327,11 +322,11 @@ export default function AnalyticsPage() {
                         {/* HEADER */}
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
 
-                            <h3 className="text-[20px] sm:text-[22px] font-semibold text-[#2D201B] dark:text-[#ededed] font-serif">
+                            <h3 className="text-[20px] sm:text-[22px] font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] font-serif">
                                 Top Performing Lessons
                             </h3>
 
-                            <button onClick={() => alert("View all lessons - coming soon")} className="text-[13px] text-[#8A4A26] dark:text-[#c9a882] font-medium hover:underline self-start sm:self-auto">
+                            <button onClick={() => alert("View all lessons - coming soon")} className="text-[13px] text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)] font-medium hover:underline self-start sm:self-auto">
                                 Give All
                             </button>
 
@@ -387,7 +382,7 @@ export default function AnalyticsPage() {
                     {/* STUDENT SEGMENT */}
                     <div className="bhn-card p-4">
 
-                        <h3 className="text-[22px] font-semibold text-[#2D201B] dark:text-[#ededed] mb-6 font-serif">
+                        <h3 className="text-[22px] font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] mb-6 font-serif">
                             Student Segment
                         </h3>
 
@@ -398,19 +393,19 @@ export default function AnalyticsPage() {
                                 className="w-full h-full rounded-full"
                                 style={{
                                     background: `conic-gradient(
-            #8A4A26 0% ${pd.studentSegments?.active ?? 0}%,
-            #E9A56D ${pd.studentSegments?.active ?? 0}% ${(pd.studentSegments?.active ?? 0) + (pd.studentSegments?.stalled ?? 0)}%,
-            #EFE3DB ${(pd.studentSegments?.active ?? 0) + (pd.studentSegments?.stalled ?? 0)}% 100%
+            var(--bhn-brand-600) 0% ${pd.studentSegments?.active ?? 0}%,
+            var(--bhn-brand-400) ${pd.studentSegments?.active ?? 0}% ${(pd.studentSegments?.active ?? 0) + (pd.studentSegments?.stalled ?? 0)}%,
+            var(--bhn-border) ${(pd.studentSegments?.active ?? 0) + (pd.studentSegments?.stalled ?? 0)}% 100%
           )`,
                                 }}
                             />
 
-                            <div className="absolute inset-[18px] bg-white rounded-full flex flex-col items-center justify-center">
-                                <h2 className="text-[32px] font-semibold text-[#2D201B] dark:text-[#ededed]">
+                            <div className="absolute inset-[18px] bg-[var(--bhn-surface)] rounded-full flex flex-col items-center justify-center">
+                                <h2 className="text-[32px] font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
                                     {pd.studentSegments?.total ? `${(pd.studentSegments.total / 1000).toFixed(1)}k` : "0"}
                                 </h2>
 
-                                <p className="text-[12px] text-[#8B7A70] dark:text-[#7a6a5a]">
+                                <p className="text-[12px] text-[#8B7A70] dark:text-[var(--bhn-text-soft)]">
                                     Students
                                 </p>
                             </div>
@@ -421,39 +416,39 @@ export default function AnalyticsPage() {
 
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-3 h-3 rounded-full bg-[#8A4A26] dark:bg-[#b86a3a]" />
-                                    <span className="text-[14px] text-[#6D5A50] dark:text-[#b89b7d]">
+                                    <div className="w-3 h-3 rounded-full bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)]" />
+                                    <span className="text-[14px] text-[#6D5A50] dark:text-[var(--bhn-text-soft)]">
                                         Completed
                                     </span>
                                 </div>
 
-                                <span className="text-[14px] font-medium text-[#2D201B] dark:text-[#ededed]">
+                                <span className="text-[14px] font-medium text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
                                     {pd.studentSegments?.active ?? 0}%
                                 </span>
                             </div>
 
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-3 h-3 rounded-full bg-[#E9A56D] dark:bg-[#2a2018]" />
-                                    <span className="text-[14px] text-[#6D5A50] dark:text-[#b89b7d]">
+                                    <div className="w-3 h-3 rounded-full bg-[#E9A56D] dark:bg-[var(--bhn-neutral-900)]" />
+                                    <span className="text-[14px] text-[#6D5A50] dark:text-[var(--bhn-text-soft)]">
                                         In Progress
                                     </span>
                                 </div>
 
-                                <span className="text-[14px] font-medium text-[#2D201B] dark:text-[#ededed]">
+                                <span className="text-[14px] font-medium text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
                                     {pd.studentSegments?.stalled ?? 0}%
                                 </span>
                             </div>
 
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-3 h-3 rounded-full bg-[#EFE3DB] dark:bg-[#2a2a2a]" />
-                                    <span className="text-[14px] text-[#6D5A50] dark:text-[#b89b7d]">
+                                    <div className="w-3 h-3 rounded-full bg-[#EFE3DB] dark:bg-[var(--bhn-neutral-900)]" />
+                                    <span className="text-[14px] text-[#6D5A50] dark:text-[var(--bhn-text-soft)]">
                                         Inactive
                                     </span>
                                 </div>
 
-                                <span className="text-[14px] font-medium text-[#2D201B] dark:text-[#ededed]">
+                                <span className="text-[14px] font-medium text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)]">
                                     {pd.studentSegments?.completed ?? 0}%
                                 </span>
                             </div>

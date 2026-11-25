@@ -86,8 +86,8 @@ export default function Blogs() {
       <div className="card mb-4">
         <div className="flex items-center gap-3">
           <div className="flex items-center flex-1">
-            <Search className="w-4 h-4 text-gray-400 mr-2" />
-            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search blogs..." className="flex-1 outline-none text-sm text-gray-700" />
+            <Search className="w-4 h-4 text-[var(--bhn-text-muted)] mr-2" />
+            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search blogs..." className="flex-1 outline-none text-sm text-[var(--bhn-text)]" />
           </div>
           <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="admin-input" style={{ width: 'auto' }}>
             <option value="">All Status</option>
@@ -99,9 +99,9 @@ export default function Blogs() {
       </div>
 
       {isLoading ? (
-        <div className="py-8 text-center text-sm text-gray-500">Loading...</div>
+        <div className="py-8 text-center text-sm text-[var(--bhn-text-muted)]">Loading...</div>
       ) : blogs.length === 0 ? (
-        <div className="py-8 text-center text-sm text-gray-500">No blogs found</div>
+        <div className="py-8 text-center text-sm text-[var(--bhn-text-muted)]">No blogs found</div>
       ) : (
         <div className="card overflow-x-auto">
           <table className="admin-table">
@@ -125,7 +125,7 @@ export default function Blogs() {
                       {b.status}
                     </span>
                   </td>
-                  <td>{b.featured ? <Eye size={14} className="text-violet-600" /> : <EyeOff size={14} className="text-gray-300" />}</td>
+                  <td>{b.featured ? <Eye size={14} className="text-[var(--bhn-brand-600)]" /> : <EyeOff size={14} className="text-[var(--bhn-text-soft)]" />}</td>
                   <td>{b.createdAt ? new Date(b.createdAt).toLocaleDateString() : '—'}</td>
                   <td>
                     <div className="flex gap-1">

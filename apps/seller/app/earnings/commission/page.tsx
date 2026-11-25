@@ -62,17 +62,17 @@ export default function CommissionPage() {
   
   if (loading) {
     return (
-      <div className="flex min-h-screen bg-[#F6F2EE]">
+      <div className="flex min-h-screen bg-[var(--bhn-surface-2)]">
         <Sidebar />
         <div className="flex-1 flex items-center justify-center">
-          <p className="text-sm text-gray-500">Loading breakdown...</p>
+          <p className="text-sm text-[var(--bhn-text-muted)]">Loading breakdown...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen bg-[#F6F2EE]">
+    <div className="flex min-h-screen bg-[var(--bhn-surface-2)]">
 
       {/* SIDEBAR */}
       <Sidebar />
@@ -91,7 +91,7 @@ export default function CommissionPage() {
             {/* SEARCH */}
             <div className="relative w-full lg:w-[420px]">
 
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#A38F82] text-sm">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--bhn-text-soft)] text-sm">
                 🔍
               </span>
 
@@ -103,20 +103,20 @@ export default function CommissionPage() {
                   pr-4
                   py-3
                   rounded-xl
-                  bg-[#EFE3D9]
+                  bg-[var(--bhn-surface-2)]
                   border
                   border-transparent
                   text-sm
-                  text-[#2D201B]
+                  text-[var(--bhn-text)]
                   outline-none
-                  placeholder:text-[#A38F82]
+                  placeholder:text-[var(--bhn-text-soft)]
                   transition-all
                   duration-200
 
-                  focus:bg-white
-                  focus:border-[#8B4A2F]
+                  focus:bg-[var(--bhn-surface)]
+                  focus:border-[var(--bhn-brand-600)]
                   focus:ring-4
-                  focus:ring-[#E9D8CC]
+                  focus:ring-[var(--bhn-border)]
                   focus:shadow-sm
                 "
               />
@@ -129,11 +129,11 @@ export default function CommissionPage() {
               <div className="flex items-center gap-3 ml-auto">
 
                 <div className="text-right">
-                  <p className="text-sm font-medium text-[#2B1D18]">
+                  <p className="text-sm font-medium text-[var(--bhn-text)]">
                     {userName}
                   </p>
 
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-[var(--bhn-text-muted)]">
                     Seller Account
                   </p>
                 </div>
@@ -143,7 +143,7 @@ export default function CommissionPage() {
                   width={42}
                   height={42}
                   alt=""
-                  className="rounded-full border border-[#E5D7CC]"
+                  className="rounded-full border border-[var(--bhn-border)]"
                 />
 
               </div>
@@ -158,14 +158,14 @@ export default function CommissionPage() {
 
           <div className="text-center mb-7 px-2">
 
-            <h1 className="text-[28px] sm:text-[34px] lg:text-[40px] leading-tight font-serif text-[#2B1D18]">
+            <h1 className="text-[28px] sm:text-[34px] lg:text-[40px] leading-tight font-serif text-[var(--bhn-text)]">
               Commission Breakdown
             </h1>
 
-            <p className="text-sm sm:text-base text-gray-500 mt-2 leading-6">
+            <p className="text-sm sm:text-base text-[var(--bhn-text-muted)] mt-2 leading-6">
               See how your earnings are calculated for
               {" "}
-              <span className="font-medium text-[#8B4A2F]">
+              <span className="font-medium text-[var(--bhn-text)]">
                 Order #{params.id}
               </span>
             </p>
@@ -173,11 +173,11 @@ export default function CommissionPage() {
             {/* STATUS */}
             <div className="flex flex-wrap justify-center gap-2 mt-4">
 
-              <span className="bg-green-100 text-green-700 px-4 py-1.5 text-xs font-medium rounded-full">
+              <span className="bg-[var(--bhn-success-50)] text-[var(--bhn-success-700)] px-4 py-1.5 text-xs font-medium rounded-full">
                 COMPLETED
               </span>
 
-              <span className="bg-orange-100 text-orange-700 px-4 py-1.5 text-xs font-medium rounded-full">
+              <span className="bg-[var(--bhn-warning-50)] text-[var(--bhn-warning-700)] px-4 py-1.5 text-xs font-medium rounded-full">
                 PAID
               </span>
 
@@ -189,31 +189,31 @@ export default function CommissionPage() {
               MAIN CARD
           ========================= */}
 
-          <div className="bg-white rounded-[24px] p-4 sm:p-4 lg:p-5 shadow-sm max-w-5xl mx-auto w-full border border-[#EFE5DD]">
+          <div className="bg-[var(--bhn-surface)] rounded-[24px] p-4 sm:p-4 lg:p-5 shadow-sm max-w-5xl mx-auto w-full border border-[var(--bhn-border)]">
 
             {/* TRANSACTION BAR */}
             <div className="mb-4">
 
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
 
-                <p className="text-xs sm:text-sm tracking-wide text-gray-500">
+                <p className="text-xs sm:text-sm tracking-wide text-[var(--bhn-text-muted)]">
                   TRANSACTION BREAKDOWN
                 </p>
 
-                <p className="text-sm sm:text-base text-[#8B4A2F] font-semibold">
+                <p className="text-sm sm:text-base text-[var(--bhn-text)] font-semibold">
                   ₹{commission.toLocaleString("en-IN")} Fee • ₹{net.toLocaleString("en-IN")} Net
                 </p>
 
               </div>
 
               {/* BAR */}
-              <div className="w-full bg-[#ECE2DA] h-3 rounded-full overflow-hidden">
+              <div className="w-full bg-[var(--bhn-surface-2)] h-3 rounded-full overflow-hidden">
 
-                <div className="bg-[#8B4A2F] h-3 rounded-full" style={{ width: `${Math.min(commissionPct, 100)}%` }}></div>
+                <div className="bg-[var(--bhn-brand-600)] h-3 rounded-full" style={{ width: `${Math.min(commissionPct, 100)}%` }}></div>
 
               </div>
 
-              <div className="flex justify-between text-[11px] sm:text-xs text-gray-400 mt-2">
+              <div className="flex justify-between text-[11px] sm:text-xs text-[var(--bhn-text-muted)] mt-2">
                 <span>₹0</span>
                 <span>₹{productPrice.toLocaleString("en-IN")} TOTAL VALUE</span>
               </div>
@@ -224,51 +224,51 @@ export default function CommissionPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 mb-4">
 
               {/* CARD */}
-              <div className="bg-[#F7EEE8] border border-[#E9D9CE] rounded-2xl p-5 text-center">
+              <div className="bg-[var(--bhn-surface-2)] border border-[var(--bhn-border)] rounded-2xl p-5 text-center">
 
-                <p className="text-xs tracking-wide text-gray-500 mb-2">
+                <p className="text-xs tracking-wide text-[var(--bhn-text-muted)] mb-2">
                   PRODUCT PRICE
                 </p>
 
-                <h2 className="text-2xl font-semibold text-[#2B1D18]">
+                <h2 className="text-2xl font-semibold text-[var(--bhn-text)]">
                   ₹{productPrice.toLocaleString("en-IN")}
                 </h2>
 
-                <p className="text-xs text-gray-400 mt-2">
+                <p className="text-xs text-[var(--bhn-text-muted)] mt-2">
                   Gross order amount
                 </p>
 
               </div>
 
               {/* CARD */}
-              <div className="bg-[#F7EEE8] border border-[#E9D9CE] rounded-2xl p-5 text-center">
+              <div className="bg-[var(--bhn-surface-2)] border border-[var(--bhn-border)] rounded-2xl p-5 text-center">
 
-                <p className="text-xs tracking-wide text-gray-500 mb-2">
+                <p className="text-xs tracking-wide text-[var(--bhn-text-muted)] mb-2">
                   PLATFORM FEE
                 </p>
 
-                <h2 className="text-2xl font-semibold text-red-500">
+                <h2 className="text-2xl font-semibold text-[var(--bhn-error-500)]">
                   ₹{commission.toLocaleString("en-IN")}
                 </h2>
 
-                <p className="text-xs text-gray-400 mt-2">
+                <p className="text-xs text-[var(--bhn-text-muted)] mt-2">
                   {commissionPct}% Platform commission
                 </p>
 
               </div>
 
               {/* CARD */}
-              <div className="bg-[#F7EEE8] border border-[#E9D9CE] rounded-2xl p-5 text-center sm:col-span-2 lg:col-span-1">
+              <div className="bg-[var(--bhn-surface-2)] border border-[var(--bhn-border)] rounded-2xl p-5 text-center sm:col-span-2 lg:col-span-1">
 
-                <p className="text-xs tracking-wide text-gray-500 mb-2">
+                <p className="text-xs tracking-wide text-[var(--bhn-text-muted)] mb-2">
                   NET EARNINGS
                 </p>
 
-                <h2 className="text-2xl font-semibold text-[#8B4A2F]">
+                <h2 className="text-2xl font-semibold text-[var(--bhn-text)]">
                   ₹{net.toLocaleString("en-IN")}
                 </h2>
 
-                <p className="text-xs text-gray-400 mt-2">
+                <p className="text-xs text-[var(--bhn-text-muted)] mt-2">
                   To be settled in account
                 </p>
 
@@ -277,26 +277,26 @@ export default function CommissionPage() {
             </div>
 
             {/* FORMULA */}
-            <div className="bg-[#F7EEE8] border border-[#E9D9CE] rounded-2xl p-5 text-center mb-4">
+            <div className="bg-[var(--bhn-surface-2)] border border-[var(--bhn-border)] rounded-2xl p-5 text-center mb-4">
 
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-[var(--bhn-text)]">
                 Net Earnings = Product Price - Platform Fee
               </p>
 
-              <h3 className="text-lg sm:text-xl font-semibold mt-3 text-[#2B1D18] break-words">
+              <h3 className="text-lg sm:text-xl font-semibold mt-3 text-[var(--bhn-text)] break-words">
                 ₹{productPrice.toLocaleString("en-IN")} - ₹{commission.toLocaleString("en-IN")} = ₹{net.toLocaleString("en-IN")}
               </h3>
 
             </div>
 
             {/* DETAILS */}
-            <div className="bg-[#FAF7F4] border border-[#EFE5DD] rounded-2xl p-4 sm:p-5 mb-4">
+            <div className="bg-[var(--bhn-surface-2)] border border-[var(--bhn-border)] rounded-2xl p-4 sm:p-5 mb-4">
 
               <div className="space-y-4">
 
                 <div className="flex items-center justify-between gap-4 text-sm">
 
-                  <p className="text-gray-600">
+                  <p className="text-[var(--bhn-text)]">
                     Fixed Platform Fee ({commissionPct}%)
                   </p>
 
@@ -308,7 +308,7 @@ export default function CommissionPage() {
 
                 <div className="flex items-center justify-between gap-4 text-sm">
 
-                  <p className="text-gray-600">
+                  <p className="text-[var(--bhn-text)]">
                     GST on Commission (18%)
                   </p>
 
@@ -320,7 +320,7 @@ export default function CommissionPage() {
 
                 <div className="flex items-center justify-between gap-4 text-sm">
 
-                  <p className="text-gray-600">
+                  <p className="text-[var(--bhn-text)]">
                     Payment Gateway Fee
                   </p>
 
@@ -332,7 +332,7 @@ export default function CommissionPage() {
 
                 <div className="flex items-center justify-between gap-4 text-sm">
 
-                  <p className="text-gray-600">
+                  <p className="text-[var(--bhn-text)]">
                     Applied Discounts
                   </p>
 
@@ -343,13 +343,13 @@ export default function CommissionPage() {
                 </div>
 
                 {/* FINAL */}
-                <div className="flex items-center justify-between gap-4 border-t border-[#E8DDD5] pt-4 mt-2">
+                <div className="flex items-center justify-between gap-4 border-t border-[var(--bhn-border)] pt-4 mt-2">
 
-                  <p className="font-semibold text-[#2B1D18]">
+                  <p className="font-semibold text-[var(--bhn-text)]">
                     Final Payout
                   </p>
 
-                  <p className="font-bold text-lg text-[#8B4A2F]">
+                  <p className="font-bold text-lg text-[var(--bhn-text)]">
                     ₹{net.toFixed(2)}
                   </p>
 
@@ -362,7 +362,7 @@ export default function CommissionPage() {
             {/* FOOTER */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 
-              <button className="text-xs sm:text-sm text-gray-500 hover:text-[#8B4A2F] transition text-left">
+              <button className="text-xs sm:text-sm text-[var(--bhn-text-muted)] hover:text-[var(--bhn-text)] transition text-left">
                 ⓘ How fees are calculated
               </button>
 
@@ -374,9 +374,9 @@ export default function CommissionPage() {
                   px-5
                   py-3
                   rounded-xl
-                  bg-[#8B4A2F]
-                  hover:bg-[#6F3822]
-                  text-white
+                  bg-[var(--bhn-brand-600)]
+                  hover:bg-[var(--bhn-brand-600)]
+                  text-[var(--bhn-text-on-brand)]
                   text-sm
                   font-medium
                   transition-all
@@ -392,7 +392,7 @@ export default function CommissionPage() {
           </div>
 
           {/* NOTE */}
-          <p className="text-center text-xs sm:text-sm text-gray-400 mt-6 px-4 leading-6">
+          <p className="text-center text-xs sm:text-sm text-[var(--bhn-text-muted)] mt-6 px-4 leading-6">
             *The platform fee is calculated based on category commission
             structure effective from 1st April 2024.
           </p>

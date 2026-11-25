@@ -4,7 +4,8 @@ export const profileApi = baseApi.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
     getProfile: builder.query({
-      query: () => "/profile",
+      query: () => "/student/get-profile",
+      providesTags: ["StudentProfile"],
     }),
   }),
 });

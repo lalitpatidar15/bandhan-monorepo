@@ -15,15 +15,15 @@ const categories = [
 
 export default function CategoryGrid() {
   return (
-    <section className="bg-white px-4 py-12 sm:px-6 md:py-16">
+    <section className="bg-[var(--bhn-surface)] px-4 py-12 sm:px-6 md:py-16">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--bhn-brand-600)]">Browse by category</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--bhn-text)]">Browse by category</p>
           <h2 className="mt-2 text-2xl font-bold text-[var(--bhn-text)] sm:text-3xl" style={{ fontFamily: 'var(--bhn-font-display)' }}>Top categories</h2>
         </div>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-6">
           {categories.map(({ icon: Icon, label, desc, href, color }) => (
-            <Link key={label} href={href} className="group relative flex flex-col items-center rounded-2xl border border-[var(--bhn-border)] bg-white p-5 text-center transition-all hover:border-[var(--bhn-brand-300)] hover:shadow-lg hover:shadow-[var(--bhn-brand-100)] hover:-translate-y-0.5">
+            <Link key={label} href={href} className="group relative flex flex-col items-center rounded-2xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-5 text-center transition-all hover:border-[var(--bhn-brand-300)] hover:shadow-lg hover:shadow-[var(--bhn-brand-100)] hover:-translate-y-0.5">
               <div className="flex h-14 w-14 items-center justify-center rounded-full transition-colors group-hover:scale-110" style={{ backgroundColor: `${color}1A` }}>
                 <Icon size={24} style={{ color }} />
               </div>

@@ -23,15 +23,15 @@ export default function PromoStrip() {
             <Clock size={15} className="text-[var(--bhn-brand-200)]" />
             <span className="text-xs font-semibold uppercase tracking-[0.15em] text-[var(--bhn-brand-200)]">Limited time</span>
           </div>
-          <h3 className="mt-2 text-xl font-bold text-white sm:text-2xl" style={{ fontFamily: 'var(--bhn-font-display)' }}>
+          <h3 className="mt-2 text-xl font-bold text-[var(--bhn-text-on-brand)] sm:text-2xl" style={{ fontFamily: 'var(--bhn-font-display)' }}>
             {promotion.description || `${offer} on eligible marketplace products`}
           </h3>
-          <p className="mt-1 text-sm text-white/65">
-            Use code <strong className="text-white">{promotion.code}</strong> at checkout
+          <p className="mt-1 text-sm text-[color-mix(in_srgb,var(--bhn-text-on-brand)_65%,transparent)]">
+            Use code <strong className="text-[var(--bhn-text-on-brand)]">{promotion.code}</strong> at checkout
             {promotion.minOrderAmount ? ` on orders above ₹${promotion.minOrderAmount.toLocaleString('en-IN')}` : ''}.
           </p>
         </div>
-        <a href="/explore?type=products" className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-[var(--bhn-brand-800)] shadow-lg transition hover:shadow-xl hover:scale-[1.02] shrink-0">
+        <a href="/explore?type=products" className="inline-flex items-center gap-2 rounded-full bg-[var(--bhn-surface)] px-6 py-3 text-sm font-semibold text-[var(--bhn-brand-800)] shadow-lg transition hover:shadow-xl hover:scale-[1.02] shrink-0">
           Shop eligible products <ArrowRight size={15} />
         </a>
       </div>

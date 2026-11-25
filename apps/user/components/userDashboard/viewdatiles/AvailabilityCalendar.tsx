@@ -27,7 +27,7 @@ export default function AvailabilityCalendar({ bookedDates = [10, 14, 18] }: Pro
   };
 
   return (
-    <Card className="bg-white p-4 rounded-3xl">
+    <Card className="bg-[var(--bhn-surface)] p-4 rounded-3xl">
 
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
@@ -35,7 +35,7 @@ export default function AvailabilityCalendar({ bookedDates = [10, 14, 18] }: Pro
           <ChevronLeft />
         </button>
 
-        <h3 className="text-sm font-medium text-[#1C1A16]">
+        <h3 className="text-sm font-medium text-[var(--bhn-text)]">
           {currentDate.toLocaleString("default", { month: "long", year: "numeric" })}
         </h3>
 
@@ -45,7 +45,7 @@ export default function AvailabilityCalendar({ bookedDates = [10, 14, 18] }: Pro
       </div>
 
       {/* Days */}
-      <div className="grid grid-cols-7 text-xs text-[#8B7E72] mb-3 text-center uppercase">
+      <div className="grid grid-cols-7 text-xs text-[var(--bhn-text-muted)] mb-3 text-center uppercase">
         {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
           <div key={d}>{d}</div>
         ))}
@@ -69,9 +69,9 @@ export default function AvailabilityCalendar({ bookedDates = [10, 14, 18] }: Pro
               disabled={isBooked}
               onClick={() => setSelectedDate(day)}
               className={`h-12 rounded-2xl flex items-center justify-center transition
-                ${isSelected ? "bg-[#C2652A] text-white" : ""}
-                ${isBooked ? "bg-[#F0E2D5] text-[#8B7E72] cursor-not-allowed" : ""}
-                ${!isBooked && !isSelected ? "hover:bg-[#EAD9C8] text-[#6B625A]" : ""}
+                ${isSelected ? "bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)]" : ""}
+                ${isBooked ? "bg-[var(--bhn-surface-2)] text-[var(--bhn-text-muted)] cursor-not-allowed" : ""}
+                ${!isBooked && !isSelected ? "hover:bg-[var(--bhn-surface-2)] text-[var(--bhn-text-muted)]" : ""}
               `}
             >
               {day}
@@ -81,19 +81,19 @@ export default function AvailabilityCalendar({ bookedDates = [10, 14, 18] }: Pro
       </div>
 
       {/* Legend */}
-      <div className="flex gap-4 mt-6 text-xs text-[#6B625A]">
+      <div className="flex gap-4 mt-6 text-xs text-[var(--bhn-text-muted)]">
         <div className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-full bg-[#C2652A]" />
+          <span className="w-3 h-3 rounded-full bg-[var(--bhn-brand-600)]" />
           Selected
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-full bg-[#F0E2D5]" />
+          <span className="w-3 h-3 rounded-full bg-[var(--bhn-surface-2)]" />
           Booked
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-full border border-[#C2652A]" />
+          <span className="w-3 h-3 rounded-full border border-[var(--bhn-brand-600)]" />
           Available
         </div>
       </div>

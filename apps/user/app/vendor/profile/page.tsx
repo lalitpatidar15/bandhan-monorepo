@@ -13,12 +13,12 @@ const highlights = [
 
 export default function VendorProfilePage() {
   return (
-    <main className="min-h-screen bg-[#F6F1EA]">
+    <main className="min-h-screen bg-[var(--bhn-bg)]">
       <Header variant="main1" />
 
       <section className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
         <div className="grid gap-5 lg:grid-cols-[1fr_340px]">
-          <div className="rounded-xl border border-[#E5D8CC] bg-white p-4">
+          <div className="rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-4">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <Image
                 src="/Border.png"
@@ -28,24 +28,24 @@ export default function VendorProfilePage() {
                 className="h-32 w-32 rounded-xl object-cover"
               />
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#B65B2D]">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--bhn-text)]">
                   Verified Vendor
                 </p>
-                <h1 className="mt-2 text-xl font-semibold text-[#1C1A16]">
+                <h1 className="mt-2 text-xl font-semibold text-[var(--bhn-text)]">
                   Royal Decor Studio
                 </h1>
-                <p className="mt-2 flex items-center gap-2 text-sm text-[#6B625A]">
+                <p className="mt-2 flex items-center gap-2 text-sm text-[var(--bhn-text-muted)]">
                   <MapPin size={16} />
                   Mumbai, Delhi NCR, Bengaluru
                 </p>
-                <p className="mt-3 flex items-center gap-2 text-sm text-[#6B625A]">
-                  <Star size={16} className="fill-[#C2652A] text-[#C2652A]" />
+                <p className="mt-3 flex items-center gap-2 text-sm text-[var(--bhn-text-muted)]">
+                  <Star size={16} className="fill-[var(--bhn-brand-600)]" />
                   4.8 rating from 128 reviews
                 </p>
               </div>
             </div>
 
-            <p className="mt-4 max-w-3xl text-sm leading-6 text-[#6B625A]">
+            <p className="mt-4 max-w-3xl text-sm leading-6 text-[var(--bhn-text-muted)]">
               Premium event decor partner specializing in floral mandaps,
               reception stages, aisle styling, lighting, and full-event setup
               coordination for intimate and large-scale celebrations.
@@ -53,9 +53,9 @@ export default function VendorProfilePage() {
 
             <div className="mt-4 grid gap-4 sm:grid-cols-3">
               {highlights.map((item) => (
-                <div key={item.label} className="rounded-lg bg-[#FAF1EA] p-4">
-                  <p className="text-xl font-semibold text-[#1C1A16]">{item.value}</p>
-                  <p className="mt-1 text-xs uppercase tracking-[0.14em] text-[#7B6A5E]">
+                <div key={item.label} className="rounded-lg bg-[var(--bhn-brand-50)] p-4">
+                  <p className="text-xl font-semibold text-[var(--bhn-text)]">{item.value}</p>
+                  <p className="mt-1 text-xs uppercase tracking-[0.14em] text-[var(--bhn-text-muted)]">
                     {item.label}
                   </p>
                 </div>
@@ -63,15 +63,15 @@ export default function VendorProfilePage() {
             </div>
           </div>
 
-          <aside className="rounded-xl border border-[#E5D8CC] bg-white p-4">
-            <h2 className="text-lg font-semibold text-[#1C1A16]">Book this vendor</h2>
-            <div className="mt-5 space-y-4 text-sm text-[#6B625A]">
+          <aside className="rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-4">
+            <h2 className="text-lg font-semibold text-[var(--bhn-text)]">Book this vendor</h2>
+            <div className="mt-5 space-y-4 text-sm text-[var(--bhn-text-muted)]">
               <p className="flex items-center gap-2">
-                <Award size={16} className="text-[#B65B2D]" />
+                <Award size={16} className="text-[var(--bhn-text)]" />
                 Bandhan verified partner
               </p>
               <p className="flex items-center gap-2">
-                <CalendarDays size={16} className="text-[#B65B2D]" />
+                <CalendarDays size={16} className="text-[var(--bhn-text)]" />
                 Available for 2026 event season
               </p>
             </div>

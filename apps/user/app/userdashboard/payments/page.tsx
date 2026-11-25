@@ -80,7 +80,7 @@ export default function PaymentsPage() {
 
         {isLoading ? (
           <div className="bhn-card p-12 text-center">
-            <Clock2 className="mx-auto mb-3 animate-spin text-[var(--bhn-brand-600)]" size={36} />
+            <Clock2 className="mx-auto mb-3 animate-spin text-[var(--bhn-text)]" size={36} />
             <p className="font-medium text-[var(--bhn-text)]">Loading verified invoices…</p>
           </div>
         ) : isError ? (

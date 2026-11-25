@@ -98,10 +98,10 @@ export function ArtisanCard(props: ArtisanCardProps) {
               event.preventDefault();
               setIsFavorite(!isFavorite);
             }}
-            className="absolute top-2 right-2 bhn-btn bhn-btn-icon bhn-btn-ghost bg-white/90 shadow-sm"
+            className="absolute top-2 right-2 bhn-btn bhn-btn-icon bhn-btn-ghost bg-[color-mix(in_srgb,var(--bhn-surface)_90%,transparent)] shadow-sm"
             aria-label="Add to wishlist"
           >
-            <Heart size={16} className="text-[var(--bhn-brand-600)]" />
+            <Heart size={16} className="text-[var(--bhn-text)]" />
           </button>
 
           {onCompare && (
@@ -112,7 +112,7 @@ export function ArtisanCard(props: ArtisanCardProps) {
                 event.preventDefault();
                 handleCompareToggle();
               }}
-              className={`bhn-btn bhn-btn-icon bhn-btn-ghost bg-white/90 shadow-sm absolute bottom-2 right-2 ${compared ? "text-[var(--bhn-brand-600)]" : ""}`}
+              className={`bhn-btn bhn-btn-icon bhn-btn-ghost bg-[color-mix(in_srgb,var(--bhn-surface)_90%,transparent)] shadow-sm absolute bottom-2 right-2 ${compared ? "text-[var(--bhn-text)]" : ""}`}
               aria-label={compared ? "Remove from compare" : "Add to compare"}
             >
               <Scale size={16} />
@@ -157,7 +157,7 @@ export function ArtisanCard(props: ArtisanCardProps) {
               className="bhn-btn bhn-btn-icon bhn-btn-ghost"
               aria-label="Add to wishlist"
             >
-              <Heart size={16} className="text-[var(--bhn-brand-600)]" />
+              <Heart size={16} className="text-[var(--bhn-text)]" />
             </button>
             {onCompare && (
               <button
@@ -166,7 +166,7 @@ export function ArtisanCard(props: ArtisanCardProps) {
                   e.stopPropagation();
                   handleCompareToggle();
                 }}
-                className={`bhn-btn bhn-btn-icon bhn-btn-ghost ${compared ? "text-[var(--bhn-brand-600)]" : ""}`}
+                className={`bhn-btn bhn-btn-icon bhn-btn-ghost ${compared ? "text-[var(--bhn-text)]" : ""}`}
                 aria-label={compared ? "Remove from compare" : "Add to compare"}
               >
                 <Scale size={16} />

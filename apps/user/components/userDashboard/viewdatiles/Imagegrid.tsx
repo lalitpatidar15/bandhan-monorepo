@@ -20,7 +20,7 @@ export function ImageGrid({ images }: any) {
         <div className="relative">
           <img src={images[0]} className="rounded-2xl object-cover" />
 
-          <div className="absolute bottom-3 right-3 bg-white px-3 py-1 rounded-full text-xs shadow">
+          <div className="absolute bottom-3 right-3 bg-[var(--bhn-surface)] px-3 py-1 rounded-full text-xs shadow">
             View all 48 photos
           </div>
         </div>

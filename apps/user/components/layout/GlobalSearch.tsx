@@ -27,15 +27,15 @@ export default function GlobalSearch({ variant = 'header' }: { variant?: 'header
 
   if (variant === 'hero') {
     return (
-      <div className="w-full max-w-3xl rounded-2xl bg-white/95 p-2 shadow-xl backdrop-blur">
-        <div className="flex flex-wrap gap-1 border-b border-gray-100 px-1 pb-2">
+      <div className="w-full max-w-3xl rounded-2xl bg-[color-mix(in_srgb,var(--bhn-surface)_95%,transparent)] p-2 shadow-xl backdrop-blur">
+        <div className="flex flex-wrap gap-1 border-b border-[var(--bhn-border)] px-1 pb-2">
           {TABS.map((t) => (
             <button
               key={t.key}
               type="button"
               onClick={() => setTab(t.key)}
               className={`rounded-full px-3 py-1.5 text-sm font-medium transition ${
-                tab === t.key ? 'bg-[#924C2B] text-white' : 'text-gray-600 hover:bg-gray-100'
+                tab === t.key ? 'bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)]' : 'text-[var(--bhn-text)] hover:bg-[var(--bhn-surface-3)]'
               }`}
             >
               {t.label}
@@ -49,19 +49,19 @@ export default function GlobalSearch({ variant = 'header' }: { variant?: 'header
           }}
           className="mt-2 flex items-center gap-2 px-2 py-1"
         >
-          <Search className="h-5 w-5 text-gray-400" />
+          <Search className="h-5 w-5 text-[var(--bhn-text-muted)]" />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search venues, services, products..."
-            className="flex-1 bg-transparent text-sm outline-none placeholder:text-gray-400"
+            className="flex-1 bg-transparent text-sm outline-none placeholder:text-[var(--bhn-text-muted)]"
           />
           {query && (
             <button type="button" onClick={() => setQuery('')} aria-label="Clear">
-              <X className="h-4 w-4 text-gray-400" />
+              <X className="h-4 w-4 text-[var(--bhn-text-muted)]" />
             </button>
           )}
-          <button type="submit" className="rounded-lg bg-[#924C2B] px-4 py-2 text-sm font-semibold text-white hover:bg-[#7a3d23]">
+          <button type="submit" className="rounded-lg bg-[var(--bhn-brand-600)] px-4 py-2 text-sm font-semibold text-[var(--bhn-text-on-brand)] hover:bg-[var(--bhn-brand-600)]">
             Search
           </button>
         </form>
@@ -77,7 +77,7 @@ export default function GlobalSearch({ variant = 'header' }: { variant?: 'header
                 params.set('q', t);
                 router.push(`/explore?${params.toString()}`);
               }}
-              className="rounded-full bg-gray-100 px-2.5 py-1 text-xs text-gray-600 hover:bg-gray-200"
+              className="rounded-full bg-[var(--bhn-surface-3)] px-2.5 py-1 text-xs text-[var(--bhn-text)] hover:bg-[var(--bhn-surface-3)]"
             >
               {t}
             </button>
@@ -95,12 +95,12 @@ export default function GlobalSearch({ variant = 'header' }: { variant?: 'header
       }}
       className="relative hidden flex-1 md:flex"
     >
-      <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+      <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--bhn-text-muted)]" />
       <input
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search products, rentals, services, venues..."
-        className="w-full rounded-full border border-[#E7E1D8] bg-[#F3ECE4] py-2 pl-9 pr-3 text-xs outline-none focus:border-[#924C2B]"
+        className="w-full rounded-full border border-[var(--bhn-border)] bg-[var(--bhn-surface-2)] py-2 pl-9 pr-3 text-xs outline-none focus:border-[var(--bhn-brand-600)]"
       />
     </form>
   );

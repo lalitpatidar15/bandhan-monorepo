@@ -219,7 +219,7 @@ export default function SettingsPage() {
   }, []);
 
   return (
-    <div className="flex min-h-screen bg-[#F8F2EE]">
+    <div className="flex min-h-screen bg-[var(--bhn-surface-2)]">
 
       {/* SIDEBAR */}
       <Sidebar />
@@ -236,9 +236,9 @@ export default function SettingsPage() {
              w-full
              lg:w-[360px]
              h-[42px]
-             bg-[#F6ECE6]
+             bg-[var(--bhn-surface-2)]
              border
-             border-[#E7D8CF]
+             border-[var(--bhn-border)]
              rounded-xl
              flex
              items-center
@@ -246,16 +246,16 @@ export default function SettingsPage() {
              transition-all
              duration-200
 
-             focus-within:border-[#8A4D2A]
+             focus-within:border-[var(--bhn-brand-600)]
              focus-within:ring-4
-             focus-within:ring-[#F3E5DB]
-             focus-within:bg-white
+             focus-within:ring-[var(--bhn-border)]
+             focus-within:bg-[var(--bhn-surface)]
            "
           >
 
             <Search
               size={16}
-              className="text-[#9A8579]"
+              className="text-[var(--bhn-text-muted)]"
             />
 
             <input
@@ -267,8 +267,8 @@ export default function SettingsPage() {
               text-[13px]
               ml-3
               w-full
-              text-[#7B685D]
-              placeholder:text-[#B29E93]
+              text-[var(--bhn-text-muted)]
+              placeholder:text-[var(--bhn-text-soft)]
           "
             />
 
@@ -277,15 +277,15 @@ export default function SettingsPage() {
           {/* USER */}
           <div className="flex items-center justify-between lg:justify-end gap-4 sm:gap-6 flex-wrap">
 
-            <Bell size={18} className="text-[#4D3B34]" />
+            <Bell size={18} className="text-[var(--bhn-text)]" />
 
             <div className="flex items-center gap-12">
               <div className="text-right">
-                <h4 className="text-[13px] font-medium text-[#2D201B]">
+                <h4 className="text-[13px] font-medium text-[var(--bhn-text)]">
                   {userName}
                 </h4>
 
-                <p className="text-[11px] text-[#9D8C83]">
+                <p className="text-[11px] text-[var(--bhn-text-soft)]">
                   Seller
                 </p>
               </div>
@@ -303,11 +303,11 @@ export default function SettingsPage() {
 
         {/* HEADER */}
         <div className="mb-7">
-          <h1 className="text-[30px] sm:text-[38px] font-serif text-[#2D1F1A] leading-tight">
+          <h1 className="text-[30px] sm:text-[38px] font-serif text-[var(--bhn-text)] leading-tight">
             Merchant Settings
           </h1>
 
-          <p className="text-[14px] text-[#8F7D73] mt-1">
+          <p className="text-[14px] text-[var(--bhn-text-muted)] mt-1">
             Manage your store identity, business verification, and payout preferences.
           </p>
         </div>
@@ -325,7 +325,7 @@ export default function SettingsPage() {
             gap-3
             sm:gap-4
             border-b
-            border-[#E5D7CF]
+            border-[var(--bhn-border)]
            pb-4
          "
           >
@@ -353,8 +353,8 @@ export default function SettingsPage() {
                 whitespace-nowrap
 
                ${activeTab === tab
-                    ? "bg-[#8A4D2A] text-white shadow-sm"
-                    : "bg-[#F8F2EE] text-[#76675E] border border-[#E5D7CF] hover:bg-[#F3E5DB]"
+                    ? "bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)] shadow-sm"
+                    : "bg-[var(--bhn-surface-2)] text-[var(--bhn-text-muted)] border border-[var(--bhn-border)] hover:bg-[var(--bhn-surface-2)]"
                   }
                `}
               >
@@ -374,9 +374,9 @@ export default function SettingsPage() {
           <div className="space-y-6">
 
             {/* PROFILE CARD */}
-            <div className="bg-white border border-[#E8D9D0] rounded-2xl p-4 sm:p-4">
+            <div className="bg-[var(--bhn-surface)] border border-[var(--bhn-border)] rounded-2xl p-4 sm:p-4">
 
-              <h2 className="text-[24px] sm:text-[28px] font-serif text-[#2B1E19] mb-6">
+              <h2 className="text-[24px] sm:text-[28px] font-serif text-[var(--bhn-text)] mb-6">
                 Profile Information
               </h2>
 
@@ -399,7 +399,7 @@ export default function SettingsPage() {
                     <div className="
                        absolute
                        inset-0
-                       bg-black/40
+                       bg-[color-mix(in_srgb,var(--bhn-text)_40%,transparent)]
                        rounded-xl
                        opacity-0
                        group-hover:opacity-100
@@ -407,7 +407,7 @@ export default function SettingsPage() {
                        flex
                        items-center
                        justify-center
-                       text-white
+                       text-[var(--bhn-text-on-brand)]
                        text-xs
                        font-medium
                          ">
@@ -429,7 +429,7 @@ export default function SettingsPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 flex-1">
 
                   <div>
-                    <p className="text-[11px] text-[#7D6C63] mb-2 uppercase">
+                    <p className="text-[11px] text-[var(--bhn-text-muted)] mb-2 uppercase">
                       Full Name
                     </p>
 
@@ -441,23 +441,23 @@ export default function SettingsPage() {
                        w-full
                        h-[48px]
                        border
-                       border-[#E5D7CF]
+                       border-[var(--bhn-border)]
                        rounded-lg
                        px-4
                        outline-none
-                       bg-white
-                       text-[#2B1E19]
-                       placeholder:text-[#B7A79C]
-                       focus:border-[#8B4A2F]
+                       bg-[var(--bhn-surface)]
+                       text-[var(--bhn-text)]
+                       placeholder:text-[var(--bhn-text-soft)]
+                       focus:border-[var(--bhn-brand-600)]
                        focus:ring-4
-                       focus:ring-[#F3E4DA]
+                       focus:ring-[var(--bhn-border)]
                       transition-all
                     "
                     />
                   </div>
 
                   <div>
-                    <p className="text-[11px] text-[#7D6C63] mb-2 uppercase">
+                    <p className="text-[11px] text-[var(--bhn-text-muted)] mb-2 uppercase">
                       Email Address
                     </p>
 
@@ -469,23 +469,23 @@ export default function SettingsPage() {
                       w-full
                       h-[48px]
                       border
-                      border-[#E5D7CF]
+                      border-[var(--bhn-border)]
                       rounded-lg
                       px-4
                       outline-none
-                      bg-white
-                      text-[#2B1E19]
-                      placeholder:text-[#B7A79C]
-                      focus:border-[#8B4A2F]
+                      bg-[var(--bhn-surface)]
+                      text-[var(--bhn-text)]
+                      placeholder:text-[var(--bhn-text-soft)]
+                      focus:border-[var(--bhn-brand-600)]
                       focus:ring-4
-                      focus:ring-[#F3E4DA]
+                      focus:ring-[var(--bhn-border)]
                       transition-all
                        "
                     />
                   </div>
 
                   <div>
-                    <p className="text-[11px] text-[#7D6C63] mb-2 uppercase">
+                    <p className="text-[11px] text-[var(--bhn-text-muted)] mb-2 uppercase">
                       Phone Number
                     </p>
 
@@ -497,23 +497,23 @@ export default function SettingsPage() {
                       w-full
                       h-[48px]
                       border
-                      border-[#E5D7CF]
+                      border-[var(--bhn-border)]
                       rounded-lg
                       px-4
                       outline-none
-                      bg-white
-                      text-[#2B1E19]
-                      placeholder:text-[#B7A79C]
-                      focus:border-[#8B4A2F]
+                      bg-[var(--bhn-surface)]
+                      text-[var(--bhn-text)]
+                      placeholder:text-[var(--bhn-text-soft)]
+                      focus:border-[var(--bhn-brand-600)]
                       focus:ring-4
-                      focus:ring-[#F3E4DA]
+                      focus:ring-[var(--bhn-border)]
                       transition-all
                     "
                     />
                   </div>
 
                   <div>
-                    <p className="text-[11px] text-[#7D6C63] mb-2 uppercase">
+                    <p className="text-[11px] text-[var(--bhn-text-muted)] mb-2 uppercase">
                       Display Name
                     </p>
 
@@ -525,16 +525,16 @@ export default function SettingsPage() {
                       w-full
                       h-[48px]
                       border
-                      border-[#E5D7CF]
+                      border-[var(--bhn-border)]
                       rounded-lg
                       px-4
                       outline-none
-                      bg-white
-                      text-[#2B1E19]
-                      placeholder:text-[#B7A79C]
-                      focus:border-[#8B4A2F]
+                      bg-[var(--bhn-surface)]
+                      text-[var(--bhn-text)]
+                      placeholder:text-[var(--bhn-text-soft)]
+                      focus:border-[var(--bhn-brand-600)]
                       focus:ring-4
-                      focus:ring-[#F3E4DA]
+                      focus:ring-[var(--bhn-border)]
                       transition-all
                    "
                     />
@@ -545,16 +545,16 @@ export default function SettingsPage() {
             </div>
 
             {/* BUSINESS CARD */}
-            <div className="bg-white border border-[#E8D9D0] rounded-2xl p-4 sm:p-4">
+            <div className="bg-[var(--bhn-surface)] border border-[var(--bhn-border)] rounded-2xl p-4 sm:p-4">
 
               {/* HEADER */}
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
 
-                <h2 className="text-[24px] sm:text-[28px] font-serif text-[#2B1E19]">
+                <h2 className="text-[24px] sm:text-[28px] font-serif text-[var(--bhn-text)]">
                   Business Details
                 </h2>
 
-                <div className="bg-[#EAF7ED] text-[#2E8B57] text-[12px] px-3 py-1 rounded-full flex items-center gap-1 w-fit">
+                <div className="bg-[var(--bhn-surface-2)] text-[var(--bhn-text-muted)] text-[12px] px-3 py-1 rounded-full flex items-center gap-1 w-fit">
                   <CheckCircle size={14} />
                   Verified Seller
                 </div>
@@ -567,7 +567,7 @@ export default function SettingsPage() {
                 {/* LEGAL NAME */}
                 <div>
 
-                  <p className="text-[11px] text-[#7D6C63] mb-2 uppercase">
+                  <p className="text-[11px] text-[var(--bhn-text-muted)] mb-2 uppercase">
                     Legal Entity Name
                   </p>
 
@@ -579,19 +579,19 @@ export default function SettingsPage() {
                      w-full
                      h-[48px]
                     border
-                    border-[#E5D7CF]
+                    border-[var(--bhn-border)]
                     rounded-lg
                     px-4
                     outline-none
-                    bg-white
-                    text-[#2B1E19]
-                    placeholder:text-[#B7A79D]
+                    bg-[var(--bhn-surface)]
+                    text-[var(--bhn-text)]
+                    placeholder:text-[var(--bhn-text-soft)]
                     transition-all
                     duration-200
 
-                    focus:border-[#8A4D2A]
+                    focus:border-[var(--bhn-brand-600)]
                     focus:ring-4
-                    focus:ring-[#F3E5DB]
+                    focus:ring-[var(--bhn-border)]
                     "
                   />
 
@@ -600,7 +600,7 @@ export default function SettingsPage() {
                 {/* GST */}
                 <div>
 
-                  <p className="text-[11px] text-[#7D6C63] mb-2 uppercase">
+                  <p className="text-[11px] text-[var(--bhn-text-muted)] mb-2 uppercase">
                     Tax ID / GST Number
                   </p>
 
@@ -612,19 +612,19 @@ export default function SettingsPage() {
                     w-full
                     h-[48px]
                     border
-                    border-[#E5D7CF]
+                    border-[var(--bhn-border)]
                     rounded-lg
                     px-4
                     outline-none
-                    bg-white
-                    text-[#2B1E19]
-                    placeholder:text-[#B7A79D]
+                    bg-[var(--bhn-surface)]
+                    text-[var(--bhn-text)]
+                    placeholder:text-[var(--bhn-text-soft)]
                     transition-all
                     duration-200
 
-                    focus:border-[#8A4D2A]
+                    focus:border-[var(--bhn-brand-600)]
                     focus:ring-4
-                    focus:ring-[#F3E5DB]
+                    focus:ring-[var(--bhn-border)]
                      "
                   />
 
@@ -633,7 +633,7 @@ export default function SettingsPage() {
                 {/* ADDRESS */}
                 <div className="sm:col-span-2">
 
-                  <p className="text-[11px] text-[#7D6C63] mb-2 uppercase">
+                  <p className="text-[11px] text-[var(--bhn-text-muted)] mb-2 uppercase">
                     Registered Address
                   </p>
 
@@ -644,21 +644,21 @@ export default function SettingsPage() {
                     className="
                     w-full
                     border
-                    border-[#E5D7CF]
+                    border-[var(--bhn-border)]
                     rounded-lg
                     p-4
                     outline-none
                     h-[110px]
                     resize-none
-                    bg-white
-                    text-[#2B1E19]
-                    placeholder:text-[#B7A79D]
+                    bg-[var(--bhn-surface)]
+                    text-[var(--bhn-text)]
+                    placeholder:text-[var(--bhn-text-soft)]
                     transition-all
                     duration-200
 
-                   focus:border-[#8A4D2A]
+                   focus:border-[var(--bhn-brand-600)]
                    focus:ring-4
-                   focus:ring-[#F3E5DB]
+                   focus:ring-[var(--bhn-border)]
                   "
                   />
 
@@ -669,7 +669,7 @@ export default function SettingsPage() {
               {/* TAGS */}
               <div className="mt-6">
 
-                <p className="text-[11px] text-[#7D6C63] uppercase mb-3">
+                <p className="text-[11px] text-[var(--bhn-text-muted)] uppercase mb-3">
                   Store Categories
                 </p>
 
@@ -681,8 +681,8 @@ export default function SettingsPage() {
                     <span
                       key={index}
                       className="
-                      bg-[#F4E5DC]
-                      text-[#8A4D2A]
+                      bg-[var(--bhn-surface-2)]
+                      text-[var(--bhn-text)]
                       text-[12px]
                       px-3
                       py-1.5
@@ -708,19 +708,19 @@ export default function SettingsPage() {
                     flex-1
                     h-[44px]
                     border
-                    border-[#E5D7CF]
+                    border-[var(--bhn-border)]
                     rounded-full
                     px-4
                     outline-none
-                    bg-white
-                    text-[#2B1E19]
-                    placeholder:text-[#B7A79D]
+                    bg-[var(--bhn-surface)]
+                    text-[var(--bhn-text)]
+                    placeholder:text-[var(--bhn-text-soft)]
                     transition-all
                     duration-200
 
-                    focus:border-[#8A4D2A]
+                    focus:border-[var(--bhn-brand-600)]
                     focus:ring-4
-                    focus:ring-[#F3E5DB]
+                    focus:ring-[var(--bhn-border)]
                     "
                   />
 
@@ -730,9 +730,9 @@ export default function SettingsPage() {
                     h-[44px]
                     px-5
                     rounded-full
-                    bg-[#8A4D2A]
-                    hover:bg-[#723B1F]
-                    text-white
+                    bg-[var(--bhn-brand-600)]
+                    hover:bg-[var(--bhn-brand-600)]
+                    text-[var(--bhn-text-on-brand)]
                     text-[13px]
                     font-medium
                     transition-all
@@ -757,9 +757,9 @@ export default function SettingsPage() {
           <div className="space-y-6">
 
             {/* SECURITY */}
-            <div className="bg-white border border-[#E8D9D0] rounded-2xl p-4">
+            <div className="bg-[var(--bhn-surface)] border border-[var(--bhn-border)] rounded-2xl p-4">
 
-              <h2 className="text-[24px] sm:text-[28px] font-serif text-[#2B1E19] mb-5">
+              <h2 className="text-[24px] sm:text-[28px] font-serif text-[var(--bhn-text)] mb-5">
                 Security
               </h2>
 
@@ -771,18 +771,18 @@ export default function SettingsPage() {
                   <ShieldCheck
                     size={18}
                     className={`transition-all ${is2FAEnabled
-                      ? "text-[#8A4D2A]"
-                      : "text-[#B8AAA1]"
+                      ? "text-[var(--bhn-text)]"
+                      : "text-[var(--bhn-text-soft)]"
                       }`}
                   />
 
                   <div>
 
-                    <h3 className="text-[14px] text-[#2D1F1A] font-medium">
+                    <h3 className="text-[14px] text-[var(--bhn-text)] font-medium">
                       2FA Security
                     </h3>
 
-                    <p className="text-[11px] text-[#9A887D]">
+                    <p className="text-[11px] text-[var(--bhn-text-muted)]">
                       {is2FAEnabled
                         ? "SMS & Authenticator Enabled"
                         : "2FA Disabled"}
@@ -805,12 +805,12 @@ export default function SettingsPage() {
                   duration-300
 
                    ${is2FAEnabled
-                      ? "bg-[#7A3E1D] justify-end"
-                      : "bg-[#D8CBC2] justify-start"
+                      ? "bg-[var(--bhn-brand-600)] justify-end"
+                      : "bg-[var(--bhn-surface-2)] justify-start"
                     }
                   `}
                 >
-                  <div className="w-4 h-4 rounded-full bg-white shadow-sm"></div>
+                  <div className="w-4 h-4 rounded-full bg-[var(--bhn-surface)] shadow-sm"></div>
                 </button>
 
               </div>
@@ -822,11 +822,11 @@ export default function SettingsPage() {
                 w-full
                 h-[45px]
                 border
-                border-[#D9C8BE]
+                border-[var(--bhn-border)]
                 rounded-xl
-                text-[#3A2B25]
+                text-[var(--bhn-text)]
                 font-medium
-                hover:bg-[#F8F2EE]
+                hover:bg-[var(--bhn-surface-2)]
                 active:scale-[0.98]
                 transition-all
               "
@@ -837,9 +837,9 @@ export default function SettingsPage() {
             </div>
 
             {/* PREFERENCES */}
-            <div className="bg-white border border-[#E8D9D0] rounded-2xl p-4">
+            <div className="bg-[var(--bhn-surface)] border border-[var(--bhn-border)] rounded-2xl p-4">
 
-              <h2 className="text-[24px] sm:text-[28px] font-serif text-[#2B1E19] mb-5">
+              <h2 className="text-[24px] sm:text-[28px] font-serif text-[var(--bhn-text)] mb-5">
                 Quick Preferences
               </h2>
 
@@ -849,16 +849,16 @@ export default function SettingsPage() {
                 <div className="flex items-center justify-between">
 
                   <div>
-                    <p className="text-[14px] text-[#3A2B25] font-medium">
+                    <p className="text-[14px] text-[var(--bhn-text)] font-medium">
                       Order Alerts
                     </p>
 
-                    <p className="text-[11px] text-[#9A887D] mt-1">
+                    <p className="text-[11px] text-[var(--bhn-text-muted)] mt-1">
                       Receive instant order notifications
                     </p>
                   </div>
 
-                  <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center text-white text-[10px]">
+                  <div className="w-5 h-5 rounded-full bg-[var(--bhn-success-500)] flex items-center justify-center text-[var(--bhn-text-on-brand)] text-[10px]">
                     ✓
                   </div>
 
@@ -868,16 +868,16 @@ export default function SettingsPage() {
                 <div className="flex items-center justify-between">
 
                   <div>
-                    <p className="text-[14px] text-[#3A2B25] font-medium">
+                    <p className="text-[14px] text-[var(--bhn-text)] font-medium">
                       Stock Updates
                     </p>
 
-                    <p className="text-[11px] text-[#9A887D] mt-1">
+                    <p className="text-[11px] text-[var(--bhn-text-muted)] mt-1">
                       Get low stock inventory alerts
                     </p>
                   </div>
 
-                  <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center text-white text-[10px]">
+                  <div className="w-5 h-5 rounded-full bg-[var(--bhn-success-500)] flex items-center justify-center text-[var(--bhn-text-on-brand)] text-[10px]">
                     ✓
                   </div>
 
@@ -887,11 +887,11 @@ export default function SettingsPage() {
                 <div className="flex items-center justify-between">
 
                   <div>
-                    <p className="text-[14px] text-[#3A2B25] font-medium">
+                    <p className="text-[14px] text-[var(--bhn-text)] font-medium">
                       Order Alerts
                     </p>
 
-                    <p className="text-[11px] text-[#9A887D] mt-1">
+                    <p className="text-[11px] text-[var(--bhn-text-muted)] mt-1">
                       Receive instant order notifications
                     </p>
                   </div>
@@ -913,12 +913,12 @@ export default function SettingsPage() {
                     items-center
                     px-1
                     ${profileData.emailNotifications
-                        ? "bg-[#7A3E1D] justify-end"
-                        : "bg-[#E5D7CF] justify-start"
+                        ? "bg-[var(--bhn-brand-600)] justify-end"
+                        : "bg-[var(--bhn-surface-2)] justify-start"
                       }
                  `}
                   >
-                    <div className="w-4 h-4 rounded-full bg-white shadow-sm"></div>
+                    <div className="w-4 h-4 rounded-full bg-[var(--bhn-surface)] shadow-sm"></div>
                   </button>
 
                 </div>
@@ -927,11 +927,11 @@ export default function SettingsPage() {
                 <div className="flex items-center justify-between">
 
                   <div>
-                    <p className="text-[14px] text-[#3A2B25] font-medium">
+                    <p className="text-[14px] text-[var(--bhn-text)] font-medium">
                       Stock Updates
                     </p>
 
-                    <p className="text-[11px] text-[#9A887D] mt-1">
+                    <p className="text-[11px] text-[var(--bhn-text-muted)] mt-1">
                       Get low stock inventory alerts
                     </p>
                   </div>
@@ -953,12 +953,12 @@ export default function SettingsPage() {
                     items-center
                     px-1
                     ${profileData.smsNotifications
-                        ? "bg-[#7A3E1D] justify-end"
-                        : "bg-[#E5D7CF] justify-start"
+                        ? "bg-[var(--bhn-brand-600)] justify-end"
+                        : "bg-[var(--bhn-surface-2)] justify-start"
                       }
                  `}
                   >
-                    <div className="w-4 h-4 rounded-full bg-white shadow-sm"></div>
+                    <div className="w-4 h-4 rounded-full bg-[var(--bhn-surface)] shadow-sm"></div>
                   </button>
 
                 </div>
@@ -967,11 +967,11 @@ export default function SettingsPage() {
                 <div className="flex items-center justify-between">
 
                   <div>
-                    <p className="text-[14px] text-[#3A2B25] font-medium">
+                    <p className="text-[14px] text-[var(--bhn-text)] font-medium">
                       Marketing Emails
                     </p>
 
-                    <p className="text-[11px] text-[#9A887D] mt-1">
+                    <p className="text-[11px] text-[var(--bhn-text-muted)] mt-1">
                       Receive offers and campaign updates
                     </p>
                   </div>
@@ -993,12 +993,12 @@ export default function SettingsPage() {
                     items-center
                     px-1
                     ${profileData.marketingEmails
-                        ? "bg-[#7A3E1D] justify-end"
-                        : "bg-[#E5D7CF] justify-start"
+                        ? "bg-[var(--bhn-brand-600)] justify-end"
+                        : "bg-[var(--bhn-surface-2)] justify-start"
                       }
                  `}
                   >
-                    <div className="w-4 h-4 rounded-full bg-white shadow-sm"></div>
+                    <div className="w-4 h-4 rounded-full bg-[var(--bhn-surface)] shadow-sm"></div>
                   </button>
 
                 </div>
@@ -1007,43 +1007,43 @@ export default function SettingsPage() {
             </div>
 
             {/* HEALTH */}
-            <div className="bg-[#F5E6DD] rounded-2xl p-4">
+            <div className="bg-[var(--bhn-surface-2)] rounded-2xl p-4">
 
-              <h2 className="text-[24px] sm:text-[26px] font-serif text-[#7A3E1D] mb-5">
+              <h2 className="text-[24px] sm:text-[26px] font-serif text-[var(--bhn-text)] mb-5">
                 Merchant Health
               </h2>
 
               <div className="mb-5">
 
                 <div className="flex items-center justify-between mb-2">
-                  <p className="text-[12px] text-[#6B4B3B] uppercase">
+                  <p className="text-[12px] text-[var(--bhn-text)] uppercase">
                     Fulfillment Rate
                   </p>
 
-                  <p className="text-[12px] text-[#7A3E1D] font-semibold">
+                  <p className="text-[12px] text-[var(--bhn-text)] font-semibold">
                     98.2%
                   </p>
                 </div>
 
-                <div className="w-full h-2 rounded-full bg-[#E2CFC3]">
-                  <div className="w-[98%] h-2 rounded-full bg-[#7A3E1D]"></div>
+                <div className="w-full h-2 rounded-full bg-[var(--bhn-surface-2)]">
+                  <div className="w-[98%] h-2 rounded-full bg-[var(--bhn-brand-600)]"></div>
                 </div>
               </div>
 
               <div>
 
                 <div className="flex items-center justify-between mb-2">
-                  <p className="text-[12px] text-[#6B4B3B] uppercase">
+                  <p className="text-[12px] text-[var(--bhn-text)] uppercase">
                     Response Time
                   </p>
 
-                  <p className="text-[12px] text-[#7A3E1D] font-semibold">
+                  <p className="text-[12px] text-[var(--bhn-text)] font-semibold">
                     1.2 HRS
                   </p>
                 </div>
 
-                <div className="w-full h-2 rounded-full bg-[#E2CFC3]">
-                  <div className="w-[82%] h-2 rounded-full bg-[#7A3E1D]"></div>
+                <div className="w-full h-2 rounded-full bg-[var(--bhn-surface-2)]">
+                  <div className="w-[82%] h-2 rounded-full bg-[var(--bhn-brand-600)]"></div>
                 </div>
               </div>
             </div>
@@ -1059,10 +1059,10 @@ export default function SettingsPage() {
             h-[46px]
             px-7
             border
-            border-red-200
+            border-[var(--bhn-error-500)]
             rounded-xl
-            text-red-600
-            hover:bg-red-50
+            text-[var(--bhn-error-600)]
+            hover:bg-[var(--bhn-error-50)]
             active:scale-[0.98]
             transition-all
             w-full
@@ -1085,10 +1085,10 @@ export default function SettingsPage() {
             h-[46px]
             px-7
             border
-            border-[#D7C8BE]
+            border-[var(--bhn-border)]
             rounded-xl
-            text-[#3A2B25]
-            hover:bg-[#F6ECE6]
+            text-[var(--bhn-text)]
+            hover:bg-[var(--bhn-surface-2)]
             active:scale-[0.98]
             transition-all
             w-full
@@ -1103,11 +1103,11 @@ export default function SettingsPage() {
             className="
              h-[46px]
              px-5
-             bg-[#7A3E1D]
-             text-white
+             bg-[var(--bhn-brand-600)]
+             text-[var(--bhn-text-on-brand)]
              rounded-xl
              shadow-md
-             hover:bg-[#683418]
+             hover:bg-[var(--bhn-brand-600)]
              active:scale-[0.98]
              transition-all
              w-full

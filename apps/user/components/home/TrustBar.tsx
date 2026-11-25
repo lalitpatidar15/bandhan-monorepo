@@ -17,7 +17,7 @@ export default function TrustBar() {
       <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-4 px-4 py-3 sm:px-6 sm:gap-6 md:gap-8">
         {features.map(({ icon: Icon, text }) => (
           <div key={text} className="flex items-center gap-2 text-xs text-[var(--bhn-text-muted)] sm:text-sm">
-            <Icon size={15} className="text-[var(--bhn-brand-600)]" />
+            <Icon size={15} className="text-[var(--bhn-text)]" />
             <span className="whitespace-nowrap">{text}</span>
           </div>
         ))}

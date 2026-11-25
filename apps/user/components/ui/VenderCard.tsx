@@ -15,11 +15,11 @@ const renderStars = (rating: number) => {
 
   for (let i = 1; i <= 5; i++) {
     if (rating >= i) {
-      stars.push(<FaStar key={i} className="text-yellow-400 text-xs" />);
+      stars.push(<FaStar key={i} className="text-[var(--bhn-warning-500)] text-xs" />);
     } else if (rating >= i - 0.5) {
-      stars.push(<FaStarHalfAlt key={i} className="text-yellow-400 text-xs" />);
+      stars.push(<FaStarHalfAlt key={i} className="text-[var(--bhn-warning-500)] text-xs" />);
     } else {
-      stars.push(<FaRegStar key={i} className="text-yellow-400 text-xs" />);
+      stars.push(<FaRegStar key={i} className="text-[var(--bhn-warning-500)] text-xs" />);
     }
   }
 
@@ -40,14 +40,14 @@ export const VendorCard = ({
         <Image src={img} alt={name} fill sizes="(min-width: 768px) 340px, 100vw" unoptimized className="object-cover" />
 
         {/* Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[color-mix(in_srgb,var(--bhn-text)_70%,transparent)] via-[color-mix(in_srgb,var(--bhn-text)_20%,transparent)] to-transparent" />
 
         {/* VERIFIED Badge */}
-        <div className="absolute top-3 right-2 text-white bg-[#924C2B] px-3 py-1 rounded-full text-xs font-medium">
+        <div className="absolute top-3 right-2 text-[var(--bhn-text-on-brand)] bg-[var(--bhn-brand-600)] px-3 py-1 rounded-full text-xs font-medium">
           VERIFIED
         </div>
         {/* Bottom Content */}
-        <div className="absolute bottom-4 left-4 right-4 text-white">
+        <div className="absolute bottom-4 left-4 right-4 text-[var(--bhn-text-on-brand)]">
           {/* Name + Stars */}
           <div className="flex justify-between items-start">
             <div>

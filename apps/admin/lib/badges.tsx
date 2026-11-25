@@ -4,9 +4,9 @@ const BADGE_CLASS: Record<BadgeColor, string> = {
   active: 'admin-badge-active',
   inactive: 'admin-badge-inactive',
   pending: 'admin-badge-pending',
-  info: 'bg-blue-100 text-blue-800',
-  warning: 'bg-amber-100 text-amber-800',
-  danger: 'bg-red-100 text-red-800',
+  info: 'bg-[var(--bhn-brand-50)] text-[var(--bhn-brand-700)]',
+  warning: 'bg-[var(--bhn-warning-50)] text-[var(--bhn-warning-700)]',
+  danger: 'bg-[var(--bhn-error-50)] text-[var(--bhn-error-700)]',
 };
 
 export function statusBadgeClass(status: string): string {

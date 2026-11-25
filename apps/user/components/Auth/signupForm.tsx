@@ -219,15 +219,15 @@
 
 //       {step === 1 && (
 //         <div className="space-y-4">
-//           <h2 className="text-center text-lg font-semibold text-[#3A2E24]">
+//           <h2 className="text-center text-lg font-semibold text-[var(--bhn-text)]">
 //             {steps[0].title}
 //           </h2>
-//           <p className="text-center text-[10px] text-[#6B625A]">
+//           <p className="text-center text-[10px] text-[var(--bhn-text-muted)]">
 //             {steps[0].description}
 //           </p>
 //           <Button
 //             variant="custom"
-//             className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#DDD6CD] bg-white py-3 text-sm font-medium text-[#1F2937] hover:bg-[#F8F4EF] transition"
+//             className="flex w-full items-center justify-center gap-2 rounded-lg border border-[var(--bhn-border)] bg-[var(--bhn-surface)] py-3 text-sm font-medium text-[var(--bhn-text)] hover:bg-[var(--bhn-surface-2)] transition"
 //           >
 //             <FcGoogle size={20} />
 //             Sign up with Google
@@ -235,16 +235,16 @@
 
 //           <Button
 //             variant="custom"
-//             className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#DDD6CD] bg-white py-3 text-sm font-medium text-[#1F2937] hover:bg-[#F8F4EF] transition"
+//             className="flex w-full items-center justify-center gap-2 rounded-lg border border-[var(--bhn-border)] bg-[var(--bhn-surface)] py-3 text-sm font-medium text-[var(--bhn-text)] hover:bg-[var(--bhn-surface-2)] transition"
 //           >
-//             <FaFacebook size={20} className="text-blue-600" />
+//             <FaFacebook size={20} className="text-[var(--bhn-brand-600)]" />
 //             Sign up with Facebook
 //           </Button>
 
 //           <div className="flex items-center gap-3">
-//             <div className="flex-1 border-t border-[#DDD6CD]" />
-//             <span className="text-xs text-gray-500 font-medium">Or</span>
-//             <div className="flex-1 border-t border-[#DDD6CD]" />
+//             <div className="flex-1 border-t border-[var(--bhn-border)]" />
+//             <span className="text-xs text-[var(--bhn-text-muted)] font-medium">Or</span>
+//             <div className="flex-1 border-t border-[var(--bhn-border)]" />
 //           </div>
 
 //           <Input
@@ -257,19 +257,19 @@
 //             className="mt-1 py-3"
 //           />
 
-//           {error && <p className="text-sm text-red-600 font-medium">{error}</p>}
+//           {error && <p className="text-sm text-[var(--bhn-error-600)] font-medium">{error}</p>}
 
 //           <Button
 //             onClick={goNext}
-//             className="w-full rounded-lg bg-[#7A3F23] py-3 text-sm font-semibold text-white hover:bg-[#6d2d09] transition"
+//             className="w-full rounded-lg bg-[var(--bhn-brand-600)] py-3 text-sm font-semibold text-[var(--bhn-text-on-brand)] hover:bg-[var(--bhn-brand-600)] transition"
 //           >
 //             Get started
 //           </Button>
 
-//           <p className="text-center text-sm text-gray-600">
+//           <p className="text-center text-sm text-[var(--bhn-text)]">
 //             Already have an account?{" "}
 //             <span
-//               className="cursor-pointer font-semibold text-[#7A3F23] hover:underline"
+//               className="cursor-pointer font-semibold text-[var(--bhn-text)] hover:underline"
 //               onClick={() => router.push("/login")}
 //             >
 //               Sign in
@@ -282,25 +282,25 @@
 //         <div className="space-y-4">
           
 //           <div
-//             className="w-14 h-14 rounded-full border border-[#E4E5E7A] 
-//              bg-gradient-to-r from-[#E4E5E77A] via-white to-[#E4E5E77A]/0 
+//             className="w-14 h-14 rounded-full border border-[var(--bhn-border)] 
+//              bg-gradient-to-r from-[var(--bhn-surface-2)] via-[var(--bhn-surface)] to-[color-mix(in_srgb,var(--bhn-surface-2)_0%,transparent)] 
 //           flex items-center justify-center mx-auto shadow-sm"
 //           >
-//             <div className="w-8 h-8 rounded-full border border-[#E2E4E9] bg-white flex items-center justify-center shadow-sm">
+//             <div className="w-8 h-8 rounded-full border border-[var(--bhn-border)] bg-[var(--bhn-surface)] flex items-center justify-center shadow-sm">
 //               <MdPerson
 //                 size={16}
-//                 className="text-white bg-[#525866]  p-[3px]"
+//                 className="text-[var(--bhn-text-on-brand)] bg-[var(--bhn-surface-3)]  p-[3px]"
 //               />
 //             </div>
 //           </div>
-//           <h2 className="text-center text-lg font-semibold text-[#3A2E24]">
+//           <h2 className="text-center text-lg font-semibold text-[var(--bhn-text)]">
 //             {steps[1].title}
 //           </h2>
-//           <p className="text-center text-sm text-[#6B625A]">
+//           <p className="text-center text-sm text-[var(--bhn-text-muted)]">
 //             {steps[1].description}
 //           </p>
 //           <div>
-//             <label className="text-sm font-semibold text-[#3A2E24]">
+//             <label className="text-sm font-semibold text-[var(--bhn-text)]">
 //               Full name *
 //             </label>
 //             <Input
@@ -315,9 +315,9 @@
 //           </div>
 
 //           <div>
-//             <label className="text-sm font-semibold text-[#3A2E24]">
+//             <label className="text-sm font-semibold text-[var(--bhn-text)]">
 //               Username{" "}
-//               <span className="text-gray-400 font-normal">(Optional)</span>
+//               <span className="text-[var(--bhn-text-muted)] font-normal">(Optional)</span>
 //             </label>
 //             <Input
 //               value={username}
@@ -331,11 +331,11 @@
 //           </div>
 
 //           <div>
-//             <label className="text-sm font-semibold text-[#3A2E24]">
+//             <label className="text-sm font-semibold text-[var(--bhn-text)]">
 //               Phone Number *
 //             </label>
 //             <div className="mt-2 flex gap-2">
-//               <select className="rounded-lg border border-[#DDD6CD] bg-white px-3 py-2 text-sm font-medium text-[#3A2E24]">
+//               <select className="rounded-lg border border-[var(--bhn-border)] bg-[var(--bhn-surface)] px-3 py-2 text-sm font-medium text-[var(--bhn-text)]">
 //                 <option value="+91">🇮🇳 +91</option>
 //                 <option value="+1">🇺🇸 +1</option>
 //                 <option value="+44">🇬🇧 +44</option>
@@ -353,16 +353,16 @@
 //             </div>
 //           </div>
 
-//           {error && <p className="text-sm text-red-600 font-medium">{error}</p>}
+//           {error && <p className="text-sm text-[var(--bhn-error-600)] font-medium">{error}</p>}
 
 //           <Button
 //             onClick={goNext}
-//             className="w-full rounded-lg bg-[#7A3F23] py-3 text-sm font-semibold text-white hover:bg-[#6d2d09] transition"
+//             className="w-full rounded-lg bg-[var(--bhn-brand-600)] py-3 text-sm font-semibold text-[var(--bhn-text-on-brand)] hover:bg-[var(--bhn-brand-600)] transition"
 //           >
 //             Continue
 //           </Button>
 
-//           <p className="text-center text-sm text-gray-600">
+//           <p className="text-center text-sm text-[var(--bhn-text)]">
 //             Want to fill in later?{" "}
 //           </p>
 //         </div>
@@ -374,25 +374,25 @@
 //     {/* LOCK ICON */}
 //     <div className="mb-6 flex justify-center">
 //       <div
-//         className="flex h-[72px] w-[72px] items-center justify-center rounded-full border border-[#EAECF0]"
+//         className="flex h-[72px] w-[72px] items-center justify-center rounded-full border border-[var(--bhn-border)]"
 //         style={{
 //           background:
-//             "linear-gradient(180deg, #FFFFFF 0%, #F9FAFB 100%)",
+//             "linear-gradient(180deg, var(--bhn-text-soft) 0%, var(--bhn-text-soft) 100%)",
 //         }}
 //       >
-//         <div className="flex h-[48px] w-[48px] items-center justify-center rounded-full border border-[#EAECF0] bg-white shadow-sm">
-//           <MdLock size={20} className="text-[#667085]" />
+//         <div className="flex h-[48px] w-[48px] items-center justify-center rounded-full border border-[var(--bhn-border)] bg-[var(--bhn-surface)] shadow-sm">
+//           <MdLock size={20} className="text-[var(--bhn-text-muted)]" />
 //         </div>
 //       </div>
 //     </div>
 
 //     {/* TITLE */}
 //     <div className="mb-4 text-center">
-//       <h2 className="text-[32px] font-semibold leading-[38px] text-[#181D27]">
+//       <h2 className="text-[32px] font-semibold leading-[38px] text-[var(--bhn-text)]">
 //         Password Setup
 //       </h2>
 
-//       <p className="mt-2 text-sm text-[#667085]">
+//       <p className="mt-2 text-sm text-[var(--bhn-text-muted)]">
 //         Set up a secure password to protect your account.
 //       </p>
 //     </div>
@@ -402,14 +402,14 @@
       
 //       {/* PASSWORD */}
 //       <div>
-//         <label className="mb-2 block text-sm font-medium text-[#344054]">
+//         <label className="mb-2 block text-sm font-medium text-[var(--bhn-text-muted)]">
 //           Create a Password *
 //         </label>
 
 //         <div className="relative">
 //           {/* LEFT ICON */}
 //           <div className="absolute left-4 top-1/2 -translate-y-1/2">
-//             <MdLock size={18} className="text-[#98A2B3]" />
+//             <MdLock size={18} className="text-[var(--bhn-text-soft)]" />
 //           </div>
 
 //           <input
@@ -419,14 +419,14 @@
 //               setPassword(e.target.value)
 //             }
 //             placeholder="••••••••"
-//             className="h-[52px] w-full rounded-xl border border-[#D0D5DD] bg-white pl-11 pr-11 text-sm text-[#101828] shadow-sm outline-none transition-all duration-200 placeholder:text-[#98A2B3] focus:border-[#7A3F23]"
+//             className="h-[52px] w-full rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] pl-11 pr-11 text-sm text-[var(--bhn-text)] shadow-sm outline-none transition-all duration-200 placeholder:text-[var(--bhn-text-soft)] focus:border-[var(--bhn-brand-600)]"
 //           />
 
 //           {/* EYE ICON */}
 //           <button
 //             type="button"
 //             onClick={() => setShowPassword(!showPassword)}
-//             className="absolute right-4 top-1/2 -translate-y-1/2 text-[#98A2B3]"
+//             className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--bhn-text-soft)]"
 //           >
 //             {showPassword ? (
 //               <AiOutlineEyeInvisible size={20} />
@@ -439,14 +439,14 @@
 
 //       {/* CONFIRM PASSWORD */}
 //       <div>
-//         <label className="mb-2 block text-sm font-medium text-[#344054]">
+//         <label className="mb-2 block text-sm font-medium text-[var(--bhn-text-muted)]">
 //           Confirm Password *
 //         </label>
 
 //         <div className="relative">
 //           {/* LEFT ICON */}
 //           <div className="absolute left-4 top-1/2 -translate-y-1/2">
-//             <MdLock size={18} className="text-[#98A2B3]" />
+//             <MdLock size={18} className="text-[var(--bhn-text-soft)]" />
 //           </div>
 
 //           <input
@@ -456,7 +456,7 @@
 //               setConfirmPassword(e.target.value)
 //             }
 //             placeholder="••••••••"
-//             className="h-[52px] w-full rounded-xl border border-[#D0D5DD] bg-white pl-11 pr-11 text-sm text-[#101828] shadow-sm outline-none transition-all duration-200 placeholder:text-[#98A2B3] focus:border-[#7A3F23]"
+//             className="h-[52px] w-full rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] pl-11 pr-11 text-sm text-[var(--bhn-text)] shadow-sm outline-none transition-all duration-200 placeholder:text-[var(--bhn-text-soft)] focus:border-[var(--bhn-brand-600)]"
 //           />
 
 //           {/* EYE ICON */}
@@ -465,7 +465,7 @@
 //             onClick={() =>
 //               setShowConfirmPassword(!showConfirmPassword)
 //             }
-//             className="absolute right-4 top-1/2 -translate-y-1/2 text-[#98A2B3]"
+//             className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--bhn-text-soft)]"
 //           >
 //             {showConfirmPassword ? (
 //               <AiOutlineEyeInvisible size={20} />
@@ -478,14 +478,14 @@
 
 //       {/* PASSWORD RULES */}
 //       <div className="pt-1">
-//         <p className="mb-3 text-xs font-medium text-[#D92D20]">
+//         <p className="mb-3 text-xs font-medium text-[var(--bhn-text)]">
 //           Weak password. Must contain at least;
 //         </p>
 
 //         {/* PROGRESS */}
-//         <div className="mb-4 h-[3px] w-full overflow-hidden rounded-full bg-[#EAECF0]">
+//         <div className="mb-4 h-[3px] w-full overflow-hidden rounded-full bg-[var(--bhn-surface-2)]">
 //           <div
-//             className="h-full rounded-full bg-[#7A3F23] transition-all duration-300"
+//             className="h-full rounded-full bg-[var(--bhn-brand-600)] transition-all duration-300"
 //             style={{
 //               width: `${
 //                 (completedChecks / passwordChecks.length) * 100
@@ -505,8 +505,8 @@
 //                 className={`flex h-4 w-4 items-center justify-center rounded-full border text-[10px]
 //                 ${
 //                   check.valid
-//                     ? "border-green-500 bg-green-50 text-green-600"
-//                     : "border-[#D0D5DD] bg-white text-[#98A2B3]"
+//                     ? "border-[var(--bhn-success-500)] bg-[var(--bhn-success-50)] text-[var(--bhn-success-600)]"
+//                     : "border-[var(--bhn-border)] bg-[var(--bhn-surface)] text-[var(--bhn-text-soft)]"
 //                 }`}
 //               >
 //                 ✓
@@ -515,8 +515,8 @@
 //               <span
 //                 className={`text-sm ${
 //                   check.valid
-//                     ? "text-[#344054]"
-//                     : "text-[#667085]"
+//                     ? "text-[var(--bhn-text-muted)]"
+//                     : "text-[var(--bhn-text-muted)]"
 //                 }`}
 //               >
 //                 {check.label}
@@ -528,14 +528,14 @@
 
 //       {/* ERROR */}
 //       {error && (
-//         <p className="text-sm font-medium text-red-600">
+//         <p className="text-sm font-medium text-[var(--bhn-error-600)]">
 //           {error}
 //         </p>
 //       )}
 
 //       {/* SUCCESS */}
 //       {success && (
-//         <p className="text-sm font-medium text-green-600">
+//         <p className="text-sm font-medium text-[var(--bhn-success-600)]">
 //           ✓ Registration successful!
 //         </p>
 //       )}
@@ -544,7 +544,7 @@
 //       <Button
 //         onClick={handleSubmit}
 //         disabled={isLoading || success}
-//         className="mt-6 h-[52px] w-full rounded-xl bg-[#8B4A2B] text-sm font-semibold text-white transition-all hover:bg-[#72371C] disabled:cursor-not-allowed disabled:opacity-70"
+//         className="mt-6 h-[52px] w-full rounded-xl bg-[var(--bhn-brand-600)] text-sm font-semibold text-[var(--bhn-text-on-brand)] transition-all hover:bg-[var(--bhn-brand-600)] disabled:cursor-not-allowed disabled:opacity-70"
 //       >
 //         {isLoading
 //           ? "Saving..."
@@ -799,7 +799,7 @@ export default function SignupForm({
           alt="Bandhan Events Hub"
           width={433}
           height={96}
-          className="mx-auto mb-4 h-14 w-60 rounded-lg bg-[#2A1C16] object-contain px-3 py-1.5"
+          className="mx-auto mb-4 h-14 w-60 rounded-lg bg-[var(--bhn-brand-600)] object-contain px-3 py-1.5"
         />
       </div>
 
@@ -807,17 +807,17 @@ export default function SignupForm({
       {step === 1 && (
         <div className="space-y-4">
 
-          <h2 className="text-center text-lg font-semibold text-[#3A2E24]">
+          <h2 className="text-center text-lg font-semibold text-[var(--bhn-text)]">
             {steps[0].title}
           </h2>
 
-          <p className="text-center text-[10px] text-[#6B625A]">
+          <p className="text-center text-[10px] text-[var(--bhn-text-muted)]">
             {steps[0].description}
           </p>
 
           <Button
             variant="custom"
-            className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#DDD6CD] bg-white py-3 text-sm font-medium text-[#1F2937] hover:bg-[#F8F4EF] transition"
+            className="flex w-full items-center justify-center gap-2 rounded-lg border border-[var(--bhn-border)] bg-[var(--bhn-surface)] py-3 text-sm font-medium text-[var(--bhn-text)] hover:bg-[var(--bhn-surface-2)] transition"
           >
             <FcGoogle size={20} />
             Sign up with Google
@@ -825,23 +825,23 @@ export default function SignupForm({
 
           <Button
             variant="custom"
-            className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#DDD6CD] bg-white py-3 text-sm font-medium text-[#1F2937] hover:bg-[#F8F4EF] transition"
+            className="flex w-full items-center justify-center gap-2 rounded-lg border border-[var(--bhn-border)] bg-[var(--bhn-surface)] py-3 text-sm font-medium text-[var(--bhn-text)] hover:bg-[var(--bhn-surface-2)] transition"
           >
             <FaFacebook
               size={20}
-              className="text-blue-600"
+              className="text-[var(--bhn-brand-600)]"
             />
             Sign up with Facebook
           </Button>
 
           <div className="flex items-center gap-3">
-            <div className="flex-1 border-t border-[#DDD6CD]" />
+            <div className="flex-1 border-t border-[var(--bhn-border)]" />
 
-            <span className="text-xs text-gray-500 font-medium">
+            <span className="text-xs text-[var(--bhn-text-muted)] font-medium">
               Or
             </span>
 
-            <div className="flex-1 border-t border-[#DDD6CD]" />
+            <div className="flex-1 border-t border-[var(--bhn-border)]" />
           </div>
 
           <Input
@@ -857,7 +857,7 @@ export default function SignupForm({
           <select
             value={role}
             onChange={(event) => setRole(event.target.value as "buyer" | "seller")}
-            className="w-full rounded-lg border border-[#DDD6CD] bg-white px-3 py-2.5 text-sm text-[#3A2E24]"
+            className="w-full rounded-lg border border-[var(--bhn-border)] bg-[var(--bhn-surface)] px-3 py-2.5 text-sm text-[var(--bhn-text)]"
             aria-label="Account type"
           >
             <option value="buyer">Customer — shop, book services and venues</option>
@@ -865,23 +865,23 @@ export default function SignupForm({
           </select>
 
           {error && (
-            <p className="text-sm text-red-600 font-medium">
+            <p className="text-sm text-[var(--bhn-error-600)] font-medium">
               {error}
             </p>
           )}
 
           <Button
             onClick={goNext}
-            className="w-full rounded-lg bg-[#7A3F23] py-3 text-sm font-semibold text-white hover:bg-[#6d2d09] transition"
+            className="w-full rounded-lg bg-[var(--bhn-brand-600)] py-3 text-sm font-semibold text-[var(--bhn-text-on-brand)] hover:bg-[var(--bhn-brand-600)] transition"
           >
             Get started
           </Button>
 
-          <p className="text-center text-sm text-gray-600">
+          <p className="text-center text-sm text-[var(--bhn-text)]">
             Already have an account?{" "}
 
             <span
-              className="cursor-pointer font-semibold text-[#7A3F23] hover:underline"
+              className="cursor-pointer font-semibold text-[var(--bhn-text)] hover:underline"
               onClick={() =>
                 router.push("/login")
               }
@@ -897,28 +897,28 @@ export default function SignupForm({
         <div className="space-y-4">
 
           <div
-            className="w-14 h-14 rounded-full border border-[#E4E5E7A] 
-             bg-gradient-to-r from-[#E4E5E77A] via-white to-[#E4E5E77A]/0 
+            className="w-14 h-14 rounded-full border border-[var(--bhn-border)] 
+             bg-gradient-to-r from-[var(--bhn-surface-2)] via-[var(--bhn-surface)] to-[color-mix(in_srgb,var(--bhn-surface-2)_0%,transparent)] 
           flex items-center justify-center mx-auto shadow-sm"
           >
-            <div className="w-8 h-8 rounded-full border border-[#E2E4E9] bg-white flex items-center justify-center shadow-sm">
+            <div className="w-8 h-8 rounded-full border border-[var(--bhn-border)] bg-[var(--bhn-surface)] flex items-center justify-center shadow-sm">
               <MdPerson
                 size={16}
-                className="text-white bg-[#525866] p-[3px]"
+                className="text-[var(--bhn-text-on-brand)] bg-[var(--bhn-surface-3)] p-[3px]"
               />
             </div>
           </div>
 
-          <h2 className="text-center text-lg font-semibold text-[#3A2E24]">
+          <h2 className="text-center text-lg font-semibold text-[var(--bhn-text)]">
             {steps[1].title}
           </h2>
 
-          <p className="text-center text-sm text-[#6B625A]">
+          <p className="text-center text-sm text-[var(--bhn-text-muted)]">
             {steps[1].description}
           </p>
 
           <div>
-            <label className="text-sm font-semibold text-[#3A2E24]">
+            <label className="text-sm font-semibold text-[var(--bhn-text)]">
               Full name *
             </label>
 
@@ -934,12 +934,12 @@ export default function SignupForm({
           </div>
 
           <div>
-            <label className="text-sm font-semibold text-[#3A2E24]">
+            <label className="text-sm font-semibold text-[var(--bhn-text)]">
               Phone Number *
             </label>
 
             <div className="mt-2 flex gap-2">
-              <select className="rounded-lg border border-[#DDD6CD] bg-white px-3 py-2 text-sm font-medium text-[#3A2E24]">
+              <select className="rounded-lg border border-[var(--bhn-border)] bg-[var(--bhn-surface)] px-3 py-2 text-sm font-medium text-[var(--bhn-text)]">
                 <option value="+91">
                   🇮🇳 +91
                 </option>
@@ -960,7 +960,7 @@ export default function SignupForm({
           </div>
 
           {error && (
-            <p className="text-sm text-red-600 font-medium">
+            <p className="text-sm text-[var(--bhn-error-600)] font-medium">
               {error}
             </p>
           )}
@@ -976,7 +976,7 @@ export default function SignupForm({
 
             <Button
               onClick={goNext}
-              className="w-full rounded-lg bg-[#7A3F23] py-3 text-sm font-semibold text-white hover:bg-[#6d2d09] transition"
+              className="w-full rounded-lg bg-[var(--bhn-brand-600)] py-3 text-sm font-semibold text-[var(--bhn-text-on-brand)] hover:bg-[var(--bhn-brand-600)] transition"
             >
               Continue
             </Button>
@@ -990,27 +990,27 @@ export default function SignupForm({
 
           <div className="mb-6 flex justify-center">
             <div
-              className="flex h-[72px] w-[72px] items-center justify-center rounded-full border border-[#EAECF0]"
+              className="flex h-[72px] w-[72px] items-center justify-center rounded-full border border-[var(--bhn-border)]"
               style={{
                 background:
-                  "linear-gradient(180deg, #FFFFFF 0%, #F9FAFB 100%)",
+                  "linear-gradient(180deg, var(--bhn-text-soft) 0%, var(--bhn-text-soft) 100%)",
               }}
             >
-              <div className="flex h-[48px] w-[48px] items-center justify-center rounded-full border border-[#EAECF0] bg-white shadow-sm">
+              <div className="flex h-[48px] w-[48px] items-center justify-center rounded-full border border-[var(--bhn-border)] bg-[var(--bhn-surface)] shadow-sm">
                 <MdLock
                   size={20}
-                  className="text-[#667085]"
+                  className="text-[var(--bhn-text-muted)]"
                 />
               </div>
             </div>
           </div>
 
           <div className="mb-4 text-center">
-            <h2 className="text-[32px] font-semibold leading-[38px] text-[#181D27]">
+            <h2 className="text-[32px] font-semibold leading-[38px] text-[var(--bhn-text)]">
               Password Setup
             </h2>
 
-            <p className="mt-2 text-sm text-[#667085]">
+            <p className="mt-2 text-sm text-[var(--bhn-text-muted)]">
               Set up a secure password to protect your account.
             </p>
           </div>
@@ -1019,7 +1019,7 @@ export default function SignupForm({
 
             {/* PASSWORD */}
             <div>
-              <label className="mb-2 block text-sm font-medium text-[#344054]">
+              <label className="mb-2 block text-sm font-medium text-[var(--bhn-text-muted)]">
                 Create a Password *
               </label>
 
@@ -1028,7 +1028,7 @@ export default function SignupForm({
                 <div className="absolute left-4 top-1/2 -translate-y-1/2">
                   <MdLock
                     size={18}
-                    className="text-[#98A2B3]"
+                    className="text-[var(--bhn-text-soft)]"
                   />
                 </div>
 
@@ -1045,7 +1045,7 @@ export default function SignupForm({
                     setPassword(e.target.value)
                   }
                   placeholder="••••••••"
-                  className="h-[52px] w-full rounded-xl border border-[#D0D5DD] bg-white pl-11 pr-11 text-sm text-[#101828] shadow-sm outline-none transition-all duration-200 placeholder:text-[#98A2B3] focus:border-[#7A3F23]"
+                  className="h-[52px] w-full rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] pl-11 pr-11 text-sm text-[var(--bhn-text)] shadow-sm outline-none transition-all duration-200 placeholder:text-[var(--bhn-text-soft)] focus:border-[var(--bhn-brand-600)]"
                 />
 
                 <button
@@ -1055,7 +1055,7 @@ export default function SignupForm({
                       !showPassword
                     )
                   }
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#98A2B3]"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--bhn-text-soft)]"
                 >
                   {showPassword ? (
                     <AiOutlineEyeInvisible size={20} />
@@ -1068,7 +1068,7 @@ export default function SignupForm({
 
             {/* CONFIRM */}
             <div>
-              <label className="mb-2 block text-sm font-medium text-[#344054]">
+              <label className="mb-2 block text-sm font-medium text-[var(--bhn-text-muted)]">
                 Confirm Password *
               </label>
 
@@ -1077,7 +1077,7 @@ export default function SignupForm({
                 <div className="absolute left-4 top-1/2 -translate-y-1/2">
                   <MdLock
                     size={18}
-                    className="text-[#98A2B3]"
+                    className="text-[var(--bhn-text-soft)]"
                   />
                 </div>
 
@@ -1096,7 +1096,7 @@ export default function SignupForm({
                     )
                   }
                   placeholder="••••••••"
-                  className="h-[52px] w-full rounded-xl border border-[#D0D5DD] bg-white pl-11 pr-11 text-sm text-[#101828] shadow-sm outline-none transition-all duration-200 placeholder:text-[#98A2B3] focus:border-[#7A3F23]"
+                  className="h-[52px] w-full rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] pl-11 pr-11 text-sm text-[var(--bhn-text)] shadow-sm outline-none transition-all duration-200 placeholder:text-[var(--bhn-text-soft)] focus:border-[var(--bhn-brand-600)]"
                 />
 
                 <button
@@ -1106,7 +1106,7 @@ export default function SignupForm({
                       !showConfirmPassword
                     )
                   }
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#98A2B3]"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--bhn-text-soft)]"
                 >
                   {showConfirmPassword ? (
                     <AiOutlineEyeInvisible size={20} />
@@ -1120,13 +1120,13 @@ export default function SignupForm({
             {/* RULES */}
             <div className="pt-1">
 
-              <p className="mb-3 text-xs font-medium text-[#D92D20]">
+              <p className="mb-3 text-xs font-medium text-[var(--bhn-text)]">
                 Weak password. Must contain at least;
               </p>
 
-              <div className="mb-4 h-[3px] w-full overflow-hidden rounded-full bg-[#EAECF0]">
+              <div className="mb-4 h-[3px] w-full overflow-hidden rounded-full bg-[var(--bhn-surface-2)]">
                 <div
-                  className="h-full rounded-full bg-[#7A3F23] transition-all duration-300"
+                  className="h-full rounded-full bg-[var(--bhn-brand-600)] transition-all duration-300"
                   style={{
                     width: `${
                       (completedChecks /
@@ -1147,8 +1147,8 @@ export default function SignupForm({
                       className={`flex h-4 w-4 items-center justify-center rounded-full border text-[10px]
                       ${
                         check.valid
-                          ? "border-green-500 bg-green-50 text-green-600"
-                          : "border-[#D0D5DD] bg-white text-[#98A2B3]"
+                          ? "border-[var(--bhn-success-500)] bg-[var(--bhn-success-50)] text-[var(--bhn-success-600)]"
+                          : "border-[var(--bhn-border)] bg-[var(--bhn-surface)] text-[var(--bhn-text-soft)]"
                       }`}
                     >
                       ✓
@@ -1157,8 +1157,8 @@ export default function SignupForm({
                     <span
                       className={`text-sm ${
                         check.valid
-                          ? "text-[#344054]"
-                          : "text-[#667085]"
+                          ? "text-[var(--bhn-text-muted)]"
+                          : "text-[var(--bhn-text-muted)]"
                       }`}
                     >
                       {check.label}
@@ -1170,14 +1170,14 @@ export default function SignupForm({
 
             {/* ERROR */}
             {error && (
-              <p className="text-sm font-medium text-red-600">
+              <p className="text-sm font-medium text-[var(--bhn-error-600)]">
                 {error}
               </p>
             )}
 
             {/* SUCCESS */}
             {success && (
-              <p className="text-sm font-medium text-green-600">
+              <p className="text-sm font-medium text-[var(--bhn-success-600)]">
                 ✓ Registration successful!
               </p>
             )}
@@ -1185,7 +1185,7 @@ export default function SignupForm({
             <Button
               onClick={handleSubmit}
               disabled={isLoading || isRegistering || isCompletingRegistration || success}
-              className="mt-6 h-[52px] w-full rounded-xl bg-[#8B4A2B] text-sm font-semibold text-white transition-all hover:bg-[#72371C] disabled:cursor-not-allowed disabled:opacity-70"
+              className="mt-6 h-[52px] w-full rounded-xl bg-[var(--bhn-brand-600)] text-sm font-semibold text-[var(--bhn-text-on-brand)] transition-all hover:bg-[var(--bhn-brand-600)] disabled:cursor-not-allowed disabled:opacity-70"
             >
               {isLoading || isRegistering || isCompletingRegistration
                 ? "Saving..."

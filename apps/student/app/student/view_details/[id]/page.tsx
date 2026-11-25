@@ -1,6 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import { getCookie } from "@/lib/session";
 import StudentHeader from "@/components/common/StudentHeader";
 import Button from "@/components/common/Button";
 import { useRouter } from "next/navigation";
@@ -117,7 +118,7 @@ export default function CourseDetails() {
       setOpenModule(firstModuleKey);
     }
 
-    setHasToken(Boolean(localStorage.getItem("token")));
+    setHasToken(Boolean(getCookie("bandhan_academy_token")));
   }, []);
 
   // Loading state
@@ -184,7 +185,7 @@ export default function CourseDetails() {
           >
             <span>{instructorName}</span>
 
-            <span className="text-[#F59E0B] font-medium">
+            <span className="text-[var(--bhn-warning-500)] font-medium">
               ⭐ {courseRating}
             </span>
 
@@ -246,7 +247,7 @@ export default function CourseDetails() {
             border-t border-[var(--bhn-border)] pt-8
             text-[28px]
             font-bold
-            text-[#241B18] dark:text-[#ededed]
+            text-[#241B18] dark:text-[var(--bhn-neutral-400)]
             mb-4
             "
           >
@@ -291,8 +292,8 @@ export default function CourseDetails() {
                       duration-300
 
                                 ${isOpen
-                        ? "bg-[#F6EAE4] dark:bg-[#1a1a1a]"
-                        : "bg-white"
+                        ? "bg-[#F6EAE4] dark:bg-[var(--bhn-neutral-900)]"
+                        : "bg-[var(--bhn-surface)]"
                       }
                             `}
                   >
@@ -316,7 +317,7 @@ export default function CourseDetails() {
                           text-base
                           sm:text-xl
                           lg:text-[25px]
-                          text-[#2B211E] dark:text-[#ededed]
+                          text-[#2B211E] dark:text-[var(--bhn-neutral-400)]
                           "
                       >
                         {module.title}
@@ -327,7 +328,7 @@ export default function CourseDetails() {
                     {/* ICON */}
                     <div
                       className="
-                        text-[#2B211E] dark:text-[#ededed]
+                        text-[#2B211E] dark:text-[var(--bhn-neutral-400)]
                         transition-all
                         duration-300
                                 "
@@ -397,7 +398,7 @@ export default function CourseDetails() {
                           text-left
                            p-3
                           rounded-lg
-                          hover:bg-[#F6EAE4] dark:hover:bg-[#1a1a1a] dark:hover:bg-[#1a1a1a] dark:bg-[#1a1a1a]
+                          hover:bg-[#F6EAE4] dark:hover:bg-[#1a1a1a] dark:hover:bg-[#1a1a1a] dark:bg-[var(--bhn-neutral-900)]
                           transition-all
                           duration-200
                           cursor-pointer
@@ -415,12 +416,12 @@ export default function CourseDetails() {
                               className="w-4 h-4 sm:w-5 sm:h-5"
                             />
 
-                            <span className="text-sm sm:text-lg lg:text-[21px] text-[#685C56] dark:text-[#a89080]">
+                            <span className="text-sm sm:text-lg lg:text-[21px] text-[#685C56] dark:text-[var(--bhn-text-soft)]">
                               {lesson.title}
                             </span>
                           </div>
 
-                          <span className="text-sm sm:text-lg lg:text-[21px] text-[#685C56] dark:text-[#a89080]">
+                          <span className="text-sm sm:text-lg lg:text-[21px] text-[#685C56] dark:text-[var(--bhn-text-soft)]">
                             {lesson.duration ?? lesson.time ?? ""}
                           </span>
                         </button>
@@ -512,7 +513,7 @@ export default function CourseDetails() {
                   text-lg
                   sm:text-2xl
                   font-semibold
-                  text-[#2B1D18] dark:text-[#ededed]
+                  text-[#2B1D18] dark:text-[var(--bhn-neutral-400)]
                 "
               >
                 Show EMI Options
@@ -537,7 +538,7 @@ export default function CourseDetails() {
                   className={`
                     w-7
                     h-7
-                    bg-white
+                    bg-[var(--bhn-surface)]
                     rounded-full
                     shadow-md
                     transform
@@ -582,7 +583,7 @@ export default function CourseDetails() {
                         transition-all
                         duration-200
                         ${selectedPlan === plan
-                          ? "bg-white text-[var(--bhn-brand-700)] shadow-sm"
+                          ? "bg-[var(--bhn-surface)] text-[var(--bhn-brand-700)] shadow-sm"
                           : "text-[var(--bhn-text-muted)]"
                         }
                       `}
@@ -637,7 +638,7 @@ export default function CourseDetails() {
               <Button
                 onClick={async () => {
                   const wishlistId = String(courseId || id);
-                  if (!localStorage.getItem("token")) {
+                  if (!getCookie("bandhan_academy_token")) {
                     router.push(`/student/auth?next=${encodeURIComponent(`/student/view_details/${wishlistId}`)}`);
                     return;
                   }
@@ -694,7 +695,7 @@ export default function CourseDetails() {
                   sm:text-2xl
                   font-semibold
                   mb-6
-                  text-[#2B1D18] dark:text-[#ededed]
+                  text-[#2B1D18] dark:text-[var(--bhn-neutral-400)]
                 "
               >
                 Includes:
@@ -705,32 +706,32 @@ export default function CourseDetails() {
                   space-y-5
                   text-sm
                   sm:text-lg
-                  text-[#5E514B] dark:text-[#a89080]
+                  text-[#5E514B] dark:text-[var(--bhn-text-soft)]
                 "
               >
 
                 <div className="flex items-center gap-4">
-                  <span className="text-[#8B5E3C] dark:text-[#c9a882]">▣</span>
+                  <span className="text-[#8B5E3C] dark:text-[var(--bhn-brand-400)]">▣</span>
                   <p>{(course.duration || course.totalDuration || "Self-paced")} of on-demand video</p>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <span className="text-[#8B5E3C] dark:text-[#c9a882]">▤</span>
+                  <span className="text-[#8B5E3C] dark:text-[var(--bhn-brand-400)]">▤</span>
                   <p>{totalLessons} lessons • {modules.length} modules</p>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <span className="text-[#8B5E3C] dark:text-[#c9a882]">◉</span>
+                  <span className="text-[#8B5E3C] dark:text-[var(--bhn-brand-400)]">◉</span>
                   <p>{course.language || "English"}{course.subtitle ? ` • ${course.subtitle}` : ""}</p>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <span className="text-[#8B5E3C] dark:text-[#c9a882]">∞</span>
+                  <span className="text-[#8B5E3C] dark:text-[var(--bhn-brand-400)]">∞</span>
                   <p>Certificate of completion</p>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <span className="text-[#8B5E3C] dark:text-[#c9a882]">∞</span>
+                  <span className="text-[#8B5E3C] dark:text-[var(--bhn-brand-400)]">∞</span>
                   <p>Full lifetime access</p>
                 </div>
 

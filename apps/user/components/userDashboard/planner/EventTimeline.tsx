@@ -97,7 +97,7 @@ export default function EventTimeline({ event, onSaveTimeline }: Props) {
 
       {phases.length === 0 && defaultPhaseNames(event.eventType).length > 0 ? (
         <div className="bhn-card bhn-card-hover p-6 text-center">
-          <Edit3 size={32} className="mx-auto mb-3 text-[var(--bhn-brand-600)]" />
+          <Edit3 size={32} className="mx-auto mb-3 text-[var(--bhn-text)]" />
           <p className="text-sm text-[var(--bhn-text-muted)] mb-3">No phases yet. Add your first planning phase.</p>
           <button type="button" onClick={addPhase} className="bhn-btn bhn-btn-secondary bhn-btn-sm gap-2">
             <Plus size={12} /> Add phase

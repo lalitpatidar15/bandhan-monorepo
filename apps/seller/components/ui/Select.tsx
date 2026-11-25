@@ -29,7 +29,7 @@ export default function Select({
   return (
     <div className="flex flex-col gap-1 w-full">
       {label && (
-        <label className="text-xs font-semibold text-[#3A2E24] uppercase tracking-wide">
+        <label className="text-xs font-semibold text-[var(--bhn-text)] uppercase tracking-wide">
           {label}
         </label>
       )}
@@ -38,7 +38,7 @@ export default function Select({
         name={name}
         value={value}
         onChange={onChange}
-        className={`w-full rounded-lg border border-[#E5DED6] bg-white px-3 py-2 text-sm text-[#3A2E24] outline-none focus:border-[#7A3F23] ${className}`}
+        className={`w-full rounded-lg border border-[var(--bhn-border)] bg-[var(--bhn-surface)] px-3 py-2 text-sm text-[var(--bhn-text)] outline-none focus:border-[var(--bhn-brand-600)] ${className}`}
       >
         {placeholder ? (
           <option value="">{placeholder}</option>
@@ -50,7 +50,7 @@ export default function Select({
         ))}
       </select>
 
-      {error ? <p className="text-sm text-red-600 mt-1">{error}</p> : null}
+      {error ? <p className="text-sm text-[var(--bhn-error-600)] mt-1">{error}</p> : null}
     </div>
   );
 }

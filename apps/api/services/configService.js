@@ -16,6 +16,8 @@ const DEFAULTS = {
   jobPostingFee: 499,
   serviceFee: 150,
   taxRate: 0.08,
+  // Single source of truth for the platform commission charged to vendors.
+  commissionRate: 0.1,
   platformFee: 50,
   gstRate: 0.18,
   defaultCurrency: "INR",

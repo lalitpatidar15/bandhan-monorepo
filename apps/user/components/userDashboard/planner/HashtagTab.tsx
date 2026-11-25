@@ -14,7 +14,7 @@ export default function HashtagTab({ event }: Props) {
   return (
     <div className="bhn-card p-6 space-y-5">
       <div className="flex items-center gap-3">
-        <Sparkles size={16} className="text-[var(--bhn-brand-600)]" />
+        <Sparkles size={16} className="text-[var(--bhn-text)]" />
         <h3 className="font-display text-lg font-bold text-[var(--bhn-text)]">Hashtag Generator</h3>
       </div>
 

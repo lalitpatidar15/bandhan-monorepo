@@ -67,8 +67,8 @@ export default function RolesPermissions() {
           <div key={role.id} className="card">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <h3 className="font-semibold text-gray-900">{role.role}</h3>
-                <p className="text-xs text-gray-500">{role.description || 'No description'}</p>
+                <h3 className="font-semibold text-[var(--bhn-text)]">{role.role}</h3>
+                <p className="text-xs text-[var(--bhn-text-muted)]">{role.description || 'No description'}</p>
               </div>
               {!role.isSystem && (
                 <button onClick={() => deleteRole(role.id)} className="admin-btn admin-btn-danger text-xs">Delete</button>

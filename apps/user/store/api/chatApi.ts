@@ -65,6 +65,9 @@ export interface Conversation {
   serviceName?: string;
   serviceTitle?: string;
   serviceImage?: string;
+  venueName?: string;
+  venueImage?: string;
+  venue?: ChatListing | null;
   category?: string;
   price?: number;
   location?: string;

@@ -43,7 +43,7 @@ function SellerSsoCallbackContent() {
   }, [router, searchParams]);
 
   if (!error) return <SsoLoadingScreen portalName="your seller portal" />;
-  return <main className="flex min-h-screen items-center justify-center bg-[#F7F1EB] p-6 text-center text-[#3A2B22]"><p>{error}</p></main>;
+  return <main className="flex min-h-screen items-center justify-center bg-[var(--bhn-bg)] p-6 text-center text-[var(--bhn-text)]"><p>{error}</p></main>;
 }
 
 export default function SellerSsoCallbackPage() {

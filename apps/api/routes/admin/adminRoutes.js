@@ -41,6 +41,14 @@ router.get("/venues/:id", adminController.getVenueDetails);
 router.put("/venues/:id", adminController.updateVenue);
 router.delete("/venues/:id", adminController.deleteVenue);
 
+// Manual seller verification
+router.get("/verifications/sellers", adminController.getSellerVerifications);
+router.put("/verifications/sellers/:id/review", adminController.reviewSellerVerification);
+
+// Payment distribution / reporting
+router.get("/vendor-earnings", adminController.getVendorEarnings);
+router.get("/payment-breakdown", adminController.getPaymentBreakdown);
+
 // Enhanced seller views
 router.get("/sellers", adminController.getSellersWithReviews);
 router.get("/sellers/:sellerId/reviews", adminController.getSellerReviews);

@@ -78,8 +78,8 @@ export default function JobSeekers() {
 
       <div className="card mb-3">
         <div className="flex items-center">
-          <Search className="w-4 h-4 text-gray-400 mr-2" />
-          <input type="text" placeholder="Search job seekers..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="flex-1 outline-none text-sm text-gray-700" />
+          <Search className="w-4 h-4 text-[var(--bhn-text-muted)] mr-2" />
+          <input type="text" placeholder="Search job seekers..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="flex-1 outline-none text-sm text-[var(--bhn-text)]" />
         </div>
       </div>
 
@@ -98,9 +98,9 @@ export default function JobSeekers() {
             {filtered.map(s => (
               <tr key={s.id}>
                 <td>
-                  <div className="font-medium text-gray-900 text-sm">{s.name}</div>
-                  <div className="text-xs text-gray-500">{s.email}</div>
-                  <div className="text-xs text-gray-500">{s.phone || 'No phone'}</div>
+                  <div className="font-medium text-[var(--bhn-text)] text-sm">{s.name}</div>
+                  <div className="text-xs text-[var(--bhn-text-muted)]">{s.email}</div>
+                  <div className="text-xs text-[var(--bhn-text-muted)]">{s.phone || 'No phone'}</div>
                 </td>
                 <td className="text-sm">{s.currentRole}</td>
                 <td className="text-sm">{s.experienceLevel}</td>

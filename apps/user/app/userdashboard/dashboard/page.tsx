@@ -127,7 +127,7 @@ export default function EventManagerDashboard() {
               <div className="relative h-64 md:h-full min-h-[220px] rounded-2xl overflow-hidden shadow-[var(--bhn-shadow)] bg-[var(--bhn-surface-3)]">
                 {featuredEvent?.image ? <Image src={featuredEvent.image} alt={featuredEvent.title} fill sizes="(max-width: 768px) 100vw, 40vw" unoptimized className="object-cover hover:scale-105 transition-transform duration-500" /> : (
                   <div className="flex h-full w-full flex-col items-center justify-center p-8 text-center text-sm text-[var(--bhn-text-muted)]">
-                    <CalendarDays className="mb-3 text-[var(--bhn-brand-600)]" size={32} />
+                    <CalendarDays className="mb-3 text-[var(--bhn-text)]" size={32} />
                     {featuredEvent ? "Your saved event details are ready in the planner." : "Create an event plan to track your budget, venues, and tasks."}
                   </div>
                 )}

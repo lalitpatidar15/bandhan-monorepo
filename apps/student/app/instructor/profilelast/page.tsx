@@ -50,21 +50,21 @@ export default function VerificationPage() {
 
     const getStatusBadge = (value: string | undefined) => {
         if (!value) {
-            return { label: "Not Submitted", bg: "bg-[#EDEDED] text-[#8A7A71]", icon: Clock };
+            return { label: "Not Submitted", bg: "bg-[var(--bhn-neutral-200)] text-[var(--bhn-text-soft)]", icon: Clock };
         }
         const n = normalizeStatusValue(value);
 
         switch (n) {
             case "approved":
             case "verified":
-                return { label: "Complete", bg: "bg-[#E6F4EA] text-green-700", icon: CheckCircle };
+                return { label: "Complete", bg: "bg-[var(--bhn-success-50)] text-[var(--bhn-success-700)]", icon: CheckCircle };
             case "pending":
             case "submitted":
-                return { label: "Pending Review", bg: "bg-[#FCE8D5] text-[#C05621]", icon: Clock };
+                return { label: "Pending Review", bg: "bg-[var(--bhn-warning-50)] text-[var(--bhn-brand-600)]", icon: Clock };
             case "rejected":
-                return { label: "Rejected", bg: "bg-[#FDE8E8] text-red-600", icon: XCircle };
+                return { label: "Rejected", bg: "bg-[var(--bhn-error-50)] text-[var(--bhn-error-600)]", icon: XCircle };
             default:
-                return { label: value, bg: "bg-[#EDEDED] text-[#8A7A71]", icon: Clock };
+                return { label: value, bg: "bg-[var(--bhn-neutral-200)] text-[var(--bhn-text-soft)]", icon: Clock };
         }
     };
 
@@ -293,7 +293,7 @@ export default function VerificationPage() {
 
     return (
         <>
-        <div className="bg-[#F6F1EC] min-h-screen">
+        <div className="bg-[var(--bhn-surface-3)] min-h-screen">
 
             {/* HEADER */}
             <InstructorHeader step={3} totalSteps={3} />
@@ -302,8 +302,8 @@ export default function VerificationPage() {
             <div className="max-w-7xl mx-auto px-6 py-6">
 
                 {/* Breadcrumb */}
-                <p className="text-sm text-[#8A7A71] mb-6">
-                    Dashboard › <span className="text-[#2D201B] font-medium">Verification</span>
+                <p className="text-sm text-[var(--bhn-text-soft)] mb-6">
+                    Dashboard › <span className="text-[var(--bhn-text)] font-medium">Verification</span>
                 </p>
 
                 <div className="grid md:grid-cols-3 gap-4">
@@ -312,7 +312,7 @@ export default function VerificationPage() {
                     <div className="md:col-span-2 space-y-6">
 
                         {/* TOP CARD */}
-                        <div className="bg-white p-4 rounded-2xl border border-[#E8DDD5]">
+                        <div className="bg-[var(--bhn-surface)] p-4 rounded-2xl border border-[var(--bhn-border)]">
 
                             {/* HEADER */}
                             <div className="flex flex-col items-start mb-6">
@@ -325,14 +325,14 @@ export default function VerificationPage() {
                                 />
 
                                 {/* Heading */}
-                                <h2 className="text-[35px] font-semibold text-[#2D201B] leading-none font-serif">
+                                <h2 className="text-[35px] font-semibold text-[var(--bhn-text)] leading-none font-serif">
                                     Document Verification
                                 </h2>
 
                             </div>
 
                             {/* DESCRIPTION */}
-                            <p className="text-[#8A7A71] text-[17px] leading-7 mb-4 max-w-xl">
+                            <p className="text-[var(--bhn-text-soft)] text-[17px] leading-7 mb-4 max-w-xl">
                                 Verify your identity and academic credentials through India's most
                                 secure digital locker system to begin your journey as an instructor.
                             </p>
@@ -341,7 +341,7 @@ export default function VerificationPage() {
                             <button
                                 onClick={handleDigiLockerDemo}
                                 disabled={isConnectingDigiLocker}
-                                className="w-full bg-[#8B4A28] hover:bg-[#6f3a20] text-white py-3 sm:py-4 px-4 rounded-lg flex items-center justify-center gap-2 sm:gap-3 shadow-sm text-sm sm:text-base text-center"
+                                className="w-full bg-[var(--bhn-brand-600)] hover:bg-[#6f3a20] text-white py-3 sm:py-4 px-4 rounded-lg flex items-center justify-center gap-2 sm:gap-3 shadow-sm text-sm sm:text-base text-center"
                             >
                                 <UploadCloud className="shrink-0" size={17} />
 
@@ -353,20 +353,20 @@ export default function VerificationPage() {
 
                             {/* OR DIVIDER */}
                             <div className="flex items-center gap-4 my-6">
-                                <div className="flex-1 h-px bg-[#E5D6CC]" />
-                                <span className="text-[#A3938A] text-xs tracking-wider">OR</span>
-                                <div className="flex-1 h-px bg-[#E5D6CC]" />
+                                <div className="flex-1 h-px bg-[var(--bhn-border)]" />
+                                <span className="text-[var(--bhn-text-soft)] text-xs tracking-wider">OR</span>
+                                <div className="flex-1 h-px bg-[var(--bhn-border)]" />
                             </div>
 
                             {/*  MANUAL UPLOAD (FIXED LIKE IMAGE) */}
                             <div className="flex justify-center">
-                                <button className="flex items-center gap-2 text-[#8B4A28] text-2sm font-bold hover:underline">
+                                <button className="flex items-center gap-2 text-[var(--bhn-brand-700)] text-2sm font-bold hover:underline">
 
                                     {/* FILE ICON BOX */}
-                                    <div className="w-5 h-5 flex items-center justify-center border border-[#D8C2B5] rounded-sm">
+                                    <div className="w-5 h-5 flex items-center justify-center border border-[var(--bhn-border)] rounded-sm">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
-                                            className="w-3 h-3 text-[#8B4A28]"
+                                            className="w-3 h-3 text-[var(--bhn-brand-700)]"
                                             fill="none"
                                             viewBox="0 0 24 24"
                                             stroke="currentColor"
@@ -388,13 +388,13 @@ export default function VerificationPage() {
                             {showUploadModal && (
                                 <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
 
-                                    <div className="bg-white w-full max-w-2xl rounded-2xl p-5 shadow-xl">
+                                    <div className="bg-[var(--bhn-surface)] w-full max-w-2xl rounded-2xl p-5 shadow-xl">
 
                                         {/* Header */}
 
                                         <div className="flex justify-between items-center mb-6">
 
-                                            <h2 className="text-2xl font-semibold text-[#2D201B]">
+                                            <h2 className="text-2xl font-semibold text-[var(--bhn-text)]">
                                                 Upload Verification Documents
                                             </h2>
 
@@ -472,7 +472,7 @@ export default function VerificationPage() {
                                             <button
                                                 onClick={handleUpload}
                                                 disabled={isUploading}
-                                                className="bg-[#8B4A28] text-white px-6 py-2 rounded-lg"
+                                                className="bg-[var(--bhn-brand-600)] text-white px-6 py-2 rounded-lg"
                                             >
                                                 {isUploading ? "Uploading..." : "Upload Documents"}
                                             </button>
@@ -488,21 +488,21 @@ export default function VerificationPage() {
 
 
                         {/* STATUS CARD */}
-                        <div className="bg-white rounded-2xl border border-[#E8DDD5] overflow-hidden">
+                        <div className="bg-[var(--bhn-surface)] rounded-2xl border border-[var(--bhn-border)] overflow-hidden">
 
                             {/* HEADER */}
-                            <div className="flex justify-between items-center px-6 py-4 bg-[#F5EEE8] border-b border-[#E8DDD5]">
-                                <h3 className="text-[#2D201B] font-semibold text-[18px] font-serif">
+                            <div className="flex justify-between items-center px-6 py-4 bg-[#F5EEE8] border-b border-[var(--bhn-border)]">
+                                <h3 className="text-[var(--bhn-text)] font-semibold text-[18px] font-serif">
                                     Verification Status
                                 </h3>
 
-                                <span className="text-[11px] tracking-widest text-[#8A7A71]">
+                                <span className="text-[11px] tracking-widest text-[var(--bhn-text-soft)]">
                                     3 DOCUMENTS REQUIRED
                                 </span>
                             </div>
 
                             {/* LIST */}
-                            <div className="divide-y divide-[#EFE7E2]">
+                            <div className="divide-y divide-[var(--bhn-border)]">
 
                                 {/* GOV ID */}
                                 <div className="flex justify-between items-center px-6 py-5">
@@ -510,16 +510,16 @@ export default function VerificationPage() {
                                     <div className="flex items-center gap-4">
 
                                         {/* ICON */}
-                                        <div className="w-12 h-12 rounded-xl bg-[#E6F4EA] flex items-center justify-center">
+                                        <div className="w-12 h-12 rounded-xl bg-[var(--bhn-success-50)] flex items-center justify-center">
                                             <IdCard className="text-green-600" size={20} />
                                         </div>
 
                                         {/* TEXT */}
                                         <div>
-                                            <p className="text-[#2D201B] font-bold text-[15px]">
+                                            <p className="text-[var(--bhn-text)] font-bold text-[15px]">
                                                 Gov ID (Aadhar/PAN)
                                             </p>
-                                            <p className="text-[#8A7A71] text-sm">
+                                            <p className="text-[var(--bhn-text-soft)] text-sm">
                                                 {docLabel("aadhaar") || docLabel("pan") || "Automatically fetched from DigiLocker"}
                                             </p>
                                         </div>
@@ -545,15 +545,15 @@ export default function VerificationPage() {
 
                                     <div className="flex items-center gap-4">
 
-                                        <div className="w-12 h-12 rounded-xl bg-[#F4EDE7] flex items-center justify-center">
-                                            <GraduationCap className="text-[#B7791F]" size={20} />
+                                        <div className="w-12 h-12 rounded-xl bg-[var(--bhn-surface-3)] flex items-center justify-center">
+                                            <GraduationCap className="text-[var(--bhn-warning-500)]" size={20} />
                                         </div>
 
                                         <div>
-                                            <p className="text-[#2D201B] font-bold text-[15px]">
+                                            <p className="text-[var(--bhn-text)] font-bold text-[15px]">
                                                 Academic Degree
                                             </p>
-                                            <p className="text-[#8A7A71] text-sm">
+                                            <p className="text-[var(--bhn-text-soft)] text-sm">
                                                 {docLabel("academicDegree") || "No degree uploaded"}
                                             </p>
                                         </div>
@@ -578,15 +578,15 @@ export default function VerificationPage() {
 
                                     <div className="flex items-center gap-4">
 
-                                        <div className="w-12 h-12 rounded-xl bg-[#FDE8E8] flex items-center justify-center">
+                                        <div className="w-12 h-12 rounded-xl bg-[var(--bhn-error-50)] flex items-center justify-center">
                                             <BadgeCheck className="text-red-500" size={20} />
                                         </div>
 
                                         <div>
-                                            <p className="text-[#2D201B] font-bold text-[15px]">
+                                            <p className="text-[var(--bhn-text)] font-bold text-[15px]">
                                                 Professional Certification
                                             </p>
-                                            <p className="text-[#8A7A71] text-sm">
+                                            <p className="text-[var(--bhn-text-soft)] text-sm">
                                                 {docLabel("professionalCertificate") || "No certificate uploaded"}
                                             </p>
                                         </div>
@@ -611,10 +611,10 @@ export default function VerificationPage() {
 
                         {/* HELP */}
                         <div className="text-center mt-6">
-                            <p className="text-[#2D201B] font-medium mb-2 font-serif">
+                            <p className="text-[var(--bhn-text)] font-medium mb-2 font-serif">
                                 Need help with verification?
                             </p>
-                            <p className="text-sm text-[#8A7A71] mb-4">
+                            <p className="text-sm text-[var(--bhn-text-soft)] mb-4">
                                 Our support team is available 24/7 to help you with DigiLocker
                                 connections or manual document reviews.
                             </p>
@@ -664,10 +664,10 @@ export default function VerificationPage() {
                     <div className="space-y-6">
 
                         {/* WHY VERIFY */}
-                        <div className="bg-[#EFE4DC] p-4 rounded-2xl border border-[#E3D6CD]">
+                        <div className="bg-[var(--bhn-border)] p-4 rounded-2xl border border-[var(--bhn-border)]">
 
                             {/* TITLE */}
-                            <h3 className="text-[22px] font-semibold text-[#2D201B] mb-6 font-serif">
+                            <h3 className="text-[22px] font-semibold text-[var(--bhn-text)] mb-6 font-serif">
                                 Why Verify?
                             </h3>
 
@@ -676,14 +676,14 @@ export default function VerificationPage() {
 
                                 {/* ITEM 1 */}
                                 <div className="flex items-start gap-4">
-                                    <div className="bg-[#F5E8DF] p-2 rounded-lg">
-                                        <ShieldCheck className="text-[#8B4A28]" size={20} />
+                                    <div className="bg-[var(--bhn-surface-3)] p-2 rounded-lg">
+                                        <ShieldCheck className="text-[var(--bhn-brand-700)]" size={20} />
                                     </div>
                                     <div>
-                                        <p className="font-semibold text-[#2D201B]">
+                                        <p className="font-semibold text-[var(--bhn-text)]">
                                             Build Trust
                                         </p>
-                                        <p className="text-sm text-[#6B5B52] leading-relaxed">
+                                        <p className="text-sm text-[var(--bhn-text-soft)] leading-relaxed">
                                             Students feel safer learning from verified experts.
                                         </p>
                                     </div>
@@ -691,14 +691,14 @@ export default function VerificationPage() {
 
                                 {/* ITEM 2 */}
                                 <div className="flex items-start gap-4">
-                                    <div className="bg-[#F5E8DF] p-2 rounded-lg">
-                                        <Banknote className="text-[#8B4A28]" size={20} />
+                                    <div className="bg-[var(--bhn-surface-3)] p-2 rounded-lg">
+                                        <Banknote className="text-[var(--bhn-brand-700)]" size={20} />
                                     </div>
                                     <div>
-                                        <p className="font-semibold text-[#2D201B]">
+                                        <p className="font-semibold text-[var(--bhn-text)]">
                                             Fast Payouts
                                         </p>
-                                        <p className="text-sm text-[#6B5B52] leading-relaxed">
+                                        <p className="text-sm text-[var(--bhn-text-soft)] leading-relaxed">
                                             Complete KYC is required for tax-compliant earnings.
                                         </p>
                                     </div>
@@ -706,14 +706,14 @@ export default function VerificationPage() {
 
                                 {/* ITEM 3 */}
                                 <div className="flex items-start gap-4">
-                                    <div className="bg-[#F5E8DF] p-2 rounded-lg">
-                                        <BadgeCheck className="text-[#8B4A28]" size={20} />
+                                    <div className="bg-[var(--bhn-surface-3)] p-2 rounded-lg">
+                                        <BadgeCheck className="text-[var(--bhn-brand-700)]" size={20} />
                                     </div>
                                     <div>
-                                        <p className="font-semibold text-[#2D201B]">
+                                        <p className="font-semibold text-[var(--bhn-text)]">
                                             Global Exposure
                                         </p>
-                                        <p className="text-sm text-[#6B5B52] leading-relaxed">
+                                        <p className="text-sm text-[var(--bhn-text-soft)] leading-relaxed">
                                             Appear in curated premium instructor lists.
                                         </p>
                                     </div>
@@ -723,7 +723,7 @@ export default function VerificationPage() {
                         </div>
 
                         {/* VERIFY CARD */}
-                        <div className="bg-white p-5 rounded-2xl border border-[#E8DDD5] text-center">
+                        <div className="bg-[var(--bhn-surface)] p-5 rounded-2xl border border-[var(--bhn-border)] text-center">
 
                             {/* TOP IMAGE */}
                             <div className="w-full h-[160px] rounded-xl overflow-hidden mb-5">
@@ -737,7 +737,7 @@ export default function VerificationPage() {
                             </div>
 
                             {/* TEXT */}
-                            <p className="text-[14px] leading-relaxed text-[#6F625B] mb-6 px-2">
+                            <p className="text-[14px] leading-relaxed text-[var(--bhn-text-soft)] mb-6 px-2">
                                 By connecting with DigiLocker, you agree to our Instructor Verification
                                 Policy and Data Security Guidelines.
                             </p>
@@ -745,13 +745,13 @@ export default function VerificationPage() {
                             {/* BUTTON (DISABLED STYLE SAME AS IMAGE) */}
                             <button
                                 disabled
-                                className="w-full bg-[#EDE6E1] text-[#9C8F87] py-3 rounded-xl text-sm font-medium cursor-not-allowed"
+                                className="w-full bg-[var(--bhn-surface-3)] text-[var(--bhn-text-soft)] py-3 rounded-xl text-sm font-medium cursor-not-allowed"
                             >
                                 VERIFY DOCUMENTS
                             </button>
 
                             {/* FOOT NOTE */}
-                            <p className="text-[11px] text-[#B7AAA2] mt-3 tracking-wide">
+                            <p className="text-[11px] text-[var(--bhn-text-soft)] mt-3 tracking-wide">
                                 REQUIRES ALL DOCUMENTS TO BE VERIFIED
                             </p>
 
@@ -764,11 +764,11 @@ export default function VerificationPage() {
         </div>
         {showDigiLockerSuccess && (
             <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4" role="dialog" aria-modal="true" aria-labelledby="digilocker-complete-title">
-                <div className="w-full max-w-md rounded-2xl bg-white p-6 text-center shadow-2xl">
+                <div className="w-full max-w-md rounded-2xl bg-[var(--bhn-surface)] p-6 text-center shadow-2xl">
                     <CheckCircle className="mx-auto h-12 w-12 text-green-600" />
-                    <h2 id="digilocker-complete-title" className="mt-3 text-xl font-semibold text-[#2D201B]">Verification recorded</h2>
-                    <p className="mt-2 text-sm text-[#6F625B]">Your demo verification was saved. A real DigiLocker provider connection is required before it can be used as government identity proof.</p>
-                    <button onClick={() => router.push("/instructor/curriculum")} className="mt-5 w-full rounded-lg bg-[#8B4A28] py-3 font-medium text-white">Continue</button>
+                    <h2 id="digilocker-complete-title" className="mt-3 text-xl font-semibold text-[var(--bhn-text)]">Verification recorded</h2>
+                    <p className="mt-2 text-sm text-[var(--bhn-text-soft)]">Your demo verification was saved. A real DigiLocker provider connection is required before it can be used as government identity proof.</p>
+                    <button onClick={() => router.push("/instructor/curriculum")} className="mt-5 w-full rounded-lg bg-[var(--bhn-brand-600)] py-3 font-medium text-white">Continue</button>
                 </div>
             </div>
         )}

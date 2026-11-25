@@ -26,11 +26,11 @@ export default function ContentGovernance() {
           <div key={post.id} className="card">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <h2 className="font-semibold text-gray-900">{post.authorName}</h2>
-                <p className="text-xs text-gray-500">{post.authorEmail}</p>
-                <p className="mt-2 whitespace-pre-wrap text-sm text-gray-700">{post.content || 'No text content'}</p>
-                {post.image ? <p className="mt-2 text-xs text-blue-700">Image attached</p> : null}
-                {post.video ? <p className="mt-1 text-xs text-blue-700">Video attached</p> : null}
+                <h2 className="font-semibold text-[var(--bhn-text)]">{post.authorName}</h2>
+                <p className="text-xs text-[var(--bhn-text-muted)]">{post.authorEmail}</p>
+                <p className="mt-2 whitespace-pre-wrap text-sm text-[var(--bhn-text)]">{post.content || 'No text content'}</p>
+                {post.image ? <p className="mt-2 text-xs text-[var(--bhn-brand-700)]">Image attached</p> : null}
+                {post.video ? <p className="mt-1 text-xs text-[var(--bhn-brand-700)]">Video attached</p> : null}
               </div>
               <button onClick={() => remove(post.id)} disabled={isLoading} className="admin-btn admin-btn-danger text-xs">
                 Remove

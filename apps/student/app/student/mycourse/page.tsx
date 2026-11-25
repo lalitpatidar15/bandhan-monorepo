@@ -9,17 +9,8 @@ import { useGetDashboardQuery } from "@/app/redux/services/courseApi";
 
 export default function MyCoursesPage() {
     const router = useRouter();
-    const [user, setUser] = useState<{ name?: string; email?: string } | null>(null);
     const { data: enrollmentsData, isLoading: isDashboardLoading, error: dashboardError } = useGetDashboardQuery(undefined);
-
-    
-
-    useEffect(() => {
-        const userData = localStorage.getItem("user");
-        if (userData) {
-            setUser(JSON.parse(userData));
-        }
-    }, []);
+    const user = enrollmentsData?.data?.user || enrollmentsData?.data?.student || null;
 
     const handleViewCourse = () => {
         router.push("/student/courses");
@@ -32,7 +23,7 @@ export default function MyCoursesPage() {
             author: course.instructor?.fullName || "Unknown instructor",
             lesson: course.currentLesson || "Continue learning",
             progress: course.progress ?? 0,
-            image: course.thumbnail || "/image20.png",
+            image: course.thumbnail || "",
         }))
         : [];
 
@@ -45,7 +36,7 @@ export default function MyCoursesPage() {
             title: course.title,
             description: course.description || "Explore this recommended course.",
             price: course.price ? `₹${course.price}` : "₹0.00",
-            image: course.image || "/image23.png",
+            image: course.image || "",
         }))
         : [];
 
@@ -128,7 +119,7 @@ export default function MyCoursesPage() {
 
                                 <p
                                     onClick={() => router.push("/student/mycourse")}
-                                    className="text-sm text-[#8B5E3C] dark:text-[#c9a882] cursor-pointer whitespace-nowrap"
+                                    className="text-sm text-[#8B5E3C] dark:text-[var(--bhn-brand-400)] cursor-pointer whitespace-nowrap"
                                 >
                                     View All
                                 </p>
@@ -239,7 +230,7 @@ export default function MyCoursesPage() {
                             <div className="flex flex-col gap-4">
 
                                 {/* TASK CARD */}
-                                <div className="bg-white rounded-xl p-4 sm:p-5 shadow-sm space-y-4">
+                                <div className="bg-[var(--bhn-surface)] rounded-xl p-4 sm:p-5 shadow-sm space-y-4">
 
                                     {
                                         enrollmentsData?.data?.upcomingTasks?.map((task: any) => (
@@ -322,8 +313,8 @@ export default function MyCoursesPage() {
                                     <button
                                         onClick={() => router.push("/student/courses")}
                                         className="
-                                            bg-white
-                                            text-[#9C4F2C]
+                                            bg-[var(--bhn-surface)]
+                                            text-[var(--bhn-brand-600)]
                                             text-sm
                                             px-5
                                             py-2
@@ -377,7 +368,7 @@ export default function MyCoursesPage() {
                                         </span>
                                     </div>
 
-                                    <h3 className="text-[17px] font-semibold mt-2 text-[#3B2F2F] dark:text-[#a89080]">
+                                    <h3 className="text-[17px] font-semibold mt-2 text-[#3B2F2F] dark:text-[var(--bhn-text-soft)]">
                                         {course.title}
                                     </h3>
 
@@ -431,15 +422,15 @@ export default function MyCoursesPage() {
                     {/* RIGHT */}
                     <div className="flex flex-wrap justify-center gap-5 sm:gap-9">
 
-                        <span onClick={() => router.push("/support")} className="cursor-pointer hover:text-[#8B5E3C] dark:text-[#c9a882]">
+                        <span onClick={() => router.push("/support")} className="cursor-pointer hover:text-[#8B5E3C] dark:text-[var(--bhn-brand-400)]">
                             Support
                         </span>
 
-                        <span onClick={() => router.push("/privacy-policy")} className="cursor-pointer hover:text-[#8B5E3C] dark:text-[#c9a882]">
+                        <span onClick={() => router.push("/privacy-policy")} className="cursor-pointer hover:text-[#8B5E3C] dark:text-[var(--bhn-brand-400)]">
                             Privacy Policy
                         </span>
 
-                        <span onClick={() => router.push("/terms-of-service")} className="cursor-pointer hover:text-[#8B5E3C] dark:text-[#c9a882]">
+                        <span onClick={() => router.push("/terms-of-service")} className="cursor-pointer hover:text-[#8B5E3C] dark:text-[var(--bhn-brand-400)]">
                             Terms of Service
                         </span>
 

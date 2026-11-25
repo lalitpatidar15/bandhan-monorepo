@@ -334,7 +334,7 @@ export default function InventoryPage() {
         <SellerHeader />
 
         {isViewModalOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 py-6">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-[color-mix(in_srgb,var(--bhn-text)_60%,transparent)] px-4 py-6">
             <div
               className="w-full max-w-5xl rounded-[28px] bg-[var(--bhn-surface)] shadow-[var(--bhn-shadow-lg)] overflow-hidden"
               onClick={(event) => event.stopPropagation()}

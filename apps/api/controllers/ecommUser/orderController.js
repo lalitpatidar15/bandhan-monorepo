@@ -7,6 +7,7 @@ const User = require("../../models/shared/User.js");
 const Payment = require("../../models/shared/Payment.js");
 const Invoice = require("../../models/shared/Invoice.js");
 const Cart = require("../../models/shared/Cart.js");
+const { recordProductOrderEarnings } = require("../../services/vendorEarningsService.js");
 const mongoose = require("mongoose");
 const { resolveBuyerIdentity, resolveSellerIdentity } = require("../../utils/ecommIdentity.js");
 
@@ -278,6 +279,8 @@ exports.createUserOrder = async (req, res) => {
         }], { session });
       }
 
+      await recordProductOrderEarnings({ payment, orders: createdOrders, session });
+
       payment.fulfilledOrderIds = createdOrders.map((order) => order._id);
       payment.fulfilledAt = new Date();
       payment.isInvoice = true;
@@ -435,6 +438,25 @@ exports.createShipment = async (req, res) => {
       return res.status(404).json({ success: false, message: "Order not found" });
     }
 
+    // Use the package data captured on the product instead of courier defaults.
+    const productIds = (Array.isArray(order.items) ? order.items : [])
+      .map((item) => item?.productId)
+      .filter((id) => id && mongoose.Types.ObjectId.isValid(String(id)));
+    const products = productIds.length > 0
+      ? await Product.find({ _id: { $in: productIds } }).select("weight shippingWeight dimensions pickupLocation shippingRequired")
+      : [];
+    const shippableProducts = products.filter((product) => product.shippingRequired !== false);
+    const packageWeight = shippableProducts.reduce(
+      (total, product) => total + (Number(product.weight ?? product.shippingWeight) || 0), 0
+    );
+    const packageDimensions = {
+      length: Math.max(0, ...shippableProducts.map((product) => Number(product.dimensions?.length) || 0)),
+      width: Math.max(0, ...shippableProducts.map((product) => Number(product.dimensions?.width) || 0)),
+      height: Math.max(0, ...shippableProducts.map((product) => Number(product.dimensions?.height) || 0)),
+    };
+    const hasPackageDimensions = Object.values(packageDimensions).some((value) => value > 0);
+    const pickupLocation = shippableProducts.find((product) => product.pickupLocation)?.pickupLocation;
+
     const shiprocketPayload = buildShiprocketOrderPayload({
       _id: order._id,
       orderId: order._id,
@@ -446,6 +468,9 @@ exports.createShipment = async (req, res) => {
       service: order.service || order.productName,
       paymentMethod: order.paymentMethod,
       shippingAddress: order.shippingAddress,
+      dimensions: hasPackageDimensions ? packageDimensions : undefined,
+      weight: packageWeight > 0 ? packageWeight : undefined,
+      pickupLocation,
     });
 
     const shiprocketResponse = await shiprocket.createOrder(shiprocketPayload);

@@ -24,7 +24,7 @@ export default function AuthLayout({
       )}
 
       {/* FORM SECTION */}
-      <div className="w-full md:w-1/2 flex items-center justify-center p-4 sm:p-5 bg-white">
+      <div className="w-full md:w-1/2 flex items-center justify-center p-4 sm:p-5 bg-[var(--bhn-surface)]">
         <div className="w-full max-w-md">{children}</div>
       </div>
 
@@ -60,10 +60,10 @@ function ImageSection({
       />
 
       {/* SINGLE OVERLAY */}
-      <div className="absolute inset-0 bg-black/40"></div>
+      <div className="absolute inset-0 bg-[color-mix(in_srgb,var(--bhn-text)_40%,transparent)]"></div>
 
       {/* CONTENT */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-white px-6 text-center">
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-[var(--bhn-text-on-brand)] px-6 text-center">
            {/* TITLE */}
         <h1 className="text-xl sm:text-xl md:text-xl font-bold max-w-sm">
           {title}

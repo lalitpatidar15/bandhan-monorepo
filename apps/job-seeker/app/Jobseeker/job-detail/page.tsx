@@ -140,12 +140,10 @@ function JobDetailPageContent() {
         setShareMessage("Copied link to clipboard");
       } else {
         // fallback prompt
-        // eslint-disable-next-line no-alert
         window.prompt("Copy this link", localShareUrl);
         setShareMessage("Link shown — copy it manually");
       }
     } catch (err: any) {
-      // If native share failed, still proceed to try fetching canonical link
       setShareMessage(err?.message || "Share cancelled or failed");
     }
 
@@ -171,44 +169,44 @@ function JobDetailPageContent() {
   const errorMessage =
     typeof (error as { data?: { message?: string } } | undefined)?.data?.message === "string"
       ? (error as { data?: { message?: string } }).data?.message
-      : "Unable to load this job right now.";
+      : "Unable to load this job right now."
 
   return (
-    <div className="min-h-screen bg-[#FFF8F4] text-[#2D1F1A] flex flex-col">
+    <div className="min-h-screen bg-[var(--bhn-bg)] text-[var(--bhn-text)] flex flex-col">
       <CareersHeader variant="jobs" activeTab="Jobs" />
 
       <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-5">
-        <p className="text-xs sm:text-sm text-gray-500 pt-4">Jobs &gt; {job.title}</p>
+        <p className="text-xs sm:text-sm text-[var(--bhn-text-soft)] pt-4">Jobs > {job.title}</p>
       </div>
 
       <div className="flex-1">
         <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-5 py-5">
           <div className="mx-auto px-4 flex flex-col lg:flex-row gap-5">
             <div className="space-y-8 py-6 w-full lg:w-[70%]">
-              <Card className="bg-white p-5 sm:p-4 rounded-3xl border border-[#F1E1D7] shadow-sm">
+              <Card className="bg-[var(--bhn-surface)] p-5 sm:p-4 rounded-xl border border-[var(--bhn-border)] shadow-sm">
                 <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
                   <div className="flex flex-col sm:flex-row gap-4 w-full">
-                    <div className="w-14 h-14 rounded-2xl bg-black flex items-center justify-center overflow-hidden shrink-0">
+                    <div className="w-14 h-14 rounded-xl overflow-hidden flex items-center justify-center shrink-0">
                       <img src={job.companyLogo} alt="Company Logo" className="object-contain w-8 h-8" />
                     </div>
 
                     <div className="space-y-4 w-full">
                       <div>
-                        <h1 className="text-2xl sm:text-2xl md:text-6xl lg:text-2xl font-serif font-semibold leading-tight text-[#2D1F1A]">
+                        <h1 className="text-2xl sm:text-2xl md:text-6xl lg:text-2xl font-serif font-semibold text-[var(--bhn-text)]">
                           {job.title}
                         </h1>
 
-                        <div className="flex flex-wrap items-center gap-3 text-sm text-[#6B3E2E] mt-3">
+                        <div className="flex flex-wrap items-center gap-3 text-sm text-[var(--bhn-text-muted)] mt-3">
                           <span className="text-sm opacity-90">{job.companyName}</span>
                           {job.jobCategory ? (
                             <>
-                              <span className="hidden sm:block w-1 h-1 bg-[#E7D6CC] rounded-full" />
-                              <span className="hidden sm:block text-sm text-[#8B7368]">{job.jobCategory}</span>
+                              <span className="hidden sm:block w-1 h-1 bg-[var(--bhn-neutral-200)] rounded-full" />
+                              <span className="hidden sm:block text-sm text-[var(--bhn-text-muted)]">{job.jobCategory}</span>
                             </>
                           ) : null}
-                          <span className="hidden sm:block w-1 h-1 bg-[#E7D6CC] rounded-full" />
-                          <div className="flex items-center gap-1 text-sm text-[#8B7368]">
-                            <MapPin size={14} className="text-[#8B7368]" />
+                          <span className="hidden sm:block w-1 h-1 bg-[var(--bhn-neutral-200)] rounded-full" />
+                          <div className="flex items-center gap-1 text-sm text-[var(--bhn-text-muted)]">
+                            <MapPin size={14} className="text-[var(--bhn-text-muted)]" />
                             <span>{job.location}</span>
                           </div>
                         </div>
@@ -218,50 +216,50 @@ function JobDetailPageContent() {
                         {job.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="text-xs tracking-wider uppercase bg-[#FDEDE6] text-[#6B3E2E] px-3 py-1 rounded-full font-semibold"
+                            className="text-xs tracking-wider uppercase bg-[var(--bhn-surface)] text-[var(--bhn-text-muted)] px-3 py-1 rounded-full font-semibold"
                           >
                             {tag}
                           </span>
                         ))}
                       </div>
 
-                      <div className="bg-[#FCF3EE] px-5 py-3 rounded-2xl text-sm font-semibold w-fit text-[#6B3E2E] mt-3">{job.salary}</div>
+                      <div className="bg-[var(--bhn-brand-50)] px-5 py-3 rounded-xl text-sm font-semibold w-fit text-[var(--bhn-brand-600)] mt-3">{job.salary}</div>
                     </div>
                   </div>
 
-                  <div className="hidden lg:flex w-14 h-14 rounded-2xl bg-black items-center justify-center overflow-hidden shrink-0">
+                  <div className="hidden lg:flex w-14 h-14 rounded-xl bg-black items-center justify-center overflow-hidden shrink-0">
                     <img src={job.companyLogo} alt="Company Logo" className="object-contain w-8 h-8" />
                   </div>
                 </div>
               </Card>
 
               {isLoading ? (
-                <div className="rounded-3xl border border-[#E9DDD5] bg-white p-5 text-center text-sm text-[#8A7A72]">
+                <div className="rounded-3xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-5 text-center text-sm text-[var(--bhn-text-muted)]">
                   Loading job details...
                 </div>
               ) : isError ? (
-                <div className="rounded-3xl border border-[#E9DDD5] bg-white p-5 text-center text-sm text-[#8A7A72]">
+                <div className="rounded-3xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-5 text-center text-sm text-[var(--bhn-text-muted)]">
                   {errorMessage}
                 </div>
               ) : !jobId ? (
-                <div className="rounded-3xl border border-[#E9DDD5] bg-white p-5 text-center text-sm text-[#8A7A72]">
+                <div className="rounded-3xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-5 text-center text-sm text-[var(--bhn-text-muted)]">
                   Select a job to view the full details.
                 </div>
               ) : (
                 <>
                   <section>
-                    <h2 className="text-2xl font-semibold mb-3 text-[#3E2D26]">About the Role</h2>
-                    <p className="text-sm sm:text-[15px] text-[#7C6A63] leading-8">{job.aboutRole}</p>
+                    <h2 className="text-2xl font-semibold mb-3 text-[var(--bhn-text)]">About the Role</h2>
+                    <p className="text-sm sm:text-[15px] text-[var(--bhn-text-muted)] leading-8">{job.aboutRole}</p>
                   </section>
 
                   <section>
-                    <h2 className="text-2xl font-semibold mb-4 text-[#3E2D26]">Responsibilities</h2>
+                    <h2 className="text-2xl font-semibold mb-4 text-[var(--bhn-text)]">Responsibilities</h2>
                     {job.responsibilities.length > 0 ? (
                       <ul className="space-y-4">
                         {job.responsibilities.map((item, index) => (
-                          <li key={`${item}-${index}`} className="flex items-start gap-3 text-sm text-[#7C6A63]">
-                            <div className="mt-1 flex h-5 w-5 items-center justify-center border border-[#7A3F23] rounded-full shrink-0">
-                              <Check size={14} className="text-[#7A3F23]" />
+                          <li key={`${item}-${index}`} className="flex items-start gap-3 text-sm text-[var(--bhn-text-muted)]">
+                            <div className="mt-1 flex h-5 w-5 items-center justify-center border border-[var(--bhn-brand-300)] rounded-full shrink-0">
+                              <Check size={14} className="text-[var(--bhn-brand-600)]" />
                             </div>
                             <span className="leading-7">{item}</span>
                           </li>
@@ -273,13 +271,13 @@ function JobDetailPageContent() {
                   </section>
 
                   <section>
-                    <h2 className="text-2xl font-semibold mb-4 text-[#3E2D26]">Skills & Requirements</h2>
+                    <h2 className="text-2xl font-semibold mb-4 text-[var(--bhn-text)]">Skills & Requirements</h2>
                     {job.skills.length > 0 ? (
                       <ul className="space-y-4">
                         {job.skills.map((item, index) => (
-                          <li key={`${item}-${index}`} className="flex items-start gap-3 text-sm text-[#7C6A63]">
-                            <div className="mt-1 flex h-5 w-5 items-center justify-center border border-[#7A3F23] border-dashed rounded-full shrink-0">
-                              <Check size={14} className="text-[#7A3F23]" />
+                          <li key={`${item}-${index}`} className="flex items-start gap-3 text-sm text-[var(--bhn-text-muted)]">
+                            <div className="mt-1 flex h-5 w-5 items-center justify-center border border-[var(--bhn-brand-300)] border-dashed rounded-full shrink-0">
+                              <Check size={14} className="text-[var(--bhn-brand-600)]" />
                             </div>
                             <span className="leading-7">{item}</span>
                           </li>
@@ -292,17 +290,17 @@ function JobDetailPageContent() {
 
                   {job.benefits && job.benefits.length > 0 && (
                     <section>
-                      <h2 className="text-xl font-semibold mb-4 text-[#3E2D26]">Why join this team</h2>
+                      <h2 className="text-xl font-semibold mb-4 text-[var(--bhn-text)]">Why join this team</h2>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {job.benefits.map((item, index) => (
-                          <div key={index} className="bg-[#FFF4EE] p-5 rounded-2xl border border-[#F3E5DC]">
+                          <div key={index} className="bg-[var(--bhn-brand-50)] p-5 rounded-xl border border-[var(--bhn-border)]">
                             <div className="mb-3">
-                              <div className="w-11 h-11 rounded-xl bg-white flex items-center justify-center">
-                                <Check size={18} className="text-[#7A3F23]" />
+                              <div className="w-11 h-11 rounded-xl bg-[var(--bhn-surface)] flex items-center justify-center">
+                                <Check size={18} className="text-[var(--bhn-brand-600)]" />
                               </div>
                             </div>
                             <div>
-                              <p className="font-semibold text-[#3E2D26] text-sm">{item}</p>
+                              <p className="font-semibold text-[var(--bhn-text)] text-sm">{item}</p>
                             </div>
                           </div>
                         ))}
@@ -317,11 +315,11 @@ function JobDetailPageContent() {
               <div className="xl:sticky xl:top-6 space-y-6">
 
                 {/* Right Side Card */}
-                <Card className="bg-white border border-[#E8DDD5] rounded-3xl p-4 shadow-sm">
+                <Card className="bg-[var(--bhn-surface)] border border-[var(--bhn-border)] rounded-3xl p-4 shadow-sm">
 
                   {/* Company Info */}
-                  <div className="flex items-center gap-4 pb-5 border-b border-[#F3E5DC]">
-                    <div className="w-14 h-14 rounded-2xl overflow-hidden border border-[#E8DDD5] bg-[#FFF8F4] flex items-center justify-center shrink-0">
+                  <div className="flex items-center gap-4 pb-5 border-b border-[var(--bhn-border)]">
+                    <div className="w-14 h-14 rounded-xl overflow-hidden border border-[var(--bhn-border)] bg-[var(--bhn-brand-50)] flex items-center justify-center shrink-0">
                       <img
                         src={job.companyLogo}
                         alt="Company Logo"
@@ -330,11 +328,11 @@ function JobDetailPageContent() {
                     </div>
 
                     <div className="min-w-0 flex-1">
-                      <h3 className="text-[16px] font-semibold text-[#2D201B] line-clamp-2">
+                      <h3 className="text-[16px] font-semibold text-[var(--bhn-text)] line-clamp-2">
                         {job.title}
                       </h3>
 
-                      <p className="text-sm text-[#8A7A72] mt-1 truncate">
+                      <p className="text-sm text-[var(--bhn-text-muted)] mt-1 truncate">
                         {job.companyName}
                       </p>
                     </div>
@@ -343,7 +341,7 @@ function JobDetailPageContent() {
                   {/* Apply Button */}
                   <div className="mt-6">
                     <Link href={`/Jobseeker/apply?jobId=${encodeURIComponent(job.jobId)}`}>
-                      <button className="w-full h-12 rounded-xl bg-[#8B3E05] hover:bg-[#6B2E04] text-white font-semibold transition-all">
+                      <button className="w-full h-12 rounded-xl bg-[var(--bhn-brand-600)] hover:bg-[var(--bhn-brand-500)] text-white font-semibold transition-all">
                         Apply Now
                       </button>
                     </Link>
@@ -356,8 +354,8 @@ function JobDetailPageContent() {
                       disabled={isSaving || isRemoving}
                       className={`h-11 rounded-xl border flex items-center justify-center gap-2 transition disabled:opacity-60 ${
                         isSaved
-                          ? "border-[#8B3E05] bg-[#8B3E05] text-white"
-                          : "border-[#E8DDD5] text-[#5E463A] hover:bg-[#FFF4EE]"
+                          ? "border-[var(--bhn-brand-600)] bg-[var(--bhn-brand-600)] text-white"
+                          : "border-[var(--bhn-border)] text-[var(--bhn-text-muted)] hover:bg-[var(--bhn-brand-50)]"
                       }`}
                     >
                       <Bookmark size={16} />
@@ -367,7 +365,7 @@ function JobDetailPageContent() {
                     <button
                       onClick={handleShare}
                       disabled={isSharing}
-                      className="h-11 rounded-xl border border-[#E8DDD5] flex items-center justify-center gap-2 text-[#5E463A] hover:bg-[#FFF4EE] transition disabled:opacity-60"
+                      className="h-11 rounded-xl border border-[var(--bhn-border)] flex items-center justify-center gap-2 text-[var(--bhn-text-muted)] hover:bg-[var(--bhn-brand-50)] transition disabled:opacity-60"
                     >
                       <Share2 size={16} />
                       <span className="text-sm font-medium">{isSharing ? "Sharing…" : "Share"}</span>
@@ -375,103 +373,99 @@ function JobDetailPageContent() {
                   </div>
 
                   {shareMessage ? (
-                    <div className="mt-2 text-xs text-[#6B3E2E]">{shareMessage}</div>
+                    <div className="mt-2 text-xs text-[var(--bhn-text-muted)]">{shareMessage}</div>
                   ) : null}
 
                   {/* Job Info */}
-                  <div className="mt-6 border-t border-[#F3E5DC] pt-5 space-y-4">
+                  <div className="mt-6 border-t border-[var(--bhn-border)] pt-5 space-y-4">
 
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-[#8A7A72]">Posted</span>
-                      <span className="font-medium text-[#2D201B]">
+                      <span className="text-[var(--bhn-text-muted)]">Posted</span>
+                      <span className="font-medium text-[var(--bhn-text)]">
                         {job.postedOn || "Recently posted"}
                       </span>
                     </div>
 
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-[#8A7A72]">Applicants</span>
-                      <span className="font-medium text-[#2D201B]">
+                      <span className="text-[var(--bhn-text-muted)]">Applicants</span>
+                      <span className="font-medium text-[var(--bhn-text)]">
                         {job.totalApplicants ?? 0}
                       </span>
                     </div>
 
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-[#8A7A72]">Views</span>
-                      <span className="font-medium text-[#2D201B]">
+                      <span className="text-[var(--bhn-text-muted)]">Views</span>
+                      <span className="font-medium text-[var(--bhn-text)]">
                         {job.totalViews ?? 0}
                       </span>
                     </div>
 
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-[#8A7A72]">Deadline</span>
-                      <span className="font-medium text-[#2D201B] text-right">
+                      <span className="text-[var(--bhn-text-muted)]">Deadline</span>
+                      <span className="font-medium text-[var(--bhn-text)] text-right">
                         {job.applicationDeadline || "Not specified"}
                       </span>
                     </div>
 
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-[#8A7A72]">Openings</span>
-                      <span className="font-medium text-[#2D201B]">
+                      <span className="text-[var(--bhn-text-muted)]">Openings</span>
+                      <span className="font-medium text-[var(--bhn-text)]">
                         {job.openings ?? 0}
                       </span>
                     </div>
-
                   </div>
 
                   {/* Verified */}
                   <div className="mt-6 space-y-3">
 
-                    <div className="flex items-center gap-3 rounded-xl bg-green-50 border border-green-100 px-4 py-3">
-                      <CheckCircle size={18} className="text-green-600 shrink-0" />
-                      <span className="text-sm font-medium text-green-700">
+                    <div className="flex items-center gap-3 rounded-xl bg-[var(--bhn-success-50)] border border-[var(--bhn-success-200)] px-4 py-3">
+                      <CheckCircle size={18} className="text-[var(--bhn-success-600)] shrink-0" />
+                      <span className="text-sm font-medium text-[var(--bhn-success-700)]">
                         Verified Company
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-3 rounded-xl bg-[#F8F8F8] border border-[#ECECEC] px-4 py-3">
-                      <ShieldCheck size={18} className="text-gray-500 shrink-0" />
-                      <span className="text-sm font-medium text-gray-600">
+                    <div className="flex items-center gap-3 rounded-xl bg-[var(--bhn-neutral-100)] border border-[var(--bhn-border)] px-4 py-3">
+                      <ShieldCheck size={18} className="text-[var(--bhn-text-muted)] shrink-0" />
+                      <span className="text-sm font-medium text-[var(--bhn-text-muted)]">
                         Secure application process
                       </span>
                     </div>
 
                   </div>
-
                 </Card>
 
                 {/* Similar Jobs */}
-                <section className="bg-[#F8F2ED] border border-[#E8DDD5] rounded-3xl p-4">
+                <section className="bg-[var(--bhn-neutral-50)] border border-[var(--bhn-border)] rounded-3xl p-4">
 
-                  <h2 className="text-lg font-semibold text-[#2D201B] mb-5">
+                  <h2 className="text-lg font-semibold text-[var(--bhn-text)] mb-5">
                     You might also like
                   </h2>
 
                   <div className="space-y-4">
-
                     {job.similarJobs.length > 0 ? (
                       job.similarJobs.map((item, index) => (
                         <Link
                           key={item.jobId || index}
                           href={`/Jobseeker/job-detail?jobId=${encodeURIComponent(item.jobId || "")}`}
-                          className="block rounded-2xl bg-white border border-[#E8DDD5] p-4 hover:shadow-md transition"
+                          className="block rounded-2xl bg-[var(--bhn-surface)] border border-[var(--bhn-border)] p-4 hover:shadow-md transition"
                         >
-                          <p className="text-sm font-semibold text-[#2D201B] line-clamp-2">
+                          <p className="text-sm font-semibold text-[var(--bhn-text)] line-clamp-2">
                             {item.jobTitle || "Similar role"}
                           </p>
 
-                          <p className="text-xs text-[#8A7A72] mt-2">
+                          <p className="text-xs text-[var(--bhn-text-muted)] mt-2">
                             {item.companyName || "Company"} • {item.location || "Remote"}
                           </p>
                         </Link>
                       ))
                     ) : (
-                      <div className="rounded-2xl bg-white border border-[#E8DDD5] p-5 text-center">
-                        <p className="text-sm text-[#8A7A72]">
+                      <div className="rounded-2xl bg-[var(--bhn-surface)] border border-[var(--bhn-border)] p-5 text-center">
+                        <p className="text-sm text-[var(--bhn-text-muted)]">
                           No similar roles found
                         </p>
                       </div>
                     )}
-
                   </div>
 
                 </section>
@@ -479,27 +473,31 @@ function JobDetailPageContent() {
               </div>
             </div>
           </div>
+
+          <footer className="border-t bg-[var(--bhn-surface)] mt-6">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-5 py-6 text-sm text-[var(--bhn-text-muted)] flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <p>© {new Date().getFullYear()} Bandhan Careers</p>
+              <div className="flex flex-wrap gap-4">
+                <span className="cursor-pointer hover:text-[var(--bhn-text)] transition" onClick={() => router.push("/privacy-policy")}>Privacy Policy</span>
+                <span className="cursor-pointer hover:text-[var(--bhn-text)] transition" onClick={() => router.push("/terms")}>Terms</span>
+                <span className="cursor-pointer hover:text-[var(--bhn-text)] transition" onClick={() => router.push("/cookie-policy")}>Cookie Policy</span>
+                <span className="cursor-pointer hover:text-[var(--bhn-text)] transition" onClick={() => router.push("/support")}>Support</span>
+              </div>
+            </div>
+          </footer>
         </div>
       </div>
 
-      <footer className="border-t bg-white mt-6">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-5 py-6 text-sm text-gray-500 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <p>© {new Date().getFullYear()} Bandhan Careers</p>
-          <div className="flex flex-wrap gap-4">
-            <span className="cursor-pointer hover:text-black transition" onClick={() => router.push("/privacy-policy")}>Privacy Policy</span>
-            <span className="cursor-pointer hover:text-black transition" onClick={() => router.push("/terms")}>Terms</span>
-            <span className="cursor-pointer hover:text-black transition" onClick={() => router.push("/cookie-policy")}>Cookie Policy</span>
-            <span className="cursor-pointer hover:text-black transition" onClick={() => router.push("/support")}>Support</span>
-          </div>
-        </div>
-      </footer>
+      <Suspense fallback={<div className="min-h-screen bg-[var(--bhn-bg)] text-[var(--bhn-text)]" />}>
+        <JobDetailPageContent />
+      </Suspense>
     </div>
   );
 }
 
 export default function JobDetailPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#FFF8F4] text-[#2D1F1A]" />}>
+    <Suspense fallback={<div className="min-h-screen bg-[var(--bhn-bg)] text-[var(--bhn-text)]" />}>
       <JobDetailPageContent />
     </Suspense>
   );

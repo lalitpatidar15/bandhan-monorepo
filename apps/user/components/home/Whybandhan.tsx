@@ -110,7 +110,7 @@ export default function WhyBandhan() {
 
       <section className="bg-[var(--bhn-bg)] py-24 px-6">
         <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-xl font-serif text-[var(--bhn-brand-600)] mb-20">
+          <h2 className="text-xl font-serif text-[var(--bhn-text)] mb-20">
             The Journey to Your Dream Event
           </h2>
 
@@ -120,7 +120,7 @@ export default function WhyBandhan() {
           <div className="grid md:grid-cols-3 gap-12">
             {steps.map((step, i) => (
               <div key={i} className="flex flex-col items-center text-center">
-                <div className="w-[100px] h-[100px] rounded-full bg-[var(--bhn-surface)] border border-[var(--bhn-border)] shadow-[var(--bhn-shadow-md)] flex items-center justify-center font-hedvig text-[50px] leading-[69px] font-normal text-[var(--bhn-brand-600)] mb-6">
+                <div className="w-[100px] h-[100px] rounded-full bg-[var(--bhn-surface)] border border-[var(--bhn-border)] shadow-[var(--bhn-shadow-md)] flex items-center justify-center font-hedvig text-[50px] leading-[69px] font-normal text-[var(--bhn-text)] mb-6">
                   {step.no}
                 </div>
 

@@ -12,12 +12,9 @@ function logout() {
   window.location.href = "/login";
 }
 
-const API_BASE_URL = (() => {
-  if (typeof window !== "undefined") {
-    return process.env.NEXT_PUBLIC_API_URL || `${window.location.origin}/api`;
-  }
-  return process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api";
-})();
+// All seller data lives on the shared Bandhan API. The seller app has no
+// same-origin /api proxy, so never fall back to the seller origin.
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: API_BASE_URL,

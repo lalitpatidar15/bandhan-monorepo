@@ -138,27 +138,27 @@ export default function InventoryPage() {
     {
       title: "TOTAL PRODUCTS",
       value: stats.totalProducts.toLocaleString(),
-      icon: <Package size={16} className="text-[#9A5B34]" />,
+      icon: <Package size={16} className="text-[var(--bhn-text)]" />,
     },
     {
       title: "IN STOCK",
       value: stats.inStock.toLocaleString(),
-      icon: <CircleCheck size={16} className="text-[#0F9D58]" />,
+      icon: <CircleCheck size={16} className="text-[var(--bhn-text-muted)]" />,
     },
     {
       title: "LOW STOCK",
       value: stats.lowStock.toLocaleString(),
-      icon: <TriangleAlert size={16} className="text-[#F59E0B]" />,
+      icon: <TriangleAlert size={16} className="text-[var(--bhn-text-soft)]" />,
     },
     {
       title: "OUT OF STOCK",
       value: stats.outOfStock.toLocaleString(),
-      icon: <CircleAlert size={16} className="text-[#DC2626]" />,
+      icon: <CircleAlert size={16} className="text-[var(--bhn-error-600)]" />,
     },
     {
       title: "RENTAL ACTIVE",
       value: stats.rentalActive.toLocaleString(),
-      icon: <CalendarDays size={16} className="text-[#9A5B34]" />,
+      icon: <CalendarDays size={16} className="text-[var(--bhn-text)]" />,
     },
   ];
 
@@ -539,7 +539,7 @@ export default function InventoryPage() {
 
                   <div className="flex items-center gap-2">
 
-                    <button className="w-7 h-7 rounded bg-[var(--bhn-brand-600)] text-white text-xs">
+                    <button className="w-7 h-7 rounded bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)] text-xs">
                       1
                     </button>
 
@@ -629,9 +629,9 @@ export default function InventoryPage() {
               </Card>
 
               {/* RENTAL CARD */}
-              <div className="bhn-hero rounded-2xl p-4 text-white relative overflow-hidden">
+              <div className="bhn-hero rounded-2xl p-4 text-[var(--bhn-text-on-brand)] relative overflow-hidden">
 
-                <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-white/5 rounded-full"></div>
+                <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-[color-mix(in_srgb,var(--bhn-surface)_5%,transparent)] rounded-full"></div>
 
                 <h3 className="text-[26px] font-display leading-9 relative z-10">
                   Maximize your Rental Revenue
@@ -642,7 +642,7 @@ export default function InventoryPage() {
                   earnings by up to 40%.
                 </p>
 
-                <button className="mt-5 bg-white text-[var(--bhn-text)] h-[42px] px-5 rounded-lg text-[13px] font-medium hover:scale-[1.02] transition relative z-10">
+                <button className="mt-5 bg-[var(--bhn-surface)] text-[var(--bhn-text)] h-[42px] px-5 rounded-lg text-[13px] font-medium hover:scale-[1.02] transition relative z-10">
 
                   Explore Rental Tool
                 </button>

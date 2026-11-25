@@ -60,7 +60,7 @@ function BookingPageContent() {
     return (
       <DashboardLayout>
         <div className="mx-auto max-w-2xl px-4 py-10 text-center">
-          <p className="text-gray-500">Please log in to book a {listingType === 'service' ? 'service' : 'venue'}.</p>
+          <p className="text-[var(--bhn-text-muted)]">Please log in to book a {listingType === 'service' ? 'service' : 'venue'}.</p>
           <Button variant="primary" className="mt-4" onClick={() => router.push(`/login?next=/userdashboard/booking?listingType=${listingType}&listingId=${listingId}`)}>
             Login
           </Button>
@@ -73,7 +73,7 @@ function BookingPageContent() {
     return (
       <DashboardLayout>
         <div className="mx-auto max-w-2xl px-4 py-10 text-center">
-          <p className="text-gray-500">No booking target selected. Please choose a venue or service before booking.</p>
+          <p className="text-[var(--bhn-text-muted)]">No booking target selected. Please choose a venue or service before booking.</p>
         </div>
       </DashboardLayout>
     );
@@ -82,14 +82,14 @@ function BookingPageContent() {
   return (
     <DashboardLayout>
       <div className="mx-auto max-w-2xl px-4 py-6">
-        <h1 className="text-xl font-bold text-[#1C1A16]">{listingType === 'service' ? 'Book Service' : 'Book Venue'}</h1>
-        <p className="text-sm text-gray-500">{listingType === 'service' ? 'Complete the details to confirm your service booking.' : 'Select date, space and preferences to reserve.'}</p>
+        <h1 className="text-xl font-bold text-[var(--bhn-text)]">{listingType === 'service' ? 'Book Service' : 'Book Venue'}</h1>
+        <p className="text-sm text-[var(--bhn-text-muted)]">{listingType === 'service' ? 'Complete the details to confirm your service booking.' : 'Select date, space and preferences to reserve.'}</p>
 
         <div className="surface mt-4 space-y-3 p-4">
           <div className="grid grid-cols-2 gap-3">
             <label className="space-y-1">
-              <span className="text-xs text-gray-500">Event type</span>
-              <select value={form.eventType} onChange={(e) => set('eventType', e.target.value)} className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm">
+              <span className="text-xs text-[var(--bhn-text-muted)]">Event type</span>
+              <select value={form.eventType} onChange={(e) => set('eventType', e.target.value)} className="w-full rounded-md border border-[var(--bhn-border)] px-3 py-2 text-sm">
                 {['wedding', 'corporate', 'reception', 'other'].map((t) => <option key={t}>{t}</option>)}
               </select>
             </label>
@@ -105,8 +105,8 @@ function BookingPageContent() {
           ) : null}
           <Input label="Package ID (optional)" value={form.packageId} onChange={(e: React.ChangeEvent<HTMLInputElement>) => set('packageId', e.target.value)} />
           <div className="space-y-1">
-            <label className="text-xs text-gray-500">Requirements</label>
-            <textarea rows={3} value={form.requirements} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => set('requirements', e.target.value)} className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm focus:border-[#924C2B] focus:outline-none" />
+            <label className="text-xs text-[var(--bhn-text-muted)]">Requirements</label>
+            <textarea rows={3} value={form.requirements} onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => set('requirements', e.target.value)} className="w-full rounded-md border border-[var(--bhn-border)] px-3 py-2 text-sm focus:border-[var(--bhn-brand-600)] focus:outline-none" />
           </div>
           <Button variant="primary" fullWidth disabled={isLoading} onClick={submit}>
             {isLoading ? 'Booking...' : 'Review & Pay'}

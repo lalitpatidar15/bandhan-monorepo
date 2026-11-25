@@ -27,12 +27,12 @@ export const ServiceCard = ({ title, desc, img }: ServiceCardProps) => {
       </h3>
 
       
-      <p className="text-sm text-gray-500 mb-3 max-w-[280px]">
+      <p className="text-sm text-[var(--bhn-text-muted)] mb-3 max-w-[280px]">
         {desc}
       </p>
 
       {/* Button */}
-      <button className="text-[#924C2B] font-medium hover:underline">
+      <button className="text-[var(--bhn-text)] font-medium hover:underline">
         Read More →
       </button>
 

@@ -76,7 +76,7 @@ function ServiceBookingPageContent() {
     return (
       <DashboardLayout>
         <div className="mx-auto max-w-2xl px-4 py-10 text-center">
-          <p className="text-gray-500">Please log in to book a service.</p>
+          <p className="text-[var(--bhn-text-muted)]">Please log in to book a service.</p>
           <Button
             variant="primary"
             className="mt-4"
@@ -93,7 +93,7 @@ function ServiceBookingPageContent() {
     return (
       <DashboardLayout>
         <div className="mx-auto max-w-2xl px-4 py-10 text-center">
-          <p className="text-gray-500">No service selected. Please choose a service before booking.</p>
+          <p className="text-[var(--bhn-text-muted)]">No service selected. Please choose a service before booking.</p>
         </div>
       </DashboardLayout>
     );
@@ -102,11 +102,11 @@ function ServiceBookingPageContent() {
   return (
     <DashboardLayout>
       <div className="mx-auto max-w-2xl px-4 py-6">
-        <h1 className="text-xl font-bold text-[#1C1A16]">Book Service</h1>
-        <p className="text-sm text-gray-500">Complete the details to confirm your booking.</p>
+        <h1 className="text-xl font-bold text-[var(--bhn-text)]">Book Service</h1>
+        <p className="text-sm text-[var(--bhn-text-muted)]">Complete the details to confirm your booking.</p>
 
         {errorMessage && (
-          <div className="mt-3 rounded-md bg-red-50 p-3 text-sm text-red-600 border border-red-200">
+          <div className="mt-3 rounded-md bg-[var(--bhn-error-50)] p-3 text-sm text-[var(--bhn-error-600)] border border-[var(--bhn-error-500)]">
             {errorMessage}
           </div>
         )}
@@ -114,11 +114,11 @@ function ServiceBookingPageContent() {
         <div className="surface mt-4 space-y-3 p-4">
           <div className="grid grid-cols-2 gap-3">
             <label className="space-y-1">
-              <span className="text-xs text-gray-500">Event type</span>
+              <span className="text-xs text-[var(--bhn-text-muted)]">Event type</span>
               <select
                 value={form.eventType}
                 onChange={(e) => set('eventType', e.target.value)}
-                className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm"
+                className="w-full rounded-md border border-[var(--bhn-border)] px-3 py-2 text-sm"
               >
                 {['wedding', 'corporate', 'birthday', 'other'].map((t) => (
                   <option key={t} value={t}>
@@ -165,12 +165,12 @@ function ServiceBookingPageContent() {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => set('alternateMobile', e.target.value)}
           />
           <div className="space-y-1">
-            <label className="text-xs text-gray-500">Requirements</label>
+            <label className="text-xs text-[var(--bhn-text-muted)]">Requirements</label>
             <textarea
               rows={3}
               value={form.requirements}
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => set('requirements', e.target.value)}
-              className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm focus:border-[#924C2B] focus:outline-none"
+              className="w-full rounded-md border border-[var(--bhn-border)] px-3 py-2 text-sm focus:border-[var(--bhn-brand-600)] focus:outline-none"
             />
           </div>
           <Button variant="primary" fullWidth onClick={submit} disabled={isLoading}>

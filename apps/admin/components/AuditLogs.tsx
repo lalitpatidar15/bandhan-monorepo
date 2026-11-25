@@ -19,7 +19,7 @@ export default function AuditLogs() {
       case 'success': return 'admin-badge-active';
       case 'failure': return 'admin-badge-inactive';
       case 'warning': return 'admin-badge-pending';
-      default: return 'bg-gray-100 text-gray-600';
+      default: return 'bg-[var(--bhn-surface-3)] text-[var(--bhn-text)]';
     }
   };
 
@@ -27,7 +27,7 @@ export default function AuditLogs() {
     <div>
       <div className="flex justify-between items-center mb-4">
         <h1 className="admin-page-heading">Audit Logs</h1>
-        <span className="text-xs text-gray-500">{logs.length} entries</span>
+        <span className="text-xs text-[var(--bhn-text-muted)]">{logs.length} entries</span>
       </div>
 
       <div className="flex gap-2 mb-4">
@@ -42,9 +42,9 @@ export default function AuditLogs() {
       </div>
 
       {isLoading ? (
-        <div className="py-8 text-center text-sm text-gray-500">Loading...</div>
+        <div className="py-8 text-center text-sm text-[var(--bhn-text-muted)]">Loading...</div>
       ) : logs.length === 0 ? (
-        <div className="card py-8 text-center text-sm text-gray-500">No audit logs found</div>
+        <div className="card py-8 text-center text-sm text-[var(--bhn-text-muted)]">No audit logs found</div>
       ) : (
         <div className="space-y-2">
           {logs.map((log) => (
@@ -54,7 +54,7 @@ export default function AuditLogs() {
                   <span className={`admin-badge ${statusColor(log.status)}`}>{log.status}</span>
                   <div className="min-w-0 flex-1">
                     <p className="text-xs font-medium truncate">{log.action} — {log.entity}</p>
-                    <p className="text-[10px] text-gray-500">by {log.userName} • {new Date(log.createdAt).toLocaleString()}</p>
+                    <p className="text-[10px] text-[var(--bhn-text-muted)]">by {log.userName} • {new Date(log.createdAt).toLocaleString()}</p>
                   </div>
                 </div>
                 <button onClick={() => setExpandedId(expandedId === log.id ? null : log.id)} className="admin-btn admin-btn-secondary ml-2">
@@ -62,10 +62,10 @@ export default function AuditLogs() {
                 </button>
               </div>
               {expandedId === log.id && (
-                <div className="mt-3 pt-3 border-t border-gray-100 text-xs space-y-1">
-                  <p><span className="text-gray-500">Entity ID:</span> <span className="font-mono">{log.entityId || 'N/A'}</span></p>
-                  <p><span className="text-gray-500">IP Address:</span> {log.ipAddress || 'N/A'}</p>
-                  {log.details && <p><span className="text-gray-500">Details:</span> {log.details}</p>}
+                <div className="mt-3 pt-3 border-t border-[var(--bhn-border)] text-xs space-y-1">
+                  <p><span className="text-[var(--bhn-text-muted)]">Entity ID:</span> <span className="font-mono">{log.entityId || 'N/A'}</span></p>
+                  <p><span className="text-[var(--bhn-text-muted)]">IP Address:</span> {log.ipAddress || 'N/A'}</p>
+                  {log.details && <p><span className="text-[var(--bhn-text-muted)]">Details:</span> {log.details}</p>}
                 </div>
               )}
             </div>

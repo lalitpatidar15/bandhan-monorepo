@@ -27,6 +27,7 @@ export default function CoursesPage() {
   const [activeLevel, setActiveLevel] = useState("All Levels");
   const [search, setSearch] = useState("");
   const [categories, setCategories] = useState<string[]>(["All Topics"]);
+  const [levels] = useState<string[]>(["All Levels", "Beginner", "Intermediate", "Advanced"]);
 
   // Fetch courses from API
   const { data: coursesData, isLoading, error } = useGetCoursesQuery({});
@@ -38,15 +39,17 @@ export default function CoursesPage() {
   const heroGoal = dashStats?.completionRate ?? 0;
 
   useEffect(() => {
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || "https://bandhan-api.vercel.app/api";
-    fetch(`${apiBase}/student/page-resources`)
-      .then(res => res.json())
-      .then(json => {
-        if (json?.success && json?.data) {
-          setCategories(json.data.categories || ["All Topics"]);
-        }
-      })
-      .catch(() => {});
+    const apiBase = process.env.NEXT_PUBLIC_API_URL;
+    if (apiBase) {
+      fetch(`${apiBase}/student/page-resources`)
+        .then(res => res.json())
+        .then(json => {
+          if (json?.success && json?.data) {
+            setCategories(json.data.categories || ["All Topics"]);
+          }
+        })
+        .catch(() => {});
+    }
   }, []);
   
   // Extract courses array from response (handle both array and object responses)
@@ -205,7 +208,7 @@ export default function CoursesPage() {
           <aside className="rounded-2xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-5">
             <div className="flex items-center justify-between">
               <h2 className="text-xl font-semibold">Continue Learning</h2>
-              <Flame className="text-[var(--bhn-brand-700)] dark:text-[#c9a882]" size={22} />
+              <Flame className="text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)]" size={22} />
             </div>
             {continueCourse ? (
               <>
@@ -214,14 +217,14 @@ export default function CoursesPage() {
                   alt={continueCourse.title}
                   className="mt-5 h-40 w-full rounded-2xl object-cover"
                 />
-                <p className="mt-4 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--bhn-brand-700)] dark:text-[#c9a882]">
+                <p className="mt-4 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)]">
                   {continueCourse.category}
                 </p>
                 <h3 className="mt-2 text-lg font-semibold leading-6">{continueCourse.title}</h3>
-                <p className="mt-2 text-sm text-[var(--bhn-text-muted)] dark:text-[#b89b7d]">Lesson {continueCourse.currentLesson ?? 6} of {continueCourse.totalLessons ?? 18} • {continueCourse.progress ?? 42}% completed</p>
-                <div className="mt-4 h-2 overflow-hidden rounded-full bg-[#E8DDD5] dark:bg-[#2a2a2a]">
-                  <div className="h-full rounded-full bg-[var(--bhn-brand-600)] dark:bg-[#b86a3a]" style={{ width: `${continueCourse.progress ?? 42}%` }} />
-                </div>
+                <p className="mt-2 text-sm text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)]">Lesson {continueCourse.currentLesson ?? 6} of {continueCourse.totalLessons ?? 18} • {continueCourse.progress ?? 42}% completed</p>
+<div className="mt-4 h-2 overflow-hidden rounded-full bg-[var(--bhn-border)] dark:bg-[var(--bhn-neutral-900)]">
+                   <div className="h-full rounded-full bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)]" style={{ width: `${continueCourse.progress ?? 42}%` }} />
+                 </div>
                 <Button
                   onClick={() => router.push(`/student/course-player/${continueCourse.courseId}`)}
                   className="mt-5 w-full"
@@ -230,8 +233,8 @@ export default function CoursesPage() {
                 </Button>
               </>
             ) : (
-              <div className="mt-5 rounded-2xl bg-[var(--bhn-surface-2)] dark:bg-[#171717] p-4 text-center">
-                <p className="text-sm text-[var(--bhn-text-muted)] dark:text-[#b89b7d]">No courses to continue yet. Start exploring available courses!</p>
+              <div className="mt-5 rounded-2xl bg-[var(--bhn-surface-2)] dark:bg-[var(--bhn-neutral-900)] p-4 text-center">
+                <p className="text-sm text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)]">No courses to continue yet. Start exploring available courses!</p>
                 <Button
                   onClick={() => document.getElementById("recommended-courses")?.scrollIntoView({ behavior: "smooth" })}
                   className="mt-4 w-full"
@@ -274,7 +277,7 @@ export default function CoursesPage() {
             <div className="mt-5 space-y-5">
               <div>
                 <p className="mb-3 text-sm font-semibold">Category</p>
-                {["All Topics", "Design", "Development", "Marketing", "Business"].map((cat) => (
+                {categories.map((cat) => (
                   <label key={cat} className="mb-3 flex cursor-pointer items-center gap-3 text-sm">
                     <input
                       type="radio"
@@ -290,7 +293,7 @@ export default function CoursesPage() {
 
               <div>
                 <p className="mb-3 text-sm font-semibold">Level</p>
-                {["All Levels", "Beginner", "Intermediate", "Advanced"].map((level) => (
+                {levels.map((level) => (
                   <label key={level} className="mb-3 flex cursor-pointer items-center gap-3 text-sm">
                     <input
                       type="radio"
@@ -304,25 +307,25 @@ export default function CoursesPage() {
                 ))}
               </div>
 
-              <div className="rounded-2xl bg-[var(--bhn-surface-2)] dark:bg-[#1a1a1a] p-4">
+              <div className="rounded-2xl bg-[var(--bhn-surface-2)] dark:bg-[var(--bhn-neutral-900)] p-4">
                 <p className="flex items-center gap-2 text-sm font-semibold">
                   <Award size={16} />
                   Weekly Goal
                 </p>
-                <p className="mt-2 text-sm text-[var(--bhn-text-muted)] dark:text-[#b89b7d]">Complete 3 lessons this week to keep your streak.</p>
+                <p className="mt-2 text-sm text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)]">Complete 3 lessons this week to keep your streak.</p>
               </div>
             </div>
           </aside>
 
           <div className="min-w-0">
-            <div className="rounded-3xl border border-[var(--bhn-border)] dark:border-[#374151] bg-[var(--bhn-surface)] p-4 shadow-sm">
+            <div className="rounded-3xl border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-4 shadow-sm">
               <label className="relative block">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--bhn-text-soft)] dark:text-[#7a6a5a]" size={18} />
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]" size={18} />
                 <input
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
                   placeholder="Search courses, mentors, topics..."
-                  className="h-12 w-full rounded-2xl border border-[var(--bhn-border)] dark:border-[#374151] bg-[var(--bhn-surface-2)] dark:bg-[#171717] pl-11 pr-4 outline-none focus:border-[var(--bhn-brand-500)]"
+                  className="h-12 w-full rounded-2xl border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] bg-[var(--bhn-surface-2)] dark:bg-[var(--bhn-neutral-900)] pl-11 pr-4 outline-none focus:border-[var(--bhn-brand-500)]"
                 />
               </label>
 
@@ -332,8 +335,8 @@ export default function CoursesPage() {
                     key={item}
                     onClick={() => setActiveCategory(item)}
                     className={`rounded-full px-4 py-2 text-sm font-medium transition ${activeCategory === item
-                        ? "bg-[var(--bhn-brand-600)] dark:bg-[#b86a3a] text-white shadow-sm"
-                        : "bg-[var(--bhn-surface-3)] dark:bg-[#171717] text-[#5F554D] dark:text-[#a89080] hover:bg-[#E8DDD5] dark:hover:bg-[#2a2a2a]"
+                        ? "bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] text-white shadow-sm"
+                        : "bg-[var(--bhn-surface-3)] dark:bg-[var(--bhn-neutral-900)] text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] hover:bg-[var(--bhn-border)] dark:hover:bg-[var(--bhn-neutral-900)]"
                       }`}
                   >
                     {item}
@@ -364,7 +367,7 @@ export default function CoursesPage() {
                     <p className="mt-2 text-sm text-[var(--bhn-text-muted)]">{course.instructorName}</p>
                     <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-[var(--bhn-text-muted)]">
                       <span className="flex items-center gap-1">
-                        <Star size={15} className="fill-[#F59E0B] text-[#F59E0B]" />
+                        <Star size={15} className="fill-[var(--bhn-warning-500)] text-[var(--bhn-warning-500)]" />
                         {course.rating} ({course.reviews ?? course.totalReviews ?? "240 reviews"})
                       </span>
                       <span className="flex items-center gap-1">

@@ -42,8 +42,8 @@ export default function Enrollments() {
 
       <div className="card mt-4">
         <div className="flex items-center">
-          <Search className="w-4 h-4 text-gray-400 mr-2" />
-          <input type="text" placeholder="Search by student, course, or status..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="flex-1 outline-none text-sm text-gray-700" />
+          <Search className="w-4 h-4 text-[var(--bhn-text-muted)] mr-2" />
+          <input type="text" placeholder="Search by student, course, or status..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="flex-1 outline-none text-sm text-[var(--bhn-text)]" />
         </div>
       </div>
 
@@ -65,12 +65,12 @@ export default function Enrollments() {
                 {editingId === e.id ? (
                   <>
                     <td>
-                      <div className="font-medium text-gray-900 text-sm">{e.student}</div>
-                      <div className="text-xs text-gray-500">{e.studentEmail}</div>
+                      <div className="font-medium text-[var(--bhn-text)] text-sm">{e.student}</div>
+                      <div className="text-xs text-[var(--bhn-text-muted)]">{e.studentEmail}</div>
                     </td>
                     <td>
-                      <div className="font-medium text-gray-900 text-sm">{e.course}</div>
-                      <div className="text-xs text-gray-500">{e.category}</div>
+                      <div className="font-medium text-[var(--bhn-text)] text-sm">{e.course}</div>
+                      <div className="text-xs text-[var(--bhn-text-muted)]">{e.category}</div>
                     </td>
                     <td>
                       <input type="number" min="0" max="100" value={editForm.progressPercentage} onChange={e2 => setEditForm({ ...editForm, progressPercentage: Number(e2.target.value) })} className="admin-input text-xs w-20" />
@@ -91,12 +91,12 @@ export default function Enrollments() {
                 ) : (
                   <>
                     <td>
-                      <div className="font-medium text-gray-900 text-sm">{e.student}</div>
-                      <div className="text-xs text-gray-500">{e.studentEmail}</div>
+                      <div className="font-medium text-[var(--bhn-text)] text-sm">{e.student}</div>
+                      <div className="text-xs text-[var(--bhn-text-muted)]">{e.studentEmail}</div>
                     </td>
                     <td>
-                      <div className="font-medium text-gray-900 text-sm">{e.course}</div>
-                      <div className="text-xs text-gray-500">{e.category}</div>
+                      <div className="font-medium text-[var(--bhn-text)] text-sm">{e.course}</div>
+                      <div className="text-xs text-[var(--bhn-text-muted)]">{e.category}</div>
                     </td>
                     <td className="text-sm">{e.progressPercentage}%</td>
                     <td className="text-sm">{e.lastAccessedAt ? new Date(e.lastAccessedAt).toLocaleDateString() : '—'}</td>

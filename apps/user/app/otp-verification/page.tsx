@@ -48,8 +48,8 @@ function OtpVerificationPageContent() {
   return (
     <AuthLayout image="/login.png" position="right" title="Verify it's you" logo="/Group1.png">
       <div className="w-full max-w-sm">
-        <h2 className="text-xl font-bold text-[#1C1A16]">OTP Verification</h2>
-        <p className="mt-1 text-sm text-gray-500">
+        <h2 className="text-xl font-bold text-[var(--bhn-text)]">OTP Verification</h2>
+        <p className="mt-1 text-sm text-[var(--bhn-text-muted)]">
           We sent a code to {mobile || email || 'your number'}.
         </p>
 
@@ -61,15 +61,15 @@ function OtpVerificationPageContent() {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setOtp(e.target.value)}
           />
           {error && (
-            <p className="text-xs text-red-500">Invalid or expired OTP. Please try again.</p>
+            <p className="text-xs text-[var(--bhn-error-500)]">Invalid or expired OTP. Please try again.</p>
           )}
           <Button variant="primary" fullWidth onClick={submit} loading={isLoading}>
             Verify OTP
           </Button>
-          <button onClick={resendOtp} className="w-full text-center text-xs text-[#924C2B] hover:underline">
+          <button onClick={resendOtp} className="w-full text-center text-xs text-[var(--bhn-text)] hover:underline">
             Resend OTP
           </button>
-          {success && <p className="text-center text-sm text-green-600">Verified successfully!</p>}
+          {success && <p className="text-center text-sm text-[var(--bhn-success-600)]">Verified successfully!</p>}
         </div>
       </div>
     </AuthLayout>

@@ -69,7 +69,19 @@ interface PlatformSettingsResponse {
   };
 }
 
-export interface CreatedUserOrder {
+export interface PincodeResponse {
+  success: boolean;
+  message: string;
+  postOffice: Array<{
+    District: string;
+    Block: string;
+    State: string;
+    PostOfficeName: string;
+    Pin: string;
+  }>;
+}
+
+export interface CreateUserOrder {
   _id: string;
   amount: number;
   items: Array<{ title?: string; quantity?: number; price?: number }>;
@@ -78,8 +90,8 @@ export interface CreatedUserOrder {
 
 interface CreateUserOrderResponse {
   success: boolean;
-  order: CreatedUserOrder;
-  orders: CreatedUserOrder[];
+  order: CreateUserOrder;
+  orders: CreateUserOrder[];
   alreadyCreated?: boolean;
 }
 
@@ -101,10 +113,16 @@ export const authApi = baseApi.injectEndpoints({
     }),
 
     portalRegister: builder.mutation({
-      query: (data) => ({
+      query: (data: { name?: string; fullName?: string; role?: string; portalRole?: string; email: string; password: string; phone?: string }) => ({
         url: "/auth/portal-register",
         method: "POST",
-        body: data,
+        body: {
+          fullName: data.fullName || data.name,
+          role: data.role || data.portalRole,
+          email: data.email,
+          password: data.password,
+          ...(data.phone ? { phone: data.phone } : {}),
+        },
       }),
     }),
 
@@ -162,12 +180,16 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
 
-    getPlatformSettings: builder.query<PlatformSettingsResponse, void>({
+getPlatformSettings: builder.query<PlatformSettingsResponse, void>({
       query: () => "/auth/platform-settings",
     }),
 
     getPaymentKey: builder.query<{ key?: string }, void>({
       query: () => "/payment/key",
+    }),
+
+    lookupPincode: builder.query<PincodeResponse, string>({
+      query: (pincode) => `https://api.postalpincode.in/pincode/${pincode}`,
     }),
 
     getCheckoutQuote: builder.query<CheckoutQuoteResponse, void>({
@@ -216,8 +238,9 @@ export const {
   useVerifyOtpMutation,
   useResetPasswordMutation,
   useSocialLoginMutation,
-  useGetPlatformSettingsQuery,
+useGetPlatformSettingsQuery,
   useLazyGetPaymentKeyQuery,
+  useLookupPincodeQuery,
   useGetCheckoutQuoteQuery,
   useCreatePaymentOrderMutation,
   useVerifyPaymentMutation,

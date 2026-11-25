@@ -134,6 +134,17 @@ const normalizeListingType = (value: string) => {
   return normalized;
 };
 
+const resolveProviderId = (listing: unknown): string => {
+  const record = listing as { sellerId?: unknown; seller?: unknown } | null;
+  const provider = record?.sellerId ?? record?.seller;
+  if (!provider) return "";
+  if (typeof provider === "object") {
+    const object = provider as { _id?: unknown; id?: unknown };
+    return String(object._id || object.id || "");
+  }
+  return String(provider);
+};
+
 const parseExploreType = (rawType: string | null): { mode: ExploreType; id?: string } => {
   const value = rawType || "services";
   const [mode, id] = value.split("/");
@@ -220,6 +231,18 @@ function ExploreDetailView({ mode, id }: { mode: ExploreType; id: string }) {
     { label: "Guests", value: detailGuests ? `Up to ${detailGuests} guests` : "Contact for guest count" },
   ];
 
+  const listingType = normalizeListingType(String(mode));
+  const providerId = mode === "services" ? resolveProviderId(service) : mode === "venues" ? resolveProviderId(venue) : "";
+  const providerName =
+    mode === "services"
+      ? service?.sellerName || String((service as any)?.sellerId?.fullName || "")
+      : mode === "venues"
+      ? String((venue as any)?.sellerId?.fullName || (venue as any)?.sellerName || "")
+      : "";
+  const chatHref = `/userdashboard/inbox?listingType=${listingType}&listingId=${encodeURIComponent(id)}${
+    providerId ? `&sellerId=${encodeURIComponent(providerId)}` : ""
+  }`;
+
   return (
     <main className="min-h-screen bg-[var(--bhn-bg)]">
       <SiteHeader />
@@ -253,8 +276,10 @@ onSecondary={() => {
   }
 }}
         details={details}
-        providerName={mode === "services" ? service?.sellerName : undefined}
+        providerName={providerName || undefined}
         reviewCount={Number(mode === "services" ? service?.reviewCount ?? 0 : 0)}
+        onChat={mode === "services" || mode === "venues" ? () => router.push(chatHref) : undefined}
+        chatLabel="Message provider"
       />
       <Footer />
     </main>
@@ -349,7 +374,7 @@ function ExplorePageContent() {
       <header className="sticky top-0 z-40">
         <SiteHeader />
       </header>
-      <main className="min-h-[70vh] bg-[#FBFAF8]">
+      <main className="min-h-[70vh] bg-[var(--bhn-surface-2)]">
       <div className="mx-auto max-w-[1440px] px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
         <div className="grid gap-8 lg:grid-cols-[252px_minmax(0,1fr)]">
           <aside className="lg:sticky lg:top-24 lg:self-start">

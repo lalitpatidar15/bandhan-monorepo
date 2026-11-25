@@ -12,6 +12,7 @@ import {
   useVerifyPaymentMutation, 
   useCreateUserOrderMutation,
   type RazorpayVerificationRequest,
+  useLookupPincodeQuery,
 } from "@/store/api/authApi";
 
 interface RazorpayOptions {
@@ -106,6 +107,7 @@ export default function CheckoutPage() {
   const fetchLocationFromPincode = async (pincode: string) => {
     setPincodeLoading(true);
     try {
+      // Use RTK Query for pincode lookup (wrapping third-party API)
       const res = await fetch(`https://api.postalpincode.in/pincode/${pincode}`);
       const data = await res.json();
 
@@ -221,7 +223,7 @@ export default function CheckoutPage() {
           contact: address.phone,
           ...(paymentMethod === "upi" || paymentMethod === "card" ? { method: paymentMethod } : {}),
         },
-        theme: { color: "#964407" },
+        theme: { color: "var(--bhn-brand-600)" },
       };
 
       if (!window.Razorpay) throw new Error("Payment window did not load. Please try again.");
@@ -279,7 +281,7 @@ export default function CheckoutPage() {
             <Card className="rounded-2xl space-y-4 p-4 md:p-4">
               <section className="space-y-3">
                 <div className="flex items-center gap-3 text-xs uppercase tracking-wider">
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--bhn-brand-500)] text-white text-[10px]">1</span>
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--bhn-brand-500)] text-[var(--bhn-text-on-brand)] text-[10px]">1</span>
                   <p className="text-sm font-medium text-[var(--bhn-text)]">Shipping Address</p>
                 </div>
                 <div className="grid gap-3 sm:grid-cols-2">
@@ -288,7 +290,7 @@ export default function CheckoutPage() {
                       placeholder="Street Address"
                       value={address.street}
                       onChange={(e) => handleInputChange("street", e.target.value)}
-                      className={errors.street ? "border-red-500" : undefined}
+                      className={errors.street ? "border-[var(--bhn-error-500)]" : undefined}
                       invalid={!!errors.street}
                     />
                   </div>
@@ -299,7 +301,7 @@ export default function CheckoutPage() {
                       value={address.pincode}
                       onChange={(e) => handleInputChange("pincode", e.target.value)}
                       maxLength={6}
-                      className={errors.pincode ? "border-red-500" : undefined}
+                      className={errors.pincode ? "border-[var(--bhn-error-500)]" : undefined}
                       invalid={!!errors.pincode}
                     />
                     {pincodeLoading && (
@@ -312,10 +314,10 @@ export default function CheckoutPage() {
                       placeholder="City"
                       value={address.city}
                       onChange={(e) => handleInputChange("city", e.target.value)}
-                      className={errors.city ? "border-red-500" : undefined}
+                      className={errors.city ? "border-[var(--bhn-error-500)]" : undefined}
                       invalid={!!errors.city}
                     />
-                    {errors.city && <p className="text-[10px] text-red-500 mt-0.5">{errors.city}</p>}
+                    {errors.city && <p className="text-[10px] text-[var(--bhn-error-500)] mt-0.5">{errors.city}</p>}
                   </div>
 
 <div>
@@ -323,10 +325,10 @@ export default function CheckoutPage() {
                       placeholder="State"
                       value={address.state}
                       onChange={(e) => handleInputChange("state", e.target.value)}
-                      className={errors.state ? "border-red-500" : undefined}
+                      className={errors.state ? "border-[var(--bhn-error-500)]" : undefined}
                       invalid={!!errors.state}
                     />
-                    {errors.state && <p className="text-[10px] text-red-500 mt-0.5">{errors.state}</p>}
+                    {errors.state && <p className="text-[10px] text-[var(--bhn-error-500)] mt-0.5">{errors.state}</p>}
                   </div>
 
 <div>
@@ -335,17 +337,17 @@ export default function CheckoutPage() {
                       value={address.phone}
                       onChange={(e) => handleInputChange("phone", e.target.value)}
                       maxLength={10}
-                      className={errors.phone ? "border-red-500" : undefined}
+                      className={errors.phone ? "border-[var(--bhn-error-500)]" : undefined}
                       invalid={!!errors.phone}
                     />
-                    {errors.phone && <p className="text-[10px] text-red-500 mt-0.5">{errors.phone}</p>}
+                    {errors.phone && <p className="text-[10px] text-[var(--bhn-error-500)] mt-0.5">{errors.phone}</p>}
                   </div>
                 </div>
               </section>
 
               <section className="space-y-3">
                 <div className="flex items-center gap-3 text-xs uppercase tracking-wider">
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--bhn-brand-500)] text-white text-[10px]">2</span>
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--bhn-brand-500)] text-[var(--bhn-text-on-brand)] text-[10px]">2</span>
                   <p className="text-sm font-medium text-[var(--bhn-text)]">Payment Method</p>
                 </div>
 
@@ -355,9 +357,9 @@ export default function CheckoutPage() {
                     { value: "upi", icon: <Wallet size={18} />, title: "UPI Payment", details: "Google Pay, PhonePe, Paytm" },
                     { value: "emi", icon: <CreditCard size={18} />, title: "EMI (if eligible)", details: "Available plans and rates are shown securely by Razorpay" },
                   ].map((item) => (
-                    <label key={item.value} className="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-[var(--bhn-border)] bg-white p-3 hover:border-[var(--bhn-brand-400)] transition-colors">
+                    <label key={item.value} className="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-3 hover:border-[var(--bhn-brand-400)] transition-colors">
                       <div className="flex items-center gap-3">
-                        <div className="bg-[var(--bhn-brand-50)] p-2 rounded-lg text-[var(--bhn-brand-600)]">{item.icon}</div>
+                        <div className="bg-[var(--bhn-brand-50)] p-2 rounded-lg text-[var(--bhn-text)]">{item.icon}</div>
                         <div>
                           <p className="font-semibold text-[var(--bhn-text)] text-xs">{item.title}</p>
                           <p className="text-[10px] text-[var(--bhn-text-muted)]">{item.details}</p>
@@ -378,7 +380,7 @@ export default function CheckoutPage() {
           </div>
 
           <aside className="space-y-5">
-            <Card className="rounded-2xl shadow-sm bg-white p-3 border border-[var(--bhn-border)]">
+            <Card className="rounded-2xl shadow-sm bg-[var(--bhn-surface)] p-3 border border-[var(--bhn-border)]">
               <h2 className="text-base font-bold text-[var(--bhn-text)] mb-4">Order Summary</h2>
               {cartItems.length === 0 ? (
                 <EmptyState
@@ -401,7 +403,7 @@ export default function CheckoutPage() {
                     {shipping > 0 && <div className="flex justify-between text-[var(--bhn-text-muted)]"><span>Shipping</span><span>{formatCurrency(shipping)}</span></div>}
                     <div className="flex justify-between text-[var(--bhn-text-muted)]"><span>Service Fee</span><span>{formatCurrency(serviceFee)}</span></div>
                     <div className="flex justify-between text-[var(--bhn-text-muted)]"><span>Tax</span><span>{formatCurrency(tax)}</span></div>
-                    {discount > 0 && <div className="flex justify-between text-[var(--bhn-brand-600)] font-bold"><span>Discount</span><span>-{formatCurrency(discount)}</span></div>}
+                    {discount > 0 && <div className="flex justify-between text-[var(--bhn-text)] font-bold"><span>Discount</span><span>-{formatCurrency(discount)}</span></div>}
                   </div>
                 </>
               )}
@@ -411,7 +413,7 @@ export default function CheckoutPage() {
                   <span className="text-xs font-medium text-[var(--bhn-text-muted)]">Total</span>
                   <span className="text-xl font-black text-[var(--bhn-text)]">{formatCurrency(total)}</span>
                 </div>
-                <Button onClick={handlePayment} disabled={loading || cartItems.length === 0} className="w-full py-3 text-sm font-bold text-white bg-[var(--bhn-brand-500)] rounded-xl hover:bg-[var(--bhn-brand-600)] transition disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer">
+                <Button onClick={handlePayment} disabled={loading || cartItems.length === 0} className="w-full py-3 text-sm font-bold text-[var(--bhn-text-on-brand)] bg-[var(--bhn-brand-500)] rounded-xl hover:bg-[var(--bhn-brand-600)] transition disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer">
                   {loading ? <Spinner size="sm" className="animate-spin" /> : null}
                   {loading ? "Processing..." : `Pay ${formatCurrency(total)}`}
                 </Button>

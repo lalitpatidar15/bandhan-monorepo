@@ -1,38 +1,186 @@
 "use client";
 
+import { use, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import Image from "next/image";
 import toast from "react-hot-toast";
-import { Button, Field, Input, Logo } from "@bandhan/ui";
+import { Button, Field, Input } from "@bandhan/ui";
 import { usePortalRegisterMutation } from "@/store/api/authApi";
-import { registrationRoles } from "@bandhan/config";
 
-const nameLabels = { buyer: "Full name", seller: "Business or owner name", student: "Full name", instructor: "Full name", jobseeker: "Full name", recruiter: "Company name" } as const;
-type RegistrationRole = keyof typeof nameLabels;
+type RoleRegistration = {
+  role: string;
+  title: string;
+  description: string;
+};
 
-export default function RoleSignupPage() {
+const roleOptions: RoleRegistration[] = [
+  { role: "buyer", title: "Buyer", description: "Shop products and services for events" },
+  { role: "seller", title: "Seller", description: "Sell products and services on the platform" },
+  { role: "student", title: "Student", description: "Learn and take courses" },
+  { role: "instructor", title: "Instructor", description: "Teach courses and earn" },
+  { role: "jobseeker", title: "Job Seeker", description: "Find jobs and build career" },
+  { role: "recruiter", title: "Recruiter", description: "Hire talent and manage recruiting" },
+];
+
+export default function RoleSignupPage({
+  params,
+}: {
+  params: Promise<{ role: string }>;
+}) {
+  const { role } = use(params);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const params = useParams<{ role: string }>();
-  const role = params.role as RegistrationRole;
-  const roleOption = registrationRoles.find((option) => option.role === role);
-  const config = roleOption ? { label: roleOption.title, nameLabel: nameLabels[role] } : null;
-  const [register, { isLoading }] = usePortalRegisterMutation();
-  const [form, setForm] = useState({ fullName: "", email: "", phone: "", password: "", confirmPassword: "" });
+  const [register] = usePortalRegisterMutation();
 
-  if (!config) { router.replace("/signup"); return null; }
-  const submit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (form.password !== form.confirmPassword) return toast.error("Passwords do not match.");
+  const routeMap: Record<string, string> = {
+    buyer: "/userdashboard",
+    seller: "/seller/dashboard",
+    student: "/student/courses",
+    instructor: "/instructor/dashboard",
+    jobseeker: "/job-seeker/dashboard",
+    recruiter: "/recruiter/dashboard",
+  };
+
+  const roleOption = roleOptions.find((r) => r.role === role);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrors({});
+
+    const newErrors: Record<string, string> = {};
+
+    if (!formData.name?.trim()) {
+      newErrors.name = "Name is required";
+    }
+    if (!formData.email?.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Please enter a valid email";
+    }
+    if (!formData.password) {
+      newErrors.password = "Password is required";
+    } else if (formData.password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters";
+    } else if (!/[A-Z]/.test(formData.password)) {
+      newErrors.password = "Password must contain at least 1 uppercase letter";
+    } else if (!/[a-z]/.test(formData.password)) {
+      newErrors.password = "Password must contain at least 1 lowercase letter";
+    } else if (!/\d/.test(formData.password)) {
+      newErrors.password = "Password must contain at least 1 number";
+    }
+    if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match";
+    }
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) return;
+
     try {
-      await register({ role, fullName: form.fullName.trim(), email: form.email.trim(), phone: form.phone.trim(), password: form.password }).unwrap();
-      toast.success("Account created. Please sign in.");
-      router.replace("/login?registered=true");
-    } catch (error: unknown) {
-      const apiError = error as { data?: { message?: string } };
-      toast.error(apiError.data?.message || "Unable to create account.");
+      await register({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        portalRole: role,
+      }).unwrap();
+
+      toast.success("Account created successfully!");
+
+      const targetRoute = routeMap[role];
+      if (targetRoute) {
+        router.replace(targetRoute);
+      } else {
+        router.replace("/userdashboard");
+      }
+    } catch (err: any) {
+      console.error("Registration error:", err);
+      toast.error("Registration failed. Please try again.");
     }
   };
 
-  return <main className="flex min-h-screen items-center justify-center bg-[var(--bhn-bg)] p-4"><form onSubmit={submit} className="bhn-card bhn-card-pad-lg w-full max-w-md space-y-5"><div className="text-center"><Logo size="lg" /><h1 className="mt-5 text-2xl font-bold text-[var(--bhn-text)]">Create a {config.label} account</h1><p className="mt-1 text-sm text-[var(--bhn-text-muted)]">You can complete portal details after signing in.</p></div><Field label={config.nameLabel}><Input required value={form.fullName} onChange={(e) => setForm({ ...form, fullName: e.target.value })} placeholder={config.nameLabel} /></Field><Field label="Email"><Input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="you@example.com" /></Field><Field label="Phone (optional)"><Input type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="Phone number" /></Field><Field label="Password"><Input required type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} placeholder="At least 8 characters" /></Field><Field label="Confirm password"><Input required type="password" value={form.confirmPassword} onChange={(e) => setForm({ ...form, confirmPassword: e.target.value })} placeholder="Repeat password" /></Field><Button type="submit" disabled={isLoading} className="w-full">{isLoading ? "Creating account…" : `Create ${config.label} account`}</Button><p className="text-center text-sm text-[var(--bhn-text-muted)]"><Link href="/signup" className="font-semibold text-[var(--bhn-brand-700)] hover:underline">Choose a different role</Link></p></form></main>;
+  return (
+    <main className="min-h-screen bg-[var(--bhn-bg)] px-4 py-12 sm:py-16">
+      <section className="mx-auto max-w-4xl">
+        <div className="mb-6 text-center">
+          <Image
+            src="/Group1.png"
+            alt="Bandhan Events Hub"
+            width={433}
+            height={96}
+            className="mx-auto h-12 w-auto rounded-lg bg-[var(--bhn-brand-900)] px-3 py-1.5 priority"
+          />
+          <h1 className="mt-4 text-2xl font-bold text-[var(--bhn-text)]">
+            {roleOption?.title} Registration
+          </h1>
+          <p className="mt-2 text-[var(--bhn-text-muted)]">
+            {roleOption?.description}
+          </p>
+        </div>
+
+        <div className="bg-[var(--bhn-surface)] rounded-2xl p-8 sm:p-10 max-w-md w-full">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <Field label="Full Name" required error={errors.name}>
+              <Input
+                placeholder="John Doe"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                required
+              />
+            </Field>
+            <Field label="Email Address" required error={errors.email}>
+              <Input
+                type="email"
+                placeholder="john@example.com"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                required
+              />
+            </Field>
+            <Field label="Password" required error={errors.password}>
+              <Input
+                type="password"
+                placeholder="••••••••"
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                required
+              />
+            </Field>
+            <Field label="Confirm Password" required error={errors.confirmPassword}>
+              <Input
+                type="password"
+                placeholder="••••••••"
+                value={formData.confirmPassword}
+                onChange={(e) =>
+                  setFormData({ ...formData, confirmPassword: e.target.value })
+                }
+                required
+              />
+            </Field>
+
+            <Button type="submit" disabled={isLoading} className="w-full">
+              {isLoading ? "Creating Account..." : "Create Account"}
+            </Button>
+
+            <p className="mt-4 text-center text-sm text-[var(--bhn-text-muted)]">
+              Already have an account?{" "}
+              <Link
+                href="/login"
+                className="font-semibold text-[var(--bhn-brand-700)] hover:underline"
+              >
+                Sign in
+              </Link>
+            </p>
+          </form>
+        </div>
+      </section>
+    </main>
+  );
 }

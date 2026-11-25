@@ -31,11 +31,11 @@ export function ContinueSection() {
     <section className="mt-6 px-1">
       {/* SECTION HEADER */}
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-bold text-[#1C1A16] tracking-tight">
+        <h3 className="text-lg font-bold text-[var(--bhn-text)] tracking-tight">
           Pick back up where you left off
         </h3>
         {/* Mobile Indicator */}
-        <span className="text-[10px] uppercase tracking-widest text-[#C2652A] font-bold md:hidden">
+        <span className="text-[10px] uppercase tracking-widest text-[var(--bhn-text)] font-bold md:hidden">
           Swipe &rarr;
         </span>
       </div>
@@ -55,7 +55,7 @@ export function ContinueSection() {
         {data.map((item, i) => (
           <Card 
             key={i}
-            className="group flex items-center gap-4 rounded-2xl border border-[#E7E1D8] bg-[#FEF1E7] p-3 hover:bg-white hover:border-[#C2652A] hover:shadow-md transition-all duration-300 w-[220px] sm:w-[240px] h-[75px] shrink-0 snap-start cursor-pointer active:scale-95"
+            className="group flex items-center gap-4 rounded-2xl border border-[var(--bhn-border)] bg-[var(--bhn-surface-2)] p-3 hover:bg-[var(--bhn-surface)] hover:border-[var(--bhn-brand-600)] hover:shadow-md transition-all duration-300 w-[220px] sm:w-[240px] h-[75px] shrink-0 snap-start cursor-pointer active:scale-95"
           >
             {/* ITEM IMAGE */}
             <div className="relative shrink-0">
@@ -70,10 +70,10 @@ export function ContinueSection() {
 
             {/* ITEM DETAILS */}
             <div className="min-w-0 flex-1">
-              <p className="font-bold text-[#1C1A16] text-[15px] sm:text-[16px] truncate leading-tight">
+              <p className="font-bold text-[var(--bhn-text)] text-[15px] sm:text-[16px] truncate leading-tight">
                 {item.title}
               </p>
-              <p className="text-[#6B625A] text-[11px] sm:text-[12px] font-medium truncate mt-0.5">
+              <p className="text-[var(--bhn-text-muted)] text-[11px] sm:text-[12px] font-medium truncate mt-0.5">
                 {item.category}
               </p>
             </div>

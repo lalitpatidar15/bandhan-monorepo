@@ -14,25 +14,25 @@ export default function AdminTopBar({ title }: { title: string }) {
           <Logo size="sm" onDark />
         </span>
 
-        <div className="min-w-0 border-l pl-3" style={{ borderLeftColor: 'rgba(255, 255, 255, 0.25)' }}>
-          <p className="text-[10px] font-semibold uppercase tracking-[.16em] text-white/70">
+        <div className="min-w-0 border-l pl-3" style={{ borderLeftColor: 'var(--bhn-text-on-brand-25)' }}>
+          <p className="text-[10px] font-semibold uppercase tracking-[.16em] text-[color-mix(in_srgb,var(--bhn-text-on-brand)_70%,transparent)]">
             Bandhan control centre
           </p>
-          <h1 className="truncate text-lg font-semibold text-white">{title}</h1>
+          <h1 className="truncate text-lg font-semibold text-[var(--bhn-text-on-brand)]">{title}</h1>
         </div>
       </div>
 
-      <div className="flex items-center gap-2 text-sm text-white">
-        <button type="button" aria-label="Notifications" className="rounded-full p-2 transition hover:bg-white/15">
+      <div className="flex items-center gap-2 text-sm text-[var(--bhn-text-on-brand)]">
+        <button type="button" aria-label="Notifications" className="rounded-full p-2 transition hover:bg-[color-mix(in_srgb,var(--bhn-surface)_15%,transparent)]">
           <Bell size={18} />
         </button>
 
-        <span className="hidden items-center gap-1 rounded-full bg-white/15 px-3 py-1.5 font-medium text-white sm:flex">
+        <span className="hidden items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--bhn-surface)_15%,transparent)] px-3 py-1.5 font-medium text-[var(--bhn-text-on-brand)] sm:flex">
           <ShieldCheck size={16} />
           Admin
         </span>
 
-        <span className="flex h-9 w-9 items-center justify-center rounded-full border" style={{ borderColor: 'rgba(255, 255, 255, 0.4)' }}>
+        <span className="flex h-9 w-9 items-center justify-center rounded-full border" style={{ borderColor: 'var(--bhn-text-on-brand-40)' }}>
           <UserRound size={17} />
         </span>
       </div>

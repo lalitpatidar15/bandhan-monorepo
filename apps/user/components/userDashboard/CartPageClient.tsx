@@ -111,7 +111,7 @@ export default function CartPageClient() {
       <div className="min-h-screen bg-[var(--bhn-bg)] px-4 py-6">
         <Card className="mx-auto max-w-xl rounded-xl p-8 text-center shadow-sm">
           <h1 className="text-lg font-semibold text-[var(--bhn-text)]">We could not load your cart</h1>
-          <p className="mt-2 text-sm text-red-600">{getErrorMessage(cartError)}</p>
+          <p className="mt-2 text-sm text-[var(--bhn-error-600)]">{getErrorMessage(cartError)}</p>
           <Button onClick={() => refetch()} className="mt-4">Try Again</Button>
         </Card>
       </div>
@@ -144,7 +144,7 @@ export default function CartPageClient() {
         />
 
         {actionError && (
-          <div role="alert" className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+          <div role="alert" className="mt-4 rounded-xl border border-[var(--bhn-error-500)] bg-[var(--bhn-error-50)] p-3 text-sm text-[var(--bhn-error-700)]">
             {actionError}
           </div>
         )}
@@ -158,7 +158,7 @@ export default function CartPageClient() {
               return (
                 <Card
                   key={`${item.itemType}-${item.id}`}
-                  className="flex flex-col justify-between gap-4 rounded-2xl bg-white p-3 sm:flex-row sm:items-center"
+                  className="flex flex-col justify-between gap-4 rounded-2xl bg-[var(--bhn-surface)] p-3 sm:flex-row sm:items-center"
                 >
                   <div className="flex min-w-0 gap-4">
                     {item.image ? (
@@ -168,13 +168,13 @@ export default function CartPageClient() {
                         className="h-24 w-24 shrink-0 rounded-xl object-cover"
                       />
                     ) : (
-                      <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl bg-[var(--bhn-brand-50)] text-xs text-[var(--bhn-brand-600)]">
+                      <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl bg-[var(--bhn-brand-50)] text-xs text-[var(--bhn-text)]">
                         No image
                       </div>
                     )}
 
                     <div className="min-w-0">
-                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--bhn-brand-600)]">
+                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--bhn-text)]">
                         {item.itemType === 'rental' ? 'Rental product' : item.itemType}
                       </p>
                       <h2 className="truncate text-lg font-semibold text-[var(--bhn-text)]">{item.title}</h2>
@@ -182,7 +182,7 @@ export default function CartPageClient() {
                         <p className="mt-1 text-sm text-[var(--bhn-text-muted)]">{details.join(' • ')}</p>
                       )}
 
-                      <div className="mt-3 flex w-fit items-center gap-3 rounded-full border border-[var(--bhn-border)] bg-white px-3 py-1">
+                      <div className="mt-3 flex w-fit items-center gap-3 rounded-full border border-[var(--bhn-border)] bg-[var(--bhn-surface)] px-3 py-1">
                         <Button
                           type="button"
                           variant="ghost"

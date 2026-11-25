@@ -119,7 +119,7 @@ export default function HashtagGenerator({ className = "", defaultEventType, def
   return (
     <div className={["bhn-card p-6 space-y-5", className].filter(Boolean).join(" ")}>
       <div className="flex items-center gap-3">
-        <Sparkles size={20} className="text-[var(--bhn-brand-600)]" />
+        <Sparkles size={20} className="text-[var(--bhn-text)]" />
         <h3 className="font-display text-lg font-bold text-[var(--bhn-text)]">
           Hashtag Generator
         </h3>

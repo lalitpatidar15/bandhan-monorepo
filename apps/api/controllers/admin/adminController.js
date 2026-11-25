@@ -1,4 +1,9 @@
 const User = require("../../models/shared/User.js");
+const IdentityVerification = require("../../models/shared/IdentityVerification.js");
+const Payment = require("../../models/shared/Payment.js");
+const Profile = require("../../models/shared/Profile.js");
+const VendorEarning = require("../../models/shared/VendorEarning.js");
+const Booking = require("../../models/shared/Booking.js");
 const Product = require("../../models/shared/Product.js");
 const Order = require("../../models/shared/Order.js");
 const Venue = require("../../models/shared/Venue.js");
@@ -22,7 +27,9 @@ const ReviewInstructor = require("../../models/student/ReviewInstructor.js");
 const Application = require("../../models/jobPoster/Application.js");
 const Plan = require("../../models/jobPoster/Plan.js");
 const AuditLog = require("../../models/shared/AuditLog.js");
+const { normalizeShippingFields, validateShippingForActive } = require("../../utils/shippingFields.js");
 const { createRazorpayRefund } = require("../../services/razorpayService.js");
+const { recordRefund } = require("../../services/vendorEarningsService.js");
 
 const PRODUCT_AVAILABILITY = new Set(["sale", "rent", "both"]);
 const ORDER_STATUSES = new Set(["pending", "confirmed", "completed", "cancelled"]);
@@ -315,7 +322,7 @@ exports.createUser = async (req, res) => {
     const user = await User.create({
       email,
       username,
-      password: String(req.body.password || "admin_created_user"),
+      password: String(req.body.password),
       fullName,
       phone: String(req.body.phone || "").trim(),
       role: req.body.role || "buyer",
@@ -426,6 +433,12 @@ exports.createProduct = async (req, res) => {
     const isApproved = isActive && req.body.isApproved !== false;
     const isPublished = isApproved && req.body.isPublished !== false;
 
+    const shipping = normalizeShippingFields(req.body);
+    if (isActive) {
+      const shippingError = validateShippingForActive({ ...shipping, shippingRequired: shipping.shippingRequired ?? true });
+      if (shippingError) return res.status(400).json({ success: false, message: shippingError });
+    }
+
     const product = await Product.create({
       sellerId,
       sellerEmail: seller.email,
@@ -449,6 +462,7 @@ exports.createProduct = async (req, res) => {
       type: normalizeAvailability(req.body.type || req.body.productType),
       images: Array.isArray(req.body.images) ? req.body.images : [],
       tags: Array.isArray(req.body.tags) ? req.body.tags : [],
+      ...shipping,
     });
 
     const populatedProduct = await Product.findById(product._id).populate("sellerId", "fullName email");
@@ -462,7 +476,8 @@ exports.createProduct = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
   try {
-    const updates = { ...req.body };
+    const shipping = normalizeShippingFields(req.body);
+    const updates = { ...req.body, ...shipping };
     if (updates.status === "inactive") {
       updates.status = "draft";
     }
@@ -492,6 +507,15 @@ exports.updateProduct = async (req, res) => {
       const availability = normalizeAvailability(updates.productType || updates.type);
       updates.productType = availability;
       updates.type = availability;
+    }
+
+    if (updates.status === "active" || Object.keys(shipping).length > 0) {
+      const existing = await Product.findById(req.params.id);
+      const nextProduct = existing ? { ...existing.toObject(), ...updates } : updates;
+      if (nextProduct.status === "active") {
+        const shippingError = validateShippingForActive(nextProduct);
+        if (shippingError) return res.status(400).json({ success: false, message: shippingError });
+      }
     }
 
     const product = await Product.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true });
@@ -595,28 +619,53 @@ exports.updateOrder = async (req, res) => {
 exports.refundOrder = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
-    if (!order) {
-      return res.status(404).json({ success: false, message: "Order not found" });
-    }
-
+    if (!order) return res.status(404).json({ success: false, message: "Order not found" });
     if (order.paymentStatus !== "paid") {
       return res.status(400).json({ success: false, message: "Only paid orders can be refunded" });
     }
-
     if (!order.razorpayPaymentId) {
       return res.status(400).json({ success: false, message: "No Razorpay payment ID found for this order" });
     }
 
-    const amount = req.body.amount ? Math.round(req.body.amount * 100) : undefined;
-    const reason = req.body.reason || "Admin initiated refund";
-
-    const refund = await createRazorpayRefund(order.razorpayPaymentId, amount, reason);
-    if (!refund) {
-      return res.status(500).json({ success: false, message: "Refund failed via Razorpay" });
+    // A single Razorpay payment can fund several vendor sub-orders. Never
+    // refund the whole charge by accident when only one vendor is targeted.
+    const payment = await Payment.findOne({
+      transactionId: order.razorpayPaymentId,
+      orderId: order.razorpayOrderId,
+    }).populate("fulfilledOrderIds");
+    const relatedOrders = payment?.fulfilledOrderIds?.length ? payment.fulfilledOrderIds : [order];
+    const isShared = relatedOrders.length > 1;
+    const requested = req.body.amount === undefined || req.body.amount === null || req.body.amount === ""
+      ? null
+      : Number(req.body.amount);
+    if (isShared && !(requested > 0)) {
+      return res.status(400).json({
+        success: false,
+        message: "This payment covers multiple vendors. Enter the refund amount for this order.",
+      });
+    }
+    if (requested !== null && (!(requested > 0) || requested > Number(order.amount) + 0.01)) {
+      return res.status(400).json({ success: false, message: "Invalid refund amount" });
     }
 
-    order.paymentStatus = "refunded";
+    const amountRupees = requested !== null ? requested : Number(order.amount);
+    const amountPaise = Math.round(amountRupees * 100);
+    const reason = req.body.reason || "Admin initiated refund";
+    const refund = await createRazorpayRefund(order.razorpayPaymentId, amountPaise, reason);
+    if (!refund) return res.status(500).json({ success: false, message: "Refund failed via Razorpay" });
+
+    order.paymentStatus = amountRupees >= Number(order.amount) - 0.01 ? "refunded" : "partially_refunded";
+    order.refundedAmount = amountRupees;
     await order.save();
+
+    if (payment) {
+      const refundedSoFar = Number(payment.metadata?.refundedAmount || 0) + amountRupees;
+      payment.metadata = { ...(payment.metadata?.toObject?.() || payment.metadata || {}), refundedAmount: refundedSoFar };
+      payment.status = refundedSoFar >= Number(payment.totalAmount) - 0.01 ? "refunded" : "completed";
+      await payment.save();
+    }
+
+    await recordRefund({ paymentId: payment?._id, orderId: order._id, amount: amountRupees });
 
     await AuditLog.create({
       userId: req.user?._id,
@@ -624,17 +673,17 @@ exports.refundOrder = async (req, res) => {
       action: "refund_order",
       entity: "Order",
       entityId: order._id,
-      changes: { paymentStatus: "refunded", refundId: refund.id, amount: amount ? amount / 100 : order.amount, reason },
+      changes: { paymentStatus: order.paymentStatus, refundId: refund.id, amount: amountRupees, reason },
       ipAddress: req.ip,
       userAgent: req.get("user-agent") || "",
       status: "success",
       details: `Refund processed for order ${order.orderId || order._id}, refund ID: ${refund.id}`,
     });
 
-    res.json({ success: true, refundId: refund.id, message: "Refund processed successfully" });
+    return res.json({ success: true, refundId: refund.id, message: "Refund processed successfully" });
   } catch (error) {
     console.error("Error in controllers/admin/adminController.js refundOrder:", error);
-    res.status(500).json({ success: false, message: "Server error" });
+    return res.status(500).json({ success: false, message: "Server error" });
   }
 };
 
@@ -1135,6 +1184,12 @@ exports.updateProductModeration = async (req, res) => {
     const updates = {};
     if (req.body.status === "active" || req.body.status === "draft") {
       updates.status = req.body.status;
+      if (req.body.status === "active") {
+        updates.isApproved = true;
+        updates.isPublished = true;
+      } else {
+        updates.isPublished = false;
+      }
     }
     if (typeof req.body.isFeatured === "boolean") {
       updates.isFeatured = req.body.isFeatured;
@@ -2191,5 +2246,218 @@ exports.deletePlan = async (req, res) => {
     console.error("Error in controllers/admin/adminController.js:", error);
 
     res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// ==================== MANUAL SELLER VERIFICATION ====================
+
+function formatSellerVerification(record) {
+  const seller = record.ownerId || {};
+  return {
+    id: String(record._id),
+    sellerId: String(record.ownerId),
+    sellerName: seller.fullName || seller.name || "",
+    sellerEmail: seller.email || "",
+    sellerPhone: seller.phone || "",
+    provider: record.provider,
+    status: record.status,
+    businessName: record.businessName || "",
+    documents: record.documents || {},
+    submittedAt: record.submittedAt,
+    reviewedAt: record.reviewedAt,
+    verifiedAt: record.verifiedAt,
+    rejectionReason: record.rejectionReason || "",
+  };
+}
+
+exports.getSellerVerifications = async (req, res) => {
+  try {
+    const filter = { ownerType: "seller" };
+    if (["pending", "verified", "rejected"].includes(req.query.status)) filter.status = req.query.status;
+    const records = await IdentityVerification.find(filter)
+      .populate("ownerId", "fullName name email phone")
+      .sort({ submittedAt: -1, createdAt: -1 })
+      .lean();
+    res.json({ success: true, data: records.map(formatSellerVerification) });
+  } catch (error) {
+    console.error("Error in controllers/admin/adminController.js getSellerVerifications:", error);
+    res.status(500).json({ success: false, message: "Unable to load seller verifications" });
+  }
+};
+
+exports.reviewSellerVerification = async (req, res) => {
+  try {
+    const { action, rejectionReason } = req.body || {};
+    if (!["approve", "reject"].includes(action)) {
+      return res.status(400).json({ success: false, message: "Action must be approve or reject" });
+    }
+    if (action === "reject" && !String(rejectionReason || "").trim()) {
+      return res.status(400).json({ success: false, message: "A rejection reason is required" });
+    }
+    const record = await IdentityVerification.findOne({ _id: req.params.id, ownerType: "seller" });
+    if (!record) return res.status(404).json({ success: false, message: "Verification request not found" });
+
+    const now = new Date();
+    record.status = action === "approve" ? "verified" : "rejected";
+    record.reviewedBy = req.user?._id;
+    record.reviewedAt = now;
+    record.verifiedAt = action === "approve" ? now : undefined;
+    record.rejectionReason = action === "reject" ? String(rejectionReason).trim() : undefined;
+    record.audit.push({
+      action: action === "approve" ? "manual_approved" : "manual_rejected",
+      at: now,
+      actorId: req.user?._id,
+    });
+    await record.save();
+
+    await Profile.findOneAndUpdate(
+      { userId: record.ownerId },
+      { $set: { isVerified: action === "approve", verificationStatus: record.status, verificationDate: now } },
+      { upsert: false }
+    );
+
+    res.json({ success: true, data: formatSellerVerification(record), message: `Seller ${action === "approve" ? "approved" : "rejected"}` });
+  } catch (error) {
+    console.error("Error in controllers/admin/adminController.js reviewSellerVerification:", error);
+    res.status(500).json({ success: false, message: "Unable to review seller verification" });
+  }
+};
+
+// ==================== VENDOR PAYMENT DISTRIBUTION ====================
+
+const round2 = (value) => Math.round((Number(value) || 0) * 100) / 100;
+
+exports.getVendorEarnings = async (req, res) => {
+  try {
+    const filter = {};
+    if (["product", "service", "venue"].includes(req.query.vendorType)) filter.vendorType = req.query.vendorType;
+    if (["pending", "paid", "partially_refunded", "refunded"].includes(req.query.status)) filter.status = req.query.status;
+    if (req.query.vendorId) filter.vendorId = req.query.vendorId;
+    const earnings = await VendorEarning.find(filter)
+      .populate("vendorId", "fullName name email")
+      .populate("orderId", "orderId amount paymentStatus")
+      .populate("bookingId", "bookingType status paymentStatus")
+      .sort({ createdAt: -1 })
+      .limit(500)
+      .lean();
+    res.json({
+      success: true,
+      data: earnings.map((entry) => ({
+        id: String(entry._id),
+        vendorId: String(entry.vendorId?._id || entry.vendorId),
+        vendorName: entry.vendorId?.fullName || entry.vendorId?.name || entry.vendorName || "Vendor",
+        vendorEmail: entry.vendorId?.email || "",
+        vendorType: entry.vendorType,
+        orderId: entry.orderId?._id || null,
+        bookingId: entry.bookingId?._id || null,
+        paymentId: String(entry.paymentId),
+        status: entry.status,
+        grossAmount: entry.grossAmount,
+        commissionRate: entry.commissionRate,
+        commission: entry.commission,
+        netPayable: entry.netPayable,
+        refundedAmount: entry.refundedAmount || 0,
+        createdAt: entry.createdAt,
+      })),
+    });
+  } catch (error) {
+    console.error("Error in controllers/admin/adminController.js getVendorEarnings:", error);
+    res.status(500).json({ success: false, message: "Unable to load vendor earnings" });
+  }
+};
+
+exports.getPaymentBreakdown = async (req, res) => {
+  try {
+    const [payments, earnings, paidBookings] = await Promise.all([
+      Payment.find({ paymentFor: { $in: ["product_order", "booking"] }, status: { $in: ["completed", "refunded"] } }).lean(),
+      VendorEarning.find().populate("vendorId", "fullName name email").lean(),
+      Booking.countDocuments({ paymentStatus: "paid" }),
+    ]);
+
+    const byVendorType = {
+      product: { gross: 0, commission: 0, payable: 0, refunded: 0, count: 0 },
+      service: { gross: 0, commission: 0, payable: 0, refunded: 0, count: 0 },
+      venue: { gross: 0, commission: 0, payable: 0, refunded: 0, count: 0 },
+    };
+    const vendorsMap = new Map();
+    let commissionCollected = 0;
+    let vendorPayable = 0;
+    let refundedTotal = 0;
+
+    for (const entry of earnings) {
+      const gross = Number(entry.grossAmount || 0);
+      const commission = Number(entry.commission || 0);
+      const net = Number(entry.netPayable || 0);
+      const refunded = Math.min(Number(entry.refundedAmount || 0), net);
+      const commissionAfterRefund = net > 0 ? round2(commission * (1 - refunded / net)) : 0;
+      const payable = Math.max(0, round2(net - refunded));
+      const type = byVendorType[entry.vendorType] || byVendorType.product;
+      type.gross = round2(type.gross + gross);
+      type.commission = round2(type.commission + commissionAfterRefund);
+      type.payable = round2(type.payable + payable);
+      type.refunded = round2(type.refunded + refunded);
+      type.count += 1;
+      commissionCollected = round2(commissionCollected + commissionAfterRefund);
+      vendorPayable = round2(vendorPayable + payable);
+      refundedTotal = round2(refundedTotal + refunded);
+
+      const vendorId = String(entry.vendorId?._id || entry.vendorId);
+      const key = `${entry.vendorType}:${vendorId}`;
+      const vendor = vendorsMap.get(key) || {
+        vendorId,
+        vendorType: entry.vendorType,
+        vendorName: entry.vendorId?.fullName || entry.vendorId?.name || entry.vendorName || "Vendor",
+        vendorEmail: entry.vendorId?.email || "",
+        gross: 0,
+        commission: 0,
+        payable: 0,
+        orderCount: 0,
+      };
+      vendor.gross = round2(vendor.gross + gross);
+      vendor.commission = round2(vendor.commission + commissionAfterRefund);
+      vendor.payable = round2(vendor.payable + payable);
+      vendor.orderCount += 1;
+      vendorsMap.set(key, vendor);
+    }
+
+    let grossCollected = 0;
+    let platformServiceFees = 0;
+    let taxCollected = 0;
+    let gatewayRefunds = 0;
+    for (const payment of payments) {
+      grossCollected = round2(grossCollected + Number(payment.totalAmount || 0));
+      platformServiceFees = round2(platformServiceFees + Number(payment.platformFee || 0));
+      taxCollected = round2(taxCollected + Number(payment.gst || 0));
+      gatewayRefunds = round2(gatewayRefunds + Number(payment.metadata?.refundedAmount || 0));
+    }
+
+    return res.json({
+      success: true,
+      data: {
+        grossCollected: round2(grossCollected),
+        platformEarned: round2(commissionCollected + platformServiceFees),
+        commissionCollected,
+        platformServiceFees,
+        taxCollected,
+        vendorPayable,
+        refunded: round2(Math.max(refundedTotal, gatewayRefunds)),
+        byVendorType,
+        vendors: [...vendorsMap.values()].sort((a, b) => b.payable - a.payable),
+        paidBookings,
+        recentPayments: payments.slice(0, 20).map((payment) => ({
+          id: String(payment._id),
+          paymentFor: payment.paymentFor,
+          totalAmount: payment.totalAmount,
+          platformFee: payment.platformFee || 0,
+          gst: payment.gst || 0,
+          status: payment.status,
+          refundedAmount: Number(payment.metadata?.refundedAmount || 0),
+          createdAt: payment.createdAt,
+        })),
+      },
+    });
+  } catch (error) {
+    console.error("Error in controllers/admin/adminController.js getPaymentBreakdown:", error);
+    res.status(500).json({ success: false, message: "Unable to load payment breakdown" });
   }
 };

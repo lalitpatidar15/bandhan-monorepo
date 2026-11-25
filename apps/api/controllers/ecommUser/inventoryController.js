@@ -1,6 +1,7 @@
 const Product = require("../../models/shared/Product.js");
 const cloudinary = require("../../config/cloudinary.js");
 const { normalizeImages, hasMinimumListingImages, listingMediaError } = require("../../utils/listingMedia.js");
+const { normalizeShippingFields, validateShippingForActive } = require("../../utils/shippingFields.js");
 
 // == SELLER DASHBOARD: ADD PRODUCT ==
 exports.addProduct = async (req, res) => {
@@ -28,10 +29,17 @@ exports.addProduct = async (req, res) => {
 
     if (!hasMinimumListingImages(images)) return listingMediaError(res);
 
+    const shipping = normalizeShippingFields(req.body);
+    if (req.body.status === "active") {
+      const shippingError = validateShippingForActive({ ...shipping, shippingRequired: shipping.shippingRequired ?? true });
+      if (shippingError) return res.status(400).json({ success: false, message: shippingError });
+    }
+
     const product = await Product.create({
       sellerId: req.user.id,
       images,
-      ...req.body
+      ...req.body,
+      ...shipping
     });
 
     res.status(201).json({
@@ -102,12 +110,24 @@ exports.getProducts = async (req, res) => {
 
 exports.updateProduct = async (req, res) => {
   try {
+    const existing = await Product.findOne({ _id: req.params.id, sellerId: req.user.id });
+    if (!existing) {
+      return res.status(404).json({ success: false, message: "Product not found" });
+    }
+
+    const shipping = normalizeShippingFields(req.body);
+    const nextProduct = { ...existing.toObject(), ...req.body, ...shipping };
+    if (nextProduct.status === "active" && (req.body.status === "active" || Object.keys(shipping).length > 0)) {
+      const shippingError = validateShippingForActive(nextProduct);
+      if (shippingError) return res.status(400).json({ success: false, message: shippingError });
+    }
+
     const product = await Product.findOneAndUpdate(
       {
         _id: req.params.id,
         sellerId: req.user.id
       },
-      req.body,
+      { ...req.body, ...shipping },
       { new: true }
     );
 
@@ -206,25 +226,35 @@ exports.addProductManagement = async (req, res) => {
     const combinedImages = imageUrls.length ? imageUrls : submittedImages;
     const images = normalizeImages(combinedImages);
 
-   // Product.create ke andar sellerEmail add karein
-const product = await Product.create({
-  sellerId: req.user.id,
-  sellerEmail: req.user.email, // <--- Add this line
-  title: String(req.body.title || req.body.name || "").trim(),
-  name: String(req.body.name || req.body.title || "").trim(),
-  category: req.body.category,
-  subCategory: req.body.subCategory,
-  description: req.body.description,
-  tags: req.body.tags ? (Array.isArray(req.body.tags) ? req.body.tags : req.body.tags.split(",")) : [],
-  images,
-  sku: req.body.sku,
-  price: Number(req.body.price || 0),
-  stock: Math.max(0, Number(req.body.stock || 0)),
-  productType: req.body.productType || req.body.type || "sale",
-  type: req.body.type || req.body.productType || "sale",
-  stockStatus: Number(req.body.stock || 0) > 0 ? "in_stock" : "out_of_stock",
-  status: req.body.status === "draft" ? "draft" : "active",
-});
+    const status = req.body.status === "draft" ? "draft" : "active";
+    const shipping = normalizeShippingFields(req.body);
+    if (status === "active") {
+      const shippingError = validateShippingForActive({ ...shipping, shippingRequired: shipping.shippingRequired ?? true });
+      if (shippingError) return res.status(400).json({ success: false, message: shippingError });
+    }
+
+    // Product.create ke andar sellerEmail add karein
+    const product = await Product.create({
+      sellerId: req.user.id,
+      sellerEmail: req.user.email, // <--- Add this line
+      title: String(req.body.title || req.body.name || "").trim(),
+      name: String(req.body.name || req.body.title || "").trim(),
+      category: req.body.category,
+      subCategory: req.body.subCategory,
+      description: req.body.description,
+      tags: req.body.tags ? (Array.isArray(req.body.tags) ? req.body.tags : req.body.tags.split(",")) : [],
+      images,
+      sku: req.body.sku,
+      price: Number(req.body.price || 0),
+      discountPrice: Number(req.body.discountPrice || 0),
+      rentPrice: Number(req.body.rentPrice || 0),
+      stock: Math.max(0, Number(req.body.stock || 0)),
+      productType: req.body.productType || req.body.type || "sale",
+      type: req.body.type || req.body.productType || "sale",
+      stockStatus: Number(req.body.stock || 0) > 0 ? "in_stock" : "out_of_stock",
+      ...shipping,
+      status,
+    });
 
     res.status(201).json({
       success: true,
