@@ -644,3 +644,71 @@ exports.updateShipment = async (req, res) => {
     res.status(500).json({ success: false, message: "Failed to update shipment" });
   }
 };
+
+exports.assignShiprocketAwb = async (req, res) => {
+  try {
+    const orderId = String(req.body.orderId || req.body.order_id || req.params.id || "").trim();
+    if (!orderId) {
+      return res.status(400).json({ success: false, message: "Order ID is required" });
+    }
+
+    const order = await findOrderForUser(orderId, req.user);
+    if (!order) {
+      return res.status(404).json({ success: false, message: "Order not found" });
+    }
+
+    let shipment = await Shipping.findOne({ orderId: order._id, provider: "shiprocket" }) ||
+      await Shipping.findOne({ orderId: order._id });
+    const shipmentId = String(req.body.shipmentId || shipment?.shipmentId || shipment?.shiprocketOrderId || "").trim();
+    if (!shipmentId) {
+      return res.status(400).json({ success: false, message: "Create a Shiprocket order before assigning an AWB" });
+    }
+
+    const awbResponse = await shiprocket.assignAwb(shipmentId, req.body.courierId || undefined);
+    const nested = awbResponse?.response || awbResponse?.data?.response || awbResponse;
+    const normalized = normalizeShiprocketResponse(nested);
+    if (!normalized.awbCode) {
+      return res.status(502).json({ success: false, message: "Shiprocket did not return an AWB" });
+    }
+
+    const shipmentPayload = buildShipmentPayload(order, {
+      ...normalized,
+      shiprocketOrderId: normalized.shiprocketOrderId || shipment?.shiprocketOrderId || "",
+      shipmentId: normalized.shipmentId || shipmentId,
+    }, "in_transit");
+    shipment = await Shipping.findOneAndUpdate(
+      { orderId: order._id },
+      shipmentPayload,
+      { new: true, upsert: true, setDefaultsOnInsert: true, runValidators: true }
+    );
+
+    order.shipmentDetails = {
+      ...(order.shipmentDetails?.toObject?.() || order.shipmentDetails || {}),
+      shiprocketOrderId: shipmentPayload.shiprocketOrderId,
+      shipmentId: shipmentPayload.shipmentId,
+      awbCode: normalized.awbCode,
+      courierName: normalized.courierName || "Shiprocket",
+      trackingUrl: normalized.trackingUrl || shipment.trackingUrl || "",
+      labelUrl: normalized.labelUrl || shipment.labelUrl || "",
+      status: "SHIPPED",
+      trackingStatus: "AWB_ASSIGNED",
+      partner: "Shiprocket",
+    };
+    await order.save();
+
+    res.json({
+      success: true,
+      shipment,
+      order,
+      data: {
+        awbCode: normalized.awbCode,
+        courierName: normalized.courierName,
+        trackingUrl: normalized.trackingUrl || shipment.trackingUrl || "",
+        labelUrl: normalized.labelUrl || shipment.labelUrl || "",
+      },
+    });
+  } catch (err) {
+    console.error("Error in controllers/ecommUser/orderController.js assignShiprocketAwb:", err);
+    res.status(err.statusCode || 500).json({ success: false, message: err.message || "Failed to assign AWB" });
+  }
+};

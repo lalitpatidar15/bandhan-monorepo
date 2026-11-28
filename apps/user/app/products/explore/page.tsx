@@ -122,7 +122,8 @@ function ExplorePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialSearch = searchParams.get("q") || "";
-  const viewMode = normalizeType(searchParams.get("type"));
+  const rentalsMode = searchParams.get("mode") === "rentals" || searchParams.get("productType") === "rent";
+  const viewMode = rentalsMode ? "products" : normalizeType(searchParams.get("type"));
   const [filters, setFilters] = useState<FilterState>(emptyFilterState());
   const [sortBy, setSortBy] = useState("recommended");
 
@@ -140,6 +141,7 @@ function ExplorePageContent() {
     limit: 50,
     category: viewMode === "products" && filters.category ? filters.category : undefined,
     q: viewMode === "products" ? initialSearch : undefined,
+    productType: rentalsMode ? "rent" : undefined,
   }, { skip: viewMode !== "products" });
 
   const venueQuery = useGetVenuesQuery({
@@ -182,6 +184,8 @@ function ExplorePageContent() {
 
     const params = new URLSearchParams(searchParams.toString());
     params.set("type", mode);
+    params.delete("mode");
+    params.delete("productType");
     if (!initialSearch) params.delete("q");
     else params.set("q", initialSearch);
     router.replace(`/explore?${params.toString()}`);

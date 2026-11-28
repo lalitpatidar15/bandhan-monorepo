@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const AuditLog = require("../../models/shared/AuditLog.js");
+const auth = require("../../middlewares/auth.js");
+const { requireRole } = require("../../middlewares/role.js");
+
+router.use(auth, requireRole("admin"));
 
 router.get("/", async (req, res) => {
   try {
@@ -26,6 +30,7 @@ router.post("/", async (req, res) => {
   try {
     const log = await AuditLog.create({
       ...req.body,
+      userId: req.user?.id || req.body.userId,
       ipAddress: req.ip,
       userAgent: req.get("user-agent") || "",
     });

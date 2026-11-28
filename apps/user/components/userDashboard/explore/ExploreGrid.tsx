@@ -6,6 +6,12 @@ import { Pagination } from "@bandhan/ui";
 import { Check, Heart, MapPin, Scale, Star } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useCompare, CompareType } from "@/context/CompareContext";
+import {
+  useGetWishlistQuery,
+  useAddToWishlistMutation,
+  useRemoveFromWishlistMutation,
+  type WishlistEntityType,
+} from "@/store/api/wishlistApi";
 import { toast } from "react-hot-toast";
 import Image from "next/image";
 
@@ -65,6 +71,9 @@ export function ExploreGrid({
   const router = useRouter();
   const { cartItems } = useCart();
   const { toggle, has } = useCompare();
+  const { data: wishlistData } = useGetWishlistQuery();
+  const [addToWishlist] = useAddToWishlistMutation();
+  const [removeFromWishlist] = useRemoveFromWishlistMutation();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
 
@@ -89,9 +98,33 @@ export function ExploreGrid({
     }
   };
 
-  const handleWishlistToggle = () => {
-    // Wishlist toggle would be implemented with a context or API call
-    toast.success("Added to wishlist");
+  const handleWishlistToggle = async (item: ExploreItem) => {
+    const entityType = exploreTypeToCompareType[viewMode] as WishlistEntityType;
+    const entityId = String(item.id);
+    const existing = (wishlistData?.wishlist || []).find(
+      (entry) => entry.entityType === entityType && String(entry.entityId) === entityId
+    );
+
+    try {
+      if (existing) {
+        await removeFromWishlist({ entityType, entityId }).unwrap();
+        toast.success("Removed from wishlist");
+      } else {
+        await addToWishlist({
+          entityType,
+          entityId,
+          title: item.title,
+          image: item.image,
+          price: Number(String(item.price).replace(/[^\d.]/g, "")) || 0,
+        }).unwrap();
+        toast.success("Added to wishlist");
+      }
+    } catch (error) {
+      const message = error && typeof error === "object" && "data" in error
+        ? (error.data as { message?: string } | undefined)?.message
+        : undefined;
+      toast.error(message || "Could not update your wishlist");
+    }
   };
 
   const sortedData = useMemo(() => {
@@ -271,12 +304,17 @@ export function ExploreGrid({
                       onClick={(e) => {
                         e.stopPropagation();
                         e.preventDefault();
-                        handleWishlistToggle();
+                        handleWishlistToggle(item);
                       }}
                       className="absolute top-2 right-2 bhn-btn bhn-btn-icon bhn-btn-ghost bg-[color-mix(in_srgb,var(--bhn-surface)_90%,transparent)] shadow-sm"
-                      aria-label="Add to wishlist"
+                      aria-label="Toggle wishlist"
                     >
-                      <Heart size={16} className="text-[var(--bhn-text)]" />
+                      <Heart
+                        size={16}
+                        className={(wishlistData?.wishlist || []).some(
+                          (entry) => entry.entityType === exploreTypeToCompareType[viewMode] && String(entry.entityId) === String(item.id)
+                        ) ? "fill-[var(--bhn-brand-500)] text-[var(--bhn-brand-500)]" : "text-[var(--bhn-text)]"}
+                      />
                     </button>
                   </div>
 

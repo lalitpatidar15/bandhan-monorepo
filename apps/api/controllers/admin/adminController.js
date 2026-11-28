@@ -7,6 +7,7 @@ const Booking = require("../../models/shared/Booking.js");
 const Product = require("../../models/shared/Product.js");
 const Order = require("../../models/shared/Order.js");
 const Venue = require("../../models/shared/Venue.js");
+const Service = require("../../models/shared/Service.js");
 const Student = require("../../models/student/Student.js");
 const Instructor = require("../../models/instructor/Instructor.js");
 const Course = require("../../models/student/Course.js");
@@ -27,6 +28,8 @@ const ReviewInstructor = require("../../models/student/ReviewInstructor.js");
 const Application = require("../../models/jobPoster/Application.js");
 const Plan = require("../../models/jobPoster/Plan.js");
 const AuditLog = require("../../models/shared/AuditLog.js");
+const AdminSettingHistory = require("../../models/admin/AdminSettingHistory.js");
+const orderController = require("../ecommUser/orderController.js");
 const { normalizeShippingFields, validateShippingForActive } = require("../../utils/shippingFields.js");
 const { createRazorpayRefund } = require("../../services/razorpayService.js");
 const { recordRefund } = require("../../services/vendorEarningsService.js");
@@ -776,6 +779,14 @@ exports.updateSettings = async (req, res) => {
     Object.assign(settings, req.body || {});
     await settings.save();
     invalidateCache();
+
+    await AdminSettingHistory.create({
+      key: settings.key || "platform",
+      settings: settings.toObject ? settings.toObject() : settings,
+      changedBy: req.user?.id || undefined,
+      changedByEmail: req.user?.email || "",
+      action: "updated",
+    });
 
     res.json({
       success: true,
@@ -2461,3 +2472,232 @@ exports.getPaymentBreakdown = async (req, res) => {
     res.status(500).json({ success: false, message: "Unable to load payment breakdown" });
   }
 };
+
+// ==================== VENUES (CREATE) ====================
+exports.createVenue = async (req, res) => {
+  try {
+    const name = String(req.body.name || "").trim();
+    const location = String(req.body.location || "").trim();
+    if (!name || !location) {
+      return res.status(400).json({ success: false, message: "Venue name and location are required" });
+    }
+
+    const sellerId = String(req.body.sellerId || "").trim();
+    let sellerEmail = String(req.body.sellerEmail || "").trim().toLowerCase();
+    if (sellerId) {
+      const seller = await User.findById(sellerId);
+      if (!seller) return res.status(404).json({ success: false, message: "Vendor user not found" });
+      sellerEmail = seller.email || sellerEmail;
+    }
+
+    const images = Array.isArray(req.body.images) ? req.body.images.map(String) : [];
+    const venue = await Venue.create({
+      sellerId: sellerId || undefined,
+      sellerEmail: sellerEmail || undefined,
+      name,
+      venueType: req.body.venueType || "event_space",
+      location,
+      address: String(req.body.address || "").trim(),
+      description: String(req.body.description || "").trim(),
+      images,
+      facilities: Array.isArray(req.body.facilities) ? req.body.facilities.map(String) : [],
+      guests: Number(req.body.guests || 0),
+      minGuests: Number(req.body.minGuests || 0),
+      maxGuests: Number(req.body.maxGuests || 0),
+      pricePerDay: Number(req.body.pricePerDay || 0),
+      pricePerHour: Number(req.body.pricePerHour || 0),
+      serviceFee: Number(req.body.serviceFee || 0),
+      rating: Number(req.body.rating || 0),
+      reviews: Number(req.body.reviews || 0),
+      status: req.body.status === "draft" ? "draft" : "active",
+      isApproved: req.body.isApproved !== false,
+      isFeatured: Boolean(req.body.isFeatured),
+      spaces: Array.isArray(req.body.spaces) ? req.body.spaces : [],
+      packages: Array.isArray(req.body.packages) ? req.body.packages : [],
+    });
+
+    res.status(201).json({ success: true, data: venue, message: "Venue created successfully" });
+  } catch (error) {
+    console.error("Error in controllers/admin/adminController.js createVenue:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// ==================== SERVICES ====================
+function normalizeServiceImages(images) {
+  if (Array.isArray(images)) return images.map(String).filter(Boolean);
+  if (typeof images !== "string") return [];
+  return images.split(/[\n,]+/).map((value) => value.trim()).filter(Boolean);
+}
+
+exports.getServices = async (_req, res) => {
+  try {
+    const services = await Service.find().sort({ createdAt: -1 }).lean();
+    const sellerIds = [...new Set(services.map((service) => String(service.sellerId)).filter(Boolean))];
+    const sellers = sellerIds.length ? await User.find({ _id: { $in: sellerIds } }).select("fullName email").lean() : [];
+    const sellerById = new Map(sellers.map((seller) => [String(seller._id), seller]));
+
+    res.json({
+      success: true,
+      data: services.map((service) => {
+        const seller = sellerById.get(String(service.sellerId));
+        return {
+          ...service,
+          sellerName: seller?.fullName || seller?.email || "",
+          sellerEmail: service.sellerEmail || seller?.email || "",
+        };
+      }),
+    });
+  } catch (error) {
+    console.error("Error in controllers/admin/adminController.js getServices:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+exports.createService = async (req, res) => {
+  try {
+    const title = String(req.body.title || "").trim();
+    const category = String(req.body.category || "").trim();
+    const price = Number(req.body.price || 0);
+    const location = String(req.body.location || "").trim();
+    const sellerId = String(req.body.sellerId || "").trim();
+
+    if (!title || !category || !location || !sellerId || !Number.isFinite(price)) {
+      return res.status(400).json({ success: false, message: "Title, category, vendor, location and price are required" });
+    }
+
+    const seller = await User.findById(sellerId);
+    if (!seller) return res.status(404).json({ success: false, message: "Vendor user not found" });
+
+    const status = req.body.status === "draft" ? "draft" : "active";
+    const service = await Service.create({
+      sellerId,
+      sellerEmail: String(req.body.sellerEmail || seller.email || "").toLowerCase(),
+      title,
+      category,
+      price,
+      location,
+      description: String(req.body.description || "").trim(),
+      eventType: req.body.eventType,
+      images: normalizeServiceImages(req.body.images),
+      image: normalizeServiceImages(req.body.images)[0] || "",
+      status,
+      isActive: status === "active" && req.body.isActive !== false,
+      isFeatured: Boolean(req.body.isFeatured),
+      pricingModel: req.body.pricingModel || "fixed",
+      durationMinutes: Number(req.body.durationMinutes || 60),
+      serviceArea: Array.isArray(req.body.serviceArea) ? req.body.serviceArea : [],
+      availableDays: Array.isArray(req.body.availableDays) ? req.body.availableDays : [],
+      addons: Array.isArray(req.body.addons) ? req.body.addons : [],
+    });
+
+    res.status(201).json({ success: true, data: service, message: "Service created successfully" });
+  } catch (error) {
+    console.error("Error in controllers/admin/adminController.js createService:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+exports.updateService = async (req, res) => {
+  try {
+    const updates = { ...req.body };
+    if (updates.images !== undefined) {
+      updates.images = normalizeServiceImages(updates.images);
+      updates.image = updates.images[0] || "";
+    }
+    if (updates.status === "inactive") updates.status = "draft";
+    if (updates.status !== undefined && updates.isActive === undefined) {
+      updates.isActive = updates.status === "active";
+    }
+    const service = await Service.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true });
+    if (!service) return res.status(404).json({ success: false, message: "Service not found" });
+    res.json({ success: true, data: service, message: "Service updated successfully" });
+  } catch (error) {
+    console.error("Error in controllers/admin/adminController.js updateService:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+exports.deleteService = async (req, res) => {
+  try {
+    const service = await Service.findByIdAndDelete(req.params.id);
+    if (!service) return res.status(404).json({ success: false, message: "Service not found" });
+    res.json({ success: true, message: "Service deleted successfully" });
+  } catch (error) {
+    console.error("Error in controllers/admin/adminController.js deleteService:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// ==================== JOBS (ADMIN CREATION) ====================
+exports.createJob = async (req, res) => {
+  try {
+    const recruiterId = String(req.body.recruiterId || "").trim();
+    const jobTitle = String(req.body.jobTitle || "").trim();
+    if (!recruiterId || !jobTitle) {
+      return res.status(400).json({ success: false, message: "Recruiter and job title are required" });
+    }
+
+    const recruiter = await Recruiter.findById(recruiterId);
+    if (!recruiter) return res.status(404).json({ success: false, message: "Recruiter not found" });
+
+    const job = await Job.create({
+      recruiterId,
+      jobTitle,
+      jobCategory: String(req.body.jobCategory || "Other"),
+      jobType: String(req.body.jobType || "Full-time"),
+      experienceLevel: String(req.body.experienceLevel || "Junior"),
+      salaryMin: Number(req.body.salaryMin || 0),
+      salaryMax: Number(req.body.salaryMax || 0),
+      salaryCurrency: String(req.body.salaryCurrency || "INR"),
+      location: String(req.body.location || ""),
+      remoteAvailable: Boolean(req.body.remoteAvailable),
+      aboutRole: String(req.body.aboutRole || ""),
+      responsibilities: Array.isArray(req.body.responsibilities) ? req.body.responsibilities : [],
+      skills: Array.isArray(req.body.skills) ? req.body.skills : [],
+      applicationDeadline: req.body.applicationDeadline ? new Date(req.body.applicationDeadline) : undefined,
+      openings: Number(req.body.openings || 1),
+      status: String(req.body.status || "active"),
+    });
+
+    res.status(201).json({ success: true, data: job, message: "Job created successfully" });
+  } catch (error) {
+    console.error("Error in controllers/admin/adminController.js createJob:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// ==================== SETTINGS HISTORY ====================
+exports.getSettingsHistory = async (_req, res) => {
+  try {
+    const history = await AdminSettingHistory.find().sort({ createdAt: 1 }).limit(100).lean();
+    let previous = {};
+    const entries = history.map((entry, index) => {
+      const settings = entry.settings || {};
+      const changes = {};
+      for (const key of new Set([...Object.keys(previous), ...Object.keys(settings)])) {
+        if (JSON.stringify(previous[key]) !== JSON.stringify(settings[key])) {
+          changes[key] = { from: previous[key] ?? null, to: settings[key] ?? null };
+        }
+      }
+      previous = settings;
+      return {
+        version: index + 1,
+        changedAt: entry.createdAt,
+        changes,
+        changedByEmail: entry.changedByEmail || "",
+        action: entry.action,
+      };
+    });
+
+    res.json({ success: true, data: entries.reverse() });
+  } catch (error) {
+    console.error("Error in controllers/admin/adminController.js getSettingsHistory:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// ==================== SHIPROCKET (ADMIN) ====================
+exports.createShiprocketShipment = orderController.createShipment;
+exports.assignShiprocketAwb = orderController.assignShiprocketAwb;
+exports.refreshShiprocketTracking = orderController.trackShipment;

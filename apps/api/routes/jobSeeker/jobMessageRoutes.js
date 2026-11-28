@@ -294,7 +294,7 @@ router.get("/unread-count",auth,requireRole("jobseeker","recruiter"),jobMessageC
 
 router.get("/notification",auth,requireRole("jobseeker","recruiter"),jobMessageController.getNotifications);
 
-router.get("/dashboard",auth,requireRole("recruiter"),jobMessageController.getPaymentDashboard);
+router.get("/payment-dashboard",auth,requireRole("recruiter"),jobMessageController.getPaymentDashboard);
 
 /**
  * @swagger

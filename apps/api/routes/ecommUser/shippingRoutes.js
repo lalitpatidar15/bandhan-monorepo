@@ -3,6 +3,7 @@ const router = express.Router();
 const auth = require("../../middlewares/auth.js");
 const { requireRole } = require("../../middlewares/role.js");
 const axios = require("axios");
+const orderController = require("../../controllers/ecommUser/orderController.js");
 
 let shiprocketToken = null;
 let tokenExpiry = null;
@@ -154,6 +155,13 @@ router.post(
       });
     }
   }
+);
+
+router.post(
+  "/generate-awb",
+  auth,
+  requireRole("seller", "admin"),
+  orderController.assignShiprocketAwb
 );
 
 router.get(

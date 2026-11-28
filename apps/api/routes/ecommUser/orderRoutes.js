@@ -50,6 +50,7 @@ router.post("/:id/tracking/refresh", auth, requireRole("seller","buyer","admin",
 
 // 4. GENERAL DYNAMIC ROUTES (Dhyan rakhein ki ye humesha SABSE NEECHE rahein)
 router.get("/:id", auth, requireRole("seller","buyer","admin","eventOwner","learner","jobSeeker","seller"), orderController.getOrderById);
+router.put("/:id/status", auth, requireRole("seller", "admin"), orderController.updateOrder);
 router.put("/:id", auth, requireRole("seller","buyer","admin","eventOwner","learner","jobSeeker"), orderController.updateOrder);
 
 module.exports = router;

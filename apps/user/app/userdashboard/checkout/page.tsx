@@ -258,7 +258,7 @@ export default function CheckoutPage() {
               action={
                 <div className="flex flex-col gap-2 sm:flex-row">
                   <Button onClick={() => refetchQuote()}>Try again</Button>
-                  <Button variant="ghost" onClick={() => router.push("/cart")}>Return to cart</Button>
+                  <Button variant="ghost" onClick={() => router.push("/userdashboard/cart")}>Return to cart</Button>
                 </div>
               }
             />

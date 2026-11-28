@@ -655,7 +655,7 @@ export const jobsApi = baseApi.injectEndpoints({
     }),
     getJobSeekerPaymentDashboard: build.query<JobSeekerPaymentDashboardResponse, void>({
       query: () => ({
-        url: "job-message/dashboard",
+        url: "job-message/payment-dashboard",
         method: "GET",
       }),
     }),

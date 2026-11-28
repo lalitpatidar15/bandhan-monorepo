@@ -102,7 +102,7 @@ export default function VendorProfileByIdPage() {
                 <Button href="/userdashboard/quote/request" variant="primary" fullWidth>
                   Request Quote
                 </Button>
-                <Button href="/userdashboard/plans" variant="secondary" fullWidth>
+                <Button href="/userdashboard/planner" variant="secondary" fullWidth>
                   Back to Planner
                 </Button>
               </div>

@@ -70,7 +70,7 @@ export default function WhyBandhan() {
 
             <div className="flex flex-col sm:flex-row gap-4 md:gap-6 text-[var(--bhn-brand-700)] font-medium text-[10px] sm:text-[18px] md:text-[18px] leading-[24px]">
               <Link
-                href="/userdashboard/plans"
+                href="/userdashboard/planner"
                 className="no-underline border-b border-transparent pb-1 hover:border-[var(--bhn-brand-600)] transition"
               >
                 Plan Your Event →

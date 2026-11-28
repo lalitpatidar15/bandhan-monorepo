@@ -1,6 +1,7 @@
 const Earning = require("../../models/shared/Earning.js");
 const Order = require("../../models/shared/Order.js");
 const User = require("../../models/shared/User.js");
+const Settlement = require("../../models/shared/Settlement.js");
 const { getAuthenticatedOwnerId, isAdmin } = require("../../utils/ownership.js");
 
 function normalizeRange(value) {
@@ -355,8 +356,58 @@ exports.getCommissionBreakdown = async (req, res) => {
 };
 
 exports.withdraw = async (req, res) => {
-  res.json({
-    success: true,
-    message: "Withdrawal request submitted",
-  });
+  try {
+    const { userId } = buildSellerScope(req);
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Authentication required" });
+    }
+
+    const amount = Math.round(Number(req.body.amount || 0) * 100) / 100;
+    if (!Number.isFinite(amount) || amount <= 0) {
+      return res.status(400).json({ success: false, message: "Enter a withdrawal amount greater than 0" });
+    }
+
+    const earnings = await Earning.find({ sellerId: userId }).select("net status").lean();
+    const completedNet = earnings.reduce((sum, earning) => (
+      String(earning.status || "").toLowerCase() === "completed" ? sum + Number(earning.net || 0) : sum
+    ), 0);
+    const settlements = await Settlement.find({
+      sellerId: userId,
+      status: { $nin: ["failed"] },
+    }).select("netPayable").lean();
+    const withdrawn = settlements.reduce((sum, settlement) => sum + Number(settlement.netPayable || 0), 0);
+    const availableBalance = Math.max(0, Math.round((completedNet - withdrawn) * 100) / 100);
+
+    if (amount > availableBalance) {
+      return res.status(400).json({
+        success: false,
+        message: `Amount exceeds your available balance of ₹${availableBalance.toLocaleString("en-IN")}`,
+        availableBalance,
+      });
+    }
+
+    const now = new Date();
+    const period = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+    const settlement = await Settlement.create({
+      sellerId: userId,
+      period,
+      totalSales: completedNet,
+      commissionDeducted: 0,
+      netPayable: amount,
+      orderCount: earnings.length,
+      status: "pending",
+      paymentMethod: String(req.body.paymentMethod || "bank_transfer"),
+      notes: String(req.body.notes || "Seller withdrawal request"),
+    });
+
+    return res.status(201).json({
+      success: true,
+      message: "Withdrawal request submitted",
+      data: settlement,
+      availableBalance: Math.max(0, Math.round((availableBalance - amount) * 100) / 100),
+    });
+  } catch (error) {
+    console.error("Error in controllers/ecommUser/earningController.js withdraw:", error);
+    res.status(500).json({ success: false, message: "Withdrawal failed" });
+  }
 };

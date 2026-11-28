@@ -34,9 +34,13 @@ router.get("/orders", adminController.getOrders);
 router.get("/orders/:id", adminController.getOrderById);
 router.put("/orders/:id", adminController.updateOrder);
 router.post("/orders/:id/refund", adminController.refundOrder);
+router.post("/orders/:id/shipping/shiprocket", adminController.createShiprocketShipment);
+router.post("/orders/:id/shipping/shiprocket/awb", adminController.assignShiprocketAwb);
+router.post("/orders/:id/shipping/shiprocket/track", adminController.refreshShiprocketTracking);
 
 // Venues
 router.get("/venues", adminController.getVenues);
+router.post("/venues", adminController.createVenue);
 router.get("/venues/:id", adminController.getVenueDetails);
 router.put("/venues/:id", adminController.updateVenue);
 router.delete("/venues/:id", adminController.deleteVenue);
@@ -70,6 +74,13 @@ router.get("/analytics", adminController.getAnalytics);
 // Settings
 router.get("/settings", adminController.getSettings);
 router.put("/settings", adminController.updateSettings);
+router.get("/settings/history", adminController.getSettingsHistory);
+
+// Services
+router.get("/services", adminController.getServices);
+router.post("/services", adminController.createService);
+router.put("/services/:id", adminController.updateService);
+router.delete("/services/:id", adminController.deleteService);
 
 // Learning/admin visibility modules
 router.post("/students", adminController.createStudent);
@@ -97,6 +108,7 @@ router.post("/job-posters", adminController.createJobPoster);
 router.get("/job-posters", adminController.getJobPosters);
 router.put("/job-posters/:id", adminController.updateJobPoster);
 router.delete("/job-posters/:id", adminController.deleteJobPoster);
+router.post("/jobs", adminController.createJob);
 router.get("/jobs/moderation", adminController.getJobModerationQueue);
 router.put("/jobs/moderation/:id", adminController.updateJobModeration);
 router.get("/applications", adminController.getApplications);

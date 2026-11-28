@@ -13,7 +13,7 @@ const ROUTES = [
   "/userdashboard/checkout",
   "/userdashboard/feed",
   "/userdashboard/notification",
-  "/userdashboard/plans",
+  "/userdashboard/planner",
   "/userdashboard/quote",
   "/vendor/profile",
 ];
