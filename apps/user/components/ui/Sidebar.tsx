@@ -15,7 +15,7 @@ import { useGetConversationsQuery } from '@/store/api/chatApi';
 import { JOB_PORTAL_URL, SELLER_PORTAL_URL, STUDENT_PORTAL_URL } from '@/lib/externalLinks';
 
 interface SidebarProps {
-  variant?: 'userdashboard' | 'vendor';
+  variant?: 'account' | 'vendor';
   className?: string;
   onItemClick?: () => void;
 }
@@ -26,7 +26,7 @@ interface ConversationSummary {
   unreadCountBuyer?: number;
 }
 
-export function Sidebar({ variant = 'userdashboard', className = '', onItemClick }: SidebarProps) {
+export function Sidebar({ variant = 'account', className = '', onItemClick }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useAppDispatch();

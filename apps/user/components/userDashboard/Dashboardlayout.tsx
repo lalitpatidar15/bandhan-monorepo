@@ -18,7 +18,7 @@ function DashboardShell({ children, hero }: { children: React.ReactNode; hero?: 
   const toggleSidebar = () => setIsSidebarOpen((open) => !open);
   return (
     <div className="flex min-h-screen flex-col bg-[var(--bhn-bg)]">
-      <Header variant="userdashboard" />
+      <Header variant="account" />
       {hero && (
         <div className="relative overflow-hidden bg-[var(--bhn-surface-2)]">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--bhn-text-on-brand-75),_transparent_45%)]" />
@@ -42,7 +42,7 @@ function DashboardShell({ children, hero }: { children: React.ReactNode; hero?: 
             </button>
           </div>
           <div className="px-3 py-4 lg:px-4 lg:py-6">
-            <Sidebar variant="userdashboard" />
+            <Sidebar variant="account" />
           </div>
         </aside>
         <div className="flex-1 overflow-hidden">

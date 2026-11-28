@@ -12,7 +12,7 @@ import { useGetNotificationsQuery } from "@/store/api/notificationApi";
 
 interface HeaderProps {
   variant?: 'main' | 'main1' | 'role' | 'dashboard'
-  | 'userdashboard' | 'vendor'| 'cart' | 'booking'
+  | 'account' | 'vendor'| 'cart' | 'booking'
   | 'checkout'| 'conformation';
   showCart?: boolean;
   showSearch?: boolean;
@@ -326,7 +326,7 @@ if (variant === "main1") {
   }
 
   // User dashboard layout header
-  if (variant === 'userdashboard') {
+  if (variant === 'account') {
     return (
       <div className={`w-full bg-[var(--bhn-surface-2)] border-b border-[var(--bhn-border)] px-3 sm:px-4 lg:px-4 py-2 sm:py-3 flex items-center justify-between gap-2 ${className}`}>
         {/* Left: Logo + Nav */}

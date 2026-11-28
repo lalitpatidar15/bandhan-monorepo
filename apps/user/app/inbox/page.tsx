@@ -344,7 +344,7 @@ function InboxPageContent() {
     <div className="min-h-screen bg-[var(--bhn-surface-2)]">
       <Header variant="main" showNav />
       <div className="flex">
-        <Sidebar variant="userdashboard" />
+        <Sidebar variant="account" />
         <main className="flex-1 flex flex-col h-[calc(100vh-44px)]">
           <div className="flex items-center gap-3 p-4 border-b bg-[var(--bhn-surface)]">
             <MessageSquare className="text-[var(--bhn-text)]" size={20} />

@@ -14,7 +14,7 @@ export default function InvoicesPage() {
     <div className="min-h-screen bg-[var(--bhn-surface-2)]">
       <Header variant="main" showNav />
       <div className="flex">
-        <Sidebar variant="userdashboard" />
+        <Sidebar variant="account" />
         <main className="flex-1 p-4 md:p-4 max-w-5xl mx-auto">
           <div className="flex items-center gap-3 mb-4">
             <FileText className="text-[var(--bhn-text)]" size={24} />
