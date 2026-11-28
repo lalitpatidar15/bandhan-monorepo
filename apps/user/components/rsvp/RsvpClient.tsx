@@ -7,7 +7,8 @@ import toast from "react-hot-toast";
 import { Alert, Badge, Button, Card, Logo, Spinner } from "@bandhan/ui";
 import { useGetRsvpInvitationQuery, useSubmitRsvpMutation } from "@/store/api/eventOsApi";
 import { RsvpDetails, RsvpStatus } from "@/types/eventOs";
-import { errorText, extractItem, formatDate } from "@/components/userDashboard/planner/eventOsUi";
+import { getApiMessage } from "@/lib/apiError";
+import { extractItem, formatDate } from "@/components/userDashboard/planner/eventOsUi";
 
 interface Props {
   token: string;
@@ -54,7 +55,7 @@ export default function RsvpClient({ token }: Props) {
               This RSVP link is invalid or has expired. Ask the event organiser to send you a new invite link.
             </p>
             {isError ? (
-              <p className="text-xs text-[var(--bhn-text-soft)]">{errorText(error)}</p>
+              <p className="text-xs text-[var(--bhn-text-soft)]">{getApiMessage(error)}</p>
             ) : null}
             {isError ? (
               <Button variant="secondary" size="sm" onClick={() => refetch()}>
@@ -102,7 +103,7 @@ function RsvpForm({ token, details }: { token: string; details: RsvpDetails }) {
       setSubmitted(status);
       toast.success("Your RSVP has been recorded.");
     } catch (err) {
-      toast.error(errorText(err));
+      toast.error(getApiMessage(err));
     }
   };
 

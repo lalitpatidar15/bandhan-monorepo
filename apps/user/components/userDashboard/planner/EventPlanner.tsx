@@ -207,11 +207,7 @@ export default function EventPlanner() {
         toast.success("Event created!");
       }
     } catch (e) {
-      const message =
-        e && typeof e === "object" && "data" in e && e.data && typeof e.data === "object" && "message" in e.data
-          ? String((e.data as { message?: string }).message)
-          : undefined;
-      toast.error(message || "Could not create event");
+      toast.error(errorText(e, "Could not create event"));
     }
   };
 

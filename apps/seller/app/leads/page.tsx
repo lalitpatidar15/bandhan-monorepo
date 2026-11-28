@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import toast from "react-hot-toast";
 import { Link2, Mail, Phone } from "lucide-react";
 import {
   Badge,
@@ -17,6 +18,7 @@ import {
   Textarea,
 } from "@bandhan/ui";
 import Sidebar from "@/components/Sidebar";
+import { getApiErrorMessage, normalizeList } from "@/lib/response";
 import {
   useGetVendorLeadsQuery,
   useUpdateVendorLeadMutation,
@@ -44,7 +46,7 @@ export default function VendorLeadsPage() {
   const [noteDraft, setNoteDraft] = useState("");
   const [statusDraft, setStatusDraft] = useState<Lead["status"]>("new");
 
-  const leads = Array.isArray(data?.data) ? data.data : [];
+  const leads = normalizeList<Lead>(data);
   const filtered = useMemo(() => {
     const needle = search.trim().toLowerCase();
     return leads.filter((lead) => {
@@ -65,8 +67,8 @@ export default function VendorLeadsPage() {
     try {
       await updateLead({ id: lead._id, status }).unwrap();
       refetch();
-    } catch {
-      // Error feedback below covers both paths.
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, "Could not update the lead"));
     }
   };
 
@@ -76,8 +78,8 @@ export default function VendorLeadsPage() {
       await updateLead({ id: detailLead._id, status: statusDraft, notes: noteDraft }).unwrap();
       setDetailLead(null);
       refetch();
-    } catch {
-      // Toast is rendered inline below the form.
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, "Could not save the lead"));
     }
   };
 

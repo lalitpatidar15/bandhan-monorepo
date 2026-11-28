@@ -343,7 +343,7 @@ if (variant === "main1") {
               <Link href="/userdashboard/orders" className={dashboardNavClass("/userdashboard/orders")}>Orders</Link>
               <Link href="/userdashboard/feed" className={dashboardNavClass("/userdashboard/feed")}>Community</Link>
               <Link href="/userdashboard/communities" className={dashboardNavClass("/userdashboard/communities")}>Communities</Link>
-              <Link href="/userdashboard/planner" className={`${dashboardNavClass("/userdashboard/planner")} border-l pl-4`}>Pricing</Link>
+              <Link href="/userdashboard/planner" className={`${dashboardNavClass("/userdashboard/planner")} border-l pl-4`}>Event planner</Link>
             </nav>
           )}
         </div>
@@ -537,7 +537,7 @@ if (variant === "cart") {
             { label: "Bookings", href: "/userdashboard/booking" },
             { label: "Orders", href: "/userdashboard/orders" },
             { label: "Community", href: "/userdashboard/feed" },
-            { label: "Pricing", href: "/userdashboard/planner" },
+            { label: "Event planner", href: "/userdashboard/planner" },
           ].map((item) => (
             <Link
               key={item.label}

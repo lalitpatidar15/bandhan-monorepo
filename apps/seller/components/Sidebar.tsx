@@ -6,13 +6,14 @@ import { useRouter, usePathname } from 'next/navigation';
 import { Boxes, CalendarDays, LayoutDashboard, Package, RotateCcw, ShoppingCart, Handshake, MapPin, MessageSquare, ShieldCheck, Star, Truck, UserRoundSearch, Wallet } from 'lucide-react';
 import { useGetSellerQuotesQuery } from '@/lib/store/api/chatApi';
 import { centralLoginUrl, clearSellerSession } from '@/lib/session';
+import { normalizeList } from '@/lib/response';
 
 export default function Sidebar() {
   const router = useRouter();
   const pathname = usePathname();
   const { data: sellerQuotesData } = useGetSellerQuotesQuery();
-  const quoteList = Array.isArray(sellerQuotesData) ? sellerQuotesData : Array.isArray(sellerQuotesData?.data) ? sellerQuotesData.data : [];
-  const pendingQuotesCount = quoteList.filter((q: any) => String(q.status || 'pending').toLowerCase() === 'pending').length;
+  const quoteList = normalizeList<{ status?: string }>(sellerQuotesData);
+  const pendingQuotesCount = quoteList.filter((q) => String(q.status || 'pending').toLowerCase() === 'pending').length;
 
   const sections: PortalSidebarSection[] = [
     {

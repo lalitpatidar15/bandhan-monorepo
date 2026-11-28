@@ -1,11 +1,6 @@
-import Image from "next/image";
+import { redirect } from "next/navigation";
+import { centralLoginUrl } from "@/lib/session";
 
-import InstructorAuth from "./login/page";
-
-export default function Home() {
-  return (
-    <div >
-      <InstructorAuth /> *
-    </div>
-  );
+export default function InstructorHome() {
+  redirect(centralLoginUrl());
 }

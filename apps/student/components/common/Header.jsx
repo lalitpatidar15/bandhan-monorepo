@@ -80,7 +80,7 @@ return (
 
           {!isAuthenticated ? (
             <button
-              onClick={() => router.push(`/student/auth?next=${encodeURIComponent(`${pathname}${window.location.search}`)}`)}
+              onClick={() => window.location.assign(centralLoginUrl())}
               className="bhn-btn bhn-btn-primary rounded-[var(--bhn-radius)] px-4 py-2 text-sm font-semibold"
             >
               Login to enroll
@@ -170,7 +170,7 @@ return (
             {!isAuthenticated ? (
               <button
                 onClick={() => {
-                  router.push(`/student/auth?next=${encodeURIComponent(`${pathname}${window.location.search}`)}`);
+                  window.location.assign(centralLoginUrl());
                   setMobileMenu(false);
                 }}
                 className="bhn-btn bhn-btn-primary px-4 py-2 text-sm font-semibold"

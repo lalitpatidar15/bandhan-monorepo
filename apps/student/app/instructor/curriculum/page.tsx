@@ -1,5 +1,7 @@
 "use client";
 
+import { toast } from "react-hot-toast";
+
 import CurriculumHeader from "@/components/common/CurriculumHeader";
 import { UploadCloud } from "lucide-react";
 import Link from "next/link";
@@ -278,12 +280,12 @@ export default function CurriculumPage() {
                                     </button>
 
                                     {/* Align */}
-                                    <button onClick={() => alert("Coming soon")} className="px-2 py-1 rounded hover:bg-[var(--bhn-border)] dark:hover:bg-[#2a2a2a] dark:bg-[var(--bhn-neutral-900)]">
+                                    <button onClick={() => toast("Coming soon")} className="px-2 py-1 rounded hover:bg-[var(--bhn-border)] dark:hover:bg-[#2a2a2a] dark:bg-[var(--bhn-neutral-900)]">
                                         ≡
                                     </button>
 
                                     {/* Link */}
-                                    <button onClick={() => alert("Coming soon")} className="px-2 py-1 rounded hover:bg-[var(--bhn-border)] dark:hover:bg-[#2a2a2a] dark:bg-[var(--bhn-neutral-900)]">
+                                    <button onClick={() => toast("Coming soon")} className="px-2 py-1 rounded hover:bg-[var(--bhn-border)] dark:hover:bg-[#2a2a2a] dark:bg-[var(--bhn-neutral-900)]">
                                         🔗
                                     </button>
                                 </div>

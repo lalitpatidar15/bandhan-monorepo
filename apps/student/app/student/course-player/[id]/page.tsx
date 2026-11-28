@@ -9,7 +9,7 @@ function CoursePlayerContent() {
     const { id } = useParams();
     const searchParams = useSearchParams();
     const router = useRouter();
-    const [activeTab, setActiveTab] = useState("overview");
+    const [activeTab, setActiveTab] = useState(searchParams.get("tab") === "discussion" ? "discussion" : "overview");
     const initialLesson = Number(searchParams.get("lesson") ?? 0);
     const [selectedLesson, setSelectedLesson] = useState(initialLesson);
     const [openModule, setOpenModule] = useState<string | null>(null);
@@ -487,7 +487,7 @@ function CoursePlayerContent() {
 
                         <button
                             onClick={() =>
-                                router.push(`/student/course-doubt/${course.courseId || course.id}`)
+                                router.push(`/student/course-player/${course.courseId || course.id}?tab=discussion`)
                             }
                             className="w-full bg-[var(--bhn-surface)] text-[var(--bhn-brand-800)] py-2 rounded-md text-sm font-medium flex items-center justify-center gap-2 hover:bg-[var(--bhn-brand-50)]">
                              Ask Doubt

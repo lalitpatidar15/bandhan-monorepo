@@ -14,6 +14,7 @@ import {
 } from "@/store/api/wishlistApi";
 import { toast } from "react-hot-toast";
 import Image from "next/image";
+import { getApiMessage } from "@/lib/apiError";
 
 export type ExploreType = "services" | "products" | "venues";
 
@@ -120,10 +121,7 @@ export function ExploreGrid({
         toast.success("Added to wishlist");
       }
     } catch (error) {
-      const message = error && typeof error === "object" && "data" in error
-        ? (error.data as { message?: string } | undefined)?.message
-        : undefined;
-      toast.error(message || "Could not update your wishlist");
+      toast.error(getApiMessage(error, "Could not update your wishlist"));
     }
   };
 

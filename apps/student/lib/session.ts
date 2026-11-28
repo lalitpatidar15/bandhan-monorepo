@@ -30,6 +30,10 @@ export function centralLoginUrl() {
   return process.env.NEXT_PUBLIC_CENTRAL_LOGIN_URL || (process.env.NODE_ENV === "production" ? "https://bandhaneventshub.com/login" : "http://localhost:3000/login");
 }
 
+export function centralAppUrl(path: string) {
+  return new URL(path, centralLoginUrl()).toString();
+}
+
 export function readTokenRole(token: string): AcademyRole | null {
   try {
     const encoded = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");

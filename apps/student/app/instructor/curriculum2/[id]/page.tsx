@@ -1,5 +1,7 @@
 "use client";
 
+import { toast } from "react-hot-toast";
+
 import CurriculumHeader from "@/components/common/CurriculumHeader";
 import FileUpload from "@/components/form/FileUpload";
 import LessonCard from "@/components/lesson/LessonCard";
@@ -165,7 +167,7 @@ export default function Curriculum2() {
         if (!courseId) return;
 
         if (modules.length === 0 || totalLessons === 0) {
-            alert("Please add at least one module and one lesson before continuing.");
+            toast.error("Please add at least one module and one lesson before continuing.");
             return;
         }
 
@@ -181,7 +183,7 @@ export default function Curriculum2() {
             const lessonId = lastLessonSelection?.lessonId || activeLesson?._id || "";
 
             if (!moduleId || !lessonId) {
-                alert("Please add at least one module and one lesson before continuing.");
+                toast.error("Please add at least one module and one lesson before continuing.");
                 return;
             }
 
@@ -1333,7 +1335,7 @@ export default function Curriculum2() {
                                 </button>
 
                                 {/* PREVIEW BUTTON */}
-                                <button onClick={() => alert("Preview coming soon")} className="w-full border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] mt-3 py-3 rounded-lg text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] hover:bg-[#FAF6F3] dark:hover:bg-[#171717] dark:bg-[var(--bhn-neutral-900)] transition">
+                                <button onClick={() => toast("Preview coming soon")} className="w-full border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] mt-3 py-3 rounded-lg text-sm text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)] hover:bg-[#FAF6F3] dark:hover:bg-[#171717] dark:bg-[var(--bhn-neutral-900)] transition">
                                     Preview Curriculum
                                 </button>
 

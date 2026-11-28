@@ -3,7 +3,12 @@
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { SsoLoadingScreen } from "@bandhan/ui";
-import { setAcademySession, type AcademyRole } from "@/lib/session";
+import { centralLoginUrl, setAcademySession, type AcademyRole } from "@/lib/session";
+
+type SsoExchangeResponse = {
+  token?: string;
+  user?: { fullName?: string; name?: string; id?: string };
+};
 
 const apiUrl = () => {
   const raw = process.env.NEXT_PUBLIC_API_URL || "https://api.bandhaneventshub.com/api";
@@ -49,7 +54,7 @@ function StudentSsoCallbackContent() {
       body: JSON.stringify({ code, role }),
     })
       .then(async (response) => {
-        const result = await response.json();
+        const result = (await response.json()) as SsoExchangeResponse;
         if (!response.ok || !result.token) throw new Error("No session returned");
         applySession(result.token, result.user?.fullName || result.user?.name || "", result.user?.id);
       })
@@ -61,7 +66,7 @@ function StudentSsoCallbackContent() {
     <main className="flex min-h-screen items-center justify-center bg-[var(--bhn-bg)] p-6 text-center text-[var(--bhn-text)]">
       <div>
         <p>{error}</p>
-        <a className="mt-4 inline-block underline" href="/student/auth">Return to login</a>
+        <a className="mt-4 inline-block underline" href={centralLoginUrl()}>Return to login</a>
       </div>
     </main>
   );

@@ -17,6 +17,7 @@ import {
 } from "@bandhan/ui";
 import Sidebar from "@/components/Sidebar";
 import { apiGet, apiPut } from "@/lib/api";
+import { getApiErrorMessage, normalizeList } from "@/lib/response";
 
 type AvailabilitySlot = { start: string; end: string; isBlocked?: boolean };
 type AvailabilityRecord = {
@@ -27,15 +28,6 @@ type AvailabilityRecord = {
 };
 
 const today = () => new Date().toISOString().slice(0, 10);
-
-const normalizeRecords = (payload: unknown): AvailabilityRecord[] => {
-  if (Array.isArray(payload)) return payload as AvailabilityRecord[];
-  if (payload && typeof payload === "object") {
-    const value = payload as { data?: unknown };
-    if (Array.isArray(value.data)) return value.data as AvailabilityRecord[];
-  }
-  return [];
-};
 
 export default function AvailabilityPage() {
   const [records, setRecords] = useState<AvailabilityRecord[]>([]);
@@ -50,9 +42,9 @@ export default function AvailabilityPage() {
     setIsLoading(true);
     try {
       const response = await apiGet("/vendor/availability");
-      setRecords(normalizeRecords(response));
-    } catch {
-      toast.error("Could not load your availability");
+      setRecords(normalizeList<AvailabilityRecord>(response));
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, "Could not load your availability"));
     } finally {
       setIsLoading(false);
     }
@@ -94,10 +86,7 @@ export default function AvailabilityPage() {
       toast.success("Availability saved");
       await load();
     } catch (error) {
-      const message = error && typeof error === "object" && "message" in error
-        ? String((error as { message?: string }).message || "")
-        : "";
-      toast.error(message || "Could not save availability");
+      toast.error(getApiErrorMessage(error, "Could not save availability"));
     } finally {
       setIsSaving(false);
     }
@@ -153,6 +142,7 @@ export default function AvailabilityPage() {
                               size="sm"
                               variant="ghost"
                               icon={<Trash2 size={14} />}
+                              disabled={isSaving}
                               onClick={() => setSlots((current) => current.filter((_, slotIndex) => slotIndex !== index))}
                             >
                               Remove slot
@@ -167,6 +157,7 @@ export default function AvailabilityPage() {
                     <Button
                       variant="secondary"
                       icon={<Plus size={14} />}
+                      disabled={isSaving}
                       onClick={() => setSlots((current) => [...current, { start: "", end: "", isBlocked: false }])}
                     >
                       Add slot

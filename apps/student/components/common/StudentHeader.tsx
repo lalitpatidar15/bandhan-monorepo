@@ -4,7 +4,7 @@ import { PortalHeader } from '@bandhan/ui';
 import { useRouter, usePathname } from 'next/navigation';
 import { Bell, LogOut } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { centralLoginUrl, clearAcademySession, readTokenRole } from '@/lib/session';
+import { centralAppUrl, centralLoginUrl, clearAcademySession, readTokenRole } from '@/lib/session';
 
 export default function StudentHeader() {
   const router = useRouter();
@@ -44,8 +44,8 @@ export default function StudentHeader() {
         { label: 'Logout', onClick: () => { clearAcademySession(); window.location.assign(centralLoginUrl()); }, destructive: true },
       ]
     : [
-        { label: 'Login', href: '/login' },
-        { label: 'Sign up', href: '/signup' },
+        { label: 'Login', href: centralLoginUrl() },
+        { label: 'Sign up', href: centralAppUrl('/signup/student') },
       ];
 
   const activeNav = pathname.startsWith('/student/mycourse') ? '/student/mycourse'

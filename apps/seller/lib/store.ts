@@ -57,8 +57,6 @@ if (typeof window !== "undefined") {
             console.warn("Failed to invalidate chat tags", e);
           }
 
-          const senderName = payload?.message?.senderId?.fullName || payload?.message?.senderName || "Customer";
-          
         });
 
         socket.on?.("conversation_updated", () => {

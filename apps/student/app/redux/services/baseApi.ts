@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery, BaseQueryFn, FetchArgs, FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
+import { centralLoginUrl } from "@/lib/session";
 
 function getCookie(name: string): string | null {
   if (typeof document === "undefined") return null;
@@ -15,7 +16,7 @@ function logout() {
     localStorage.removeItem("studentId");
   }
   if (typeof window !== "undefined") {
-    window.location.href = "/student/auth";
+    window.location.href = centralLoginUrl();
   }
 }
 

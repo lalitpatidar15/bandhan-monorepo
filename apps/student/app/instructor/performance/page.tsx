@@ -31,7 +31,7 @@ export default function CoursePerformanceDashboard() {
 
   const { data: overviewData, isLoading } = useGetInstructorOverviewQuery();
   const firstCourseId = useMemo(() => overviewData?.data?.courses?.[0]?._id, [overviewData]);
-  const activeCourseId = courseId || firstCourseId;
+  const activeCourseId = courseId || firstCourseId || "";
 
   const { data: courseDashboard, isLoading: isDashboardLoading } =
     useGetInstructorCourseDashboardQuery(activeCourseId, { skip: !activeCourseId });

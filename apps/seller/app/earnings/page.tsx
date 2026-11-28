@@ -536,7 +536,7 @@ export default function EarningsPage() {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => router.push("/payouts")}
+                onClick={() => router.push("/earnings/payouts")}
               >
                 View All Payouts →
               </Button>

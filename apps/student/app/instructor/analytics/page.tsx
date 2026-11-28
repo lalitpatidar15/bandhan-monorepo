@@ -13,10 +13,12 @@ import {
     useGetInstructorOverviewQuery,
     useGetInstructorPageResourcesQuery,
     useGetInstructorCourseDashboardQuery,
+    type InstructorCourseSummary,
 } from "@/app/redux/instructor-services/DashboardApi";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+import { centralAppUrl } from "@/lib/session";
 import AcademyLogo from "@/components/common/AcademyLogo";
 import { Modal, StatCard } from "@bandhan/ui";
 
@@ -36,9 +38,9 @@ export default function AnalyticsPage() {
     const { data } = useGetInstructorOverviewQuery();
     const { data: resourcesData } = useGetInstructorPageResourcesQuery();
 
-    const courses: Array<any> = data?.data?.courses ?? [];
+    const courses: InstructorCourseSummary[] = data?.data?.courses ?? [];
     const activeCourseId = selectedCourseId || courses[0]?._id || "";
-    const { data: courseDashboardData, isLoading, isError, refetch } = useGetInstructorCourseDashboardQuery(activeCourseId, { skip: !activeCourseId });
+    const { data: courseDashboardData, isLoading, isFetching, isError, refetch } = useGetInstructorCourseDashboardQuery(activeCourseId, { skip: !activeCourseId });
 
     const pd = resourcesData?.data ?? {};
     const courseOverview = courseDashboardData?.data?.overview ?? {};
@@ -82,7 +84,7 @@ export default function AnalyticsPage() {
                         >
                             {courses.length === 0 ? (
                                 <option value="">No courses available</option>
-                            ) : courses.map((course: any) => (
+                            ) : courses.map((course) => (
                                 <option key={course._id} value={course._id}>{course.title}</option>
                             ))}
                         </select>
@@ -95,7 +97,7 @@ export default function AnalyticsPage() {
                         {isError && (
                             <p className="text-xs text-[var(--bhn-error-600)] flex items-center gap-2">
                                 Unable to load course analytics.
-                                <button type="button" onClick={() => refetch()} className="underline">Retry</button>
+                                <button type="button" disabled={isFetching} onClick={() => refetch()} className="underline disabled:opacity-50">Retry</button>
                             </p>
                         )}
 
@@ -552,7 +554,7 @@ export default function AnalyticsPage() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {courses.length > 0 ? courses.map((course: any) => (
+                                {courses.length > 0 ? courses.map((course) => (
                                     <tr key={course._id}>
                                         <td className="font-medium max-w-[280px]">{course.title}</td>
                                         <td>{course.category || "—"}</td>
@@ -616,9 +618,9 @@ export default function AnalyticsPage() {
                 <AcademyLogo className="h-7 w-auto object-contain" />
 
                 <div className="flex flex-wrap gap-4 text-sm text-[var(--bhn-text-muted)]">
-                    <p onClick={() => router.push("/privacy-policy")} className="cursor-pointer hover:text-[var(--bhn-brand-700)]">Privacy Policy</p>
-                    <p onClick={() => router.push("/support")} className="cursor-pointer hover:text-[var(--bhn-brand-700)]">Support Center</p>
-                    <p onClick={() => router.push("/instructor")} className="cursor-pointer hover:text-[var(--bhn-brand-700)]">Instructor Portal</p>
+                    <p onClick={() => window.location.assign(centralAppUrl("/privacy-policy"))} className="cursor-pointer hover:text-[var(--bhn-brand-700)]">Privacy Policy</p>
+                    <p onClick={() => window.location.assign(centralAppUrl("/userdashboard/support"))} className="cursor-pointer hover:text-[var(--bhn-brand-700)]">Support Center</p>
+                    <p onClick={() => router.push("/instructor/dashboard")} className="cursor-pointer hover:text-[var(--bhn-brand-700)]">Instructor Portal</p>
                 </div>
 
                 <p className="text-sm text-[var(--bhn-text-soft)]">

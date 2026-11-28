@@ -1,5 +1,8 @@
 "use client";
 
+import { toast } from "react-hot-toast";
+import { apiErrorMessage } from "@/lib/apiError";
+
 import { useState, useRef, useEffect } from "react";
 import {
     Camera,
@@ -102,7 +105,7 @@ export default function InstructorProfileSetup() {
             }
         } catch (error: any) {
             console.error("Profile update failed:", error);
-            alert(error?.data?.message || "Profile update failed. Please try again.");
+            toast.error(apiErrorMessage(error, "Profile update failed. Please try again."));
         } finally {
             setLoading(false);
         }

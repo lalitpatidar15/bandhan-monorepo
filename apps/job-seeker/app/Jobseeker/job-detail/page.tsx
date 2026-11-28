@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Suspense, useMemo, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import {
   Bookmark,
   Share2,
@@ -50,7 +50,6 @@ function formatSalary(min?: number | string, max?: number | string, currency = "
 }
 
 function JobDetailPageContent() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const jobId = searchParams?.get("jobId") || "";
   const { data, isLoading, isError, error } = useGetJobDetailsQuery(jobId, {
@@ -478,10 +477,10 @@ function JobDetailPageContent() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-5 py-6 text-sm text-[var(--bhn-text-muted)] flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <p>© {new Date().getFullYear()} Bandhan Careers</p>
               <div className="flex flex-wrap gap-4">
-                <span className="cursor-pointer hover:text-[var(--bhn-text)] transition" onClick={() => router.push("/privacy-policy")}>Privacy Policy</span>
-                <span className="cursor-pointer hover:text-[var(--bhn-text)] transition" onClick={() => router.push("/terms")}>Terms</span>
-                <span className="cursor-pointer hover:text-[var(--bhn-text)] transition" onClick={() => router.push("/cookie-policy")}>Cookie Policy</span>
-                <span className="cursor-pointer hover:text-[var(--bhn-text)] transition" onClick={() => router.push("/support")}>Support</span>
+                <Link href="/jobposter/privacy-policy" className="cursor-pointer hover:text-[var(--bhn-text)] transition">Privacy Policy</Link>
+                <Link href="/jobposter/terms-of-service" className="cursor-pointer hover:text-[var(--bhn-text)] transition">Terms</Link>
+                <Link href="/jobposter/cookie-policy" className="cursor-pointer hover:text-[var(--bhn-text)] transition">Cookie Policy</Link>
+                <Link href="/jobposter/contact-support" className="cursor-pointer hover:text-[var(--bhn-text)] transition">Support</Link>
               </div>
             </div>
           </footer>

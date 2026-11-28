@@ -21,7 +21,10 @@ import {
     useGetInstructorStudentQuery,
     useUpdateInstructorStudentProgressMutation,
     useIssueInstructorCertificateMutation,
+    type InstructorStudentRow,
+    type InstructorStudentDetail,
 } from "@/app/redux/instructor-services/DashboardApi";
+import { apiErrorMessage } from "@/lib/apiError";
 
 function StudentsPageContent() {
     const router = useRouter();
@@ -68,15 +71,18 @@ function StudentsPageContent() {
 
     const pagination = studentsResponse?.data?.pagination;
     const overview = studentsResponse?.data?.overview;
-    const students: StudentRow[] = (studentsResponse?.data?.students || []).map((student: any) => {
+    const students: StudentRow[] = (studentsResponse?.data?.students ?? []).map((student: InstructorStudentRow) => {
         const [completedRaw, totalRaw] = String(student.lessons ?? "0/0").split("/");
         const completedLessons = Number(completedRaw) || 0;
         const totalLessons = Number(totalRaw) || 0;
-        const override = progressOverrides[student.studentId];
+        const studentId = student.studentId || student._id || "";
+        const override = progressOverrides[studentId];
         const lastActivityAt = student.lastActivity ? new Date(student.lastActivity).getTime() : 0;
 
         return {
-            ...student,
+            studentId,
+            name: student.name || "",
+            email: student.email || "",
             image: student.profileImage || "/bandhan.png",
             progress: override?.progress ?? Number(student.progress ?? 0),
             lessons: override?.lessons ?? String(student.lessons ?? `${completedLessons}/${totalLessons}`),
@@ -107,14 +113,14 @@ function StudentsPageContent() {
 
         setIssuingStudentId(student.studentId);
         try {
-            const result: any = await issueCertificate({ courseId, studentId: student.studentId }).unwrap();
+            const result = await issueCertificate({ courseId, studentId: student.studentId }).unwrap();
             setIssuedCertificates((prev: Record<string, boolean>) => ({ ...prev, [student.studentId]: true }));
             const issuedAt = result?.certificate?.issuedAt
                 ? new Date(result.certificate.issuedAt).toLocaleDateString()
                 : "";
             toast.success(issuedAt ? `Certificate issued on ${issuedAt}.` : `Certificate issued to ${student.name}.`);
-        } catch (error: any) {
-            toast.error(error?.data?.message || error?.message || "Unable to issue certificate.");
+        } catch (error: unknown) {
+            toast.error(apiErrorMessage(error, "Unable to issue certificate."));
         } finally {
             setIssuingStudentId(null);
         }
@@ -155,8 +161,8 @@ function StudentsPageContent() {
             }));
             setEditingStudent(null);
             toast.success("Progress updated.");
-        } catch (error: any) {
-            toast.error(error?.data?.message || error?.message || "Unable to update progress.");
+        } catch (error: unknown) {
+            toast.error(apiErrorMessage(error, "Unable to update progress."));
         }
     };
 
@@ -683,8 +689,9 @@ function StudentsPageContent() {
                             <p className="text-[var(--bhn-error-600)]">Unable to load student details.</p>
                             <button
                                 type="button"
+                                disabled={isDetailLoading}
                                 onClick={() => refetchDetail()}
-                                className="px-4 py-2 rounded-lg border border-[var(--bhn-border)] text-[var(--bhn-text)]"
+                                className="px-4 py-2 rounded-lg border border-[var(--bhn-border)] text-[var(--bhn-text)] disabled:opacity-50"
                             >
                                 Retry
                             </button>
@@ -740,7 +747,7 @@ function StudentsPageContent() {
                                         <div>
                                             <p className="font-medium text-[var(--bhn-text)] mb-2">Certificates</p>
                                             <ul className="space-y-2">
-                                                {detail.certificates.map((certificate: any, index: number) => (
+                                                {detail.certificates.map((certificate: NonNullable<InstructorStudentDetail["certificates"]>[number], index: number) => (
                                                     <li key={certificate?._id || index} className="text-xs text-[var(--bhn-text-soft)]">
                                                         {certificate?.title || "Certificate"}
                                                         {certificate?.issuedAt ? ` — ${new Date(certificate.issuedAt).toLocaleDateString()}` : ""}

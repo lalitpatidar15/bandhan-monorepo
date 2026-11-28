@@ -6,6 +6,7 @@ import Button from "@/components/common/Button";
 import { StatCard } from "@bandhan/ui";
 import { useRouter } from "next/navigation";
 import { useGetDashboardQuery } from "@/app/redux/services/courseApi";
+import { centralAppUrl } from "@/lib/session";
 
 export default function MyCoursesPage() {
     const router = useRouter();
@@ -422,15 +423,15 @@ export default function MyCoursesPage() {
                     {/* RIGHT */}
                     <div className="flex flex-wrap justify-center gap-5 sm:gap-9">
 
-                        <span onClick={() => router.push("/support")} className="cursor-pointer hover:text-[#8B5E3C] dark:text-[var(--bhn-brand-400)]">
+                        <span onClick={() => window.location.assign(centralAppUrl("/userdashboard/support"))} className="cursor-pointer hover:text-[#8B5E3C] dark:text-[var(--bhn-brand-400)]">
                             Support
                         </span>
 
-                        <span onClick={() => router.push("/privacy-policy")} className="cursor-pointer hover:text-[#8B5E3C] dark:text-[var(--bhn-brand-400)]">
+                        <span onClick={() => window.location.assign(centralAppUrl("/privacy-policy"))} className="cursor-pointer hover:text-[#8B5E3C] dark:text-[var(--bhn-brand-400)]">
                             Privacy Policy
                         </span>
 
-                        <span onClick={() => router.push("/terms-of-service")} className="cursor-pointer hover:text-[#8B5E3C] dark:text-[var(--bhn-brand-400)]">
+                        <span onClick={() => window.location.assign(centralAppUrl("/terms-of-service"))} className="cursor-pointer hover:text-[#8B5E3C] dark:text-[var(--bhn-brand-400)]">
                             Terms of Service
                         </span>
 

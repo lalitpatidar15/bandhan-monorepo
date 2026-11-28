@@ -1,5 +1,8 @@
 "use client";
 
+import { toast } from "react-hot-toast";
+import { apiErrorMessage } from "@/lib/apiError";
+
 import CurriculumHeader from "@/components/common/CurriculumHeader";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState, useRef, ChangeEvent, useEffect } from "react";
@@ -110,7 +113,7 @@ function ContentPageContent() {
 
     const handleSaveDraft = async () => {
         if (!courseId || !moduleId || !lessonId) {
-            alert("Missing course/module/lesson identifiers.");
+            toast.error("Missing course/module/lesson identifiers.");
             return;
         }
 
@@ -129,7 +132,7 @@ function ContentPageContent() {
             await refetch();
         } catch (err: any) {
             console.error(err);
-            alert(err?.data?.message || err?.message || "Unable to save draft.");
+            toast.error(apiErrorMessage(err, "Unable to save draft."));
         } finally {
             setLoading(false);
         }
@@ -137,7 +140,7 @@ function ContentPageContent() {
 
     const handleContinue = async () => {
         if (!courseId || !moduleId || !lessonId) {
-            alert("Missing course/module/lesson identifiers.");
+            toast.error("Missing course/module/lesson identifiers.");
             return;
         }
 
@@ -155,7 +158,7 @@ function ContentPageContent() {
             router.push(`/instructor/pricing?courseId=${encodeURIComponent(courseId)}`);
         } catch (err: any) {
             console.error(err);
-            alert(err?.data?.message || err?.message || "Unable to save and continue.");
+            toast.error(apiErrorMessage(err, "Unable to save and continue."));
         } finally {
             setLoading(false);
         }
@@ -181,17 +184,17 @@ function ContentPageContent() {
 
     const handleSaveVideo = async (file: File) => {
         if (!courseId || !moduleId || !lessonId) {
-            alert("Missing course/module/lesson identifiers.");
+            toast.error("Missing course/module/lesson identifiers.");
             return;
         }
 
         const isVideoFile = file.type.startsWith("video/") || /\.(mp4|mov|avi|webm)$/i.test(file.name);
         if (!isVideoFile) {
-            alert("Please select an MP4, MOV, AVI, or WEBM video.");
+            toast.error("Please select an MP4, MOV, AVI, or WEBM video.");
             return;
         }
         if (file.size > maxVideoSizeMb * 1024 * 1024) {
-            alert(`This video is larger than the ${maxVideoSizeMb} MB upload limit.`);
+            toast.error(`This video is larger than the ${maxVideoSizeMb} MB upload limit.`);
             return;
         }
 
@@ -231,7 +234,7 @@ function ContentPageContent() {
         } catch (err: any) {
             console.error(err);
             setVideoUploadProgress(0);
-            alert(err?.data?.message || err?.message || "Video upload failed");
+            toast.error(apiErrorMessage(err, "Video upload failed"));
         } finally {
             window.clearInterval(progressTimer);
             setIsUploadingVideo(false);
@@ -250,7 +253,7 @@ function ContentPageContent() {
         if (!file) return;
 
         if (!courseId || !moduleId || !lessonId) {
-            alert("Missing course/module/lesson identifiers.");
+            toast.error("Missing course/module/lesson identifiers.");
             return;
         }
 
@@ -261,7 +264,7 @@ function ContentPageContent() {
             setSaveMessage("Resource uploaded successfully.");
             await refetch();
         } catch (err: any) {
-            alert(err?.data?.message || err?.message || "Upload failed");
+            toast.error(apiErrorMessage(err, "Upload failed"));
         } finally {
             if (fileInputRef.current) fileInputRef.current.value = "";
         }
@@ -269,7 +272,7 @@ function ContentPageContent() {
 
     const handleDeleteResource = async (resourceId: string) => {
         if (!courseId || !moduleId || !lessonId || !resourceId) {
-            alert("Missing course/module/lesson/resource identifiers.");
+            toast.error("Missing course/module/lesson/resource identifiers.");
             return;
         }
 
@@ -286,18 +289,18 @@ function ContentPageContent() {
             await refetch();
         } catch (err: any) {
             console.error(err);
-            alert(err?.data?.message || err?.message || "Unable to delete resource.");
+            toast.error(apiErrorMessage(err, "Unable to delete resource."));
         }
     };
 
     const handleSavePdf = async (file: File) => {
         if (!courseId || !moduleId || !lessonId) {
-            alert("Missing course/module/lesson identifiers.");
+            toast.error("Missing course/module/lesson identifiers.");
             return;
         }
 
         if (file.type !== "application/pdf") {
-            alert("Please select a PDF file.");
+            toast.error("Please select a PDF file.");
             return;
         }
 
@@ -325,7 +328,7 @@ function ContentPageContent() {
             setSaveMessage("PDF uploaded and saved to lesson.");
             await refetch();
         } catch (err: any) {
-            alert(err?.data?.message || err?.message || "PDF save failed");
+            toast.error(apiErrorMessage(err, "PDF save failed"));
         } finally {
             setIsSavingPdf(false);
             if (pdfInputRef.current) pdfInputRef.current.value = "";
@@ -336,7 +339,7 @@ function ContentPageContent() {
         const file = e.target.files?.[0];
         if (!file) return;
         if (file.type !== "application/pdf") {
-            alert("Please select a PDF file.");
+            toast.error("Please select a PDF file.");
             if (pdfInputRef.current) pdfInputRef.current.value = "";
             return;
         }
@@ -346,12 +349,12 @@ function ContentPageContent() {
 
     const handleSaveMcq = async () => {
         if (!courseId || !moduleId || !lessonId) {
-            alert("Missing course/module/lesson identifiers.");
+            toast.error("Missing course/module/lesson identifiers.");
             return;
         }
 
         if (mcqQuestions.some((q) => !q.question.trim())) {
-            alert("Please fill in all MCQ questions before saving.");
+            toast.error("Please fill in all MCQ questions before saving.");
             return;
         }
 
@@ -379,7 +382,7 @@ function ContentPageContent() {
             await refetch();
         } catch (err: any) {
             console.error(err);
-            alert(err?.data?.message || err?.message || "Unable to save MCQ.");
+            toast.error(apiErrorMessage(err, "Unable to save MCQ."));
         }
     };
 
@@ -447,7 +450,7 @@ function ContentPageContent() {
                                 {preview?.pdfFileName || lesson?.pdfFileName || "Lesson_Document.pdf"}
                             </span>
 
-                            <span onClick={() => alert("Remove PDF")} className="text-[var(--bhn-brand-600)] cursor-pointer">
+                            <span onClick={() => toast("Remove PDF")} className="text-[var(--bhn-brand-600)] cursor-pointer">
                                 Remove
                             </span>
 
@@ -498,7 +501,7 @@ function ContentPageContent() {
                             Add multiple choice questions, set duration, and passing score.
                         </p>
 
-                        <button onClick={() => alert("Edit questions coming soon")} className="mt-5 bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] text-white px-5 py-2 rounded-lg hover:scale-105 active:scale-95 transition">
+                        <button onClick={() => toast("Edit questions coming soon")} className="mt-5 bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] text-white px-5 py-2 rounded-lg hover:scale-105 active:scale-95 transition">
                             Edit Questions
                         </button>
 
@@ -578,7 +581,7 @@ function ContentPageContent() {
                             {lessonVideoLabel}
                         </span>
                         <span className="text-[var(--bhn-brand-600)] cursor-pointer">
-                            {hasVideoUploaded ? <span onClick={() => alert("Replace video")}>Replace</span> : "Pending"}
+                            {hasVideoUploaded ? <span onClick={() => toast("Replace video")}>Replace</span> : "Pending"}
                         </span>
                     </div>
 

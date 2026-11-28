@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { getCookie } from "@/lib/session";
+import { centralLoginUrl, getCookie } from "@/lib/session";
 import StudentHeader from "@/components/common/StudentHeader";
 import Button from "@/components/common/Button";
 import { useRouter } from "next/navigation";
@@ -638,7 +638,7 @@ export default function CourseDetails() {
                 onClick={async () => {
                   const wishlistId = String(courseId || id);
                   if (!getCookie("bandhan_academy_token")) {
-                    router.push(`/student/auth?next=${encodeURIComponent(`/student/view_details/${wishlistId}`)}`);
+                    window.location.assign(centralLoginUrl());
                     return;
                   }
                   try {

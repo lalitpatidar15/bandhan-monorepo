@@ -228,7 +228,7 @@ export default function NotificationsPage() {
               </p>
 
               <button
-                onClick={() => router.push("/student/premium")}
+                onClick={() => router.push("/student/allcourse")}
                 className="
                 w-full
                 mt-6

@@ -23,16 +23,11 @@ import {
   type Community,
   type CommunityMember,
 } from "@/store/api/communityApi";
+import { getApiMessage } from "@/lib/apiError";
 
 function getMemberId(member: string | CommunityMember): string {
   if (typeof member === "string") return member;
   return String(member?._id ?? member?.id ?? "");
-}
-
-function getApiMessage(error: unknown, fallback: string) {
-  const apiError = error as { data?: { message?: string } | string; error?: string };
-  const dataMessage = typeof apiError?.data === "string" ? apiError.data : apiError?.data?.message;
-  return dataMessage || apiError?.error || fallback;
 }
 
 export default function CommunitiesPage() {

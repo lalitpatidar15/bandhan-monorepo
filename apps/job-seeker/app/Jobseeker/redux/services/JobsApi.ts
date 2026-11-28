@@ -573,11 +573,6 @@ export const jobsApi = baseApi.injectEndpoints({
         for (const candidate of candidates) {
           const result = await (baseQuery as any)(candidate);
 
-          if (result.error && ((result.error as { status?: number }).status === 404 || (result.error as { status?: number }).status === 500)) {
-            lastError = result.error;
-            continue;
-          }
-
           if (result.error) {
             lastError = result.error;
             continue;
@@ -685,7 +680,6 @@ export const jobsApi = baseApi.injectEndpoints({
       async queryFn(arg, _queryApi, _extraOptions, baseQuery): Promise<any> {
         const params = arg || {};
         const candidates = [
-          { url: "job-message/applications", method: "GET" as const, params },
           { url: "job-message/applications", method: "GET" as const, params },
         ];
 

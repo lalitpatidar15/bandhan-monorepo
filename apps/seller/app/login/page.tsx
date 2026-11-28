@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { apiPost } from "@/lib/api";
+import { centralAppUrl } from "@/lib/session";
 import { Logo } from "@bandhan/ui";
 import { Button } from "@bandhan/ui";
 import { Field, Input } from "@bandhan/ui";
@@ -133,7 +134,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     if (role === "seller") {
       router.replace("/sellerDashboard");
     } else {
-      router.replace("/buyer/dashboard");
+      window.location.assign(centralAppUrl("/userdashboard/dashboard"));
     }
   } catch (err: any) {
     const status = Number(err?.status ?? 0);
@@ -252,12 +253,12 @@ const handleSubmit = async (e: React.FormEvent) => {
 
             <p className="text-center text-sm text-[var(--bhn-text-muted)] pt-2">
               Don&apos;t have an account?{" "}
-              <span
-                onClick={() => router.push("/signup")}
+              <a
+                href={centralAppUrl("/signup/seller")}
                 className="text-[var(--bhn-brand-700)] font-medium cursor-pointer hover:underline"
               >
                 Sign up
-              </span>
+              </a>
             </p>
           </form>
         </div>

@@ -401,7 +401,7 @@ export default function QuizPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-4 px-4 sm:px-6 lg:px-5 pb-6 sm:pb-8">
 
                 {/* CARD 1 */}
-                <div onClick={() => router.push('/student/quiz-history')} className="bg-[var(--bhn-brand-50)] dark:bg-[var(--bhn-neutral-900)] rounded-2xl p-5 sm:p-4 min-h-[120px] cursor-pointer">
+                <div onClick={() => router.push('/student/mycourse')} className="bg-[var(--bhn-brand-50)] dark:bg-[var(--bhn-neutral-900)] rounded-2xl p-5 sm:p-4 min-h-[120px] cursor-pointer">
 
                     <Clock3 className="text-[var(--bhn-brand-500)] dark:text-[var(--bhn-brand-400)]" size={20} />
 
@@ -416,7 +416,7 @@ export default function QuizPage() {
                 </div>
 
                 {/* CARD 2 */}
-                <div onClick={() => router.push('/student/discussion')} className="bg-[var(--bhn-brand-50)] dark:bg-[var(--bhn-neutral-900)] rounded-2xl p-5 sm:p-4 min-h-[120px] cursor-pointer">
+                <div onClick={() => router.push('/student/courses')} className="bg-[var(--bhn-brand-50)] dark:bg-[var(--bhn-neutral-900)] rounded-2xl p-5 sm:p-4 min-h-[120px] cursor-pointer">
 
                     <MessageSquare className="text-[var(--bhn-brand-500)] dark:text-[var(--bhn-brand-400)]" size={20} />
 
@@ -431,7 +431,7 @@ export default function QuizPage() {
                 </div>
 
                 {/* CARD 3 */}
-                <div onClick={() => router.push('/student/reference-material')} className="bg-[var(--bhn-brand-50)] dark:bg-[var(--bhn-neutral-900)] rounded-2xl p-5 sm:p-4 min-h-[120px] cursor-pointer">
+                <div onClick={() => router.push('/student/allcourse')} className="bg-[var(--bhn-brand-50)] dark:bg-[var(--bhn-neutral-900)] rounded-2xl p-5 sm:p-4 min-h-[120px] cursor-pointer">
 
                     <GraduationCap className="text-[var(--bhn-brand-500)] dark:text-[var(--bhn-brand-400)]" size={20} />
 

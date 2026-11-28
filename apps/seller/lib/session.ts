@@ -6,3 +6,8 @@ export function clearSellerSession() {
 export function centralLoginUrl() {
   return process.env.NEXT_PUBLIC_CENTRAL_LOGIN_URL || (process.env.NODE_ENV === 'production' ? 'https://bandhaneventshub.com/login' : 'http://localhost:3000/login');
 }
+
+// Build an absolute URL on the central user app from the configured login origin.
+export function centralAppUrl(path: string) {
+  return new URL(path, centralLoginUrl()).toString();
+}

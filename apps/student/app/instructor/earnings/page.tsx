@@ -10,6 +10,7 @@ import {
     RefreshCw,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
+import { centralAppUrl } from "@/lib/session";
 import {
     useGetInstructorEarningsQuery,
     useGetInstructorPageResourcesQuery,
@@ -25,7 +26,7 @@ function csvCell(value: unknown) {
 
 export default function EarningsDashboard() {
     const [selected, setSelected] = useState("Latest month");
-    const { data: earningsData, isLoading, isError, refetch } = useGetInstructorEarningsQuery();
+    const { data: earningsData, isLoading, isFetching, isError, refetch } = useGetInstructorEarningsQuery();
     const { data: resourcesData } = useGetInstructorPageResourcesQuery();
 
     const earnings = earningsData?.earnings ?? {};
@@ -156,7 +157,7 @@ export default function EarningsDashboard() {
                 {isError && (
                     <p className="mb-5 text-sm text-[var(--bhn-error-600)] flex items-center gap-3">
                         Unable to load earnings.
-                        <button type="button" onClick={() => refetch()} className="underline font-medium">Retry</button>
+                        <button type="button" disabled={isFetching} onClick={() => refetch()} className="underline font-medium disabled:opacity-50">Retry</button>
                     </p>
                 )}
 
@@ -532,9 +533,9 @@ export default function EarningsDashboard() {
                     </div>
 
                     <div className="flex flex-wrap gap-5">
-                        <button type="button" onClick={() => toast("Instructor terms are available from the admin team.")}>Instructor Terms</button>
-                        <button type="button" onClick={() => toast("Privacy policy documents are not available in this panel yet.")}>Privacy Policy</button>
-                        <button type="button" onClick={() => toast("Contact support through the central portal for help.")}>Help Center</button>
+                        <a href={centralAppUrl("/terms-of-service")} target="_blank" rel="noreferrer">Instructor Terms</a>
+                        <a href={centralAppUrl("/privacy-policy")} target="_blank" rel="noreferrer">Privacy Policy</a>
+                        <a href={centralAppUrl("/userdashboard/support")} target="_blank" rel="noreferrer">Help Center</a>
                     </div>
                 </div>
             </div>

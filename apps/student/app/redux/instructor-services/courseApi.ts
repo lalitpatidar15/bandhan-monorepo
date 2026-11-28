@@ -1,5 +1,34 @@
 import { baseApi } from "../services/baseApi";
 
+type LessonType = "video" | "pdf" | "mcq";
+
+type LessonMcqData = {
+  questions: Array<{
+    question: string;
+    options: string[];
+    correctOption: number;
+    explanation?: string;
+  }>;
+  duration?: number;
+  passingScore?: number;
+};
+
+type LessonFields = {
+  title: string;
+  description?: string;
+  videoUrl?: string;
+  duration?: string;
+  isPreview?: boolean;
+  type?: LessonType;
+  lessonType?: LessonType;
+  pdfUrl?: string;
+  pdfFileName?: string;
+  mcqData?: LessonMcqData;
+};
+
+type AddLessonPayload = LessonFields & { courseId: string; moduleId: string };
+type EditLessonPayload = AddLessonPayload & { lessonId: string };
+
 export const instructorCourseApi = baseApi.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
@@ -62,29 +91,7 @@ export const instructorCourseApi = baseApi.injectEndpoints({
         pdfUrl,
         pdfFileName,
         mcqData,
-      }: {
-        courseId: string;
-        moduleId: string;
-        title: string;
-        description?: string;
-        videoUrl?: string;
-        duration?: string;
-        isPreview?: boolean;
-        type?: "video" | "pdf" | "mcq";
-        lessonType?: "video" | "pdf" | "mcq";
-        pdfUrl?: string;
-        pdfFileName?: string;
-        mcqData?: {
-          questions: Array<{
-            question: string;
-            options: string[];
-            correctOption: number;
-            explanation?: string;
-          }>;
-          duration?: number;
-          passingScore?: number;
-        };
-      }) => ({
+      }: AddLessonPayload) => ({
         url: `/curriculum/${courseId}/module/${moduleId}/lesson`,
         method: "POST",
         body: {
@@ -178,30 +185,7 @@ export const instructorCourseApi = baseApi.injectEndpoints({
         pdfUrl,
         pdfFileName,
         mcqData,
-      }: {
-        courseId: string;
-        moduleId: string;
-        lessonId: string;
-        title: string;
-        description?: string;
-        videoUrl?: string;
-        duration?: string;
-        isPreview?: boolean;
-        type?: "video" | "pdf" | "mcq";
-        lessonType?: "video" | "pdf" | "mcq";
-        pdfUrl?: string;
-        pdfFileName?: string;
-        mcqData?: {
-          questions: Array<{
-            question: string;
-            options: string[];
-            correctOption: number;
-            explanation?: string;
-          }>;
-          duration?: number;
-          passingScore?: number;
-        };
-      }) => ({
+      }: EditLessonPayload) => ({
         url: `/curriculum/${courseId}/module/${moduleId}/lesson/${lessonId}`,
         method: "PUT",
         body: {

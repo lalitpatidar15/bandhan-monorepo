@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import { AlertCircle, RefreshCw } from "lucide-react";
 import { Alert, EmptyState, Spinner } from "@bandhan/ui";
+import { getApiMessage } from "@/lib/apiError";
 
 // The API wraps most payloads in { success, data }. A few list endpoints use a
 // named array instead, so normalize in one place rather than in every tab.
@@ -36,17 +37,8 @@ export function extractItem<T>(raw: unknown, key?: string): T | null {
   return (key ? root[key] ?? null : root) as T | null;
 }
 
-export function errorText(error: unknown): string {
-  if (!error || typeof error !== "object") return "Something went wrong. Please try again.";
-  const root = error as Record<string, unknown>;
-  const data = root.data;
-  if (data && typeof data === "object") {
-    const body = data as Record<string, unknown>;
-    if (typeof body.message === "string" && body.message) return body.message;
-    if (typeof body.error === "string" && body.error) return body.error;
-  }
-  if (typeof root.error === "string" && root.error) return root.error;
-  return "Something went wrong. Please try again.";
+export function errorText(error: unknown, fallback?: string): string {
+  return getApiMessage(error, fallback);
 }
 
 export function formatDate(value?: string): string {

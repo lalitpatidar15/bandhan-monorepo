@@ -20,7 +20,7 @@ const highlights = [
     title: "Plan Event",
     description: "Use our intelligent planning tools to bring your vision to life from scratch.",
     label: "Start Planning",
-    href: "/plan",
+    href: "/userdashboard/planner",
     icon: Briefcase,
     tone: "bg-[var(--bhn-brand-600)]", // सॉलिड ब्राउन बैकग्राउंड
     textColor: "text-[var(--bhn-text-on-brand)]",
@@ -32,7 +32,7 @@ const highlights = [
     title: "View Orders",
     description: "Manage your bookings, track deliveries, and chat with your vendors.",
     label: "Active Projects",
-    href: "/orders",
+    href: "/userdashboard/orders",
     icon: Package,
     tone: "bg-[var(--bhn-surface)]",
     textColor: "text-[var(--bhn-text)]",

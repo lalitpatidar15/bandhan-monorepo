@@ -27,7 +27,7 @@ export default function CourseCard({
     if (role === "student") {
       router.push(`/student/course-player/${id}`);
     } else {
-      router.push(`/instructor/curriculum/${id}`);
+      router.push(`/instructor/curriculum2/${id}`);
     }
   };
 

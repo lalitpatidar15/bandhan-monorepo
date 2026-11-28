@@ -10,6 +10,8 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import { apiErrorMessage } from "@/lib/apiError";
+import { centralAppUrl } from "@/lib/session";
 import CurriculumHeader from "@/components/common/CurriculumHeader";
 import { useUpdatePricingMutation, useUpdateEmiMutation, useUpdateVisibilityMutation, usePublishCourseMutation, useGetPricingPageQuery, useGetInstructorCoursesQuery, useToggleCourseFeaturedMutation } from "@/app/redux/instructor-services/courseApi";
 
@@ -19,8 +21,8 @@ function PricingPageContent() {
   const searchParams = useSearchParams();
   const courseId = (searchParams.get("courseId") || (params.id as string | undefined) || "") as string;
   const [updatePricing, { isLoading: isSavingPricing }] = useUpdatePricingMutation();
-  const [updateEmi] = useUpdateEmiMutation();
-  const [updateVisibility] = useUpdateVisibilityMutation();
+  const [updateEmi, { isLoading: isSavingEmi }] = useUpdateEmiMutation();
+  const [updateVisibility, { isLoading: isSavingVisibility }] = useUpdateVisibilityMutation();
   const [publishCourse, { isLoading: isPublishing }] = usePublishCourseMutation();
   const [toggleFeatured, { isLoading: isTogglingFeatured }] = useToggleCourseFeaturedMutation();
   const { data: pricingPageData, refetch: refetchPricingPage } = useGetPricingPageQuery(courseId, { skip: !courseId });
@@ -64,9 +66,8 @@ function PricingPageContent() {
         discountPercentage: enableDiscount ? Number(discountValue || 0) : 0,
       }).unwrap();
       return true;
-    } catch (error: any) {
-      console.error(error);
-      toast.error(error?.data?.message || error?.message || "Unable to save pricing.");
+    } catch (error: unknown) {
+      toast.error(apiErrorMessage(error, "Unable to save pricing."));
       return false;
     }
   };
@@ -87,8 +88,8 @@ function PricingPageContent() {
         plans,
       }).unwrap();
       return true;
-    } catch (error: any) {
-      console.error(error);
+    } catch (error: unknown) {
+      toast.error(apiErrorMessage(error, "Unable to save EMI settings."));
       return false;
     }
   };
@@ -104,8 +105,8 @@ function PricingPageContent() {
         visibility: selected.toLowerCase(),
       }).unwrap();
       return true;
-    } catch (error: any) {
-      console.error(error);
+    } catch (error: unknown) {
+      toast.error(apiErrorMessage(error, "Unable to save visibility settings."));
       return false;
     }
   };
@@ -122,7 +123,7 @@ function PricingPageContent() {
   };
 
   const handlePublish = async () => {
-    if (isSavingSettings || isSavingPricing || isPublishing) return;
+    if (isSavingSettings || isSavingPricing || isSavingEmi || isSavingVisibility || isPublishing) return;
     setIsSavingSettings(true);
 
     try {
@@ -131,9 +132,8 @@ function PricingPageContent() {
 
       await publishCourse({ courseId }).unwrap();
       router.push("/instructor/performance");
-    } catch (error: any) {
-      console.error(error);
-      toast.error(error?.data?.message || error?.message || "Unable to publish course.");
+    } catch (error: unknown) {
+      toast.error(apiErrorMessage(error, "Unable to publish course."));
     } finally {
       setIsSavingSettings(false);
     }
@@ -148,14 +148,14 @@ function PricingPageContent() {
     const nextValue = !isFeatured;
     setIsFeatured(nextValue);
     try {
-      const result: any = await toggleFeatured({ courseId, isFeatured: nextValue }).unwrap();
+      const result = (await toggleFeatured({ courseId, isFeatured: nextValue }).unwrap()) as { isFeatured?: boolean };
       const savedValue = Boolean(result?.isFeatured ?? nextValue);
       setIsFeatured(savedValue);
       toast.success(savedValue ? "Course marked as featured." : "Course removed from featured.");
       await refetchPricingPage();
-    } catch (error: any) {
+    } catch (error: unknown) {
       setIsFeatured(!nextValue);
-      toast.error(error?.data?.message || error?.message || "Unable to update featured status.");
+      toast.error(apiErrorMessage(error, "Unable to update featured status."));
     }
   };
 
@@ -175,7 +175,7 @@ function PricingPageContent() {
 
   useEffect(() => {
     if (!courseId || !instructorCoursesData?.data) return;
-    const currentCourse = (instructorCoursesData.data as any[]).find(
+    const currentCourse = (instructorCoursesData.data as Array<{ _id?: string; isFeatured?: boolean }>).find(
       (item) => String(item._id) === String(courseId)
     );
     setIsFeatured(Boolean(currentCourse?.isFeatured));
@@ -391,7 +391,7 @@ function PricingPageContent() {
                   <div
                     onClick={async () => {
                       const nextValue = !enableEMI;
-                      if (!courseId) return;
+                      if (!courseId || isSavingPricing || isSavingEmi || isSavingVisibility) return;
                       const pricingSaved = await handleSavePricing();
                       if (!pricingSaved) return;
                       setEnableEMI(nextValue);
@@ -401,8 +401,8 @@ function PricingPageContent() {
                           enabled: nextValue,
                           plans: nextValue ? [{ months: Number(selectedMonth || 0) }] : [],
                         }).unwrap();
-                      } catch (error: any) {
-                        console.error(error);
+                      } catch (error: unknown) {
+                        toast.error(apiErrorMessage(error, "Unable to update EMI settings."));
                       }
                     }}
                     className={`w-11 h-6 rounded-full relative cursor-pointer transition-all duration-300
@@ -432,7 +432,7 @@ function PricingPageContent() {
                   <div
                     key={index}
                     onClick={async () => {
-                      if (!enableEMI || !courseId) return;
+                      if (!enableEMI || !courseId || isSavingPricing || isSavingEmi || isSavingVisibility) return;
                       const pricingSaved = await handleSavePricing();
                       if (!pricingSaved) return;
                       setSelectedMonth(month);
@@ -442,8 +442,8 @@ function PricingPageContent() {
                           enabled: true,
                           plans: [{ months: Number(month) }],
                         }).unwrap();
-                      } catch (error: any) {
-                        console.error(error);
+                      } catch (error: unknown) {
+                        toast.error(apiErrorMessage(error, "Unable to update EMI settings."));
                       }
                     }}
                     className={`rounded-xl border h-[78px] flex flex-col items-center justify-center transition cursor-pointer
@@ -510,12 +510,13 @@ function PricingPageContent() {
                     <div
                       key={index}
                       onClick={async () => {
+                        if (isSavingVisibility || isSavingPricing || isSavingEmi) return;
                         setSelected(item.title);
                         if (courseId) {
                           try {
                             await updateVisibility({ courseId, visibility: item.title.toLowerCase() }).unwrap();
-                          } catch (error: any) {
-                            console.error(error);
+                          } catch (error: unknown) {
+                            toast.error(apiErrorMessage(error, "Unable to update visibility settings."));
                           }
                         }
                       }}
@@ -729,7 +730,7 @@ function PricingPageContent() {
             {/* BUTTON */}
             <button
               onClick={handlePublish}
-              disabled={isSavingSettings || isSavingPricing || isPublishing}
+              disabled={isSavingSettings || isSavingPricing || isSavingEmi || isSavingVisibility || isPublishing}
               className="
               w-full h-14 rounded-xl bg-[var(--bhn-brand-600)] text-white
               font-medium flex items-center justify-center gap-2
@@ -746,7 +747,7 @@ function PricingPageContent() {
                 className="transition-transform duration-200"
               />
 
-              {isSavingSettings || isSavingPricing || isPublishing ? "Publishing..." : "Publish Course"}
+              {isSavingSettings || isSavingPricing || isSavingEmi || isSavingVisibility || isPublishing ? "Publishing..." : "Publish Course"}
 
             </button>
 
@@ -754,15 +755,17 @@ function PricingPageContent() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5 text-sm text-[var(--bhn-text-soft)]">
 
               <button
+                type="button"
+                disabled={isSavingSettings || isSavingPricing || isSavingEmi || isSavingVisibility || isPublishing}
                 onClick={async () => {
                   const saved = await handleSaveAllSettings();
                   if (saved) {
                     toast.success("Settings saved as draft.");
                   }
                 }}
-                className="hover:text-[var(--bhn-brand-700)] transition"
+                className="hover:text-[var(--bhn-brand-700)] transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Save as Draft
+                {isSavingSettings ? "Saving..." : "Save as Draft"}
               </button>
 
               <button onClick={() => router.push(`/course-preview?courseId=${encodeURIComponent(courseId)}`)} className="hover:text-[var(--bhn-brand-700)] transition">
@@ -788,9 +791,9 @@ function PricingPageContent() {
 
           <div className="flex flex-wrap justify-center gap-4 sm:gap-5">
 
-            <span onClick={() => window.open("/instructor/policy", "_blank")} className="cursor-pointer hover:underline">Instructor Policy</span>
-            <span onClick={() => window.open("/help", "_blank")} className="cursor-pointer hover:underline">Help Center</span>
-            <span onClick={() => window.open("/terms", "_blank")} className="cursor-pointer hover:underline">Terms of Service</span>
+            <span onClick={() => window.open(centralAppUrl("/privacy-policy"), "_blank", "noopener,noreferrer")} className="cursor-pointer hover:underline">Instructor Policy</span>
+            <span onClick={() => window.open(centralAppUrl("/userdashboard/support"), "_blank", "noopener,noreferrer")} className="cursor-pointer hover:underline">Help Center</span>
+            <span onClick={() => window.open(centralAppUrl("/terms-of-service"), "_blank", "noopener,noreferrer")} className="cursor-pointer hover:underline">Terms of Service</span>
 
           </div>
 

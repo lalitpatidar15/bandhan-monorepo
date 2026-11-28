@@ -1,9 +1,9 @@
 "use client";
 
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { centralLoginUrl } from "@/lib/session";
 
 export default function AuthTabs() {
-  const router = useRouter();
   const pathname = usePathname();
 
   const isStudent = pathname.includes("student");
@@ -12,7 +12,7 @@ export default function AuthTabs() {
   return (
     <div className="flex bg-[var(--bhn-brand-50)] rounded-lg p-1 mb-6">
       <button
-        onClick={() => router.push("/student/auth")}
+        onClick={() => window.location.assign(centralLoginUrl())}
         className={`flex-1 py-2 rounded-md text-sm font-medium transition ${
           isStudent
             ? "bg-[var(--bhn-brand-600)] shadow text-white"
@@ -23,7 +23,7 @@ export default function AuthTabs() {
       </button>
 
       <button
-        onClick={() => router.push("/instructor/login")}
+        onClick={() => window.location.assign(centralLoginUrl())}
         className={`flex-1 py-2 rounded-md text-sm font-medium transition ${
           isInstructor
             ? "bg-[var(--bhn-brand-600)] shadow text-white"

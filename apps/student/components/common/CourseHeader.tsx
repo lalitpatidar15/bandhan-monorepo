@@ -86,7 +86,7 @@ return (
                         onSubmit={(e) => {
                             e.preventDefault();
                             if (searchQuery.trim()) {
-                                router.push(`/instructor/search?q=${encodeURIComponent(searchQuery.trim())}`);
+                                router.push(`/instructor/performance?q=${encodeURIComponent(searchQuery.trim())}`);
                             }
                         }}
                         className="hidden md:block relative"
@@ -107,7 +107,7 @@ return (
 
                     {/* ICONS */}
                     <button
-                        onClick={() => router.push("/instructor/notifications")}
+                        onClick={() => router.push("/instructor/dashboard")}
                         className="text-[var(--bhn-text-muted)] hover:text-[var(--bhn-brand-700)] transition"
                         aria-label="Notifications"
                     >
@@ -165,7 +165,7 @@ return (
                         onSubmit={(e) => {
                             e.preventDefault();
                             if (searchQuery.trim()) {
-                                router.push(`/instructor/search?q=${encodeURIComponent(searchQuery.trim())}`);
+                                router.push(`/instructor/performance?q=${encodeURIComponent(searchQuery.trim())}`);
                                 setMobileMenu(false);
                             }
                         }}

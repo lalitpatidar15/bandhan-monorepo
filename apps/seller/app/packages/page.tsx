@@ -18,6 +18,7 @@ import {
   Textarea,
 } from "@bandhan/ui";
 import Sidebar from "@/components/Sidebar";
+import { getApiErrorMessage, normalizeList } from "@/lib/response";
 import {
   useCreateVendorPackageMutation,
   useDeleteVendorPackageMutation,
@@ -59,7 +60,7 @@ export default function VendorPackagesPage() {
   const [form, setForm] = useState<PackageForm>(emptyForm);
   const [deleteTarget, setDeleteTarget] = useState<ServicePackage | null>(null);
 
-  const packages = Array.isArray(data?.data) ? data.data : [];
+  const packages = normalizeList<ServicePackage>(data);
 
   const openCreate = () => {
     setEditingId(null);
@@ -107,10 +108,7 @@ export default function VendorPackagesPage() {
       setShowForm(false);
       refetch();
     } catch (error) {
-      const message = error && typeof error === "object" && "data" in error
-        ? (error.data as { message?: string } | undefined)?.message
-        : undefined;
-      toast.error(message || "Could not save the package");
+      toast.error(getApiErrorMessage(error, "Could not save the package"));
     }
   };
 
@@ -122,10 +120,7 @@ export default function VendorPackagesPage() {
       setDeleteTarget(null);
       refetch();
     } catch (error) {
-      const message = error && typeof error === "object" && "data" in error
-        ? (error.data as { message?: string } | undefined)?.message
-        : undefined;
-      toast.error(message || "Could not delete the package");
+      toast.error(getApiErrorMessage(error, "Could not delete the package"));
     }
   };
 
@@ -137,7 +132,7 @@ export default function VendorPackagesPage() {
         <PageHeader
           title="Service packages"
           subtitle="Bundle your services into priced packages buyers can discover."
-          actions={<Button icon={<Plus size={16} />} onClick={openCreate}>New package</Button>}
+          actions={<Button icon={<Plus size={16} />} onClick={openCreate} disabled={isCreating || isUpdating || isDeleting}>New package</Button>}
         />
 
         {isLoading ? (
@@ -185,8 +180,8 @@ export default function VendorPackagesPage() {
                     </ul>
                   ) : null}
                   <div className="mt-4 flex gap-2 border-t border-[var(--bhn-border)] pt-3">
-                    <Button size="sm" variant="secondary" icon={<Pencil size={14} />} onClick={() => openEdit(item)}>Edit</Button>
-                    <Button size="sm" variant="ghost" icon={<Trash2 size={14} />} onClick={() => setDeleteTarget(item)}>Delete</Button>
+                    <Button size="sm" variant="secondary" icon={<Pencil size={14} />} onClick={() => openEdit(item)} disabled={isCreating || isUpdating}>Edit</Button>
+                    <Button size="sm" variant="ghost" icon={<Trash2 size={14} />} onClick={() => setDeleteTarget(item)} disabled={isDeleting}>Delete</Button>
                   </div>
                 </CardBody>
               </Card>
