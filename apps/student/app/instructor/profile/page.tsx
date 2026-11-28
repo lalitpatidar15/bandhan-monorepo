@@ -118,7 +118,7 @@ export default function InstructorProfileSetup() {
 
     const [newTag, setNewTag] = useState("");
 
-    const [tags, setTags] = useState([]);
+    const [tags, setTags] = useState<string[]>([]);
 
     const addTag = () => {
         if (!newTag.trim()) return;

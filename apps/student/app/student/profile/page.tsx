@@ -188,7 +188,7 @@ export default function SettingsPage() {
                             onClick={() => setActiveTab("Learning Interests")}
                             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-sm sm:text-base ${activeTab === "Learning Interests"
                                 ? "bg-[var(--bhn-surface)] dark:bg-[var(--bhn-neutral-900)] text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)] font-medium"
-                                : "text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)] hover:bg-[var(--bhn-surface)]"`
+                                : "text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)] hover:bg-[var(--bhn-surface)]"}`
                             }>
                                 <BookOpen size={18} />
 
@@ -200,7 +200,7 @@ export default function SettingsPage() {
                             onClick={() => setActiveTab("Payment & Billing")}
                             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-sm sm:text-base ${activeTab === "Payment & Billing"
                                 ? "bg-[var(--bhn-surface)] dark:bg-[var(--bhn-neutral-900)] text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)] font-medium"
-                                : "text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)] hover:bg-[var(--bhn-surface)]"`
+                                : "text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)] hover:bg-[var(--bhn-surface)]"}`
                             }>
                                 <CreditCard size={18} />
 
@@ -212,7 +212,7 @@ export default function SettingsPage() {
                             onClick={() => setActiveTab("Security")}
                             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-sm sm:text-base ${activeTab === "Security"
                                 ? "bg-[var(--bhn-surface)] dark:bg-[var(--bhn-neutral-900)] text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)] font-medium"
-                                : "text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)] hover:bg-[var(--bhn-surface)]"`
+                                : "text-[var(--bhn-text-muted)] dark:text-[var(--bhn-text-soft)] hover:bg-[var(--bhn-surface)]"}`
                             }>
                                 <Shield size={18} />
 
@@ -393,7 +393,7 @@ export default function SettingsPage() {
                                                     }
                                                     className={`w-[65px] h-[33px] rounded-full flex items-center px-1 transition-all duration-300 ${courseReminder
                                                         ? "bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)]"
-                                                        : "bg-[var(--bhn-border)]"`
+                                                        : "bg-[var(--bhn-border)]"
                                                     }`}
                                                 >
 
@@ -465,7 +465,7 @@ export default function SettingsPage() {
                                                 className={`px-4 sm:px-5 py-3 rounded-full text-sm font-medium transition-all
                                                  ${selectedInterests.includes(item)
                                                     ? "bg-[var(--bhn-brand-600)] dark:bg-[var(--bhn-brand-400)] text-white"
-                                                    : "bg-[var(--bhn-surface-3)] dark:bg-[var(--bhn-neutral-900)] text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]"`
+                                                    : "bg-[var(--bhn-surface-3)] dark:bg-[var(--bhn-neutral-900)] text-[var(--bhn-text-soft)] dark:text-[var(--bhn-text-soft)]"
                                                 }`}
                                             >
                                                 {item}
@@ -575,9 +575,9 @@ export default function SettingsPage() {
 
                                     </div>
                                 )}
+                                </div>
                             </div>
                         )}
-                    )}
 
                     {/* SECURITY */}
                     {(activeTab === "Profile Info" ||
@@ -671,7 +671,6 @@ export default function SettingsPage() {
                                 </div>
                             </div>
                         )}
-                    )}
 
                 </div>
 

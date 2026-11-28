@@ -185,7 +185,7 @@ export default function DashboardPage() {
                       {app.status || "Applied"}
                     </span>
                   </div>
-                ))
+                ))}
               </div>
             </Card>
 
@@ -241,10 +241,10 @@ export default function DashboardPage() {
                         <Button variant="primary" className="w-full mt-4">
                           Apply Now
                         </Button>
-                      </div>
-                    )
-                  )
-                })
+                      </Link>
+                    </div>
+                  );
+                })}
               </div>
             </Card>
           </div>
@@ -278,7 +278,7 @@ export default function DashboardPage() {
                       />
                     </div>
                   </div>
-                ))
+                ))}
               </div>
 
               <Link href="/Jobseeker/profile">

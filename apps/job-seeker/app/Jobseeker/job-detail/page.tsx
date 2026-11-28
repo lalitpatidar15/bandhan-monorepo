@@ -176,7 +176,7 @@ function JobDetailPageContent() {
       <CareersHeader variant="jobs" activeTab="Jobs" />
 
       <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-5">
-        <p className="text-xs sm:text-sm text-[var(--bhn-text-soft)] pt-4">Jobs > {job.title}</p>
+        <p className="text-xs sm:text-sm text-[var(--bhn-text-soft)] pt-4">Jobs &gt; {job.title}</p>
       </div>
 
       <div className="flex-1">

@@ -11,20 +11,16 @@ import {
 import { useGetInstructorOverviewQuery, useGetInstructorPageResourcesQuery } from "@/app/redux/instructor-services/DashboardApi";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import AcademyLogo from "@/components/common/AcademyLogo";
+import { StatCard } from "@bandhan/ui";
 
 export default function AnalyticsPage() {
     const router = useRouter();
     const [selected, setSelected] = useState("7 days");
     const { data } = useGetInstructorOverviewQuery();
     const overview = data?.data?.overview;
-    const [pageData, setPageData] = useState<any>({});
-
-    useEffect(() => {
-        const { data: resourcesData, isLoading: resourcesLoading, isError: resourcesError } = useGetInstructorPageResourcesQuery();
-        if (resourcesData && resourcesData.success && resourcesData.data) {
-            setPageData(resourcesData.data);
-        }
-    }, []);
+    const { data: resourcesData } = useGetInstructorPageResourcesQuery();
+    const pd = resourcesData?.data ?? {};
 
     return (
         <div className="min-h-screen bg-[var(--bhn-bg)]">

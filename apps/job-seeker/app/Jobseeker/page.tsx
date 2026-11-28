@@ -1,5 +1,5 @@
-import Auth from './login/page'
+import { redirect } from "next/navigation";
 
 export default function JobSeeker() {
-  return <Auth />
+  redirect("/Jobseeker/login");
 }

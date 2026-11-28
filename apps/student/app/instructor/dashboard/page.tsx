@@ -23,14 +23,14 @@ export default function InstructorDashboard() {
   const overview = overviewData?.data?.overview;
   const [tasks, setTasks] = useState<string[]>([]);
   const [todayEvents, setTodayEvents] = useState<Array<{title:string;time?:string;slots?:number;questions?:number;type:string}>>([]);
+  const { data: resourcesData } = useGetInstructorPageResourcesQuery();
 
   useEffect(() => {
-    const { data, isLoading: resourcesLoading, isError: resourcesError } = useGetInstructorPageResourcesQuery();
-    if (data && data.success && data.data) {
-      setTasks(data.data.tasks || []);
-      setTodayEvents(data.data.todaySchedule || []);
+    if (resourcesData?.success && resourcesData.data) {
+      setTasks(resourcesData.data.tasks || []);
+      setTodayEvents(resourcesData.data.todaySchedule || []);
     }
-  }, []);
+  }, [resourcesData]);
   const stats = [
     {
       label: "Active Courses",
@@ -57,7 +57,7 @@ export default function InstructorDashboard() {
       icon: Star,
     },
   ];
-  const courses = (data?.data?.courses ?? []).map((course: any) => ({
+  const courses = (overviewData?.data?.courses ?? []).map((course: any) => ({
     id: course._id,
     title: course.title,
     students: course.totalStudents ?? 0,

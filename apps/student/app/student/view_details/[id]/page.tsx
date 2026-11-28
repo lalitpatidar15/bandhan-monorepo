@@ -145,8 +145,6 @@ export default function CourseDetails() {
     );
   }
 
-
-
   return (
     <div className="bg-[var(--bhn-bg)] min-h-screen">
       <StudentHeader />
@@ -185,11 +183,11 @@ export default function CourseDetails() {
           >
             <span>{instructorName}</span>
 
-            <span className="text-[var(--bhn-warning-500)] font-medium">
+            <span className="text-[var(--bhn-brand-600)] font-medium">
               ⭐ {courseRating}
             </span>
 
-            <span className="text-gray-400">
+            <span className="text-[var(--bhn-text-muted)]">
               ({courseReviews} reviews)
             </span>
           </div>
@@ -208,10 +206,10 @@ export default function CourseDetails() {
           <p
             className="
               text-[var(--bhn-text-muted)]
-              mt-2
-              leading-relaxed
-              text-sm
-              sm:text-base
+                mt-2
+                leading-relaxed
+                text-sm
+                sm:text-base
             "
           >
             {course.description}
@@ -234,9 +232,9 @@ export default function CourseDetails() {
 
           {/* LOCKED LESSON MESSAGE */}
           {lockedMessage && (
-            <div className="bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-lg mb-4 flex items-center justify-between">
+            <div className="bg-[var(--bhn-surface-2)] border border-[var(--bhn-brand-500)] text-[var(--bhn-brand-600)] px-4 py-3 rounded-lg mb-4 flex items-center justify-between">
               <span>{lockedMessage}</span>
-              <button onClick={() => setLockedMessage("")} className="text-amber-600 font-bold ml-2 text-lg leading-none">&times;</button>
+              <button onClick={() => setLockedMessage("")} className="text-[var(--bhn-brand-600)] font-bold ml-2 text-lg leading-none">&times;</button>
             </div>
           )}
 
@@ -247,7 +245,7 @@ export default function CourseDetails() {
             border-t border-[var(--bhn-border)] pt-8
             text-[28px]
             font-bold
-            text-[#241B18] dark:text-[var(--bhn-neutral-400)]
+            text-[var(--bhn-text)]
             mb-4
             "
           >
@@ -292,7 +290,7 @@ export default function CourseDetails() {
                       duration-300
 
                                 ${isOpen
-                        ? "bg-[#F6EAE4] dark:bg-[var(--bhn-neutral-900)]"
+                        ? "bg-[var(--bhn-surface-2)] dark:bg-[var(--bhn-neutral-900)]"
                         : "bg-[var(--bhn-surface)]"
                       }
                             `}
@@ -317,7 +315,7 @@ export default function CourseDetails() {
                           text-base
                           sm:text-xl
                           lg:text-[25px]
-                          text-[#2B211E] dark:text-[var(--bhn-neutral-400)]
+                          text-[var(--bhn-text)]
                           "
                       >
                         {module.title}
@@ -328,7 +326,7 @@ export default function CourseDetails() {
                     {/* ICON */}
                     <div
                       className="
-                        text-[#2B211E] dark:text-[var(--bhn-neutral-400)]
+                        text-[var(--bhn-brand-600)] dark:text-[var(--bhn-neutral-400)]
                         transition-all
                         duration-300
                                 "
@@ -398,7 +396,7 @@ export default function CourseDetails() {
                           text-left
                            p-3
                           rounded-lg
-                          hover:bg-[#F6EAE4] dark:hover:bg-[#1a1a1a] dark:hover:bg-[#1a1a1a] dark:bg-[var(--bhn-neutral-900)]
+                          hover:bg-[var(--bhn-surface-2)] dark:hover:bg-[var(--bhn-neutral-900)] dark:hover:bg-[var(--bhn-neutral-900)] dark:bg-[var(--bhn-neutral-900)]
                           transition-all
                           duration-200
                           cursor-pointer
@@ -416,12 +414,12 @@ export default function CourseDetails() {
                               className="w-4 h-4 sm:w-5 sm:h-5"
                             />
 
-                            <span className="text-sm sm:text-lg lg:text-[21px] text-[#685C56] dark:text-[var(--bhn-text-soft)]">
+                            <span className="text-sm sm:text-lg lg:text-[21px] text-[var(--bhn-text-soft)]">
                               {lesson.title}
                             </span>
                           </div>
 
-                          <span className="text-sm sm:text-lg lg:text-[21px] text-[#685C56] dark:text-[var(--bhn-text-soft)]">
+                          <span className="text-sm sm:text-lg lg:text-[21px] text-[var(--bhn-text-soft)]">
                             {lesson.duration ?? lesson.time ?? ""}
                           </span>
                         </button>
@@ -473,7 +471,7 @@ export default function CourseDetails() {
                     line-through
                     text-lg
                     sm:text-2xl
-                    text-[var(--bhn-text-soft)]
+                    text-[var(--bhn-text-muted)]
                   "
                 >
                   {courseOldPrice ? `₹${courseOldPrice}` : ""}
@@ -513,7 +511,8 @@ export default function CourseDetails() {
                   text-lg
                   sm:text-2xl
                   font-semibold
-                  text-[#2B1D18] dark:text-[var(--bhn-neutral-400)]
+                  text-[var(--bhn-text)]
+                  dark:text-[var(--bhn-neutral-400)]
                 "
               >
                 Show EMI Options
@@ -670,8 +669,8 @@ export default function CourseDetails() {
                 <span
                   className={`text-2xl transition-all ${isWishlisted
                     ? "text-[var(--bhn-error-500)]"
-                    : "text-[var(--bhn-brand-600)]"
-                    }`}
+                    : "text-[var(--bhn-brand-600)]"}
+                  `}
                 >
                   {isWishlisted ? "❤️" : "🤍"}
                 </span>
@@ -695,7 +694,8 @@ export default function CourseDetails() {
                   sm:text-2xl
                   font-semibold
                   mb-6
-                  text-[#2B1D18] dark:text-[var(--bhn-neutral-400)]
+                  text-[var(--bhn-text)]
+                  dark:text-[var(--bhn-neutral-400)]
                 "
               >
                 Includes:
@@ -706,32 +706,33 @@ export default function CourseDetails() {
                   space-y-5
                   text-sm
                   sm:text-lg
-                  text-[#5E514B] dark:text-[var(--bhn-text-soft)]
+                  text-[var(--bhn-text-muted)]
+                  dark:text-[var(--bhn-text-soft)]
                 "
               >
 
                 <div className="flex items-center gap-4">
-                  <span className="text-[#8B5E3C] dark:text-[var(--bhn-brand-400)]">▣</span>
+                  <span className="text-[var(--bhn-brand-600)] dark:text-[var(--bhn-brand-400)]">▣</span>
                   <p>{(course.duration || course.totalDuration || "Self-paced")} of on-demand video</p>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <span className="text-[#8B5E3C] dark:text-[var(--bhn-brand-400)]">▤</span>
+                  <span className="text-[var(--bhn-brand-600)] dark:text-[var(--bhn-brand-400)]">▤</span>
                   <p>{totalLessons} lessons • {modules.length} modules</p>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <span className="text-[#8B5E3C] dark:text-[var(--bhn-brand-400)]">◉</span>
+                  <span className="text-[var(--bhn-brand-600)] dark:text-[var(--bhn-brand-400)]">◉</span>
                   <p>{course.language || "English"}{course.subtitle ? ` • ${course.subtitle}` : ""}</p>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <span className="text-[#8B5E3C] dark:text-[var(--bhn-brand-400)]">∞</span>
+                  <span className="text-[var(--bhn-brand-600)] dark:text-[var(--bhn-brand-400)]">∞</span>
                   <p>Certificate of completion</p>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <span className="text-[#8B5E3C] dark:text-[var(--bhn-brand-400)]">∞</span>
+                  <span className="text-[var(--bhn-brand-600)] dark:text-[var(--bhn-brand-400)]">∞</span>
                   <p>Full lifetime access</p>
                 </div>
 
