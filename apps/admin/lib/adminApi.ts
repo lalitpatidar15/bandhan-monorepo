@@ -9,7 +9,7 @@ function logout() {
   }
 }
 
-const rawBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://bandhan-api.vercel.app';
+const rawBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://api.bandhaneventshub.com';
 const baseUrl = rawBaseUrl.endsWith('/api') ? rawBaseUrl : `${rawBaseUrl.replace(/\/$/, '')}/api`;
 
 const rawBaseQuery = fetchBaseQuery({

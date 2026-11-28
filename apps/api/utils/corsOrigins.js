@@ -24,6 +24,13 @@ const DEFAULT_ORIGINS = [
   "https://bandhan-student-lalit-patidars-projects.vercel.app",
   "https://bandhan-jobs-lalit-patidars-projects.vercel.app",
   "https://bandhan-admin-lalit-patidars-projects.vercel.app",
+  // Canonical production origins on bandhaneventshub.com.
+  "https://bandhaneventshub.com",
+  "https://www.bandhaneventshub.com",
+  "https://seller.bandhaneventshub.com",
+  "https://student.bandhaneventshub.com",
+  "https://jobs.bandhaneventshub.com",
+  "https://admin.bandhaneventshub.com",
 ];
 
 const configuredOrigins = (process.env.CORS_ORIGINS || "")

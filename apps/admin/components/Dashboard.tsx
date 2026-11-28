@@ -21,7 +21,7 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
 
   useEffect(() => {
     // Use the exact same endpoint resolution as lib/adminApi.ts.
-    const raw = process.env.NEXT_PUBLIC_API_URL || 'https://bandhan-api.vercel.app';
+    const raw = process.env.NEXT_PUBLIC_API_URL || 'https://api.bandhaneventshub.com';
     const base = raw.endsWith('/api') ? raw : `${raw.replace(/\/$/, '')}/api`;
     const origin = base.replace(/\/api\/?$/, '');
     fetch(`${origin}/health`)

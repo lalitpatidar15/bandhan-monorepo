@@ -18,7 +18,7 @@ export function clearJobPortalSession() {
 }
 
 export function centralLoginUrl() {
-  return process.env.NEXT_PUBLIC_CENTRAL_LOGIN_URL || (process.env.NODE_ENV === "production" ? "https://bandhan-user.vercel.app/login" : "http://localhost:3000/login");
+  return process.env.NEXT_PUBLIC_CENTRAL_LOGIN_URL || (process.env.NODE_ENV === "production" ? "https://bandhaneventshub.com/login" : "http://localhost:3000/login");
 }
 
 export function readTokenRole(token: string): JobPortalRole | null {

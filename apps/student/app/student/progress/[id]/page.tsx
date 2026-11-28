@@ -92,7 +92,7 @@ export default function ProgressPage() {
 
   const handleDownload = async (certificate: any) => {
     const token = getCookie("bandhan_academy_token");
-    const apiBase = process.env.NEXT_PUBLIC_API_URL || "https://bandhan-api.vercel.app/api";
+    const apiBase = process.env.NEXT_PUBLIC_API_URL || "https://api.bandhaneventshub.com/api";
     const certId = certificate.id ?? certificate._id ?? "";
     try {
       const res = await fetch(`${apiBase}/student/progress/${id}/certificate/${certId}`, {

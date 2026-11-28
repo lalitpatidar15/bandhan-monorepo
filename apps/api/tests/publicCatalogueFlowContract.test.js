@@ -23,7 +23,8 @@ test("portal client fallbacks use the current production API", () => {
 
   for (const relativePath of portalFiles) {
     const source = fs.readFileSync(path.join(__dirname, relativePath), "utf8");
-    assert.match(source, /https:\/\/bandhan-api\.vercel\.app/);
+    assert.match(source, /https:\/\/api\.bandhaneventshub\.com/);
+    assert.doesNotMatch(source, /bandhan-api\.vercel\.app/);
     assert.doesNotMatch(source, /bandhan-backend-gykw\.onrender\.com/);
   }
 });

@@ -2,11 +2,11 @@ import { ArrowUpRight, BookOpen, BriefcaseBusiness, LayoutDashboard, ShoppingBag
 
 const portals = [
   { title: "Marketplace", copy: "Products, rentals, services and venues for every gathering.", href: "/products", icon: ShoppingBag, tone: "var(--bhn-brand-50)" },
-  { title: "Careers", copy: "Find meaningful work or build a stronger hiring pipeline.", href: "https://bandhan-jobs.vercel.app/Jobseeker/jobs", icon: BriefcaseBusiness, tone: "var(--bhn-surface-2)" },
-  { title: "Learning", copy: "Learn event skills from trusted instructors at your pace.", href: "https://bandhan-student-two.vercel.app/student/allcourse", icon: BookOpen, tone: "var(--bhn-success-50)" },
-  { title: "Sell with Bandhan", copy: "Manage products, services, quotes and business growth.", href: "https://product-seller-vert.vercel.app/login", icon: Store, tone: "var(--bhn-info-50)" },
-  { title: "Create & teach", copy: "Build a course and grow a community of learners.", href: "https://bandhan-student-two.vercel.app/instructor", icon: LayoutDashboard, tone: "var(--bhn-neutral-100)" },
-  { title: "Hire talent", copy: "Post roles and build your next great team.", href: "https://bandhan-jobs.vercel.app/jobposter/dashboard", icon: UsersRound, tone: "var(--bhn-error-50)" },
+  { title: "Careers", copy: "Find meaningful work or build a stronger hiring pipeline.", href: "https://jobs.bandhaneventshub.com/Jobseeker/jobs", icon: BriefcaseBusiness, tone: "var(--bhn-surface-2)" },
+  { title: "Learning", copy: "Learn event skills from trusted instructors at your pace.", href: "https://student.bandhaneventshub.com/student/allcourse", icon: BookOpen, tone: "var(--bhn-success-50)" },
+  { title: "Sell with Bandhan", copy: "Manage products, services, quotes and business growth.", href: "https://seller.bandhaneventshub.com/login", icon: Store, tone: "var(--bhn-info-50)" },
+  { title: "Create & teach", copy: "Build a course and grow a community of learners.", href: "https://student.bandhaneventshub.com/instructor", icon: LayoutDashboard, tone: "var(--bhn-neutral-100)" },
+  { title: "Hire talent", copy: "Post roles and build your next great team.", href: "https://jobs.bandhaneventshub.com/jobposter/dashboard", icon: UsersRound, tone: "var(--bhn-error-50)" },
 ];
 
 export default function PortalShowcase() {

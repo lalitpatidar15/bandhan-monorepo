@@ -246,7 +246,7 @@ export default function LoginForm() {
       </p>
       <p className="text-sm text-center -mt-3 text-[var(--bhn-text-muted)]">
         Want to sell on Bandhan?{" "}
-        <a href="https://product-seller-vert.vercel.app/signup" className="text-[var(--bhn-brand-700)] font-semibold hover:underline">
+        <a href={`${SELLER_PORTAL_URL}/signup`} className="text-[var(--bhn-brand-700)] font-semibold hover:underline">
           Become a Seller
         </a>
       </p>

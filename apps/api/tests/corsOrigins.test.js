@@ -12,6 +12,16 @@ test("REST and Socket.IO share the current production portal origins", () => {
   assert.equal(isOriginAllowed("https://bandhan-admin-three.vercel.app"), true);
 });
 
+test("custom bandhaneventshub.com portal domains are allowed", () => {
+  assert.equal(isOriginAllowed("https://bandhaneventshub.com"), true);
+  assert.equal(isOriginAllowed("https://www.bandhaneventshub.com"), true);
+  assert.equal(isOriginAllowed("https://seller.bandhaneventshub.com"), true);
+  assert.equal(isOriginAllowed("https://student.bandhaneventshub.com"), true);
+  assert.equal(isOriginAllowed("https://jobs.bandhaneventshub.com"), true);
+  assert.equal(isOriginAllowed("https://admin.bandhaneventshub.com"), true);
+  assert.equal(isOriginAllowed("https://evil.bandhaneventshub.com"), false);
+});
+
 test("Bandhan Vercel preview deployments are accepted without opening CORS to other teams", () => {
   assert.equal(
     isOriginAllowed("https://bandhan-user-feature-catalog-lalit-patidars-projects.vercel.app"),

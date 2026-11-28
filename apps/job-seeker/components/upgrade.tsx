@@ -29,7 +29,7 @@ function PromoteJobPageContent() {
   const [isCreatingOrder, setIsCreatingOrder] = useState<boolean>(false);
   const [isVerifyingPayment, setIsVerifyingPayment] = useState<boolean>(false);
 
-  const baseUrl = (process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_NGROK_API || "https://bandhan-api.vercel.app/api")?.replace(/\/$/, "") ?? "";
+  const baseUrl = (process.env.NEXT_PUBLIC_API_URL || process.env.NEXT_PUBLIC_NGROK_API || "https://api.bandhaneventshub.com/api")?.replace(/\/$/, "") ?? "";
   const apiBase = `${baseUrl}/job-profile`;
   const rtkBaseQuery = useMemo(
     () =>

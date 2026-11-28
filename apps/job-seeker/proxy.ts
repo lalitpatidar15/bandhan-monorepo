@@ -4,7 +4,7 @@ const publicPaths = new Set(["/", "/Jobseeker", "/Jobseeker/login", "/Jobseeker/
 
 function centralAuthUrl(path: string) {
   const centralOrigin = process.env.NEXT_PUBLIC_CENTRAL_LOGIN_URL
-    || (process.env.VERCEL ? "https://bandhan-user.vercel.app" : "http://localhost:3000");
+    || (process.env.NODE_ENV === "production" ? "https://bandhaneventshub.com" : "http://localhost:3000");
   return new URL(path, centralOrigin);
 }
 
