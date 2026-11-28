@@ -2,6 +2,7 @@
 
 import { useEffect, useSyncExternalStore } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { isPrivateRoute } from "@/lib/privateRoutes";
 
 const subscribeToHydration = () => () => undefined;
 const getClientHydrationSnapshot = () => true;
@@ -32,7 +33,7 @@ export default function RouteGuard({ children }: { children: React.ReactNode }) 
     getClientHydrationSnapshot,
     getServerHydrationSnapshot
   );
-  const protectedRoute = pathname === "/userdashboard" || pathname.startsWith("/userdashboard/") || pathname.startsWith("/dashboard/");
+  const protectedRoute = isPrivateRoute(pathname);
   const hasValidSession =
     hydrated &&
     typeof window !== "undefined" &&

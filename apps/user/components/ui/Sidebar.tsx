@@ -58,12 +58,12 @@ export function Sidebar({ variant = 'userdashboard', className = '', onItemClick
       {
         title: 'Main',
         items: [
-          { label: 'Dashboard', href: '/userdashboard/dashboard', icon: <LayoutDashboard size={16} /> },
-          { label: 'Leads', href: '/userdashboard/quote', icon: <UserSearch size={16} /> },
+          { label: 'Dashboard', href: '/dashboard', icon: <LayoutDashboard size={16} /> },
+          { label: 'Leads', href: '/quote', icon: <UserSearch size={16} /> },
           { label: 'Services', href: '/products/service-listing', icon: <HeartHandshakeIcon size={16} /> },
-          { label: 'Calendar', href: '/userdashboard/booking', icon: <CalendarDays size={16} /> },
+          { label: 'Calendar', href: '/booking', icon: <CalendarDays size={16} /> },
           { label: 'Reviews', href: '/vendor/profile', icon: <Star size={16} /> },
-          { label: 'Settings', href: '/userdashboard/profile', icon: <Settings size={16} /> },
+          { label: 'Settings', href: '/profile', icon: <Settings size={16} /> },
         ],
       },
     ];
@@ -85,32 +85,32 @@ export function Sidebar({ variant = 'userdashboard', className = '', onItemClick
   const sections: PortalSidebarSection[] = [
     {
       items: [
-        { label: 'Dashboard', href: '/userdashboard/dashboard', icon: <LayoutDashboard size={16} /> },
-        { label: 'Orders', href: '/userdashboard/orders', icon: <Package size={16} /> },
+        { label: 'Dashboard', href: '/dashboard', icon: <LayoutDashboard size={16} /> },
+        { label: 'Orders', href: '/orders', icon: <Package size={16} /> },
         {
-          label: 'Bookings', href: '/userdashboard/booking', icon: <CalendarDays size={16} />,
+          label: 'Bookings', href: '/booking', icon: <CalendarDays size={16} />,
           children: [
-            { label: 'Rentals', href: '/userdashboard/rentals' },
-            { label: 'Service Bookings', href: '/userdashboard/service-bookings' },
-            { label: 'Venue Bookings', href: '/userdashboard/venue-bookings' },
-            { label: 'Enquiries', href: '/userdashboard/enquiries' },
+            { label: 'Rentals', href: '/my-rentals' },
+            { label: 'Service Bookings', href: '/service-bookings' },
+            { label: 'Venue Bookings', href: '/venue-bookings' },
+            { label: 'Enquiries', href: '/enquiries' },
           ],
         },
-        { label: 'Quotations', href: '/userdashboard/quote', icon: <Layers size={16} /> },
-        { label: 'Inbox', href: '/userdashboard/inbox', icon: <MessageSquare size={16} />, badge: unreadConversationCount },
-        { label: 'Payments', href: '/userdashboard/payments', icon: <CreditCard size={16} /> },
-        { label: 'Wishlist', href: '/userdashboard/wishlist', icon: <Heart size={16} /> },
-        { label: 'Addresses', href: '/userdashboard/addresses', icon: <MapPin size={16} /> },
+        { label: 'Quotations', href: '/quote', icon: <Layers size={16} /> },
+        { label: 'Inbox', href: '/inbox', icon: <MessageSquare size={16} />, badge: unreadConversationCount },
+        { label: 'Payments', href: '/payments', icon: <CreditCard size={16} /> },
+        { label: 'Wishlist', href: '/wishlist', icon: <Heart size={16} /> },
+        { label: 'Addresses', href: '/addresses', icon: <MapPin size={16} /> },
         {
-          label: 'Community', href: '/userdashboard/feed', icon: <UserSearch size={16} />,
+          label: 'Community', href: '/feed', icon: <UserSearch size={16} />,
           children: [
-            { label: 'Feed', href: '/userdashboard/feed' },
+            { label: 'Feed', href: '/feed' },
             { label: 'Blogs', href: '/blogs' },
-            { label: 'Planner', href: '/userdashboard/planner' },
-            { label: 'Compare', href: '/userdashboard/compare' },
+            { label: 'Planner', href: '/planner' },
+            { label: 'Compare', href: '/compare' },
           ],
         },
-        { label: 'Support', href: '/userdashboard/support', icon: <LifeBuoy size={16} /> },
+        { label: 'Support', href: '/support', icon: <LifeBuoy size={16} /> },
       ],
     },
   ];
@@ -124,9 +124,9 @@ export function Sidebar({ variant = 'userdashboard', className = '', onItemClick
       profile={{ name: userName, email: currentUser?.email || 'Signed in', verified: true }}
       onLogout={handleLogout}
       portalLinks={[
-        { label: 'Seller Portal', href: `${SELLER_PORTAL_URL}/login`, external: true, icon: <ShoppingBag size={14} /> },
-        { label: 'Student Portal', href: `${STUDENT_PORTAL_URL}/login`, external: true, icon: <GraduationCap size={14} /> },
-        { label: 'Careers Portal', href: `${JOB_PORTAL_URL}/login`, external: true, icon: <Briefcase size={14} /> },
+        { label: 'Seller Portal', href: `${SELLER_PORTAL_URL}`, external: true, icon: <ShoppingBag size={14} /> },
+        { label: 'Student Portal', href: `${STUDENT_PORTAL_URL}`, external: true, icon: <GraduationCap size={14} /> },
+        { label: 'Careers Portal', href: `${JOB_PORTAL_URL}`, external: true, icon: <Briefcase size={14} /> },
       ]}
       className={className}
     />

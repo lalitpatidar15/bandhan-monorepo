@@ -792,7 +792,7 @@ function PricingPageContent() {
           <div className="flex flex-wrap justify-center gap-4 sm:gap-5">
 
             <span onClick={() => window.open(centralAppUrl("/privacy-policy"), "_blank", "noopener,noreferrer")} className="cursor-pointer hover:underline">Instructor Policy</span>
-            <span onClick={() => window.open(centralAppUrl("/userdashboard/support"), "_blank", "noopener,noreferrer")} className="cursor-pointer hover:underline">Help Center</span>
+            <span onClick={() => window.open(centralAppUrl("/support"), "_blank", "noopener,noreferrer")} className="cursor-pointer hover:underline">Help Center</span>
             <span onClick={() => window.open(centralAppUrl("/terms-of-service"), "_blank", "noopener,noreferrer")} className="cursor-pointer hover:underline">Terms of Service</span>
 
           </div>

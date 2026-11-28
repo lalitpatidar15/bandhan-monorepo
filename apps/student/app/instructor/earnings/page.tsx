@@ -535,7 +535,7 @@ export default function EarningsDashboard() {
                     <div className="flex flex-wrap gap-5">
                         <a href={centralAppUrl("/terms-of-service")} target="_blank" rel="noreferrer">Instructor Terms</a>
                         <a href={centralAppUrl("/privacy-policy")} target="_blank" rel="noreferrer">Privacy Policy</a>
-                        <a href={centralAppUrl("/userdashboard/support")} target="_blank" rel="noreferrer">Help Center</a>
+                        <a href={centralAppUrl("/support")} target="_blank" rel="noreferrer">Help Center</a>
                     </div>
                 </div>
             </div>

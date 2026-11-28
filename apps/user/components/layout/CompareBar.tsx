@@ -37,7 +37,7 @@ export default function CompareBar() {
             Clear
           </button>
           <Link
-            href="/userdashboard/compare"
+            href="/compare"
             className="rounded-lg bg-[var(--bhn-brand-600)] px-4 py-1.5 text-xs font-semibold text-[var(--bhn-text-on-brand)] transition hover:bg-[var(--bhn-brand-600)]"
           >
             Compare now

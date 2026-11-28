@@ -27,7 +27,7 @@ assert.match(cartPage, /summary\?\.tax/, 'dashboard cart must render the backend
 assert.match(cartPage, /summary\?\.total/, 'dashboard cart must render the backend total');
 assert.match(cartPage, /updateCartItem\(\{ itemId: item\.id, itemType: item\.itemType, quantity \}\)/, 'quantity controls must call the API');
 assert.match(cartPage, /removeFromCart\(\{ itemId: item\.id, itemType: item\.itemType \}\)/, 'remove controls must call the API');
-assert.match(cartPage, /router\.push\('\/userdashboard\/checkout'\)/, 'checkout navigation must not serialize cart totals into the URL');
+assert.match(cartPage, /router\.push\('\/checkout'\)/, 'checkout navigation must not serialize cart totals into the URL');
 
 for (const fakeValue of ['0.05', '0.08', 'Trending collections', 'The Gilded Ballroom', 'WELCOME10', 'FLAT100', 'BANDHAN20']) {
   assert.doesNotMatch(cartPage + cartContext, new RegExp(fakeValue.replace('.', '\\.')), `legacy cart fixture remains: ${fakeValue}`);

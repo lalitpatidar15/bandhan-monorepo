@@ -14,7 +14,7 @@ const NAV_LINKS = [
   { label: "Venues", href: "/explore?type=venues" },
   { label: "Services", href: "/explore?type=services" },
   { label: "Products", href: "/explore?type=products" },
-  { label: "Community", href: "/userdashboard/feed" },
+  { label: "Community", href: "/feed" },
 ];
 
 const subscribeToHydration = () => () => undefined;
@@ -88,11 +88,11 @@ export default function SiteHeader() {
 
           <div className="flex items-center gap-1 text-[var(--bhn-text-muted)]">
             {signedIn && (
-              <Link href="/userdashboard/notification" aria-label="Notifications" className="grid h-10 w-10 place-items-center rounded-lg transition hover:bg-[var(--bhn-surface-2)] hover:text-[var(--bhn-text)]">
+              <Link href="/notification" aria-label="Notifications" className="grid h-10 w-10 place-items-center rounded-lg transition hover:bg-[var(--bhn-surface-2)] hover:text-[var(--bhn-text)]">
                 <Bell size={19} />
               </Link>
             )}
-            <Link href="/userdashboard/cart" className="relative grid h-10 w-10 place-items-center rounded-lg transition hover:bg-[var(--bhn-surface-2)] hover:text-[var(--bhn-text)]" aria-label="Cart">
+            <Link href="/cart" className="relative grid h-10 w-10 place-items-center rounded-lg transition hover:bg-[var(--bhn-surface-2)] hover:text-[var(--bhn-text)]" aria-label="Cart">
               <MdOutlineShoppingCart size={22} />
               {totalItems > 0 && (
                 <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--bhn-error-500)] text-xs text-[var(--bhn-text-on-brand)]">
@@ -101,7 +101,7 @@ export default function SiteHeader() {
               )}
             </Link>
             {signedIn ? (
-              <Link href="/userdashboard/dashboard" className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--bhn-border)] bg-[var(--bhn-surface-2)]" aria-label="Profile">
+              <Link href="/dashboard" className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--bhn-border)] bg-[var(--bhn-surface-2)]" aria-label="Profile">
                 <User size={16} />
               </Link>
             ) : (

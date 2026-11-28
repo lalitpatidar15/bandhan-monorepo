@@ -28,7 +28,7 @@ export default function RootPage() {
           completed={0}
           total={4}
           nextLabel="Choose your event type, date and city"
-          nextHref="/userdashboard/planner"
+          nextHref="/planner"
           actionLabel="Start planning"
           help={<a href="/contact">Need help? Talk to Bandhan support</a>}
         />

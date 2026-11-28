@@ -51,7 +51,7 @@ export default function SiteHeader() {
         {
           icon: <Bell size={19} />,
           label: "Notifications",
-          href: "/userdashboard/notification",
+          href: "/notification",
         },
       ]
     : [
@@ -73,45 +73,45 @@ export default function SiteHeader() {
     ? [
         {
           label: "My Account",
-          href: "/userdashboard/profile",
+          href: "/profile",
           icon: <UserRound size={16} />,
         },
         {
           label: "Orders",
-          href: "/userdashboard/orders",
+          href: "/orders",
           icon: <Package size={16} />,
         },
         {
           label: "Bookings",
-          href: "/userdashboard/booking",
+          href: "/booking",
           icon: <CalendarCheck size={16} />,
         },
         {
           label: "Wishlist",
-          href: "/userdashboard/wishlist",
+          href: "/wishlist",
           icon: <Heart size={16} />,
         },
         {
           label: "Notifications",
-          href: "/userdashboard/notification",
+          href: "/notification",
           icon: <Bell size={16} />,
         },
         { divider: true },
         {
           label: "Seller Portal",
-          href: `${SELLER_PORTAL_URL}/login`,
+          href: `${SELLER_PORTAL_URL}`,
           external: true,
           icon: <Store size={16} />,
         },
         {
           label: "Student Portal",
-          href: `${STUDENT_PORTAL_URL}/login`,
+          href: `${STUDENT_PORTAL_URL}`,
           external: true,
           icon: <UserRound size={16} />,
         },
         {
           label: "Careers Portal",
-          href: `${JOB_PORTAL_URL}/login`,
+          href: `${JOB_PORTAL_URL}`,
           external: true,
           icon: <BriefcaseBusiness size={16} />,
         },

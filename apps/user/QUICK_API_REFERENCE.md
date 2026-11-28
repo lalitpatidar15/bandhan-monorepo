@@ -36,10 +36,10 @@ Your project now has a **complete RTK Query API integration system** that's read
 ## 🔧 Files Updated
 
 ### Pages:
-- ✅ `app/userdashboard/overview/page.tsx` - Now uses userApi + bookingApi
-- ✅ `app/userdashboard/notification/page.tsx` - Now uses notificationApi
-- ✅ `app/userdashboard/booking/page.tsx` - Now uses bookingApi
-- ✅ `app/userdashboard/cart/page.tsx` - Now uses cartApi
+- ✅ `app/dashboard/page.tsx` - Now uses userApi + bookingApi
+- ✅ `app/notification/page.tsx` - Now uses notificationApi
+- ✅ `app/booking/page.tsx` - Now uses bookingApi
+- ✅ `app/cart/page.tsx` - Now uses cartApi
 
 ### Components:
 - ✅ `components/userDashboard/explore/ExploreGrid.tsx` - Uses venueApi + vendorApi

@@ -27,7 +27,7 @@ export const productCatalog: CatalogItem[] = [
     image: "/invitation.png",
     location: "Mumbai",
     badge: "Popular",
-    href: "/userdashboard/cart",
+    href: "/cart",
     meta: "Ships in 5 days",
   },
   {
@@ -42,7 +42,7 @@ export const productCatalog: CatalogItem[] = [
     image: "/spice.png",
     location: "Jaipur",
     badge: "Handmade",
-    href: "/userdashboard/cart",
+    href: "/cart",
     meta: "Custom labels",
   },
   {
@@ -57,7 +57,7 @@ export const productCatalog: CatalogItem[] = [
     image: "/ring.png",
     location: "Delhi NCR",
     badge: "Limited",
-    href: "/userdashboard/cart",
+    href: "/cart",
     meta: "Ready stock",
   },
   {
@@ -72,7 +72,7 @@ export const productCatalog: CatalogItem[] = [
     image: "/Copper.jpg",
     location: "Bengaluru",
     badge: "Rental",
-    href: "/userdashboard/cart",
+    href: "/cart",
     meta: "Set of 18",
   },
   {
@@ -87,7 +87,7 @@ export const productCatalog: CatalogItem[] = [
     image: "/Bohemian.png",
     location: "Pune",
     badge: "New",
-    href: "/userdashboard/cart",
+    href: "/cart",
     meta: "Earth palette",
   },
   {
@@ -102,7 +102,7 @@ export const productCatalog: CatalogItem[] = [
     image: "/premium.png",
     location: "Hyderabad",
     badge: "Premium",
-    href: "/userdashboard/cart",
+    href: "/cart",
     meta: "Personalized",
   },
 ];
@@ -180,7 +180,7 @@ export const serviceCatalog: CatalogItem[] = [
     image: "/modern.png",
     location: "Online + onsite",
     badge: "Flexible",
-    href: "/userdashboard/quote",
+    href: "/quote",
     meta: "7-day plan",
   },
   {

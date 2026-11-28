@@ -134,7 +134,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     if (role === "seller") {
       router.replace("/sellerDashboard");
     } else {
-      window.location.assign(centralAppUrl("/userdashboard/dashboard"));
+      window.location.assign(centralAppUrl("/dashboard"));
     }
   } catch (err: any) {
     const status = Number(err?.status ?? 0);

@@ -18,7 +18,7 @@ Those documents override generic conventions. UI work must be modernization in p
 
 | Area | Path | Port | Notes |
 | --- | --- | --- | --- |
-| Buyer marketplace + central sign-in | `apps/user` | 3000 | Next 16, Tailwind 3, package `bandhan`; guards `/userdashboard`, `/dashboard` via `bandhan_user_token` |
+| Buyer marketplace + central sign-in | `apps/user` | 3000 | Next 16, Tailwind 3, package `bandhan`; account pages live at root and are guarded via shared `lib/privateRoutes.ts` + `bandhan_user_token` |
 | Product/service seller | `apps/seller` | 3001 | webpack, next-auth v4, package `bandhan-project`; no route guard in `proxy.ts` |
 | Student/instructor | `apps/student` | 3002 | `bandhan_academy_token` cookie + role, package `bandhan-panel` |
 | Job seeker/recruiter | `apps/job-seeker` | 3003 | `bandhan_job_token` cookie, package `bandhan-job-seeker` |

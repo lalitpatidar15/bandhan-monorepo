@@ -64,7 +64,7 @@ export default function Header({
   const mainNavClass = (href: string) => {
     const active =
       href === "/community"
-        ? pathname === "/community" || pathname.startsWith("/userdashboard/feed")
+        ? pathname === "/community" || pathname.startsWith("/feed")
         : isPathActive(href);
 
     return active
@@ -95,14 +95,14 @@ export default function Header({
               <Link href="/products" className={`rounded-lg px-3 py-2 text-sm transition-colors ${topNavClass("/products")}`}>Products</Link>
               <a href={STUDENT_PORTAL_URL} className="rounded-lg px-3 py-2 text-sm text-[var(--bhn-text-muted)] transition-colors hover:bg-[var(--bhn-surface-2)] hover:text-[var(--bhn-text)]">Courses</a>
               <Link href="/jobs" className={`rounded-lg px-3 py-2 text-sm transition-colors ${topNavClass("/jobs")}`}>Jobs</Link>
-              <Link href="/userdashboard/feed" className={`rounded-lg px-3 py-2 text-sm transition-colors ${topNavClass("/userdashboard/feed")}`}>Community</Link>
+              <Link href="/feed" className={`rounded-lg px-3 py-2 text-sm transition-colors ${topNavClass("/feed")}`}>Community</Link>
             </div>
           )}
 
           <div className="hidden lg:flex items-center gap-2.5 shrink-0">
             {currentUser ? (
               <>
-                <Link href="/userdashboard/notification" className="relative inline-flex h-11 w-11 items-center justify-center rounded-full text-[var(--bhn-text-muted)] transition hover:bg-[var(--bhn-surface-2)] hover:text-[var(--bhn-text)]" aria-label="Notifications">
+                <Link href="/notification" className="relative inline-flex h-11 w-11 items-center justify-center rounded-full text-[var(--bhn-text-muted)] transition hover:bg-[var(--bhn-surface-2)] hover:text-[var(--bhn-text)]" aria-label="Notifications">
                     <Bell size={20} />
                     {unreadCount > 0 && (
                       <span className="absolute -top-1 -right-1 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-[var(--bhn-error-500)] px-1.5 text-[10px] font-semibold text-[var(--bhn-text-on-brand)]">
@@ -110,7 +110,7 @@ export default function Header({
                       </span>
                     )}
                 </Link>
-                <Link href="/userdashboard/dashboard" className="flex h-11 items-center gap-2 rounded-full border border-[var(--bhn-border)] bg-[var(--bhn-surface)] px-2 pr-4 shadow-sm transition hover:-translate-y-px hover:border-[var(--bhn-brand-600)] hover:shadow-md">
+                <Link href="/dashboard" className="flex h-11 items-center gap-2 rounded-full border border-[var(--bhn-border)] bg-[var(--bhn-surface)] px-2 pr-4 shadow-sm transition hover:-translate-y-px hover:border-[var(--bhn-brand-600)] hover:shadow-md">
                   <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--bhn-brand-600)] text-sm font-bold text-[var(--bhn-text-on-brand)]">
                     {userInitial}
                   </span>
@@ -141,11 +141,11 @@ export default function Header({
               <Link href="/products" onClick={() => setMobileMenuOpen(false)} className="rounded-xl px-4 py-3 hover:bg-[var(--bhn-surface-2)] hover:text-[var(--bhn-text)]">Products</Link>
               <a href={STUDENT_PORTAL_URL} className="rounded-xl px-4 py-3 hover:bg-[var(--bhn-surface-2)] hover:text-[var(--bhn-text)]">Courses</a>
               <Link href="/jobs" onClick={() => setMobileMenuOpen(false)} className="rounded-xl px-4 py-3 hover:bg-[var(--bhn-surface-2)] hover:text-[var(--bhn-text)]">Jobs</Link>
-              <Link href="/userdashboard/feed" onClick={() => setMobileMenuOpen(false)} className="rounded-xl px-4 py-3 hover:bg-[var(--bhn-surface-2)] hover:text-[var(--bhn-text)]">Community</Link>
+              <Link href="/feed" onClick={() => setMobileMenuOpen(false)} className="rounded-xl px-4 py-3 hover:bg-[var(--bhn-surface-2)] hover:text-[var(--bhn-text)]">Community</Link>
             </div>
             {currentUser ? (
               <div className="mt-4 flex flex-col gap-2 border-t border-[var(--bhn-border)] pt-4">
-                <Link href="/userdashboard/notification" className="flex min-h-12 items-center justify-between rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] px-4 py-3 text-sm font-semibold text-[var(--bhn-text)] hover:bg-[var(--bhn-surface-2)]">
+                <Link href="/notification" className="flex min-h-12 items-center justify-between rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] px-4 py-3 text-sm font-semibold text-[var(--bhn-text)] hover:bg-[var(--bhn-surface-2)]">
                   <span>Notifications</span>
                   {unreadCount > 0 && (
                     <span className="inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-[var(--bhn-error-500)] px-1.5 text-[10px] font-semibold text-[var(--bhn-text-on-brand)]">
@@ -153,7 +153,7 @@ export default function Header({
                     </span>
                   )}
                 </Link>
-                <Link href="/userdashboard/dashboard" className="rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] px-4 py-3 text-sm font-semibold text-[var(--bhn-text)] hover:bg-[var(--bhn-surface-2)]">
+                <Link href="/dashboard" className="rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] px-4 py-3 text-sm font-semibold text-[var(--bhn-text)] hover:bg-[var(--bhn-surface-2)]">
                   {`Hi, ${userName}`}
                 </Link>
               </div>
@@ -201,13 +201,13 @@ if (variant === "main1") {
               <Link href="/explore?type=services" className={`rounded-lg px-2.5 py-2 ${mainNavClass("/explore?type=services")} `}>
                 Services
               </Link>
-              <Link href="/userdashboard/feed" className={`rounded-lg px-2.5 py-2 ${mainNavClass("/community")} `}>
+              <Link href="/feed" className={`rounded-lg px-2.5 py-2 ${mainNavClass("/community")} `}>
                 Community
               </Link>
             </nav>
             <div className="flex items-center gap-3 text-[var(--bhn-text-muted)]">
               {currentUser && (
-                <Link href="/userdashboard/notification" aria-label="Notifications" className="relative">
+                <Link href="/notification" aria-label="Notifications" className="relative">
                   <Bell className="cursor-pointer hover:text-[var(--bhn-text)]" size={20} />
                   {unreadCount > 0 && (
                     <span className="absolute -top-1 -right-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--bhn-error-500)] px-1 text-[10px] font-semibold text-[var(--bhn-text-on-brand)]">
@@ -216,7 +216,7 @@ if (variant === "main1") {
                   )}
                 </Link>
               )}
-              <Link href="/userdashboard/cart" className="relative">
+              <Link href="/cart" className="relative">
                  <MdOutlineShoppingCart className="cursor-pointer hover:text-[var(--bhn-text)]" size={20} />
                  {totalItems > 0 && (
                    <span className="absolute -top-1 -right-1 bg-[var(--bhn-error-500)] text-[var(--bhn-text-on-brand)] text-xs w-4 h-4 flex items-center justify-center rounded-full">
@@ -224,7 +224,7 @@ if (variant === "main1") {
                    </span>
                  )}
               </Link>
-              <Link href="/userdashboard/dashboard" className="w-8 h-8 rounded-full border flex items-center justify-center" aria-label="Profile">
+              <Link href="/dashboard" className="w-8 h-8 rounded-full border flex items-center justify-center" aria-label="Profile">
                 <User size={16} />
               </Link>
             </div>
@@ -248,23 +248,23 @@ if (variant === "main1") {
           {/* Menu */}
           {showNav && (
             <div className="hidden md:flex gap-2 text-xs text-[var(--bhn-text-muted)]">
-              <Link href="/userdashboard/dashboard">Dashboard</Link>
-              <Link href="/userdashboard/booking">Bookings</Link>
+              <Link href="/dashboard">Dashboard</Link>
+              <Link href="/booking">Bookings</Link>
               <Link href="/products/explore">Vendors</Link>
-              <Link href="/userdashboard/orders">Orders</Link>
+              <Link href="/orders">Orders</Link>
 
             </div>
           )}
 
           {/* Right */}
           <div className="flex items-center gap-5">
-            <button onClick={() => router.push("/userdashboard/notification")} aria-label="Notifications">
+            <button onClick={() => router.push("/notification")} aria-label="Notifications">
               <Bell size={18} className="text-[var(--bhn-text-muted)] hover:text-[var(--bhn-text)] cursor-pointer" />
             </button>
-            <button onClick={() => router.push("/userdashboard/dashboard")} aria-label="Settings">
+            <button onClick={() => router.push("/dashboard")} aria-label="Settings">
               <SettingsIcon size={18} className="text-[var(--bhn-text-muted)] hover:text-[var(--bhn-text)] cursor-pointer" />
             </button>
-            <button onClick={() => router.push("/userdashboard/dashboard")} aria-label="Profile">
+            <button onClick={() => router.push("/dashboard")} aria-label="Profile">
               <User size={18} className="text-[var(--bhn-text-muted)]" />
             </button>
           </div>
@@ -277,7 +277,7 @@ if (variant === "main1") {
     return (
       <div className={`bg-[var(--bhn-surface)] border-b px-3 sm:px-4 py-1.5 sm:py-3 flex items-center justify-between gap-2 ${className}`}>
         {/* LEFT - Profile */}
-        <button onClick={() => router.push("/userdashboard/dashboard")} className="flex items-center gap-2 p-1.5 rounded-lg cursor-pointer hover:bg-[var(--bhn-surface-3)] transition text-left">
+        <button onClick={() => router.push("/dashboard")} className="flex items-center gap-2 p-1.5 rounded-lg cursor-pointer hover:bg-[var(--bhn-surface-3)] transition text-left">
           {/* AVATAR + STATUS */}
           <div className="relative">
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--bhn-brand-600)] text-sm font-semibold text-[var(--bhn-text-on-brand)]">{userInitial}</span>
@@ -307,7 +307,7 @@ if (variant === "main1") {
 
           {/* Notification */}
           {showNotifications && (
-            <button onClick={() => router.push("/userdashboard/notification")} className="relative p-2 rounded-lg hover:bg-[var(--bhn-surface-3)] cursor-pointer" aria-label="Notifications">
+            <button onClick={() => router.push("/notification")} className="relative p-2 rounded-lg hover:bg-[var(--bhn-surface-3)] cursor-pointer" aria-label="Notifications">
               <Bell size={18} className="text-[var(--bhn-text)]" />
               <span className="absolute top-1 right-1 w-2 h-2 bg-[var(--bhn-error-500)] rounded-full"></span>
             </button>
@@ -339,11 +339,11 @@ if (variant === "main1") {
           {showNav && (
             <nav className="hidden lg:flex items-center gap-3 text-xs text-[var(--bhn-text)]">
               <Link href="/explore?type=products" className={dashboardNavClass("/explore?type=products")}>Explore</Link>
-              <Link href="/userdashboard/booking" className={dashboardNavClass("/userdashboard/booking")}>Bookings</Link>
-              <Link href="/userdashboard/orders" className={dashboardNavClass("/userdashboard/orders")}>Orders</Link>
-              <Link href="/userdashboard/feed" className={dashboardNavClass("/userdashboard/feed")}>Community</Link>
-              <Link href="/userdashboard/communities" className={dashboardNavClass("/userdashboard/communities")}>Communities</Link>
-              <Link href="/userdashboard/planner" className={`${dashboardNavClass("/userdashboard/planner")} border-l pl-4`}>Event planner</Link>
+              <Link href="/booking" className={dashboardNavClass("/booking")}>Bookings</Link>
+              <Link href="/orders" className={dashboardNavClass("/orders")}>Orders</Link>
+              <Link href="/feed" className={dashboardNavClass("/feed")}>Community</Link>
+              <Link href="/communities" className={dashboardNavClass("/communities")}>Communities</Link>
+              <Link href="/planner" className={`${dashboardNavClass("/planner")} border-l pl-4`}>Event planner</Link>
             </nav>
           )}
         </div>
@@ -356,7 +356,7 @@ if (variant === "main1") {
             </button>
           )}
 
-          <Link href="/userdashboard/cart" className="relative p-2 rounded-full hover:bg-[var(--bhn-surface)] transition" aria-label="Cart">
+          <Link href="/cart" className="relative p-2 rounded-full hover:bg-[var(--bhn-surface)] transition" aria-label="Cart">
             <MdOutlineShoppingCart size={18} className="text-[var(--bhn-text-muted)]" />
             {totalItems > 0 && (
               <span className="absolute -top-1 -right-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-[var(--bhn-error-500)] px-1 text-[10px] font-semibold text-[var(--bhn-text-on-brand)]">
@@ -390,7 +390,7 @@ if (variant === "main1") {
                 </div>
                 <div className="px-2 pt-2">
                   <button
-                    onClick={() => router.push("/userdashboard/notification")}
+                    onClick={() => router.push("/notification")}
                     className="w-full text-left rounded-lg px-3 py-2 text-xs text-[var(--bhn-text)] hover:bg-[var(--bhn-surface-2)]"
                   >
                     View all notifications
@@ -400,7 +400,7 @@ if (variant === "main1") {
             )}
           </div>
 
-          <button onClick={() => router.push("/userdashboard/dashboard")} className="p-2 rounded-full hover:bg-[var(--bhn-surface)]" aria-label="Settings">
+          <button onClick={() => router.push("/dashboard")} className="p-2 rounded-full hover:bg-[var(--bhn-surface)]" aria-label="Settings">
             <SettingsIcon size={18} className="text-[var(--bhn-text-muted)]" />
           </button>
 
@@ -421,14 +421,14 @@ if (variant === "main1") {
                 </div>
 
                 {[
-                  { label: "Profile", href: "/userdashboard/profile" },
-                  { label: "Orders", href: "/userdashboard/orders" },
-                  { label: "Bookings", href: "/userdashboard/booking" },
-                  { label: "Communities", href: "/userdashboard/communities" },
+                  { label: "Profile", href: "/profile" },
+                  { label: "Orders", href: "/orders" },
+                  { label: "Bookings", href: "/booking" },
+                  { label: "Communities", href: "/communities" },
                   { label: "Services", href: "/explore?type=services" },
                   { label: "Products", href: "/products" },
                   { label: "Venues", href: "/explore?type=venues" },
-                  { label: "Settings", href: "/userdashboard/profile" },
+                  { label: "Settings", href: "/profile" },
                 ].map((item) => (
                   <button
                     key={item.label}
@@ -477,7 +477,7 @@ if (variant === "main1") {
         <div className="flex items-center gap-3">
           {showNotifications && currentUser && (
             <button
-              onClick={() => router.push("/userdashboard/notification")}
+              onClick={() => router.push("/notification")}
               className="relative p-2 rounded-lg hover:bg-[var(--bhn-surface-3)] cursor-pointer"
               aria-label="Notifications"
             >
@@ -492,7 +492,7 @@ if (variant === "main1") {
 
           {showProfile && (
             <button
-              onClick={() => router.push("/userdashboard/dashboard")}
+              onClick={() => router.push("/dashboard")}
               className="flex items-center gap-3 p-2 rounded-lg cursor-pointer hover:bg-[var(--bhn-surface-3)] transition"
             >
               <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--bhn-brand-600)] text-sm font-semibold text-[var(--bhn-text-on-brand)]">{userInitial}</span>
@@ -534,10 +534,10 @@ if (variant === "cart") {
         <nav className="hidden md:flex items-center gap-2 text-xs text-[var(--bhn-text-muted)]">
           {[
             { label: "Explore", href: "/explore?type=products" },
-            { label: "Bookings", href: "/userdashboard/booking" },
-            { label: "Orders", href: "/userdashboard/orders" },
-            { label: "Community", href: "/userdashboard/feed" },
-            { label: "Event planner", href: "/userdashboard/planner" },
+            { label: "Bookings", href: "/booking" },
+            { label: "Orders", href: "/orders" },
+            { label: "Community", href: "/feed" },
+            { label: "Event planner", href: "/planner" },
           ].map((item) => (
             <Link
               key={item.label}
@@ -567,21 +567,21 @@ if (variant === "cart") {
 
         {/* Settings */}
         {showSettings && (
-          <button onClick={() => router.push("/userdashboard/dashboard")} className="p-2 rounded-full hover:bg-[var(--bhn-surface)] transition" aria-label="Settings">
+          <button onClick={() => router.push("/dashboard")} className="p-2 rounded-full hover:bg-[var(--bhn-surface)] transition" aria-label="Settings">
             <Settings size={18} />
           </button>
         )}
 
         {/* Notifications */}
         {showNotifications && (
-          <button onClick={() => router.push("/userdashboard/notification")} className="relative p-2 rounded-full hover:bg-[var(--bhn-surface)] transition" aria-label="Notifications">
+          <button onClick={() => router.push("/notification")} className="relative p-2 rounded-full hover:bg-[var(--bhn-surface)] transition" aria-label="Notifications">
             <Bell size={18} />
             <span className="absolute top-1 right-1 w-2 h-2 bg-[var(--bhn-warning-500)] rounded-full"></span>
           </button>
         )}
 
         {/* User */}
-        <button onClick={() => router.push("/userdashboard/dashboard")} className="w-9 h-9 bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)] flex items-center justify-center rounded-full cursor-pointer" aria-label="Profile">
+        <button onClick={() => router.push("/dashboard")} className="w-9 h-9 bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)] flex items-center justify-center rounded-full cursor-pointer" aria-label="Profile">
           <User size={16} />
         </button>
       </div>
@@ -644,7 +644,7 @@ if (variant === "checkout") {
 
         {/* 🛒 Cart */}
         <div
-          onClick={() => router.push("/userdashboard/cart")}
+          onClick={() => router.push("/cart")}
           className="p-2 rounded-full hover:bg-[var(--bhn-surface)] cursor-pointer transition"
         >
           <ShoppingBag className="text-[var(--bhn-text)]" size={18} />
@@ -681,7 +681,7 @@ if (variant === "conformation") {
         {/* Nav */}
         <nav className="hidden sm:flex items-center gap-2 text-xs text-[var(--bhn-text-muted)]">
           <Link
-            href="/userdashboard/booking"
+            href="/booking"
             className="cursor-pointer hover:text-[var(--bhn-text)]"
           >
             My Bookings
@@ -702,7 +702,7 @@ if (variant === "conformation") {
 
         {/* Notification */}
         <button
-          onClick={() => router.push("/userdashboard/notification")}
+          onClick={() => router.push("/notification")}
           className="relative p-2 rounded-full hover:bg-[var(--bhn-surface)] transition"
           aria-label="Notifications"
         >
@@ -712,7 +712,7 @@ if (variant === "conformation") {
 
         {/* User */}
         <button
-          onClick={() => router.push("/userdashboard/dashboard")}
+          onClick={() => router.push("/dashboard")}
           className="w-9 h-9 bg-[var(--bhn-brand-600)] text-[var(--bhn-text-on-brand)] flex items-center justify-center rounded-full cursor-pointer"
           aria-label="Profile"
         >

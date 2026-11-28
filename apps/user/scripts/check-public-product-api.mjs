@@ -4,8 +4,8 @@ import { readFile } from "node:fs/promises";
 const read = (path) => readFile(new URL("../" + path, import.meta.url), "utf8");
 const [productApi, checkout, confirmation, productDetail] = await Promise.all([
   read("store/api/productApi.ts"),
-  read("app/userdashboard/checkout/page.tsx"),
-  read("app/userdashboard/confirmation/page.tsx"),
+  read("app/checkout/page.tsx"),
+  read("app/confirmation/page.tsx"),
   read("components/ui/ProductDetailLayout.tsx"),
 ]);
 

@@ -239,7 +239,7 @@ function ExploreDetailView({ mode, id }: { mode: ExploreType; id: string }) {
       : mode === "venues"
       ? String((venue as any)?.sellerId?.fullName || (venue as any)?.sellerName || "")
       : "";
-  const chatHref = `/userdashboard/inbox?listingType=${listingType}&listingId=${encodeURIComponent(id)}${
+  const chatHref = `/inbox?listingType=${listingType}&listingId=${encodeURIComponent(id)}${
     providerId ? `&sellerId=${encodeURIComponent(providerId)}` : ""
   }`;
 
@@ -264,7 +264,7 @@ function ExploreDetailView({ mode, id }: { mode: ExploreType; id: string }) {
   const listingType = normalizeListingType(currentMode);
   const targetId = id || product?._id || product?.id;
   if (targetId) {
-    router.push(`/userdashboard/booking?listingType=${listingType}&listingId=${targetId}`);
+    router.push(`/booking?listingType=${listingType}&listingId=${targetId}`);
   }
 }}
 onSecondary={() => {
@@ -272,7 +272,7 @@ onSecondary={() => {
   const listingType = normalizeListingType(currentMode);
   const targetId = id || product?._id || product?.id;
   if (targetId) {
-    router.push(`/userdashboard/quote/request?listingType=${listingType}&listingId=${targetId}`);
+    router.push(`/quote/request?listingType=${listingType}&listingId=${targetId}`);
   }
 }}
         details={details}

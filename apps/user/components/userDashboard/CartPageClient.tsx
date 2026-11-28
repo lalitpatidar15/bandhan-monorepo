@@ -95,7 +95,7 @@ export default function CartPageClient() {
   };
 
   const handleCheckout = () => {
-    gate(() => router.push('/userdashboard/checkout'));
+    gate(() => router.push('/checkout'));
   };
 
   if (!isInitialized || !isAuthenticated || cartLoading) {

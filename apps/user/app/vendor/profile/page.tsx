@@ -76,7 +76,7 @@ export default function VendorProfilePage() {
               </p>
             </div>
             <div className="mt-6 grid gap-3">
-              <Button href="/userdashboard/quote/request" variant="primary" fullWidth>
+              <Button href="/quote/request" variant="primary" fullWidth>
                 Request Quote
               </Button>
               <Button href="/products/Services" variant="secondary" fullWidth>

@@ -100,7 +100,7 @@ export default function LoginForm() {
     const next = new URLSearchParams(window.location.search).get("next");
     const destination = next && next.startsWith("/") && !next.startsWith("//") && !next.startsWith("/login") && !next.startsWith("/signup")
       ? next
-      : "/userdashboard/dashboard";
+      : "/dashboard";
     router.replace(destination);
   }, [dispatch, router]);
 
@@ -395,7 +395,7 @@ export default function LoginForm() {
       </p>
       <p className="text-sm text-center -mt-3 text-[var(--bhn-text-muted)]">
         Want to sell on Bandhan?{" "}
-        <a href={`${SELLER_PORTAL_URL}/signup`} className="text-[var(--bhn-brand-700)] font-semibold hover:underline">
+        <a href="/signup/seller" className="text-[var(--bhn-brand-700)] font-semibold hover:underline">
           Become a Seller
         </a>
       </p>

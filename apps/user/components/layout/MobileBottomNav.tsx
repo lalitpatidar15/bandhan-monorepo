@@ -4,25 +4,26 @@ import { Home, Grid3x3, Search, Heart, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
+import { isPrivateRoute } from '@/lib/privateRoutes';
 
 const ITEMS = [
   { label: 'Home', href: '/', icon: Home },
   { label: 'Categories', href: '/explore?type=products', icon: Grid3x3 },
   { label: 'Search', href: '/explore?type=services', icon: Search },
-  { label: 'Wishlist', href: '/userdashboard/wishlist', icon: Heart },
+  { label: 'Wishlist', href: '/wishlist', icon: Heart },
   { label: 'Account', href: '/login', icon: User },
 ];
 
 export default function MobileBottomNav() {
   const pathname = usePathname();
   const { isAuthenticated } = useAuth();
-  const hidden = pathname.startsWith('/userdashboard') || pathname.startsWith('/dashboard');
+  const hidden = isPrivateRoute(pathname);
 
   if (hidden) return null;
 
   const items = ITEMS.map((item) =>
     item.label === 'Account' && isAuthenticated
-      ? { ...item, href: '/userdashboard/dashboard' }
+      ? { ...item, href: '/dashboard' }
       : item
   );
 

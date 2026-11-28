@@ -32,7 +32,7 @@ export default function HeroCarousel() {
             <Link className="bhn-home-primary" href="/explore?type=products">
               <Search size={18} aria-hidden="true" /> Explore marketplace <ArrowRight size={17} aria-hidden="true" />
             </Link>
-            <Link className="bhn-home-secondary" href="/userdashboard/planner">
+            <Link className="bhn-home-secondary" href="/planner">
               <CalendarDays size={18} aria-hidden="true" /> Plan an event
             </Link>
           </div>

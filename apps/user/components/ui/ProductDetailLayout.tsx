@@ -249,11 +249,11 @@ export default function ProductDetailLayout(props: Props) {
 
   const handleBuyNow = async () => {
     const added = await handleAddToCart();
-    if (added) router.push("/userdashboard/checkout");
+    if (added) router.push("/checkout");
   };
 
   const handleGetQuote = () => {
-    router.push(`/userdashboard/quote/request?listingType=product&listingId=${props.productId}`);
+    router.push(`/quote/request?listingType=product&listingId=${props.productId}`);
   };
 
   const submitReview = async () => {

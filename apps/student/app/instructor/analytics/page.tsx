@@ -619,7 +619,7 @@ export default function AnalyticsPage() {
 
                 <div className="flex flex-wrap gap-4 text-sm text-[var(--bhn-text-muted)]">
                     <p onClick={() => window.location.assign(centralAppUrl("/privacy-policy"))} className="cursor-pointer hover:text-[var(--bhn-brand-700)]">Privacy Policy</p>
-                    <p onClick={() => window.location.assign(centralAppUrl("/userdashboard/support"))} className="cursor-pointer hover:text-[var(--bhn-brand-700)]">Support Center</p>
+                    <p onClick={() => window.location.assign(centralAppUrl("/support"))} className="cursor-pointer hover:text-[var(--bhn-brand-700)]">Support Center</p>
                     <p onClick={() => router.push("/instructor/dashboard")} className="cursor-pointer hover:text-[var(--bhn-brand-700)]">Instructor Portal</p>
                 </div>
 

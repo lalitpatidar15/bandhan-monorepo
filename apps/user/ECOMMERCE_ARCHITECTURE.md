@@ -379,22 +379,22 @@ PUT    /api/admin/commissions
 /signup                    Signup
 /forgot-password           Reset password
 
-### User Dashboard (authenticated)
-/userdashboard             Overview (orders count, wishlist, recent)
-/userdashboard/profile     Profile settings
-/userdashboard/cart        Shopping cart
-/userdashboard/checkout    Checkout + pay
-/userdashboard/orders      Order history
-/userdashboard/booking     Bookings (services + venues)
-/userdashboard/wishlist    Saved items
-/userdashboard/quote       Quote requests
-/userdashboard/inbox       Chat conversations
-/userdashboard/tracking    Order/shipping tracking
-/userdashboard/reviews     My reviews
-/userdashboard/notification Notifications
-/userdashboard/blogs       Blog list
-/userdashboard/blogs/[id]  Blog detail
-/userdashboard/invoice     Invoice downloads
+### User account (authenticated, root-level routes)
+/dashboard   Overview (orders count, wishlist, recent)
+/profile     Profile settings
+/addresses   Saved addresses
+/cart        Shopping cart
+/checkout    Checkout + pay
+/orders      Order history
+/booking     Bookings (services + venues)
+/wishlist    Saved items
+/quote       Quote requests
+/inbox       Chat conversations
+/userTracking Order/shipping tracking
+/planner     Event planning workspace
+/support     Help and support
+/notification Notifications
+/invoice     Invoice downloads
 
 ### Seller Panel
 /seller/dashboard          Overview
@@ -502,7 +502,7 @@ SIDEBAR
 1. /products → filter "Rent" → browse cards with discount badges
 2. Click card → /products/[id] → toggle to "Rent" mode
 3. Pick delivery date + return date → see rent price + deposit
-4. "Add to Cart" → /userdashboard/cart → see item with dates
+4. "Add to Cart" → /cart → see item with dates
 5. "Checkout" → enter shipping address → select "UPI"
 6. See order summary → "Pay Now" → Razorpay opens
 7. Pay → verify → order created → email + notification
@@ -518,7 +518,7 @@ SIDEBAR
 2. /products/Services/[id] → "Request Quote"
 3. Fill form: describe requirements → submit
 4. Quote created → auto-creates chat with seller
-5. /userdashboard/inbox → new conversation appears
+5. /inbox → new conversation appears
 6. User: "Can you do this for ₹5001?"
 7. Seller: "I can offer ₹5500 with these add-ons..."
 8. Seller sends Quote Card → [Accept] [Decline] [Counter]
@@ -532,7 +532,7 @@ SIDEBAR
 2. /products/Venue/[id] → see details + calendar
 3. Pick date + guest count → "Check Availability"
 4. Available → "Book Now" → added to booking cart
-5. /userdashboard/cart → review → checkout → pay
+5. /cart → review → checkout → pay
 6. Invoice generated (PDF) → emailed + downloadable
 7. On event date → venue completed → review
 ```

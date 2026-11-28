@@ -423,7 +423,7 @@ export default function MyCoursesPage() {
                     {/* RIGHT */}
                     <div className="flex flex-wrap justify-center gap-5 sm:gap-9">
 
-                        <span onClick={() => window.location.assign(centralAppUrl("/userdashboard/support"))} className="cursor-pointer hover:text-[#8B5E3C] dark:text-[var(--bhn-brand-400)]">
+                        <span onClick={() => window.location.assign(centralAppUrl("/support"))} className="cursor-pointer hover:text-[#8B5E3C] dark:text-[var(--bhn-brand-400)]">
                             Support
                         </span>
 

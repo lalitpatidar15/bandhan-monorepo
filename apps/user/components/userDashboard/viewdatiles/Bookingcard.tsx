@@ -100,7 +100,7 @@ export default function BookingCard({ venue }: any) {
     }
 
     router.push(
-      `/userdashboard/booking?title=${encodeURIComponent(
+      `/booking?title=${encodeURIComponent(
         venue.name
       )}&date=${date}&guests=${guests}&price=${venuePrice}`
     );
