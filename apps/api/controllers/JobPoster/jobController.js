@@ -5,6 +5,8 @@ const Application = require("../../models/jobPoster/Application.js");
 const JobSeeker = require("../../models/jobSeeker/JobSeeker.js");
 const Interview = require("../../models/jobPoster/Interview.js");
 const notificationService = require("../../services/notificationService.js");
+const Payment = require("../../models/shared/Payment.js");
+const { getSetting } = require("../../services/configService.js");
 const bcrypt = require("bcryptjs");
 const { validatePassword } = require("../../utils/validatePassword.js");
 
@@ -618,6 +620,31 @@ exports.createJob = async (req, res) => {
 
 
         await job.save();
+
+        // A free-tier posting is not blocked when the gateway cannot be
+        // verified: record the fee as a pending payment against the new job.
+        if (!req.body.planId && !req.body.plan) {
+            try {
+                const fee = Number(await getSetting("jobPostingFee")) || 0;
+                if (fee > 0) {
+                    const payment = await Payment.create({
+                        recruiterId: req.user.id,
+                        jobId: job._id,
+                        paymentFor: "job_posting_fee",
+                        subtotal: fee,
+                        totalAmount: fee,
+                        currency: "INR",
+                        paymentMethod: "pending",
+                        status: "pending",
+                        metadata: { jobId: String(job._id) },
+                    });
+                    job.paymentId = payment._id;
+                    await job.save();
+                }
+            } catch (paymentError) {
+                console.error("Job posting fee could not be recorded:", paymentError);
+            }
+        }
 
         return res.status(200).json({
 

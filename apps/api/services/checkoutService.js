@@ -1,6 +1,7 @@
 const Cart = require("../models/shared/Cart.js");
 const Product = require("../models/shared/Product.js");
 const { getSetting } = require("./configService.js");
+const { calculateCommission } = require("./commissionService.js");
 
 class CheckoutError extends Error {
   constructor(message, statusCode = 400) {
@@ -88,9 +89,23 @@ async function buildProductCartQuote(userId) {
     getSetting("taxRate"),
   ]);
 
+  // Commission is recorded separately from the buyer-facing total: it is a
+  // platform/vendor split, not an extra charge on the quote.
+  const commissions = await Promise.all(items.map((item) =>
+    calculateCommission(productById.get(item.productId)?.category, item.unitPrice * item.quantity)
+  ));
+  items.forEach((item, index) => {
+    item.category = productById.get(item.productId)?.category || "";
+    item.commissionRate = commissions[index].rate;
+    item.commission = commissions[index].commission;
+    item.net = commissions[index].net;
+  });
+  const commission = Math.round(items.reduce((sum, item) => sum + item.commission, 0) * 100) / 100;
+
   return {
     cartId: String(cart._id),
     items,
+    commission,
     summary: calculateQuoteTotals(items, serviceFee, taxRate),
   };
 }

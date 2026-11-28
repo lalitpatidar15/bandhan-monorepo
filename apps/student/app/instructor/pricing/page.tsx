@@ -9,8 +9,9 @@ import {
   Rocket,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 import CurriculumHeader from "@/components/common/CurriculumHeader";
-import { useUpdatePricingMutation, useUpdateEmiMutation, useUpdateVisibilityMutation, usePublishCourseMutation, useGetPricingPageQuery } from "@/app/redux/instructor-services/courseApi";
+import { useUpdatePricingMutation, useUpdateEmiMutation, useUpdateVisibilityMutation, usePublishCourseMutation, useGetPricingPageQuery, useGetInstructorCoursesQuery, useToggleCourseFeaturedMutation } from "@/app/redux/instructor-services/courseApi";
 
 function PricingPageContent() {
   const router = useRouter();
@@ -21,7 +22,9 @@ function PricingPageContent() {
   const [updateEmi] = useUpdateEmiMutation();
   const [updateVisibility] = useUpdateVisibilityMutation();
   const [publishCourse, { isLoading: isPublishing }] = usePublishCourseMutation();
+  const [toggleFeatured, { isLoading: isTogglingFeatured }] = useToggleCourseFeaturedMutation();
   const { data: pricingPageData, refetch: refetchPricingPage } = useGetPricingPageQuery(courseId, { skip: !courseId });
+  const { data: instructorCoursesData } = useGetInstructorCoursesQuery(undefined);
   const course = pricingPageData?.data?.course || pricingPageData?.data;
   const courseTitle = course?.title || "Course Title";
   const courseCategory = course?.category || "Category";
@@ -37,18 +40,19 @@ function PricingPageContent() {
   const [basicPrice, setBasicPrice] = useState("");
   const [discountValue, setDiscountValue] = useState("");
   const [pricingReady, setPricingReady] = useState(false);
+  const [isFeatured, setIsFeatured] = useState(false);
   const [isSavingSettings, setIsSavingSettings] = useState(false);
   const hydratedCourseId = useRef<string | null>(null);
 
   const handleSavePricing = async () => {
     if (!courseId) {
-      alert("Missing course id.");
+      toast.error("Missing course id.");
       return false;
     }
 
     const priceValue = Number(basicPrice.replace(/[^\d.]/g, ""));
     if (!priceValue || Number.isNaN(priceValue)) {
-      alert("Please enter a valid base price.");
+      toast.error("Please enter a valid base price.");
       return false;
     }
 
@@ -62,7 +66,7 @@ function PricingPageContent() {
       return true;
     } catch (error: any) {
       console.error(error);
-      alert(error?.data?.message || error?.message || "Unable to save pricing.");
+      toast.error(error?.data?.message || error?.message || "Unable to save pricing.");
       return false;
     }
   };
@@ -129,9 +133,29 @@ function PricingPageContent() {
       router.push("/instructor/performance");
     } catch (error: any) {
       console.error(error);
-      alert(error?.data?.message || error?.message || "Unable to publish course.");
+      toast.error(error?.data?.message || error?.message || "Unable to publish course.");
     } finally {
       setIsSavingSettings(false);
+    }
+  };
+
+  const handleToggleFeatured = async () => {
+    if (!courseId) {
+      toast.error("Missing course id.");
+      return;
+    }
+
+    const nextValue = !isFeatured;
+    setIsFeatured(nextValue);
+    try {
+      const result: any = await toggleFeatured({ courseId, isFeatured: nextValue }).unwrap();
+      const savedValue = Boolean(result?.isFeatured ?? nextValue);
+      setIsFeatured(savedValue);
+      toast.success(savedValue ? "Course marked as featured." : "Course removed from featured.");
+      await refetchPricingPage();
+    } catch (error: any) {
+      setIsFeatured(!nextValue);
+      toast.error(error?.data?.message || error?.message || "Unable to update featured status.");
     }
   };
 
@@ -148,6 +172,14 @@ function PricingPageContent() {
     setSelected(String(pricingPageData.data.visibility || "public").replace(/^./, (value: string) => value.toUpperCase()));
     hydratedCourseId.current = courseId;
   }, [courseId, pricingPageData]);
+
+  useEffect(() => {
+    if (!courseId || !instructorCoursesData?.data) return;
+    const currentCourse = (instructorCoursesData.data as any[]).find(
+      (item) => String(item._id) === String(courseId)
+    );
+    setIsFeatured(Boolean(currentCourse?.isFeatured));
+  }, [courseId, instructorCoursesData]);
 
   useEffect(() => {
     const isReady = Boolean(
@@ -584,6 +616,34 @@ function PricingPageContent() {
 
             </div>
 
+            {/* FEATURED COURSE */}
+            <div className="bg-[var(--bhn-surface)] rounded-2xl border border-[var(--bhn-border)] p-5">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h3 className="font-semibold text-[15px] text-[var(--bhn-text)]">
+                    Featured course
+                  </h3>
+                  <p className="text-xs text-[var(--bhn-text-soft)] mt-1 leading-relaxed">
+                    Show this course in the featured section of the marketplace.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={isFeatured}
+                  aria-label="Toggle featured course"
+                  disabled={!courseId || isTogglingFeatured}
+                  onClick={handleToggleFeatured}
+                  className={`w-11 h-6 rounded-full relative transition-all duration-300 disabled:opacity-50 shrink-0 ${isFeatured ? "bg-[var(--bhn-brand-600)]" : "bg-[var(--bhn-border)]"}`}
+                >
+                  <span
+                    className={`w-5 h-5 bg-[var(--bhn-surface)] rounded-full absolute top-0.5 transition-all duration-300 ${isFeatured ? "right-0.5" : "left-0.5"}`}
+                  />
+                </button>
+              </div>
+            </div>
+
             {/* PUBLISH READINESS */}
             <div className="bg-[var(--bhn-surface)] rounded-2xl border border-[var(--bhn-border)] p-5">
 
@@ -697,7 +757,7 @@ function PricingPageContent() {
                 onClick={async () => {
                   const saved = await handleSaveAllSettings();
                   if (saved) {
-                    alert("Settings saved as draft.");
+                    toast.success("Settings saved as draft.");
                   }
                 }}
                 className="hover:text-[var(--bhn-brand-700)] transition"

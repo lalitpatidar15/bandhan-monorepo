@@ -2,14 +2,14 @@
 
 import { useState } from 'react';
 import { Plus, Edit, Trash2, TicketPercent } from 'lucide-react';
-import { useGetCouponsQuery, useCreateCouponMutation, useUpdateCouponMutation, useDeleteCouponMutation } from '@/lib/adminApi';
+import { type CouponAudience, useGetCouponsQuery, useCreateCouponMutation, useUpdateCouponMutation, useDeleteCouponMutation } from '@/lib/adminApi';
 
-type Coupon = { id: string; code: string; description: string; discountType: 'percentage' | 'fixed'; discountValue: number; minOrderAmount: number; maxDiscount: number; usageLimit: number; usedCount: number; isActive: boolean; startDate: string; endDate: string; createdAt: string; };
+type Coupon = { id: string; code: string; description: string; audience?: CouponAudience; discountType: 'percentage' | 'fixed'; discountValue: number; minOrderAmount: number; maxDiscount: number; usageLimit: number; usedCount: number; isActive: boolean; startDate: string; endDate: string; createdAt: string; };
 
 export default function CouponManager() {
   const [showForm, setShowForm] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
-  const [form, setForm] = useState({ code: '', description: '', discountType: 'percentage' as 'percentage' | 'fixed', discountValue: 0, minOrderAmount: 0, maxDiscount: 0, usageLimit: 0, startDate: '', endDate: '' });
+  const [form, setForm] = useState({ code: '', description: '', audience: 'all' as CouponAudience, discountType: 'percentage' as 'percentage' | 'fixed', discountValue: 0, minOrderAmount: 0, maxDiscount: 0, usageLimit: 0, startDate: '', endDate: '' });
   const [filter, setFilter] = useState('');
 
   const { data: coupons = [], isLoading } = useGetCouponsQuery({ status: filter || undefined });
@@ -18,13 +18,13 @@ export default function CouponManager() {
   const [deleteCoupon] = useDeleteCouponMutation();
 
   const reset = () => {
-    setForm({ code: '', description: '', discountType: 'percentage', discountValue: 0, minOrderAmount: 0, maxDiscount: 0, usageLimit: 0, startDate: '', endDate: '' });
+    setForm({ code: '', description: '', audience: 'all', discountType: 'percentage', discountValue: 0, minOrderAmount: 0, maxDiscount: 0, usageLimit: 0, startDate: '', endDate: '' });
     setEditId(null);
     setShowForm(false);
   };
 
   const handleEdit = (c: Coupon) => {
-    setForm({ code: c.code, description: c.description, discountType: c.discountType, discountValue: c.discountValue, minOrderAmount: c.minOrderAmount, maxDiscount: c.maxDiscount, usageLimit: c.usageLimit, startDate: c.startDate?.split('T')[0] || '', endDate: c.endDate?.split('T')[0] || '' });
+    setForm({ code: c.code, description: c.description, audience: c.audience || 'all', discountType: c.discountType, discountValue: c.discountValue, minOrderAmount: c.minOrderAmount, maxDiscount: c.maxDiscount, usageLimit: c.usageLimit, startDate: c.startDate?.split('T')[0] || '', endDate: c.endDate?.split('T')[0] || '' });
     setEditId(c.id);
     setShowForm(true);
   };
@@ -66,6 +66,13 @@ export default function CouponManager() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <input value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value.toUpperCase() })} placeholder="Coupon Code (e.g. SAVE20)" className="admin-input" />
             <input value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Description" className="admin-input" />
+            <select value={form.audience} onChange={(e) => setForm({ ...form, audience: e.target.value as CouponAudience })} className="admin-input" aria-label="Audience">
+              <option value="all">All customers</option>
+              <option value="welcome">Welcome / new customers</option>
+              <option value="existing">Existing customers</option>
+              <option value="referral">Referral customers</option>
+              <option value="guest">Guests</option>
+            </select>
             <select value={form.discountType} onChange={(e) => setForm({ ...form, discountType: e.target.value as 'percentage' | 'fixed' })} className="admin-input">
               <option value="percentage">Percentage</option>
               <option value="fixed">Fixed Amount</option>
@@ -93,6 +100,7 @@ export default function CouponManager() {
             <thead>
               <tr>
                 <th>Code</th>
+                <th>Audience</th>
                 <th>Discount</th>
                 <th>Min Order</th>
                 <th>Used</th>
@@ -105,6 +113,7 @@ export default function CouponManager() {
               {coupons.map((c) => (
                 <tr key={c.id}>
                   <td className="font-mono font-bold text-sm">{c.code}</td>
+                  <td className="text-xs capitalize text-[var(--bhn-text-muted)]">{c.audience || 'all'}</td>
                   <td>
                     <span className="admin-badge bg-[var(--bhn-brand-50)] text-[var(--bhn-brand-700)]">
                       {c.discountType === 'percentage' ? `${c.discountValue}%` : `₹${c.discountValue}`}

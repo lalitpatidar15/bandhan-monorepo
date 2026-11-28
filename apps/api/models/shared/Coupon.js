@@ -65,6 +65,11 @@ const couponSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    audience: {
+      type: String,
+      enum: ["all", "welcome", "existing", "referral", "guest"],
+      default: "all",
+    },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

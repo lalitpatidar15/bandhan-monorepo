@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { BarChart3, Bell, BookOpen, BriefcaseBusiness, Building2, ChevronDown, ClipboardList, DollarSign, FileText, GraduationCap, LayoutDashboard, LifeBuoy, LogOut, Package, Scale, Settings, ShieldCheck, ShoppingCart, Tags, TicketPercent, Users, X } from 'lucide-react';
+import { BarChart3, Bell, BookOpen, BriefcaseBusiness, Building2, ChevronDown, ClipboardList, DollarSign, FileText, GraduationCap, LayoutDashboard, LifeBuoy, LogOut, MessageSquareText, Package, Scale, Settings, ShieldCheck, ShoppingCart, Sparkles, Tags, TicketPercent, Users, UsersRound, X } from 'lucide-react';
 
 export type AdminPage =
-  | 'dashboard' | 'users' | 'students' | 'instructors' | 'courses' | 'enrollments' | 'job-seekers' | 'job-posters' | 'moderation' | 'categories' | 'commissions' | 'featured-listings' | 'disputes' | 'support-tickets' | 'roles-permissions' | 'content-governance' | 'products' | 'orders' | 'rental-orders' | 'analytics' | 'blogs' | 'banners' | 'settings' | 'coupons' | 'notifications' | 'financial-reports' | 'audit-logs' | 'merchants' | 'seller-verifications' | 'venues' | 'services' | 'jobs' | 'applications';
+  | 'dashboard' | 'users' | 'students' | 'instructors' | 'courses' | 'enrollments' | 'job-seekers' | 'job-posters' | 'moderation' | 'reviews' | 'communities' | 'categories' | 'commissions' | 'featured-listings' | 'disputes' | 'support-tickets' | 'roles-permissions' | 'content-governance' | 'products' | 'orders' | 'rental-orders' | 'analytics' | 'blogs' | 'banners' | 'inspiration' | 'settings' | 'coupons' | 'notifications' | 'financial-reports' | 'audit-logs' | 'merchants' | 'seller-verifications' | 'venues' | 'services' | 'jobs' | 'applications';
 
 interface SidebarProps {
   currentPage: AdminPage;
@@ -15,11 +15,11 @@ interface SidebarProps {
 
 const sections: Array<{ title: string; items: Array<{ id: AdminPage; label: string; icon: typeof LayoutDashboard }> }> = [
   { title: 'Overview', items: [{ id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard }, { id: 'analytics', label: 'Analytics', icon: BarChart3 }, { id: 'notifications', label: 'Notifications', icon: Bell }] },
-  { title: 'Commerce', items: [{ id: 'products', label: 'Products', icon: Package }, { id: 'services', label: 'Services', icon: Building2 }, { id: 'venues', label: 'Venues', icon: Building2 }, { id: 'orders', label: 'Orders & bookings', icon: ShoppingCart }, { id: 'rental-orders', label: 'Rental orders', icon: ClipboardList }, { id: 'merchants', label: 'Merchants', icon: Building2 }] },
-  { title: 'People & learning', items: [{ id: 'users', label: 'Users', icon: Users }, { id: 'students', label: 'Students', icon: GraduationCap }, { id: 'instructors', label: 'Instructors', icon: GraduationCap }, { id: 'courses', label: 'Courses', icon: BookOpen }, { id: 'enrollments', label: 'Enrollments', icon: ClipboardList }] },
+  { title: 'Commerce', items: [{ id: 'products', label: 'Products', icon: Package }, { id: 'services', label: 'Services', icon: Building2 }, { id: 'venues', label: 'Venues', icon: Building2 }, { id: 'inspiration', label: 'Wedding inspiration', icon: Sparkles }, { id: 'orders', label: 'Orders & bookings', icon: ShoppingCart }, { id: 'rental-orders', label: 'Rental orders', icon: ClipboardList }, { id: 'merchants', label: 'Merchants', icon: Building2 }] },
+  { title: 'People & learning', items: [{ id: 'users', label: 'Users', icon: Users }, { id: 'communities', label: 'Communities', icon: UsersRound }, { id: 'students', label: 'Students', icon: GraduationCap }, { id: 'instructors', label: 'Instructors', icon: GraduationCap }, { id: 'courses', label: 'Courses', icon: BookOpen }, { id: 'enrollments', label: 'Enrollments', icon: ClipboardList }] },
   { title: 'Jobs', items: [{ id: 'jobs', label: 'All jobs', icon: BriefcaseBusiness }, { id: 'applications', label: 'Applications', icon: ClipboardList }, { id: 'job-seekers', label: 'Job seekers', icon: Users }, { id: 'job-posters', label: 'Job posters', icon: Building2 }] },
   { title: 'Configuration', items: [{ id: 'categories', label: 'Categories', icon: Tags }, { id: 'coupons', label: 'Coupons', icon: TicketPercent }, { id: 'commissions', label: 'Commissions', icon: DollarSign }, { id: 'financial-reports', label: 'Finance', icon: DollarSign }, { id: 'settings', label: 'Settings', icon: Settings }] },
-  { title: 'Trust & support', items: [{ id: 'moderation', label: 'Moderation', icon: ShieldCheck }, { id: 'seller-verifications', label: 'Seller verification', icon: ShieldCheck }, { id: 'content-governance', label: 'Content', icon: FileText }, { id: 'disputes', label: 'Disputes', icon: Scale }, { id: 'support-tickets', label: 'Support tickets', icon: LifeBuoy }, { id: 'audit-logs', label: 'Audit log', icon: ClipboardList }] },
+  { title: 'Trust & support', items: [{ id: 'moderation', label: 'Moderation', icon: ShieldCheck }, { id: 'reviews', label: 'Review moderation', icon: MessageSquareText }, { id: 'seller-verifications', label: 'Seller verification', icon: ShieldCheck }, { id: 'content-governance', label: 'Content', icon: FileText }, { id: 'disputes', label: 'Disputes', icon: Scale }, { id: 'support-tickets', label: 'Support tickets', icon: LifeBuoy }, { id: 'audit-logs', label: 'Audit log', icon: ClipboardList }] },
 ];
 
 export default function Sidebar({ currentPage, setCurrentPage, mobileOpen = false, onMobileClose }: SidebarProps) {

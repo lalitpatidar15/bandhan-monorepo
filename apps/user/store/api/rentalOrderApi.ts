@@ -168,6 +168,14 @@ export const rentalOrderApi = baseApi.injectEndpoints({
       invalidatesTags: ['Dashboard'],
     }),
 
+    completeRentalOrder: builder.mutation<RentalOrderResponse, RentalOrderIdRequest>({
+      query: ({ rentalId }) => ({
+        url: `/rental-orders/${rentalId}/complete`,
+        method: 'PUT',
+      }),
+      invalidatesTags: ['Dashboard'],
+    }),
+
     cancelRentalOrder: builder.mutation<RentalOrderResponse, CancelRentalRequest>({
       query: ({ rentalId, reason }) => ({
         url: `/rental-orders/${rentalId}/cancel`,
@@ -205,6 +213,7 @@ export const {
   useCreateRentalOrderMutation,
   useConfirmRentalDeliveryMutation,
   useInitiateRentalReturnMutation,
+  useCompleteRentalOrderMutation,
   useCancelRentalOrderMutation,
   useRequestRentalExtensionMutation,
   useSendRentalMessageMutation,

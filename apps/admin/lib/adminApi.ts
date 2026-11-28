@@ -154,11 +154,17 @@ export type AdminOrder = {
   shipping?: AdminShipment | null;
 };
 
+export type AnalyticsBucket = { _id: string; revenue: number; orders: number };
+
 export type AnalyticsStats = {
-  totalBookings?: number;
-  averageOrderValue?: number;
-  ratingAverage?: number;
-  usersByPanel?: Array<{ name: string; value: number }>;
+  dailyRevenue: AnalyticsBucket[];
+  topCategories: AnalyticsBucket[];
+  panelStats: Record<string, number>;
+  period?: string;
+  totalBookings: number;
+  totalRevenue: number;
+  averageOrderValue: number;
+  usersByPanel: Array<{ name: string; value: number }>;
 };
 
 export type AdminStudent = {
@@ -306,11 +312,17 @@ export type AdminSupportTicket = {
   createdAt: string;
 };
 
+export type FeaturedListingItem = { _id: string; title?: string; jobTitle?: string; category?: string; jobCategory?: string; isFeatured?: boolean; createdAt?: string };
+
 export type AdminFeaturedListings = {
-  products: Array<{ _id: string; title: string; category: string; createdAt: string }>;
-  jobs: Array<{ _id: string; jobTitle: string; jobCategory: string; createdAt: string }>;
-  courses: Array<{ _id: string; title: string; category: string; createdAt: string }>;
+  products: FeaturedListingItem[];
+  jobs: FeaturedListingItem[];
+  courses: FeaturedListingItem[];
+  services?: FeaturedListingItem[];
+  venues?: FeaturedListingItem[];
 };
+
+export type FeaturedItemType = 'product' | 'service' | 'venue';
 
 export type AdminBlog = {
   id: string;
@@ -352,10 +364,13 @@ export type AdminRentalOrder = {
   createdAt: string;
 };
 
+export type CouponAudience = 'all' | 'welcome' | 'existing' | 'referral' | 'guest';
+
 export type AdminCoupon = {
   id: string;
   code: string;
   description: string;
+  audience?: CouponAudience;
   discountType: 'percentage' | 'fixed';
   discountValue: number;
   minOrderAmount: number;
@@ -552,6 +567,44 @@ export type AdminApplication = {
   status: string;
   appliedAt: string;
   resumeUrl: string;
+};
+
+export type ModerationReviewStatus = 'pending' | 'approved' | 'rejected';
+
+export type AdminModerationReview = {
+  _id: string;
+  itemId: string;
+  itemType: string;
+  rating: number;
+  title: string;
+  comment: string;
+  customerName: string;
+  status: ModerationReviewStatus;
+  createdAt: string;
+};
+
+export type AdminCommunity = {
+  _id: string;
+  name: string;
+  description: string;
+  coverImage: string;
+  category: string;
+  members: number;
+  status: string;
+  isActive: boolean;
+  createdAt: string;
+};
+
+export type AdminInspiration = {
+  _id: string;
+  title: string;
+  category: string;
+  image: string;
+  images: string[];
+  description: string;
+  tags: string[];
+  isActive: boolean;
+  publishedAt: string;
 };
 
 const normalizeUsers = (payload: unknown): AdminUser[] => {
@@ -960,6 +1013,7 @@ const normalizeCoupons = (payload: unknown): AdminCoupon[] => {
     id: String(c._id || ''),
     code: String(c.code || ''),
     description: String(c.description || ''),
+    audience: (['all', 'welcome', 'existing', 'referral', 'guest'].includes(String(c.audience)) ? String(c.audience) : 'all') as CouponAudience,
     discountType: c.discountType === 'fixed' ? 'fixed' : 'percentage',
     discountValue: Number(c.discountValue || 0),
     minOrderAmount: Number(c.minOrderAmount || 0),
@@ -1286,6 +1340,45 @@ const normalizeRecords = (payload: unknown): Array<Record<string, unknown>> => {
   return Array.isArray(data) ? (data as Array<Record<string, unknown>>) : [];
 };
 
+const normalizeModerationReviews = (payload: unknown): AdminModerationReview[] =>
+  normalizeRecords(payload).map((record) => ({
+    _id: String(record._id || record.id || ''),
+    itemId: String(record.itemId || ''),
+    itemType: String(record.itemType || 'product'),
+    rating: Number(record.rating || 0),
+    title: String(record.title || ''),
+    comment: String(record.comment || ''),
+    customerName: String(record.customerName || 'Unknown customer'),
+    status: record.status === 'approved' || record.status === 'rejected' ? record.status : 'pending',
+    createdAt: String(record.createdAt || ''),
+  }));
+
+const normalizeCommunities = (payload: unknown): AdminCommunity[] =>
+  normalizeRecords(payload).map((record) => ({
+    _id: String(record._id || record.id || ''),
+    name: String(record.name || 'Untitled community'),
+    description: String(record.description || ''),
+    coverImage: String(record.coverImage || ''),
+    category: String(record.category || ''),
+    members: Array.isArray(record.members) ? record.members.length : Number(record.members || 0),
+    status: String(record.status || (record.isActive === false ? 'inactive' : 'active')),
+    isActive: record.isActive !== false,
+    createdAt: String(record.createdAt || ''),
+  }));
+
+const normalizeInspiration = (payload: unknown): AdminInspiration[] =>
+  normalizeRecords(payload).map((record) => ({
+    _id: String(record._id || record.id || ''),
+    title: String(record.title || 'Untitled story'),
+    category: String(record.category || ''),
+    image: String(record.image || ''),
+    images: Array.isArray(record.images) ? record.images.map(String) : [],
+    description: String(record.description || ''),
+    tags: Array.isArray(record.tags) ? record.tags.map(String) : [],
+    isActive: record.isActive !== false,
+    publishedAt: String(record.publishedAt || ''),
+  }));
+
 const normalizeSellerVerifications = (payload: unknown): AdminSellerVerification[] =>
   normalizeRecords(payload).map((record) => ({
     id: String(record.id || ''),
@@ -1334,6 +1427,9 @@ export const adminApi = createApi({
     'AdminJobSeekers',
     'AdminJobPosters',
     'AdminModeration',
+    'AdminModerationReviews',
+    'AdminCommunities',
+    'AdminInspiration',
     'AdminContentModeration',
     'AdminCategories',
     'AdminCommissions',
@@ -1433,25 +1529,41 @@ export const adminApi = createApi({
     }),
     getAnalytics: builder.query<AnalyticsStats, void>({
       query: () => '/admin/analytics',
-      transformResponse: (response: { data?: any }) => {
-        const analytics = response?.data || {};
-        const panelCounts = (analytics.panelStats || {}) as Record<string, number | string | undefined>;
-        const totalPanels = Object.values(panelCounts).reduce<number>((sum, value) => sum + Number(value || 0), 0) || 1;
-        const totalBookings = Array.isArray(analytics.dailyRevenue)
-          ? analytics.dailyRevenue.reduce((sum: number, entry: { orders?: number }) => sum + Number(entry.orders || 0), 0)
-          : 0;
-        const totalRevenue = Array.isArray(analytics.dailyRevenue)
-          ? analytics.dailyRevenue.reduce((sum: number, entry: { revenue?: number }) => sum + Number(entry.revenue || 0), 0)
-          : 0;
+      transformResponse: (response: unknown) => {
+        const analytics = ((response as { data?: Record<string, unknown> })?.data || {}) as {
+          dailyRevenue?: Array<Record<string, unknown>>;
+          topCategories?: Array<Record<string, unknown>>;
+          panelStats?: Record<string, unknown>;
+          period?: string;
+        };
+        const toBuckets = (value: Array<Record<string, unknown>> | undefined): AnalyticsBucket[] =>
+          (value || []).map((entry) => ({
+            _id: String(entry._id ?? ''),
+            revenue: Number(entry.revenue || 0),
+            orders: Number(entry.orders || 0),
+          }));
+        const dailyRevenue = toBuckets(analytics.dailyRevenue);
+        const topCategories = toBuckets(analytics.topCategories);
+        const panelStats: Record<string, number> = {};
+        Object.entries(analytics.panelStats || {}).forEach(([key, value]) => {
+          panelStats[key] = Number(value || 0);
+        });
+        const totalPanels = Object.values(panelStats).reduce((sum, value) => sum + value, 0) || 1;
+        const totalBookings = dailyRevenue.reduce((sum, entry) => sum + entry.orders, 0);
+        const totalRevenue = dailyRevenue.reduce((sum, entry) => sum + entry.revenue, 0);
 
         return {
+          dailyRevenue,
+          topCategories,
+          panelStats,
+          period: analytics.period,
           totalBookings,
+          totalRevenue,
           averageOrderValue: totalBookings > 0 ? Math.round(totalRevenue / totalBookings) : 0,
-          ratingAverage: 4.7,
           usersByPanel: [
-            { name: 'Event Owners', value: Math.round((Number(panelCounts.eventOwners || 0) / totalPanels) * 100) },
-            { name: 'Buyers', value: Math.round((Number(panelCounts.buyers || 0) / totalPanels) * 100) },
-            { name: 'Vendors', value: Math.round((Number(panelCounts.vendors || 0) / totalPanels) * 100) },
+            { name: 'Event Owners', value: Math.round(((panelStats.eventOwners || 0) / totalPanels) * 100) },
+            { name: 'Buyers', value: Math.round(((panelStats.buyers || 0) / totalPanels) * 100) },
+            { name: 'Vendors', value: Math.round(((panelStats.vendors || 0) / totalPanels) * 100) },
           ],
         } satisfies AnalyticsStats;
       },
@@ -1593,6 +1705,25 @@ export const adminApi = createApi({
       }),
       invalidatesTags: ['AdminContentModeration'],
     }),
+    getModerationReviews: builder.query<AdminModerationReview[], { status?: string; itemType?: string }>({
+      query: ({ status, itemType }) => {
+        const params = new URLSearchParams();
+        if (status) params.set('status', status);
+        if (itemType) params.set('itemType', itemType);
+        const qs = params.toString();
+        return `/admin/moderation/reviews${qs ? `?${qs}` : ''}`;
+      },
+      transformResponse: (response: unknown) => normalizeModerationReviews(response),
+      providesTags: ['AdminModerationReviews'],
+    }),
+    updateModerationReview: builder.mutation<unknown, { id: string; status: 'approved' | 'rejected'; itemType: string }>({
+      query: ({ id, ...body }) => ({
+        url: `/admin/moderation/reviews/${id}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['AdminModerationReviews'],
+    }),
     getCategories: builder.query<AdminCategory[], void>({
       query: () => '/admin/categories',
       transformResponse: (response: unknown) => normalizeCategories(response),
@@ -1655,6 +1786,14 @@ export const adminApi = createApi({
         return response?.data || { products: [], jobs: [], courses: [] };
       },
       providesTags: ['AdminFeaturedListings'],
+    }),
+    updateFeaturedListing: builder.mutation<unknown, { id: string; itemType: FeaturedItemType; isFeatured: boolean }>({
+      query: ({ id, ...body }) => ({
+        url: `/admin/featured-listings/${id}`,
+        method: 'PUT',
+        body,
+      }),
+      invalidatesTags: ['AdminFeaturedListings'],
     }),
     getJobPostingFee: builder.query<{ fee: number }, void>({
       query: () => '/admin/job-posting-fee',
@@ -1783,6 +1922,44 @@ export const adminApi = createApi({
     deleteBanner: builder.mutation<unknown, string>({
       query: (id) => ({ url: `/admin/banners/${id}`, method: 'DELETE' }),
       invalidatesTags: ['AdminBanners'],
+    }),
+
+    // Communities
+    getCommunities: builder.query<AdminCommunity[], void>({
+      query: () => '/admin/communities',
+      transformResponse: (response: unknown) => normalizeCommunities(response),
+      providesTags: ['AdminCommunities'],
+    }),
+    createCommunity: builder.mutation<unknown, Omit<AdminCommunity, '_id' | 'createdAt'>>({
+      query: (body) => ({ url: '/admin/communities', method: 'POST', body }),
+      invalidatesTags: ['AdminCommunities'],
+    }),
+    updateCommunity: builder.mutation<unknown, { id: string } & Partial<Omit<AdminCommunity, '_id' | 'createdAt'>>>({
+      query: ({ id, ...body }) => ({ url: `/admin/communities/${id}`, method: 'PUT', body }),
+      invalidatesTags: ['AdminCommunities'],
+    }),
+    deleteCommunity: builder.mutation<unknown, string>({
+      query: (id) => ({ url: `/admin/communities/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['AdminCommunities'],
+    }),
+
+    // Wedding inspiration
+    getInspiration: builder.query<AdminInspiration[], void>({
+      query: () => '/admin/inspiration',
+      transformResponse: (response: unknown) => normalizeInspiration(response),
+      providesTags: ['AdminInspiration'],
+    }),
+    createInspiration: builder.mutation<unknown, Omit<AdminInspiration, '_id' | 'publishedAt'> & { publishedAt?: string }>({
+      query: (body) => ({ url: '/admin/inspiration', method: 'POST', body }),
+      invalidatesTags: ['AdminInspiration'],
+    }),
+    updateInspiration: builder.mutation<unknown, { id: string } & Partial<Omit<AdminInspiration, '_id'>>>({
+      query: ({ id, ...body }) => ({ url: `/admin/inspiration/${id}`, method: 'PUT', body }),
+      invalidatesTags: ['AdminInspiration'],
+    }),
+    deleteInspiration: builder.mutation<unknown, string>({
+      query: (id) => ({ url: `/admin/inspiration/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['AdminInspiration'],
     }),
 
     // Rental Orders
@@ -2036,6 +2213,8 @@ export const {
   useUpdateModerationJobMutation,
   useGetContentModerationPostsQuery,
   useDeleteContentModerationPostMutation,
+  useGetModerationReviewsQuery,
+  useUpdateModerationReviewMutation,
   useGetCategoriesQuery,
   useCreateCategoryMutation,
   useUpdateCategoryMutation,
@@ -2045,6 +2224,7 @@ export const {
   useUpdateCommissionRuleMutation,
   useDeleteCommissionRuleMutation,
   useGetFeaturedListingsQuery,
+  useUpdateFeaturedListingMutation,
   useGetJobPostingFeeQuery,
   useUpdateJobPostingFeeMutation,
   useGetDisputesQuery,
@@ -2066,6 +2246,14 @@ export const {
   useCreateBannerMutation,
   useUpdateBannerMutation,
   useDeleteBannerMutation,
+  useGetCommunitiesQuery,
+  useCreateCommunityMutation,
+  useUpdateCommunityMutation,
+  useDeleteCommunityMutation,
+  useGetInspirationQuery,
+  useCreateInspirationMutation,
+  useUpdateInspirationMutation,
+  useDeleteInspirationMutation,
   useGetRentalOrdersQuery,
   useUpdateRentalOrderMutation,
   useGetCouponsQuery,

@@ -7,20 +7,58 @@ import {
     Star,
     Clock3,
     CircleDollarSign,
+    RefreshCw,
 } from "lucide-react";
-import { useGetInstructorOverviewQuery, useGetInstructorPageResourcesQuery } from "@/app/redux/instructor-services/DashboardApi";
+import {
+    useGetInstructorOverviewQuery,
+    useGetInstructorPageResourcesQuery,
+    useGetInstructorCourseDashboardQuery,
+} from "@/app/redux/instructor-services/DashboardApi";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 import AcademyLogo from "@/components/common/AcademyLogo";
-import { StatCard } from "@bandhan/ui";
+import { Modal, StatCard } from "@bandhan/ui";
+
+type LessonInsight = {
+    _id?: string;
+    title?: string;
+    watch?: string;
+    complete?: string;
+    result?: string;
+};
 
 export default function AnalyticsPage() {
     const router = useRouter();
     const [selected, setSelected] = useState("7 days");
+    const [selectedCourseId, setSelectedCourseId] = useState("");
+    const [detailRow, setDetailRow] = useState<LessonInsight | null>(null);
     const { data } = useGetInstructorOverviewQuery();
-    const overview = data?.data?.overview;
     const { data: resourcesData } = useGetInstructorPageResourcesQuery();
+
+    const courses: Array<any> = data?.data?.courses ?? [];
+    const activeCourseId = selectedCourseId || courses[0]?._id || "";
+    const { data: courseDashboardData, isLoading, isError, refetch } = useGetInstructorCourseDashboardQuery(activeCourseId, { skip: !activeCourseId });
+
     const pd = resourcesData?.data ?? {};
+    const courseOverview = courseDashboardData?.data?.overview ?? {};
+    const enrollmentTrends: Array<{ day?: string; students?: number }> = courseDashboardData?.data?.enrollmentTrends ?? [];
+    const visibleTrends = selected === "7 days"
+        ? enrollmentTrends.slice(-7)
+        : selected === "30 days"
+            ? enrollmentTrends.slice(-30)
+            : enrollmentTrends;
+    const engagement = courseDashboardData?.data?.engagement ?? {};
+    const maxTrend = Math.max(...visibleTrends.map((trend) => Number(trend.students ?? 0)), 1);
+    const trendPoints = visibleTrends.map((trend, index) => ({
+        trend,
+        x: visibleTrends.length === 1 ? 350 : 20 + (index * 660) / (visibleTrends.length - 1),
+        y: 220 - (Number(trend.students ?? 0) / maxTrend) * 180,
+    }));
+    const trendPath = trendPoints.length > 0
+        ? `M ${trendPoints.map((point) => `${point.x} ${point.y}`).join(" L ")}`
+        : "";
+    const insightRows: LessonInsight[] = pd.topLessons ?? [];
 
     return (
         <div className="min-h-screen bg-[var(--bhn-bg)]">
@@ -36,11 +74,30 @@ export default function AnalyticsPage() {
                     {/* LEFT */}
                     <div className="flex flex-wrap gap-3">
 
-                        <select className="bhn-select h-[42px] px-4 w-auto min-w-[220px]">
-                            {(data?.data?.courses || []).map((course: any) => (
+                        <select
+                            className="bhn-select h-[42px] px-4 w-auto min-w-[220px]"
+                            value={activeCourseId}
+                            onChange={(event) => setSelectedCourseId(event.target.value)}
+                            disabled={courses.length === 0}
+                        >
+                            {courses.length === 0 ? (
+                                <option value="">No courses available</option>
+                            ) : courses.map((course: any) => (
                                 <option key={course._id} value={course._id}>{course.title}</option>
                             ))}
                         </select>
+
+                        {isLoading && (
+                            <p className="text-xs text-[var(--bhn-text-soft)] flex items-center gap-2">
+                                <RefreshCw size={14} className="animate-spin" /> Loading course analytics...
+                            </p>
+                        )}
+                        {isError && (
+                            <p className="text-xs text-[var(--bhn-error-600)] flex items-center gap-2">
+                                Unable to load course analytics.
+                                <button type="button" onClick={() => refetch()} className="underline">Retry</button>
+                            </p>
+                        )}
 
                     </div>
 
@@ -69,26 +126,26 @@ export default function AnalyticsPage() {
                     {[
                         {
                             title: "TOTAL ENROLLMENTS",
-                            value: Number(overview?.totalStudents ?? 0).toLocaleString("en-IN"),
-                            sub: "+12%",
+                            value: Number(courseOverview.totalStudents ?? 0).toLocaleString("en-IN"),
+                            sub: courseOverview.totalStudentsChange || "Current course",
                             icon: TrendingUp,
                         },
                         {
                             title: "REVENUE GENERATED",
-                            value: `₹${Number(overview?.totalRevenue ?? 0).toLocaleString("en-IN")}`,
-                            sub: "Net earnings this month",
+                            value: `₹${Number(courseOverview.totalRevenue ?? 0).toLocaleString("en-IN")}`,
+                            sub: courseOverview.totalRevenueChange || "Course revenue",
                             icon: CircleDollarSign,
                         },
                         {
                             title: "COMPLETION RATE",
-                            value: `${overview?.completionRate ?? 0}%`,
-                            sub: "Global avg +12%",
+                            value: `${Number(courseOverview.completionRate ?? 0)}%`,
+                            sub: courseOverview.completionRateChange || "Course completion",
                             icon: Clock3,
                         },
                         {
                             title: "AVG RATING",
-                            value: Number(overview?.averageRating ?? 0).toFixed(1),
-                            sub: `From ${overview?.totalReviews ?? 0} reviews`,
+                            value: Number(courseOverview.averageRating ?? 0).toFixed(1),
+                            sub: courseOverview.averageRatingChange || "Course rating",
                             icon: Star,
                         },
                     ].map((card, i) => (
@@ -135,30 +192,40 @@ export default function AnalyticsPage() {
                                 preserveAspectRatio="none"
                                 className="w-full h-full"
                             >
-
-                                {/* CURVE */}
-                                <path
-                                    d="
-                                      M20 190
-                                      C90 160, 140 130, 220 140
-                                      C300 150, 360 125, 430 85
-                                      C500 45, 580 40, 680 80
-                                      "
-                                    fill="none"
-                                    stroke="var(--bhn-brand-600)"
-                                    strokeWidth="4"
-                                    strokeLinecap="round"
-                                />
-
+                                {trendPath ? (
+                                    <>
+                                        <path
+                                            d={trendPath}
+                                            fill="none"
+                                            stroke="var(--bhn-brand-600)"
+                                            strokeWidth="4"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                        />
+                                        {trendPoints.map((point) => (
+                                            <circle
+                                                key={`${point.trend.day ?? "trend"}-${point.x}`}
+                                                cx={point.x}
+                                                cy={point.y}
+                                                r="5"
+                                                fill="var(--bhn-surface)"
+                                                stroke="var(--bhn-brand-600)"
+                                                strokeWidth="3"
+                                            />
+                                        ))}
+                                    </>
+                                ) : (
+                                    <text x="350" y="130" textAnchor="middle" fill="var(--bhn-text-soft)" fontSize="18">
+                                        No enrollment trend data available
+                                    </text>
+                                )}
                             </svg>
 
                             {/* LABELS */}
                             <div className="absolute bottom-0 left-0 right-0 flex justify-between text-[11px] text-[#8B7B70] dark:text-[var(--bhn-text-soft)] px-1">
-                                {["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"].map(
-                                    (day) => (
-                                        <span key={day}>{day}</span>
-                                    )
-                                )}
+                                {visibleTrends.length > 0 ? visibleTrends.map((trend, index) => (
+                                    <span key={`${trend.day ?? index}`}>{trend.day ?? `DAY ${index + 1}`}</span>
+                                )) : <span>No trend labels</span>}
                             </div>
 
                         </div>
@@ -228,7 +295,7 @@ export default function AnalyticsPage() {
                             <div>
                                 <div className="flex items-end gap-1">
                                     <h2 className="text-[52px] leading-none font-semibold text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)]">
-                                        {pd.watchTime ?? 0}
+                                        {engagement.averageWatchTime ?? pd.watchTime ?? 0}
                                     </h2>
 
                                     <span className="text-[18px] mb-1 text-[#6A5B53] dark:text-[var(--bhn-text-soft)]">
@@ -322,7 +389,11 @@ export default function AnalyticsPage() {
                                 Top Performing Lessons
                             </h3>
 
-                            <button onClick={() => alert("View all lessons - coming soon")} className="text-[13px] text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)] font-medium hover:underline self-start sm:self-auto">
+                            <button
+                                type="button"
+                                onClick={() => toast("All available lesson insights are listed below.")}
+                                className="text-[13px] text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)] font-medium hover:underline self-start sm:self-auto"
+                            >
                                 Give All
                             </button>
 
@@ -345,8 +416,8 @@ export default function AnalyticsPage() {
 
                                 <tbody>
 
-                                    {(pd.topLessons || []).length > 0 ? pd.topLessons.map((item: any, i: number) => (
-                                        <tr key={i}>
+                                    {insightRows.length > 0 ? insightRows.map((item, i) => (
+                                        <tr key={item._id || i}>
                                             <td className="font-medium max-w-[280px]">
                                                 {item.title}
                                             </td>
@@ -355,7 +426,8 @@ export default function AnalyticsPage() {
                                             <td>{item.result}</td>
                                             <td className="text-right">
                                                 <button
-                                                    onClick={() => router.push(`/instructor/analytics/lesson/${item._id || i}`)}
+                                                    type="button"
+                                                    onClick={() => setDetailRow(item)}
                                                     className="text-[var(--bhn-brand-700)] text-[13px] font-medium hover:underline whitespace-nowrap"
                                                 >
                                                     View details
@@ -451,6 +523,90 @@ export default function AnalyticsPage() {
                         </div>
                     </div>
                 </div>
+
+                {/* COURSE BREAKDOWN */}
+                <div className="bhn-card p-4 mt-6">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                        <h3 className="text-[22px] font-semibold text-[var(--bhn-text)] dark:text-[var(--bhn-neutral-400)] font-serif">
+                            Course Breakdown
+                        </h3>
+                        <button
+                            type="button"
+                            onClick={() => router.push("/instructor/performance")}
+                            className="text-[13px] text-[var(--bhn-brand-700)] dark:text-[var(--bhn-brand-400)] font-medium hover:underline self-start sm:self-auto"
+                        >
+                            View performance
+                        </button>
+                    </div>
+
+                    <div className="bhn-table-wrap">
+                        <table className="bhn-table">
+                            <thead>
+                                <tr>
+                                    <th>Course</th>
+                                    <th>Category</th>
+                                    <th>Students</th>
+                                    <th>Rating</th>
+                                    <th>Status</th>
+                                    <th className="text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {courses.length > 0 ? courses.map((course: any) => (
+                                    <tr key={course._id}>
+                                        <td className="font-medium max-w-[280px]">{course.title}</td>
+                                        <td>{course.category || "—"}</td>
+                                        <td>{Number(course.totalStudents ?? 0).toLocaleString("en-IN")}</td>
+                                        <td>{Number(course.rating ?? 0).toFixed(1)}</td>
+                                        <td>{course.status || "—"}</td>
+                                        <td className="text-right">
+                                            <button
+                                                type="button"
+                                                onClick={() => router.push(`/instructor/performance?courseId=${course._id}`)}
+                                                className="text-[var(--bhn-brand-700)] text-[13px] font-medium hover:underline whitespace-nowrap"
+                                            >
+                                                View details
+                                            </button>
+                                        </td>
+                                    </tr>
+                                )) : (
+                                    <tr>
+                                        <td colSpan={6} className="text-center text-[var(--bhn-text-soft)]">
+                                            No courses available yet.
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <Modal
+                    open={Boolean(detailRow)}
+                    onClose={() => setDetailRow(null)}
+                    title={detailRow?.title || "Insight details"}
+                    size="md"
+                >
+                    <div className="space-y-4 text-sm">
+                        <dl className="grid grid-cols-2 gap-3">
+                            <div className="p-3 rounded-lg bg-[var(--bhn-surface-3)]">
+                                <dt className="text-xs text-[var(--bhn-text-soft)]">Watch</dt>
+                                <dd className="font-medium text-[var(--bhn-text)]">{detailRow?.watch || "—"}</dd>
+                            </div>
+                            <div className="p-3 rounded-lg bg-[var(--bhn-surface-3)]">
+                                <dt className="text-xs text-[var(--bhn-text-soft)]">Completion</dt>
+                                <dd className="font-medium text-[var(--bhn-brand-700)]">{detailRow?.complete || "—"}</dd>
+                            </div>
+                            <div className="p-3 rounded-lg bg-[var(--bhn-surface-3)] col-span-2">
+                                <dt className="text-xs text-[var(--bhn-text-soft)]">Average result</dt>
+                                <dd className="font-medium text-[var(--bhn-text)]">{detailRow?.result || "—"}</dd>
+                            </div>
+                        </dl>
+                        <p className="text-xs text-[var(--bhn-text-soft)]">
+                            Insights are generated from learner progress records returned by the instructor API.
+                        </p>
+                    </div>
+                </Modal>
 
             </div>
 

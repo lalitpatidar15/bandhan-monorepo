@@ -29,6 +29,9 @@ const Application = require("../../models/jobPoster/Application.js");
 const Plan = require("../../models/jobPoster/Plan.js");
 const AuditLog = require("../../models/shared/AuditLog.js");
 const AdminSettingHistory = require("../../models/admin/AdminSettingHistory.js");
+const Community = require("../../models/shared/Community.js");
+const Inspiration = require("../../models/shared/Inspiration.js");
+const { formatModerationReview } = require("../../utils/reviewModeration.js");
 const orderController = require("../ecommUser/orderController.js");
 const { normalizeShippingFields, validateShippingForActive } = require("../../utils/shippingFields.js");
 const { createRazorpayRefund } = require("../../services/razorpayService.js");
@@ -132,7 +135,13 @@ async function ensureRoleSeed() {
     {
       role: "moderator",
       description: "Content and listing moderation",
-      permissions: ["moderation.jobs", "moderation.products", "moderation.posts"],
+      permissions: ["dashboard.read", "users.read", "moderation.jobs", "moderation.products", "moderation.posts", "moderation.reviews"],
+      isSystem: true,
+    },
+    {
+      role: "sub_admin",
+      description: "Limited operations access",
+      permissions: ["dashboard.read", "users.read", "moderation.reviews"],
       isSystem: true,
     },
   ]);
@@ -1215,6 +1224,85 @@ exports.updateProductModeration = async (req, res) => {
   } catch (error) {
     console.error("Error in controllers/admin/adminController.js:", error);
 
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// ==================== REVIEW MODERATION ====================
+const REVIEW_MODERATION_STATUSES = new Set(["pending", "approved", "rejected"]);
+const REVIEW_MODERATION_ITEM_TYPES = new Set(["product", "venue", "service", "vendor"]);
+
+exports.getReviewModerationQueue = async (req, res) => {
+  try {
+    const status = String(req.query.status || "").toLowerCase();
+    const itemType = String(req.query.itemType || "").toLowerCase();
+
+    let statusFilter = {};
+    if (REVIEW_MODERATION_STATUSES.has(status)) {
+      statusFilter = status === "pending"
+        ? { status: { $in: [null, "pending"] } }
+        : { status };
+    }
+
+    const queries = [];
+    if (!itemType || itemType === "product") {
+      queries.push(
+        Review.find(statusFilter)
+          .populate("userId", "fullName name")
+          .sort({ createdAt: -1 })
+          .lean()
+      );
+    }
+    if (!itemType || REVIEW_MODERATION_ITEM_TYPES.has(itemType)) {
+      const ecommFilter = { ...statusFilter };
+      if (itemType && itemType !== "vendor") ecommFilter.itemType = itemType;
+      queries.push(
+        EcommReview.find(ecommFilter)
+          .populate("userId", "fullName name")
+          .sort({ createdAt: -1 })
+          .lean()
+      );
+    }
+
+    const groups = await Promise.all(queries);
+    const data = groups
+      .flat()
+      .map((review) => formatModerationReview(review))
+      .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+
+    res.json({ success: true, data });
+  } catch (error) {
+    console.error("Error in controllers/admin/adminController.js:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+exports.updateReviewModeration = async (req, res) => {
+  try {
+    const status = String(req.body.status || "").toLowerCase();
+    if (status !== "approved" && status !== "rejected") {
+      return res.status(400).json({ success: false, message: "Status must be approved or rejected" });
+    }
+
+    const itemType = String(req.body.itemType || "").toLowerCase();
+    let models = [Review, EcommReview];
+    if (itemType === "product") models = [Review];
+    else if (itemType === "venue" || itemType === "service") models = [EcommReview];
+
+    const update = { status, isVisible: status === "approved" };
+    const results = await Promise.all(
+      models.map((Model) =>
+        Model.findByIdAndUpdate(req.params.id, update, { new: true, runValidators: true }).lean()
+      )
+    );
+    const review = results.find(Boolean);
+    if (!review) {
+      return res.status(404).json({ success: false, message: "Review not found" });
+    }
+
+    res.json({ success: true, data: formatModerationReview(review) });
+  } catch (error) {
+    console.error("Error in controllers/admin/adminController.js:", error);
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
@@ -2701,3 +2789,142 @@ exports.getSettingsHistory = async (_req, res) => {
 exports.createShiprocketShipment = orderController.createShipment;
 exports.assignShiprocketAwb = orderController.assignShiprocketAwb;
 exports.refreshShiprocketTracking = orderController.trackShipment;
+
+// ==================== FEATURED LISTING TOGGLE ====================
+const FEATURED_LISTING_MODELS = { product: Product, service: Service, venue: Venue };
+
+exports.toggleFeaturedListing = async (req, res) => {
+  try {
+    const itemType = String(req.body.itemType || "").toLowerCase();
+    const Model = FEATURED_LISTING_MODELS[itemType];
+    if (!Model) {
+      return res.status(400).json({ success: false, message: "Invalid item type" });
+    }
+    if (typeof req.body.isFeatured !== "boolean") {
+      return res.status(400).json({ success: false, message: "isFeatured must be a boolean" });
+    }
+
+    const updates = { isFeatured: req.body.isFeatured };
+    if (Model.schema.path("featuredAt")) {
+      updates.featuredAt = req.body.isFeatured ? new Date() : null;
+    }
+    const data = await Model.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true });
+    if (!data) {
+      return res.status(404).json({ success: false, message: "Listing not found" });
+    }
+
+    res.json({ success: true, data });
+  } catch (error) {
+    console.error("Error in controllers/admin/adminController.js:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// ==================== COMMUNITIES (ADMIN) ====================
+exports.getCommunities = async (req, res) => {
+  try {
+    const filter = {};
+    if (req.query.category) filter.category = req.query.category;
+    if (req.query.status) filter.status = req.query.status;
+    if (req.query.search) filter.name = { $regex: String(req.query.search), $options: "i" };
+
+    const communities = await Community.find(filter).sort({ createdAt: -1 });
+    res.json({ success: true, data: communities });
+  } catch (error) {
+    console.error("Error in controllers/admin/adminController.js:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+exports.createCommunity = async (req, res) => {
+  try {
+    const community = await Community.create({ ...req.body, createdBy: req.user.id });
+    res.status(201).json({ success: true, data: community });
+  } catch (error) {
+    console.error("Error in controllers/admin/adminController.js:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+exports.updateCommunity = async (req, res) => {
+  try {
+    const community = await Community.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!community) {
+      return res.status(404).json({ success: false, message: "Community not found" });
+    }
+    res.json({ success: true, data: community });
+  } catch (error) {
+    console.error("Error in controllers/admin/adminController.js:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+exports.deleteCommunity = async (req, res) => {
+  try {
+    const community = await Community.findByIdAndDelete(req.params.id);
+    if (!community) {
+      return res.status(404).json({ success: false, message: "Community not found" });
+    }
+    res.json({ success: true, message: "Community deleted" });
+  } catch (error) {
+    console.error("Error in controllers/admin/adminController.js:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// ==================== INSPIRATION CMS (ADMIN) ====================
+exports.getInspiration = async (req, res) => {
+  try {
+    const filter = {};
+    if (req.query.category) filter.category = req.query.category;
+    if (req.query.search) filter.title = { $regex: String(req.query.search), $options: "i" };
+
+    const stories = await Inspiration.find(filter).sort({ publishedAt: -1, createdAt: -1 });
+    res.json({ success: true, data: stories });
+  } catch (error) {
+    console.error("Error in controllers/admin/adminController.js:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+exports.createInspiration = async (req, res) => {
+  try {
+    const story = await Inspiration.create(req.body);
+    res.status(201).json({ success: true, data: story });
+  } catch (error) {
+    console.error("Error in controllers/admin/adminController.js:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+exports.updateInspiration = async (req, res) => {
+  try {
+    const story = await Inspiration.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!story) {
+      return res.status(404).json({ success: false, message: "Inspiration story not found" });
+    }
+    res.json({ success: true, data: story });
+  } catch (error) {
+    console.error("Error in controllers/admin/adminController.js:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+exports.deleteInspiration = async (req, res) => {
+  try {
+    const story = await Inspiration.findByIdAndDelete(req.params.id);
+    if (!story) {
+      return res.status(404).json({ success: false, message: "Inspiration story not found" });
+    }
+    res.json({ success: true, message: "Inspiration story deleted" });
+  } catch (error) {
+    console.error("Error in controllers/admin/adminController.js:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};

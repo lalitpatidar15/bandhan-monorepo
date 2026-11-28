@@ -1,8 +1,11 @@
 const Earning = require("../../models/shared/Earning.js");
 const Order = require("../../models/shared/Order.js");
 const User = require("../../models/shared/User.js");
+const Payment = require("../../models/shared/Payment.js");
+const Course = require("../../models/student/Course.js");
 const Settlement = require("../../models/shared/Settlement.js");
 const { getAuthenticatedOwnerId, isAdmin } = require("../../utils/ownership.js");
+const { calculateCommission } = require("../../services/commissionService.js");
 
 function normalizeRange(value) {
   const normalized = String(value || "This Month").trim().toLowerCase();
@@ -54,10 +57,16 @@ function buildSellerScope(req) {
     return { userId, role, filter: {} };
   }
 
+  // Instructors are paid from course enrollments; their payments do not carry a
+  // sellerId, so the authenticated id is the ownership key for both sources.
+  const ownerFilter = role === "instructor"
+    ? { $or: [{ sellerId: userId }, { instructorId: userId }] }
+    : { sellerId: userId };
+
   return {
     userId,
     role,
-    filter: { sellerId: userId },
+    filter: ownerFilter,
     orderFilter: { $or: [{ sellerId: userId }, { "items.sellerId": userId }] },
   };
 }
@@ -65,6 +74,57 @@ function buildSellerScope(req) {
 function buildDateFilter(range, fieldName = "transactionDate") {
   const { start, end } = getRangeBounds(range);
   return { [fieldName]: { $gte: start, $lte: end } };
+}
+
+// Instructor payouts come from completed course payments, not from product
+// orders. Resolve them through the courses owned by req.user.id.
+async function getInstructorPayments(userId, range) {
+  try {
+    const courses = await Course.find({ instructorId: userId }).select("_id title").lean();
+    if (!courses.length) return [];
+
+    const courseTitles = new Map(courses.map((course) => [String(course._id), course.title || "Course"]));
+    const paymentFilter = {
+      courseId: { $in: [...courseTitles.keys()] },
+      status: { $in: ["completed", "paid"] },
+    };
+    if (range !== "all") Object.assign(paymentFilter, buildDateFilter(range, "createdAt"));
+
+    const payments = await Payment.find(paymentFilter)
+      .populate({
+        path: "userId",
+        select: "name fullName nameEn email",
+        strictPopulate: false,
+      })
+      .sort({ createdAt: -1 })
+      .lean();
+
+    return Promise.all(payments.map(async (payment) => {
+      const amount = Number(payment.totalAmount || payment.amount || 0);
+      const commission = payment.platformFee !== undefined && payment.platformFee !== null
+        ? Number(payment.platformFee)
+        : (await calculateCommission("Learning", amount)).commission;
+      const net = Math.round((amount - commission) * 100) / 100;
+      const courseId = payment.courseId?._id || payment.courseId;
+
+      return {
+        _id: payment._id,
+        transactionId: payment.transactionId || payment.orderId || payment._id,
+        sellerId: userId,
+        serviceName: courseTitles.get(String(courseId)) || "Course",
+        customerName: resolveCustomerName({ ...payment, userId: payment.userId || payment.studentId }),
+        amount,
+        commission,
+        net,
+        status: "Completed",
+        transactionDate: payment.createdAt || new Date(),
+        createdAt: payment.createdAt || new Date(),
+      };
+    }));
+  } catch (error) {
+    console.error("Unable to resolve instructor payments:", error);
+    return [];
+  }
 }
 
 // Safely extract customer name from User Population or Order Address
@@ -85,10 +145,34 @@ function resolveCustomerName(doc) {
   return "Guest Customer";
 }
 
-function toSummaryRecord(item) {
+function resolveOrderCategory(order) {
+  return order?.category || order?.productCategory || order?.items?.[0]?.category || "";
+}
+
+async function orderToTransaction(order) {
+  const amount = Number(order.amount || order.totalAmount || 0);
+  const { commission, net } = await calculateCommission(resolveOrderCategory(order), amount);
+
+  return {
+    _id: order._id,
+    transactionId: order.orderId || order._id,
+    sellerId: order.sellerId,
+    serviceName: order.service || order.productName || "Order",
+    customerName: resolveCustomerName(order),
+    amount,
+    commission,
+    net,
+    status: order.orderStatus === "completed" || order.paymentStatus === "paid" ? "Completed" : "Pending",
+    transactionDate: order.createdAt || order.updatedAt || new Date(),
+    createdAt: order.createdAt || order.updatedAt || new Date(),
+  };
+}
+
+async function toSummaryRecord(item) {
   const amount = Number(item.amount || 0);
-  const commission = Number(item.commission || Math.round(amount * 0.1));
-  const net = Number(item.net || amount - commission);
+  const fallback = await calculateCommission(resolveOrderCategory(item), amount);
+  const commission = Number(item.commission || fallback.commission);
+  const net = Number(item.net || fallback.net);
   const status = String(item.status || item.orderStatus || "Pending");
 
   return {
@@ -181,6 +265,11 @@ exports.getSummary = async (req, res) => {
 
     let source = "earnings";
 
+    if (!transactions.length && role === "instructor" && userId) {
+      transactions = await getInstructorPayments(userId, range);
+      source = "instructor_payments";
+    }
+
     if (!transactions.length && userId) {
       const orders = await Order.find(orderQuery)
         .populate({
@@ -191,23 +280,11 @@ exports.getSummary = async (req, res) => {
         .sort({ createdAt: -1 })
         .lean();
 
-      transactions = orders.map((order) => ({
-        _id: order._id,
-        transactionId: order.orderId || order._id,
-        sellerId: order.sellerId,
-        serviceName: order.service || order.productName || "Order",
-        customerName: resolveCustomerName(order),
-        amount: order.amount || order.totalAmount || 0,
-        commission: Math.round((order.amount || order.totalAmount || 0) * 0.1),
-        net: (order.amount || order.totalAmount || 0) - Math.round((order.amount || order.totalAmount || 0) * 0.1),
-        status: order.orderStatus === "completed" || order.paymentStatus === "paid" ? "Completed" : "Pending",
-        transactionDate: order.createdAt || order.updatedAt || new Date(),
-        createdAt: order.createdAt || order.updatedAt || new Date(),
-      }));
+      transactions = await Promise.all(orders.map(orderToTransaction));
       source = "orders";
     }
 
-    const normalized = transactions.map(toSummaryRecord);
+    const normalized = await Promise.all(transactions.map(toSummaryRecord));
     const totalEarnings = normalized.reduce((sum, item) => sum + item.net, 0);
     const orderRevenue = normalized.reduce((sum, item) => sum + item.amount, 0);
     const commission = normalized.reduce((sum, item) => sum + item.commission, 0);
@@ -253,6 +330,10 @@ exports.getTransactions = async (req, res) => {
       .sort({ createdAt: -1 })
       .lean();
 
+    if (!rawData.length && role === "instructor" && userId) {
+      rawData = await getInstructorPayments(userId, range);
+    }
+
     if (!rawData.length && userId) {
       const orders = await Order.find(orderQuery)
         .populate({
@@ -263,19 +344,7 @@ exports.getTransactions = async (req, res) => {
         .sort({ createdAt: -1 })
         .lean();
 
-      rawData = orders.map((order) => ({
-        _id: order._id,
-        transactionId: order.orderId || order._id,
-        sellerId: order.sellerId,
-        serviceName: order.service || order.productName || "Order",
-        customerName: resolveCustomerName(order),
-        amount: order.amount || order.totalAmount || 0,
-        commission: Math.round((order.amount || order.totalAmount || 0) * 0.1),
-        net: (order.amount || order.totalAmount || 0) - Math.round((order.amount || order.totalAmount || 0) * 0.1),
-        status: order.orderStatus === "completed" || order.paymentStatus === "paid" ? "Completed" : "Pending",
-        transactionDate: order.createdAt || order.updatedAt || new Date(),
-        createdAt: order.createdAt || order.updatedAt || new Date(),
-      }));
+      rawData = await Promise.all(orders.map(orderToTransaction));
     } else {
       rawData = rawData.map((item) => ({
         ...item,
@@ -302,7 +371,7 @@ exports.getRevenueChart = async (req, res) => {
     const range = normalizeRange(req.query.range);
     const matchStage = { ...filter, ...buildDateFilter(range, "transactionDate") };
 
-    const data = await Earning.aggregate([
+    let data = await Earning.aggregate([
       { $match: matchStage },
       {
         $group: {
@@ -312,6 +381,18 @@ exports.getRevenueChart = async (req, res) => {
       },
       { $sort: { _id: 1 } },
     ]);
+
+    if (!data.length && role === "instructor" && userId) {
+      const payments = await getInstructorPayments(userId, range);
+      const byMonth = new Map();
+      for (const payment of payments) {
+        const month = new Date(payment.transactionDate).getMonth() + 1;
+        byMonth.set(month, (byMonth.get(month) || 0) + payment.net);
+      }
+      data = [...byMonth.entries()]
+        .sort(([a], [b]) => a - b)
+        .map(([_id, revenue]) => ({ _id, revenue }));
+    }
 
     res.json({
       success: true,
@@ -357,7 +438,7 @@ exports.getCommissionBreakdown = async (req, res) => {
 
 exports.withdraw = async (req, res) => {
   try {
-    const { userId } = buildSellerScope(req);
+    const { userId, role, filter } = buildSellerScope(req);
     if (!userId) {
       return res.status(401).json({ success: false, message: "Authentication required" });
     }
@@ -367,10 +448,13 @@ exports.withdraw = async (req, res) => {
       return res.status(400).json({ success: false, message: "Enter a withdrawal amount greater than 0" });
     }
 
-    const earnings = await Earning.find({ sellerId: userId }).select("net status").lean();
+    const earnings = await Earning.find(role === "instructor" ? filter : { sellerId: userId })
+      .select("net status")
+      .lean();
+    const instructorPayments = role === "instructor" ? await getInstructorPayments(userId, "all") : [];
     const completedNet = earnings.reduce((sum, earning) => (
       String(earning.status || "").toLowerCase() === "completed" ? sum + Number(earning.net || 0) : sum
-    ), 0);
+    ), 0) + instructorPayments.reduce((sum, payment) => sum + Number(payment.net || 0), 0);
     const settlements = await Settlement.find({
       sellerId: userId,
       status: { $nin: ["failed"] },
@@ -388,13 +472,14 @@ exports.withdraw = async (req, res) => {
 
     const now = new Date();
     const period = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+    const { commission } = await calculateCommission(req.body.category || "", completedNet);
     const settlement = await Settlement.create({
       sellerId: userId,
       period,
       totalSales: completedNet,
-      commissionDeducted: 0,
+      commissionDeducted: commission,
       netPayable: amount,
-      orderCount: earnings.length,
+      orderCount: earnings.length + instructorPayments.length,
       status: "pending",
       paymentMethod: String(req.body.paymentMethod || "bank_transfer"),
       notes: String(req.body.notes || "Seller withdrawal request"),

@@ -9,7 +9,10 @@ const ecommReviewSchema = new mongoose.Schema({
   comment: { type: String, required: true },
   image: { type: String, default: "" },
   sellerReply: { type: String, default: "" },
-  repliedAt: Date
+  repliedAt: Date,
+  // Legacy reviews have no status and remain publicly visible.
+  status: { type: String, enum: ["pending", "approved", "rejected"], default: "approved" },
+  isVisible: { type: Boolean, default: true }
 }, { timestamps: true });
 
 ecommReviewSchema.index({ userId: 1, itemId: 1, itemType: 1 }, { unique: true });

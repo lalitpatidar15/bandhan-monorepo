@@ -342,6 +342,7 @@ if (variant === "main1") {
               <Link href="/userdashboard/booking" className={dashboardNavClass("/userdashboard/booking")}>Bookings</Link>
               <Link href="/userdashboard/orders" className={dashboardNavClass("/userdashboard/orders")}>Orders</Link>
               <Link href="/userdashboard/feed" className={dashboardNavClass("/userdashboard/feed")}>Community</Link>
+              <Link href="/userdashboard/communities" className={dashboardNavClass("/userdashboard/communities")}>Communities</Link>
               <Link href="/userdashboard/planner" className={`${dashboardNavClass("/userdashboard/planner")} border-l pl-4`}>Pricing</Link>
             </nav>
           )}
@@ -423,6 +424,7 @@ if (variant === "main1") {
                   { label: "Profile", href: "/userdashboard/profile" },
                   { label: "Orders", href: "/userdashboard/orders" },
                   { label: "Bookings", href: "/userdashboard/booking" },
+                  { label: "Communities", href: "/userdashboard/communities" },
                   { label: "Services", href: "/explore?type=services" },
                   { label: "Products", href: "/products" },
                   { label: "Venues", href: "/explore?type=venues" },

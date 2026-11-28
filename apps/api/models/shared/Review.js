@@ -79,6 +79,18 @@ const reviewSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+
+    // Legacy reviews have no status and remain publicly visible.
+    status: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "approved",
+    },
+
+    isVisible: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,

@@ -55,7 +55,7 @@ router.post("/create", auth, requireRole("buyer","seller","admin","eventOwner","
  *       200:
  *         description: Summary fetched successfully
  */
-router.get("/summary", auth, requireRole("buyer","seller","admin","eventOwner","learner","jobSeeker"), earningController.getSummary);
+router.get("/summary", auth, requireRole("buyer","seller","admin","instructor","eventOwner","learner","jobSeeker"), earningController.getSummary);
 
 
 /**
@@ -70,7 +70,7 @@ router.get("/summary", auth, requireRole("buyer","seller","admin","eventOwner","
  *       200:
  *         description: Transactions fetched successfully
  */
-router.get("/transactions", auth, requireRole("buyer","seller","admin","eventOwner","learner","jobSeeker"), earningController.getTransactions);
+router.get("/transactions", auth, requireRole("buyer","seller","admin","instructor","eventOwner","learner","jobSeeker"), earningController.getTransactions);
 
 
 /**
@@ -85,7 +85,7 @@ router.get("/transactions", auth, requireRole("buyer","seller","admin","eventOwn
  *       200:
  *         description: Revenue chart fetched successfully
  */
-router.get("/chart", auth, requireRole("buyer","seller","admin","eventOwner","learner","jobSeeker"), earningController.getRevenueChart);
+router.get("/chart", auth, requireRole("buyer","seller","admin","instructor","eventOwner","learner","jobSeeker"), earningController.getRevenueChart);
 
 
 /**
@@ -108,7 +108,7 @@ router.get("/chart", auth, requireRole("buyer","seller","admin","eventOwner","le
  */
 router.get(
   "/breakdown/:id",
-  auth, requireRole("buyer","seller","admin","eventOwner","learner","jobSeeker"),
+  auth, requireRole("buyer","seller","admin","instructor","eventOwner","learner","jobSeeker"),
   earningController.getCommissionBreakdown
 );
 
@@ -125,6 +125,6 @@ router.get(
  *       200:
  *         description: Withdrawal request submitted
  */
-router.post("/withdraw", auth, requireRole("buyer","seller","admin","eventOwner","learner","jobSeeker"), earningController.withdraw);
+router.post("/withdraw", auth, requireRole("buyer","seller","admin","instructor","eventOwner","learner","jobSeeker"), earningController.withdraw);
 
 module.exports = router;

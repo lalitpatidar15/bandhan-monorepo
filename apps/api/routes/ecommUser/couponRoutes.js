@@ -1,5 +1,6 @@
 const express = require("express");
 const Coupon = require("../../models/shared/Coupon.js");
+const Order = require("../../models/shared/Order.js");
 const auth = require("../../middlewares/auth.js");
 const requireEcommUser = require("../../middlewares/requireEcommUser.js");
 const { requireRole } = require("../../middlewares/role.js");
@@ -17,6 +18,30 @@ const activeCouponFilter = () => {
     ],
   };
 };
+
+// Audience checks stay defensive: if the supporting data cannot be read, the
+// coupon is allowed rather than blocking a legitimate customer.
+async function audienceAllowsCoupon(audience, user) {
+  const target = audience || "all";
+  if (target === "all") return true;
+  if (target === "guest") return !user;
+  if (target === "referral") return true;
+  if (!user?.id) return true;
+
+  if (target === "welcome" || target === "existing") {
+    try {
+      const count = await Order.countDocuments({
+        $or: [{ userId: user.id }, { buyerId: user.id }],
+      });
+      return target === "welcome" ? count === 0 : count > 0;
+    } catch (error) {
+      console.error("Coupon audience lookup failed:", error);
+      return true;
+    }
+  }
+
+  return true;
+}
 
 // Public, read-only promotion data for storefront banners. Administrative and
 // usage fields are intentionally excluded.
@@ -46,6 +71,9 @@ router.post("/validate", auth, requireEcommUser, async (req, res) => {
     if (!coupon) return res.status(404).json({ success: false, message: "Invalid or expired coupon code" });
     if (orderAmount < coupon.minOrderAmount) {
       return res.status(400).json({ success: false, message: `Minimum order amount is ₹${coupon.minOrderAmount}` });
+    }
+    if (!(await audienceAllowsCoupon(coupon.audience, req.user))) {
+      return res.status(403).json({ success: false, message: "This coupon is not available for your account" });
     }
 
     let discount = coupon.discountType === "percentage"

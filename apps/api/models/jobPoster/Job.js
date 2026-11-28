@@ -176,6 +176,12 @@ promotionStatus:{
     isPublished:{
         type:Boolean,
         default:false
+    },
+
+    paymentId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Payment",
+        default:null
     }
 
 },{

@@ -7,6 +7,10 @@ export const instructorDashboardApi = baseApi.injectEndpoints({
       query: () => "/instructor/dashboard",
       providesTags: ["InstructorDashboard"],
     }),
+    getInstructorEarnings: builder.query<any, void>({
+      query: () => "/instructor/earnings",
+      providesTags: ["InstructorDashboard"],
+    }),
     getInstructorCourseDashboard: builder.query<any, string>({
       query: (courseId) => `/dashboard/${courseId}/dashboard`,
       providesTags: ["InstructorDashboard"],
@@ -19,11 +23,19 @@ export const instructorDashboardApi = baseApi.injectEndpoints({
     getInstructorStudent: builder.query<any, { courseId: string; studentId: string }>({
       query: ({ courseId, studentId }) => `/dashboard/${courseId}/student/${studentId}`,
     }),
-    updateInstructorStudentProgress: builder.mutation<any, { courseId: string; studentId: string; progressPercentage: number }>({
-      query: ({ courseId, studentId, progressPercentage }) => ({
+    updateInstructorStudentProgress: builder.mutation<any, { courseId: string; studentId: string; completedLessons: number; totalLessons: number }>({
+      query: ({ courseId, studentId, completedLessons, totalLessons }) => ({
         url: `/dashboard/${courseId}/student/${studentId}/progress`,
         method: "PUT",
-        body: { progressPercentage },
+        body: { completedLessons, totalLessons },
+      }),
+      invalidatesTags: ["InstructorDashboard"],
+    }),
+    issueInstructorCertificate: builder.mutation<any, { courseId: string; studentId: string; title?: string }>({
+      query: ({ courseId, studentId, title }) => ({
+        url: `/instructor/course/${courseId}/student/${studentId}/certificate`,
+        method: "POST",
+        body: title ? { title } : {},
       }),
       invalidatesTags: ["InstructorDashboard"],
     }),
@@ -52,10 +64,12 @@ export const instructorDashboardApi = baseApi.injectEndpoints({
 
 export const {
   useGetInstructorOverviewQuery,
+  useGetInstructorEarningsQuery,
   useGetInstructorCourseDashboardQuery,
   useGetInstructorStudentsQuery,
   useGetInstructorStudentQuery,
   useUpdateInstructorStudentProgressMutation,
+  useIssueInstructorCertificateMutation,
   useGetInstructorReviewsQuery,
   useGetInstructorReviewStatsQuery,
   useGetInstructorPageResourcesQuery,

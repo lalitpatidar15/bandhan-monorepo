@@ -287,7 +287,8 @@ const paymentSchema = new mongoose.Schema({
             "bulk_unlock",
             "invoice",
             "product_order",
-            "booking"
+            "booking",
+            "job_posting_fee"
         ],
         required:true
     },

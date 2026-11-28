@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import DashboardLayout from "@/components/userDashboard/Dashboardlayout";
 import HashtagGenerator from "@/components/userDashboard/HashtagGenerator";
+import InspirationSection from "@/components/userDashboard/InspirationSection";
 import { PageHeader, Spinner, StatCard, Badge, JourneyPanel } from "@bandhan/ui";
 import {
   useGetDashboardDataQuery,
@@ -274,6 +275,8 @@ export default function EventManagerDashboard() {
             {!upcomingMilestones.length && <div className="md:col-span-3 bhn-card p-5 text-sm text-[var(--bhn-text-muted)]">No upcoming bookings yet.</div>}
           </div>
         </section>
+
+        <InspirationSection limit={6} />
 
         <section className="space-y-4">
           <h3 className="font-serif text-xl font-bold text-[var(--bhn-text)]">

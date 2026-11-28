@@ -9,6 +9,7 @@ const {
   buildOwnerScopeFilter,
 } = require("../../utils/ownership.js");
 const { resolveBuyerIdentity, resolveSellerIdentity } = require("../../utils/ecommIdentity.js");
+const { PUBLIC_REVIEW_FILTER } = require("../../utils/reviewModeration.js");
 
 const buildReviewOwnershipFilter = (req, extra = {}) => {
   if (isAdmin(req)) {
@@ -137,7 +138,7 @@ exports.getReviewsByProduct = async (req, res) => {
         .json({ success: false, message: "productId is required" });
     }
 
-    const filter = { productId };
+    const filter = { productId, ...PUBLIC_REVIEW_FILTER };
     const rawReviews = await Review.find(filter)
       .populate("userId", "name fullName nameEn profileImage") // Fetch live user details
       .sort({ createdAt: -1 })
@@ -154,8 +155,9 @@ exports.getReviewsByProduct = async (req, res) => {
         realUser?.nameEn ||
         (r.customerName && r.customerName !== "Anonymous" ? r.customerName : "Customer");
 
+      const { status: _status, isVisible: _isVisible, ...publicReview } = r;
       return {
-        ...r,
+        ...publicReview,
         customerName: realName,
         customerImage: r.customerImage || realUser?.profileImage || "",
       };
@@ -401,6 +403,8 @@ exports.getReview = async (req, res) => {
 
     const realUser = data.userId;
     const formattedData = data.toObject();
+    delete formattedData.status;
+    delete formattedData.isVisible;
     formattedData.customerName =
       realUser?.name ||
       realUser?.fullName ||
@@ -421,9 +425,14 @@ exports.getReview = async (req, res) => {
 // UPDATE REVIEW
 exports.updateReview = async (req, res) => {
   try {
+    const updates = { ...req.body };
+    if (!isAdmin(req)) {
+      delete updates.status;
+      delete updates.isVisible;
+    }
     const data = await Review.findOneAndUpdate(
       buildReviewOwnershipFilter(req, { _id: req.params.id }),
-      req.body,
+      updates,
       {
         new: true,
       }

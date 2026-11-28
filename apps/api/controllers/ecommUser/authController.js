@@ -469,10 +469,14 @@ exports.socialLogin = async (req, res) => {
 
     setAuthCookie(res, token);
 
+    const portalRoles = ["seller", "student", "instructor", "jobseeker", "recruiter"];
+    const ssoCode = portalRoles.includes(user.role) ? await createSsoCode(user) : undefined;
+
     res.json({
       success: true,
       message: "Login successful",
       token,
+      ssoCode,
       user: {
         id: user._id,
         _id: user._id,

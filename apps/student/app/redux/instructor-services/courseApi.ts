@@ -9,6 +9,7 @@ export const instructorCourseApi = baseApi.injectEndpoints({
 
     getInstructorCourses: builder.query({
       query: () => "/curriculum/my-courses",
+      providesTags: ["InstructorCourses"],
     }),
 
     getInstructorCourse: builder.query({
@@ -345,6 +346,15 @@ export const instructorCourseApi = baseApi.injectEndpoints({
       }),
     }),
 
+    toggleCourseFeatured: builder.mutation({
+      query: ({ courseId, isFeatured }: { courseId: string; isFeatured: boolean }) => ({
+        url: `/instructor/course/${courseId}/featured`,
+        method: "PUT",
+        body: { isFeatured },
+      }),
+      invalidatesTags: ["InstructorCourses", "InstructorDashboard"],
+    }),
+
     publishCourse: builder.mutation({
       query: ({ courseId }: { courseId: string }) => ({
         url: `/curriculum/${courseId}/publish`,
@@ -401,6 +411,7 @@ export const {
   useUpdatePricingMutation,
   useUpdateEmiMutation,
   useUpdateVisibilityMutation,
+  useToggleCourseFeaturedMutation,
   usePublishCourseMutation,
   useGetCurriculumBuilderQuery,
   useGetCurriculumQuery,

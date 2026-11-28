@@ -95,6 +95,29 @@ interface NewsletterResponse {
   data: { email: string; status: 'active' | 'unsubscribed' };
 }
 
+export interface InspirationItem {
+  _id: string;
+  title: string;
+  category?: string;
+  image?: string;
+  images?: string[];
+  description?: string;
+  tags?: string[];
+  isActive?: boolean;
+  publishedAt?: string;
+}
+
+export interface InspirationQuery {
+  category?: string;
+  search?: string;
+  limit?: number;
+}
+
+interface InspirationResponse {
+  success: boolean;
+  data: InspirationItem[];
+}
+
 const emptyCatalogue: LandingCatalogue = {
   products: [], services: [], venues: [], courses: [], jobs: [],
 };
@@ -185,6 +208,12 @@ export const publicApi = baseApi.injectEndpoints({
         body,
       }),
     }),
+    getInspirations: builder.query<InspirationItem[], InspirationQuery | void>({
+      query: (params) => ({ url: "/inspiration", params: params ?? undefined }),
+      transformResponse: (response: InspirationResponse) =>
+        Array.isArray(response?.data) ? response.data : [],
+      keepUnusedDataFor: 300,
+    }),
   }),
 });
 
@@ -195,4 +224,5 @@ export const {
   useGetPublicCatalogueDetailQuery,
   useGetFeaturedReviewsQuery,
   useSubscribeNewsletterMutation,
+  useGetInspirationsQuery,
 } = publicApi;

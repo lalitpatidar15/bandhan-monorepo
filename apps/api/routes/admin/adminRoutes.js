@@ -114,6 +114,8 @@ router.put("/jobs/moderation/:id", adminController.updateJobModeration);
 router.get("/applications", adminController.getApplications);
 router.get("/moderation/products", adminController.getProductModerationQueue);
 router.put("/moderation/products/:id", adminController.updateProductModeration);
+router.get("/moderation/reviews", adminController.getReviewModerationQueue);
+router.put("/moderation/reviews/:id", adminController.updateReviewModeration);
 router.get("/moderation/content", adminController.getContentModerationQueue);
 router.delete("/moderation/content/:id", adminController.removeContentPost);
 
@@ -133,6 +135,18 @@ router.put("/commissions/:id", adminController.updateCommissionRule);
 router.delete("/commissions/:id", adminController.deleteCommissionRule);
 
 router.get("/featured-listings", adminController.getFeaturedListings);
+router.put("/featured-listings/:id", adminController.toggleFeaturedListing);
+
+// Community and wedding inspiration CMS
+router.get("/communities", adminController.getCommunities);
+router.post("/communities", adminController.createCommunity);
+router.put("/communities/:id", adminController.updateCommunity);
+router.delete("/communities/:id", adminController.deleteCommunity);
+
+router.get("/inspiration", adminController.getInspiration);
+router.post("/inspiration", adminController.createInspiration);
+router.put("/inspiration/:id", adminController.updateInspiration);
+router.delete("/inspiration/:id", adminController.deleteInspiration);
 
 router.get("/job-posting-fee", adminController.getJobPostingFee);
 router.put("/job-posting-fee", adminController.updateJobPostingFee);

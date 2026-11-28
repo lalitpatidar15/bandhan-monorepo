@@ -47,6 +47,12 @@ export default function Settings() {
     handleChange("catalogFilters", { ...(settings.catalogFilters || {}), [field]: values });
   };
 
+  const formatChange = (value: unknown) => {
+    if (value === undefined || value === null || value === '') return 'empty';
+    if (typeof value === 'object') return JSON.stringify(value);
+    return String(value);
+  };
+
   const handleSave = async () => {
     try {
       await updateSettings(settings).unwrap();
@@ -228,7 +234,7 @@ export default function Settings() {
         <h3 className="font-semibold text-lg mb-2">Configuration history</h3>
         <p className="text-sm text-[var(--bhn-text)] mb-3">Current version: {settings.version ?? 1}. The latest 100 changes are retained.</p>
         <div className="space-y-2 text-sm">
-          {(historyData?.data || []).slice(0, 10).map((entry) => <div key={`${entry.version}-${entry.changedAt}`} className="rounded border border-[var(--bhn-border)] p-3"><div className="font-medium">Version {entry.version} · {new Date(entry.changedAt).toLocaleString()}</div><div className="text-[var(--bhn-text)]">{Object.keys(entry.changes).join(', ')}</div></div>)}
+          {(historyData?.data || []).slice(0, 10).map((entry) => <div key={`${entry.version}-${entry.changedAt}`} className="rounded border border-[var(--bhn-border)] p-3"><div className="font-medium">Version {entry.version} · {entry.changedAt ? new Date(entry.changedAt).toLocaleString() : 'unknown date'}</div><div className="mt-1 space-y-1 text-[var(--bhn-text)]">{Object.entries(entry.changes || {}).map(([key, change]) => <div key={key}><span className="font-medium">{key}</span>: <span style={{ color: 'var(--bhn-text-muted)' }}>{formatChange(change?.from)}</span> → <span>{formatChange(change?.to)}</span></div>)}</div></div>)}
           {!historyData?.data?.length && <p className="text-[var(--bhn-text-muted)]">No setting changes have been recorded yet.</p>}
         </div>
       </div>

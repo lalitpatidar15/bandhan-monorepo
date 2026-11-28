@@ -12,6 +12,8 @@ import Enrollments from '@/components/Enrollments';
 import JobSeekers from '@/components/JobSeekers';
 import JobPosters from '@/components/JobPosters';
 import Moderation from '@/components/Moderation';
+import Reviews from '@/components/Reviews';
+import Communities from '@/components/Communities';
 import Categories from '@/components/Categories';
 import Commissions from '@/components/Commissions';
 import FeaturedListings from '@/components/FeaturedListings';
@@ -25,6 +27,7 @@ import RentalOrders from '@/components/RentalOrders';
 import Analytics from '@/components/Analytics';
 import Blogs from '@/components/Blogs';
 import Banners from '@/components/Banners';
+import Inspiration from '@/components/Inspiration';
 import Settings from '@/components/Settings';
 import CouponManager from '@/components/CouponManager';
 import NotificationManager from '@/components/NotificationManager';
@@ -72,6 +75,12 @@ export default function AdminDashboardPage() {
       case 'moderation':
         return <Moderation />;
 
+      case 'reviews':
+        return <Reviews />;
+
+      case 'communities':
+        return <Communities />;
+
       case 'categories':
         return <Categories />;
 
@@ -110,6 +119,9 @@ export default function AdminDashboardPage() {
 
       case 'banners':
         return <Banners />;
+
+      case 'inspiration':
+        return <Inspiration />;
 
       case 'settings':
         return <Settings />;

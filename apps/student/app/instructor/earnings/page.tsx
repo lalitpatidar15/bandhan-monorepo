@@ -1,72 +1,91 @@
 "use client";
 
 import InstructorHeader from "@/components/common/CourseHeader";
-import { useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import {
     Landmark,
     CalendarDays,
     ReceiptText,
     Pencil,
+    RefreshCw,
 } from "lucide-react";
-import { useGetInstructorOverviewQuery } from "@/app/redux/instructor-services/DashboardApi";
+import { toast } from "react-hot-toast";
+import {
+    useGetInstructorEarningsQuery,
+    useGetInstructorPageResourcesQuery,
+} from "@/app/redux/instructor-services/DashboardApi";
 import AcademyLogo from "@/components/common/AcademyLogo";
 
+type ChartRow = { month: string; value: number };
+type CourseRow = { courseId: string; title: string; enrollments: number };
+
+function csvCell(value: unknown) {
+    return `"${String(value ?? "").replace(/"/g, '""')}"`;
+}
 
 export default function EarningsDashboard() {
-     const [selected, setSelected] = useState("7 days");
-    const { data } = useGetInstructorOverviewQuery();
-    const overview = data?.data?.overview;
-    const recentPayments = data?.data?.recentPayments || [];
-    const [pageData, setPageData] = useState<any>({});
+    const [selected, setSelected] = useState("Latest month");
+    const { data: earningsData, isLoading, isError, refetch } = useGetInstructorEarningsQuery();
+    const { data: resourcesData } = useGetInstructorPageResourcesQuery();
 
-    useEffect(() => {
-        const apiBase = process.env.NEXT_PUBLIC_API_URL || "https://api.bandhaneventshub.com/api";
-        fetch(`${apiBase}/instructor/page-resources`)
-            .then(res => res.json())
-            .then(json => { if (json?.success && json?.data) setPageData(json.data); })
-            .catch(() => {});
-    }, []);
+    const earnings = earningsData?.earnings ?? {};
+    const pd = resourcesData?.data ?? {};
+    const chartRows: ChartRow[] = useMemo(
+        () => Object.entries(earnings.chart ?? {})
+            .sort(([a], [b]) => a.localeCompare(b))
+            .map(([month, value]) => ({ month, value: Number(value ?? 0) })),
+        [earnings.chart]
+    );
+    const courseRows: CourseRow[] = earnings.byCourse ?? [];
+    const totalCompletedEnrollments = courseRows.reduce((sum, row) => sum + Number(row.enrollments ?? 0), 0);
 
-    const pd = pageData;
+    const visibleChartRows = selected === "All months"
+        ? chartRows
+        : selected === "Last 3 months"
+            ? chartRows.slice(-3)
+            : chartRows.slice(-1);
+
+    const currency = (value: unknown) => `₹${Number(value ?? 0).toLocaleString("en-IN")}`;
+    const maxChartValue = Math.max(...visibleChartRows.map((row) => row.value), 1);
+    const chartPoints = visibleChartRows.map((row, index) => ({
+        row,
+        x: visibleChartRows.length === 1 ? 500 : 40 + (index * 920) / (visibleChartRows.length - 1),
+        y: 270 - (row.value / maxChartValue) * 220,
+    }));
+    const chartPath = chartPoints.length > 0
+        ? `M ${chartPoints.map((point) => `${point.x} ${point.y}`).join(" L ")}`
+        : "";
+
     const stats = [
-        {
-            title: 'TOTAL EARNINGS',
-            value: `₹${Number(overview?.totalRevenue ?? 0).toLocaleString("en-IN")}`,
-            icon: '💳',
-        },
-        {
-            title: 'RECENT PAYMENTS',
-            value: String(recentPayments.length),
-            icon: '📅',
-        },
-        {
-            title: 'PENDING PAYMENTS',
-            value: String(recentPayments.filter((payment: any) => ["created", "pending"].includes(payment.status)).length),
-            icon: '📋',
-        },
-        {
-            title: 'LAST PAYMENT',
-            value: `₹${Number(recentPayments.find((payment: any) => payment.status === "completed")?.totalAmount ?? 0).toLocaleString("en-IN")}`,
-            icon: '🪙',
-        },
+        { title: 'NET EARNINGS', value: currency(earnings.netRevenue), icon: '💳' },
+        { title: 'GROSS REVENUE', value: currency(earnings.grossRevenue), icon: '📅' },
+        { title: 'PLATFORM FEES', value: currency(earnings.platformFees), icon: '📋' },
+        { title: 'PENDING PAYOUT', value: currency(earnings.pendingPayout), icon: '🪙' },
     ];
 
-    const courseData: Array<{ course: string; sales: string; price: string; revenue: string }> =
-      (data?.data?.courses || []).map((course: any) => ({
-        course: course.title,
-        sales: Number(course.sales ?? 0).toLocaleString("en-IN"),
-        price: `₹${Number(course.pricing?.finalPrice ?? course.pricing?.basePrice ?? 0).toLocaleString("en-IN")}`,
-        revenue: `₹${Number(course.revenue ?? 0).toLocaleString("en-IN")}`,
-    }));
+    const handleDownloadCsv = () => {
+        const rows: (string | number)[][] = [
+            ["Type", "Label", "Value", "Amount (INR)"],
+            ...chartRows.map((row) => ["Revenue by month", row.month, "", row.value]),
+            ...courseRows.map((row) => ["Completed enrollments", row.title, row.enrollments, ""]),
+        ];
 
-    const transactions: Array<{ date: string; course: string; student: string; amount: string; status: string }> =
-      recentPayments.map((payment: any) => ({
-        date: payment.createdAt ? new Date(payment.createdAt).toLocaleDateString() : "",
-        course: payment.courseId?.title || "Course",
-        student: payment.studentId?.fullName || payment.studentId?.email || "Student",
-        amount: `₹${Number(payment.totalAmount ?? 0).toLocaleString("en-IN")}`,
-        status: payment.status === "completed" ? "PAID" : payment.status?.toUpperCase() || "PENDING",
-    }));
+        if (rows.length <= 1) {
+            toast.error("There are no earnings rows to download yet.");
+            return;
+        }
+
+        const csv = rows.map((row) => row.map(csvCell).join(",")).join("\n");
+        const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `instructor-earnings-${new Date().toISOString().slice(0, 10)}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+        toast.success("Earnings CSV downloaded.");
+    };
 
     return (
         <div className="min-h-screen w-full bg-[#F6EFEB] dark:bg-[var(--bhn-neutral-900)] text-[#4A3428] dark:text-[var(--bhn-text-soft)] overflow-x-hidden">
@@ -95,7 +114,12 @@ export default function EarningsDashboard() {
                     <div className="flex flex-col items-start lg:items-end gap-1 w-full lg:w-auto">
 
                         {/* BUTTON */}
-                        <button onClick={() => alert("Withdrawal feature coming soon")} className="h-[44px] px-5 rounded-lg bg-[#8B5332] dark:bg-[var(--bhn-brand-400)] hover:bg-[#74452A] dark:hover:bg-[var(--bhn-brand-300)] transition-all flex items-center justify-center gap-2 text-white text-[14px] font-medium shadow-sm w-full sm:w-auto">
+                        <button
+                            type="button"
+                            disabled
+                            title="Instructor withdrawals are processed by the admin team; no self-service endpoint is available."
+                            className="h-[44px] px-5 rounded-lg bg-[#8B5332] dark:bg-[var(--bhn-brand-400)] hover:bg-[#74452A] dark:hover:bg-[var(--bhn-brand-300)] transition-all flex items-center justify-center gap-2 text-white text-[14px] font-medium shadow-sm w-full sm:w-auto disabled:opacity-60 disabled:cursor-not-allowed"
+                        >
 
                             {/* ICON */}
                             <svg
@@ -118,11 +142,23 @@ export default function EarningsDashboard() {
                         </button>
 
                         {/* TEXT */}
-                        <p className="text-[9px] sm:text-[10px] uppercase tracking-[0.18em] text-[#B0907D] dark:text-[var(--bhn-text-soft)] text-center lg:text-right whitespace-nowrap">
-                            All payments are securely processed
+                        <p className="text-[11px] sm:text-xs text-[#B0907D] dark:text-[var(--bhn-text-soft)] text-center lg:text-right max-w-xs leading-5">
+                            Instructor payouts are managed by the admin team; self-service withdrawal is unavailable.
                         </p>
                     </div>
                 </div>
+
+                {isLoading && (
+                    <p className="mb-5 text-sm text-[var(--bhn-text-soft)] flex items-center gap-2">
+                        <RefreshCw size={15} className="animate-spin" /> Loading earnings...
+                    </p>
+                )}
+                {isError && (
+                    <p className="mb-5 text-sm text-[var(--bhn-error-600)] flex items-center gap-3">
+                        Unable to load earnings.
+                        <button type="button" onClick={() => refetch()} className="underline font-medium">Retry</button>
+                    </p>
+                )}
 
                 {/* STATS */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5 mb-7">
@@ -156,7 +192,7 @@ export default function EarningsDashboard() {
 
       <div className="flex flex-wrap gap-2 text-xs">
 
-        {["7 days", "30 days", "3 months"].map((item) => (
+        {["Latest month", "Last 3 months", "All months"].map((item) => (
 
           <button
             key={item}
@@ -186,22 +222,38 @@ export default function EarningsDashboard() {
                             fill="none"
                             preserveAspectRatio="none"
                         >
-                            <path
-                                d="M20 240 C 140 220, 180 130, 300 140 C 420 150, 450 240, 560 180 C 650 120, 700 20, 790 130 C 860 240, 920 250, 980 70"
-                                stroke="var(--bhn-brand-400)"
-                                strokeWidth="5"
-                                strokeLinecap="round"
-                            />
+                            {chartPath ? (
+                                <>
+                                    <path
+                                        d={chartPath}
+                                        stroke="var(--bhn-brand-400)"
+                                        strokeWidth="5"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
+                                    {chartPoints.map((point) => (
+                                        <circle
+                                            key={point.row.month}
+                                            cx={point.x}
+                                            cy={point.y}
+                                            r="7"
+                                            fill="var(--bhn-surface)"
+                                            stroke="var(--bhn-brand-600)"
+                                            strokeWidth="4"
+                                        />
+                                    ))}
+                                </>
+                            ) : (
+                                <text x="500" y="150" textAnchor="middle" fill="var(--bhn-text-soft)" fontSize="24">
+                                    No earnings data available yet
+                                </text>
+                            )}
                         </svg>
 
                         <div className="absolute bottom-0 left-0 right-0 flex justify-between text-[9px] sm:text-xs text-[#A28777] dark:text-[var(--bhn-text-soft)] px-1 sm:px-2">
-                            <span>MON</span>
-                            <span>TUE</span>
-                            <span>WED</span>
-                            <span>THU</span>
-                            <span>FRI</span>
-                            <span>SAT</span>
-                            <span>SUN</span>
+                            {visibleChartRows.length > 0 ? visibleChartRows.map((row) => (
+                                <span key={row.month}>{row.month}</span>
+                            )) : <span>No monthly totals</span>}
                         </div>
                     </div>
                 </div>
@@ -221,83 +273,80 @@ export default function EarningsDashboard() {
                                 <thead>
                                     <tr className="border-b border-[var(--bhn-border)] dark:border-[var(--bhn-border)] text-left text-[#A08676] dark:text-[var(--bhn-text-soft)] uppercase text-[10px] tracking-wider">
                                         <th className="pb-4 font-medium text-[12px]">Course Name</th>
-                                        <th className="pb-4 font-medium text-[12px]">Sales</th>
-                                        <th className="pb-4 font-medium text-[12px]">Avg Price</th>
-                                        <th className="pb-4 font-medium text-[12px]">Revenue</th>
+                                        <th className="pb-4 font-medium text-[12px]">Completed Enrollments</th>
+                                        <th className="pb-4 font-medium text-[12px]">Share</th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
-                                    {courseData.map((item, index) => (
+                                    {courseRows.length > 0 ? courseRows.map((item) => (
                                         <tr
-                                            key={index}
+                                            key={item.courseId}
                                             className="border-b border-[#F3E7DF] dark:border-[var(--bhn-border)] last:border-none"
                                         >
                                             <td className="py-5 text-[#4A3428] dark:text-[var(--bhn-text-soft)] font-medium text-[17px]">
-                                                {item.course}
+                                                {item.title}
                                             </td>
 
                                             <td className="py-5 text-[#7B6557] dark:text-[var(--bhn-text-soft)] text-[15px]">
-                                                {item.sales}
-                                            </td>
-
-                                            <td className="py-5 text-[#7B6557] dark:text-[var(--bhn-text-soft)] text-[15px]">
-                                                {item.price}
+                                                {Number(item.enrollments ?? 0).toLocaleString("en-IN")}
                                             </td>
 
                                             <td className="py-5 font-semibold text-[#4A3428] dark:text-[var(--bhn-text-soft)] text-[15px]">
-                                                {item.revenue}
+                                                {totalCompletedEnrollments > 0
+                                                    ? `${Math.round((Number(item.enrollments ?? 0) / totalCompletedEnrollments) * 100)}%`
+                                                    : "—"}
                                             </td>
                                         </tr>
-                                    ))}
+                                    )) : (
+                                        <tr>
+                                            <td colSpan={3} className="py-6 text-center text-[var(--bhn-text-soft)]">
+                                                No course earnings data available yet.
+                                            </td>
+                                        </tr>
+                                    )}
                                 </tbody>
                             </table>
                         </div>
 
                         {/* MOBILE CARDS */}
                         <div className="md:hidden space-y-4">
-                            {courseData.map((item, index) => (
+                            {courseRows.length > 0 ? courseRows.map((item) => (
                                 <div
-                                    key={index}
+                                    key={item.courseId}
                                     className="border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] rounded-xl p-4 bg-[var(--bhn-surface-2)] dark:bg-[var(--bhn-neutral-900)]"
                                 >
                                     <h4 className="text-[15px] font-semibold text-[#4A3428] dark:text-[var(--bhn-text-soft)] mb-4 leading-6">
-                                        {item.course}
+                                        {item.title}
                                     </h4>
 
                                     <div className="grid grid-cols-2 gap-y-4 text-sm">
                                         <div>
                                             <p className="text-[10px] uppercase tracking-wider text-[#A08676] dark:text-[var(--bhn-text-soft)] mb-1">
-                                                Sales
+                                                Completed Enrollments
                                             </p>
 
                                             <h5 className="font-medium text-[#4A3428] dark:text-[var(--bhn-text-soft)]">
-                                                {item.sales}
+                                                {Number(item.enrollments ?? 0).toLocaleString("en-IN")}
                                             </h5>
                                         </div>
 
                                         <div>
                                             <p className="text-[10px] uppercase tracking-wider text-[#A08676] dark:text-[var(--bhn-text-soft)] mb-1">
-                                                Avg Price
-                                            </p>
-
-                                            <h5 className="font-medium text-[#4A3428] dark:text-[var(--bhn-text-soft)]">
-                                                {item.price}
-                                            </h5>
-                                        </div>
-
-                                        <div className="col-span-2">
-                                            <p className="text-[10px] uppercase tracking-wider text-[#A08676] dark:text-[var(--bhn-text-soft)] mb-1">
-                                                Revenue
+                                                Share
                                             </p>
 
                                             <h5 className="font-semibold text-[#4A3428] dark:text-[var(--bhn-text-soft)]">
-                                                {item.revenue}
+                                                {totalCompletedEnrollments > 0
+                                                    ? `${Math.round((Number(item.enrollments ?? 0) / totalCompletedEnrollments) * 100)}%`
+                                                    : "—"}
                                             </h5>
                                         </div>
                                     </div>
                                 </div>
-                            ))}
+                            )) : (
+                                <p className="text-sm text-[var(--bhn-text-soft)]">No course earnings data available yet.</p>
+                            )}
                         </div>
                     </div>
 
@@ -322,7 +371,9 @@ export default function EarningsDashboard() {
                                         </p>
 
                                         <h4 className="text-[15px] sm:text-[16px] font-medium text-[#3F2C24] dark:text-[var(--bhn-neutral-400)] break-words">
-                                            {pd.bankAccount ? `${pd.bankAccount.bank} •••• ${pd.bankAccount.lastFour}` : "HDFC Bank •••• 8291"}
+                                            {pd.bankAccount?.bank && pd.bankAccount?.lastFour
+                                                ? `${pd.bankAccount.bank} •••• ${pd.bankAccount.lastFour}`
+                                                : "No bank account on file"}
                                         </h4>
                                     </div>
                                 </div>
@@ -338,7 +389,7 @@ export default function EarningsDashboard() {
                                         </p>
 
                                         <h4 className="text-[15px] sm:text-[16px] font-medium text-[#3F2C24] dark:text-[var(--bhn-neutral-400)]">
-                                            {pd.nextPayout || "01 Jan, 2025"}
+                                            {pd.nextPayout || "No payout scheduled"}
                                         </h4>
                                     </div>
                                 </div>
@@ -354,21 +405,28 @@ export default function EarningsDashboard() {
                                         </p>
 
                                         <h4 className="text-[14px] sm:text-[15px] font-medium text-[#3F2C24] dark:text-[var(--bhn-neutral-400)] break-words">
-                                            {pd.platformFee ? `${pd.platformFee}% Platform Fee applies` : "10% Platform Fee applies"}
+                                            {pd.platformFee ? `${pd.platformFee}% Platform Fee applies` : "Platform fee not available"}
                                         </h4>
                                     </div>
                                 </div>
                             </div>
 
-                            <button onClick={() => alert("Update Payout Method feature coming soon")} className="mt-7 w-full h-[50px] border border-[#B99A89] dark:border-[var(--bhn-border)] rounded-xl flex items-center justify-center gap-2 text-[var(--bhn-brand-700)] dark:text-[var(--bhn-text-soft)] text-sm font-medium hover:bg-[var(--bhn-surface-2)] dark:hover:bg-[#171717] transition-all">
+                            <button
+                                type="button"
+                                disabled
+                                title="Payout methods are managed by the admin team; no self-service endpoint is available."
+                                className="mt-7 w-full h-[50px] border border-[#B99A89] dark:border-[var(--bhn-border)] rounded-xl flex items-center justify-center gap-2 text-[var(--bhn-brand-700)] dark:text-[var(--bhn-text-soft)] text-sm font-medium hover:bg-[var(--bhn-surface-2)] dark:hover:bg-[#171717] transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                            >
                                 <Pencil size={15} />
                                 Update Payout Method
                             </button>
+                            <p className="mt-3 text-[11px] leading-5 text-[var(--bhn-text-soft)]">
+                                Payout method changes are handled by the admin team.
+                            </p>
                         </div>
 
                         <div className="bg-[#F6E7DD] dark:bg-[var(--bhn-neutral-900)] border border-[#E5CFC1] dark:border-[var(--bhn-border)] rounded-2xl px-4 py-4 text-xs sm:text-[13px] leading-6 text-[#81685A] dark:text-[var(--bhn-text-soft)] shadow-sm">
-                            *Your earnings are calculated after deducting applicable taxes and the
-                            platform service fee of 10%.
+                            *Net earnings reflect completed payments minus recorded platform fees.
                         </div>
                     </div>
                 </div>
@@ -376,11 +434,16 @@ export default function EarningsDashboard() {
                 {/* TRANSACTIONS */}
                 <div className="bg-[var(--bhn-surface)] border border-[#E8DAD2] dark:border-[var(--bhn-border)] rounded-2xl p-4 sm:p-4 shadow-sm mb-4 w-full">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-                        <h3 className="text-lg sm:text-2xl font-serif font-semibold">
-                            Recent Transactions
-                        </h3>
+                        <div>
+                            <h3 className="text-lg sm:text-2xl font-serif font-semibold">
+                                Revenue History
+                            </h3>
+                            <p className="text-xs text-[var(--bhn-text-soft)] mt-1">
+                                Monthly totals from the instructor earnings API. Individual transaction rows are not exposed for instructor accounts.
+                            </p>
+                        </div>
 
-                        <button onClick={() => alert("Download CSV feature coming soon")} className="text-sm text-[#8B5E46] dark:text-[var(--bhn-text-soft)] font-medium hover:underline w-fit border border-[#E7D3C7] dark:border-[var(--bhn-border)] bg-[#F5E7DF] dark:bg-[var(--bhn-neutral-900)] px-4 py-2 rounded-lg transition-all">
+                        <button type="button" onClick={handleDownloadCsv} className="text-sm text-[#8B5E46] dark:text-[var(--bhn-text-soft)] font-medium hover:underline w-fit border border-[#E7D3C7] dark:border-[var(--bhn-border)] bg-[#F5E7DF] dark:bg-[var(--bhn-neutral-900)] px-4 py-2 rounded-lg transition-all">
                             Download CSV
                         </button>
                     </div>
@@ -390,107 +453,71 @@ export default function EarningsDashboard() {
                         <table className="w-full text-sm">
                             <thead>
                                 <tr className="border-b border-[var(--bhn-border)] dark:border-[var(--bhn-border)] text-left text-[#A08676] dark:text-[var(--bhn-text-soft)] uppercase text-[10px] tracking-wider">
-                                    <th className="pb-4 font-medium text-[12px]">Date</th>
-                                    <th className="pb-4 font-medium text-[12px]">Course</th>
-                                    <th className="pb-4 font-medium text-[12px]">Student</th>
+                                    <th className="pb-4 font-medium text-[12px]">Month</th>
                                     <th className="pb-4 font-medium text-[12px]">Amount</th>
                                     <th className="pb-4 font-medium text-[12px]">Status</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                {transactions.map((item, index) => (
+                                {chartRows.length > 0 ? chartRows.map((item) => (
                                     <tr
-                                        key={index}
+                                        key={item.month}
                                         className="border-b border-[#F3E7DF] dark:border-[var(--bhn-border)] last:border-none"
                                     >
                                         <td className="py-5 text-[#7B6557] dark:text-[var(--bhn-text-soft)] text-[17px]">
-                                            {item.date}
-                                        </td>
-
-                                        <td className="py-5 font-medium text-[#4A3428] dark:text-[var(--bhn-text-soft)] text-[17px]">
-                                            {item.course}
-                                        </td>
-
-                                        <td className="py-5 text-[#7B6557] dark:text-[var(--bhn-text-soft)] text-[17px]">
-                                            {item.student}
+                                            {item.month}
                                         </td>
 
                                         <td className="py-5 font-semibold text-[#4A3428] dark:text-[var(--bhn-text-soft)] text-[17px]">
-                                            {item.amount}
+                                            {currency(item.value)}
                                         </td>
 
                                         <td className="py-5">
-                                            <span
-                                                className={`px-3 py-1 rounded-full text-[11px] font-semibold whitespace-nowrap ${item.status === "PAID"
-                                                    ? "bg-green-100 text-[var(--bhn-success-700)]"
-                                                    : item.status === "PENDING"
-                                                        ? "bg-yellow-100 text-yellow-700"
-                                                        : "bg-red-100 text-red-700"
-                                                    }`}
-                                            >
-                                                {item.status}
+                                            <span className="px-3 py-1 rounded-full text-[11px] font-semibold whitespace-nowrap bg-green-100 text-[var(--bhn-success-700)]">
+                                                RECORDED
                                             </span>
                                         </td>
                                     </tr>
-                                ))}
+                                )) : (
+                                    <tr>
+                                        <td colSpan={3} className="py-6 text-center text-[var(--bhn-text-soft)]">
+                                            No revenue history available yet.
+                                        </td>
+                                    </tr>
+                                )}
                             </tbody>
                         </table>
                     </div>
 
                     {/* MOBILE CARDS */}
                     <div className="md:hidden space-y-4">
-                        {transactions.map((item, index) => (
+                        {chartRows.length > 0 ? chartRows.map((item) => (
                             <div
-                                key={index}
+                                key={item.month}
                                 className="border border-[var(--bhn-border)] dark:border-[var(--bhn-border)] rounded-xl p-4 bg-[var(--bhn-surface-2)] dark:bg-[var(--bhn-neutral-900)]"
                             >
                                 <div className="flex items-start justify-between gap-3 mb-4">
-                                    <div>
-                                        <h4 className="text-[15px] font-semibold text-[#4A3428] dark:text-[var(--bhn-text-soft)] leading-6">
-                                            {item.course}
-                                        </h4>
+                                    <h4 className="text-[15px] font-semibold text-[#4A3428] dark:text-[var(--bhn-text-soft)] leading-6">
+                                        {item.month}
+                                    </h4>
 
-                                        <p className="text-xs text-[#8E7768] dark:text-[var(--bhn-text-soft)] mt-1">
-                                            {item.date}
-                                        </p>
-                                    </div>
-
-                                    <span
-                                        className={`px-3 py-1 rounded-full text-[10px] font-semibold whitespace-nowrap ${item.status === "PAID"
-                                            ? "bg-green-100 text-[var(--bhn-success-700)]"
-                                            : item.status === "PENDING"
-                                                ? "bg-yellow-100 text-yellow-700"
-                                                : "bg-red-100 text-red-700"
-                                            }`}
-                                    >
-                                        {item.status}
+                                    <span className="px-3 py-1 rounded-full text-[10px] font-semibold whitespace-nowrap bg-green-100 text-[var(--bhn-success-700)]">
+                                        RECORDED
                                     </span>
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-y-4 text-sm">
-                                    <div>
-                                        <p className="text-[10px] uppercase tracking-wider text-[#A08676] dark:text-[var(--bhn-text-soft)] mb-1">
-                                            Student
-                                        </p>
+                                <p className="text-[10px] uppercase tracking-wider text-[#A08676] dark:text-[var(--bhn-text-soft)] mb-1">
+                                    Amount
+                                </p>
 
-                                        <h5 className="font-medium text-[#4A3428] dark:text-[var(--bhn-text-soft)]">
-                                            {item.student}
-                                        </h5>
-                                    </div>
-
-                                    <div>
-                                        <p className="text-[10px] uppercase tracking-wider text-[#A08676] dark:text-[var(--bhn-text-soft)] mb-1">
-                                            Amount
-                                        </p>
-
-                                        <h5 className="font-semibold text-[#4A3428] dark:text-[var(--bhn-text-soft)]">
-                                            {item.amount}
-                                        </h5>
-                                    </div>
-                                </div>
+                                <h5 className="font-semibold text-[#4A3428] dark:text-[var(--bhn-text-soft)]">
+                                    {currency(item.value)}
+                                </h5>
                             </div>
-                        ))}
+                        )) : (
+                            <p className="text-sm text-[var(--bhn-text-soft)]">No revenue history available yet.</p>
+                        )}
                     </div>
                 </div>
 
@@ -505,9 +532,9 @@ export default function EarningsDashboard() {
                     </div>
 
                     <div className="flex flex-wrap gap-5">
-                        <button onClick={() => alert("Instructor Terms - coming soon")}>Instructor Terms</button>
-                        <button onClick={() => alert("Privacy Policy - coming soon")}>Privacy Policy</button>
-                        <button onClick={() => alert("Help Center - coming soon")}>Help Center</button>
+                        <button type="button" onClick={() => toast("Instructor terms are available from the admin team.")}>Instructor Terms</button>
+                        <button type="button" onClick={() => toast("Privacy policy documents are not available in this panel yet.")}>Privacy Policy</button>
+                        <button type="button" onClick={() => toast("Contact support through the central portal for help.")}>Help Center</button>
                     </div>
                 </div>
             </div>

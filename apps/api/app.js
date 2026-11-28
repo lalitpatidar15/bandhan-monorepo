@@ -100,6 +100,7 @@ const reviewRoutes = require("./routes/ecommUser/reviewRoutes");
 
 const merchantRoutes = require("./routes/merchant/merchantRoutes");
 const adminRoutes = require("./routes/admin/adminRoutes");
+const staffRoutes = require("./routes/admin/staffRoutes");
 
 const ecommUserRoutes = require("./routes/ecommUser/userRoutes");
 
@@ -110,6 +111,8 @@ const notificationRoutes = require("./routes/ecommUser/notificationRoutes");
 const vendorRoutes = require("./routes/ecommUser/vendorRoutes");
 const catalogRoutes = require("./routes/ecommUser/catalogRoutes");
 const customerRoutes = require("./routes/ecommUser/customerRoutes");
+const communityRoutes = require("./routes/ecommUser/communityRoutes");
+const inspirationRoutes = require("./routes/ecommUser/inspirationRoutes");
 
 // ============= student panel =========
 const courseRoutes = require("./routes/student/courseRoutes");
@@ -250,6 +253,8 @@ app.use("/api/notifications", notificationRoutes);
 app.use("/api/vendors", vendorRoutes);
 app.use("/api/catalog", catalogRoutes);
 app.use("/api/customer", customerRoutes);
+app.use("/api/communities", communityRoutes);
+app.use("/api/inspiration", inspirationRoutes);
 
 app.use("/api/cart", cartRoutes);
 
@@ -287,6 +292,7 @@ app.use("/api/reviews", reviewRoutes);
 
 app.use("/api/merchant", merchantRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/staff", staffRoutes);
 
 app.use("/api/payment", require("./routes/ecommUser/paymentRoutes"));
 app.use("/api/shipping", require("./routes/ecommUser/shippingRoutes"));
