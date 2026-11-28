@@ -1,16 +1,23 @@
 "use client";
 
-import { Edit3, Sparkles, Star } from "lucide-react";
+import { useState } from "react";
+import { Check, Edit3, RefreshCw, Sparkles, Star } from "lucide-react";
+import toast from "react-hot-toast";
+import { Badge, Button, Modal } from "@bandhan/ui";
 import { useGetSuggestedServicesQuery } from "@/store/api/eventApi";
-import { Event, SuggestedService, UpdateEventRequest } from "@/types/event";
+import { useReplaceEventVendorMutation } from "@/store/api/eventOsApi";
+import { Event, EventVendorEntry, SuggestedService, UpdateEventRequest } from "@/types/event";
+import { errorText } from "./eventOsUi";
 
 interface Props {
   event: Event;
+  eventId: string;
+  onRefresh: () => void;
   onEditField: (partial: UpdateEventRequest) => void;
   onAddSuggestedService: (service: SuggestedService) => void;
 }
 
-export default function EventOverview({ event, onEditField, onAddSuggestedService }: Props) {
+export default function EventOverview({ event, eventId, onRefresh, onEditField, onAddSuggestedService }: Props) {
   const budget = event.budget;
   const spent = Number(budget.spent || 0);
   const total = Number(budget.total || 0);
@@ -26,6 +33,44 @@ export default function EventOverview({ event, onEditField, onAddSuggestedServic
   );
 
   const services: SuggestedService[] = svcData?.data ?? [];
+  const [replaceVendor, { isLoading: replacing }] = useReplaceEventVendorMutation();
+  const [vendorToReplace, setVendorToReplace] = useState<EventVendorEntry | null>(null);
+  const [replacement, setReplacement] = useState({ name: "", category: "", vendorId: "" });
+
+  const openReplace = (vendor: EventVendorEntry) => {
+    setVendorToReplace(vendor);
+    setReplacement({ name: "", category: vendor.category || "", vendorId: "" });
+  };
+
+  const submitReplacement = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!vendorToReplace) return;
+    if (!replacement.name.trim()) {
+      toast.error("Enter the replacement vendor name.");
+      return;
+    }
+    const vendorReference = vendorToReplace._id || vendorToReplace.id;
+    if (!vendorReference) {
+      toast.error("This vendor has no reference ID, so it cannot be replaced.");
+      return;
+    }
+    try {
+      await replaceVendor({
+        eventId,
+        vendorId: vendorReference,
+        data: {
+          name: replacement.name.trim(),
+          category: replacement.category.trim() || undefined,
+          vendorId: replacement.vendorId.trim() || undefined,
+        },
+      }).unwrap();
+      toast.success("Vendor replaced.");
+      setVendorToReplace(null);
+      onRefresh();
+    } catch (err) {
+      toast.error(errorText(err));
+    }
+  };
 
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
@@ -46,6 +91,38 @@ export default function EventOverview({ event, onEditField, onAddSuggestedServic
             <FieldRow label="Guests" type="number" value={String(event.guestCount || 0)} onChange={(v) => onEditField({ guestCount: Number(v) })} />
             <FieldRow label="Total budget" type="number" value={String(total)} onChange={(v) => onEditField({ budget: { ...budget, total: Number(v), pending: Number(v) - spent } })} />
           </div>
+        </div>
+
+        <div className="bhn-card p-6 space-y-4">
+          <div className="flex items-center justify-between gap-3">
+            <h3 className="font-display text-lg font-bold text-[var(--bhn-text)]">Selected vendors</h3>
+            <Badge tone="neutral">{event.vendors?.length || 0} selected</Badge>
+          </div>
+          {!event.vendors?.length ? (
+            <p className="text-sm text-[var(--bhn-text-muted)]">
+              No vendors selected yet. Add one from suggestions or the vendor/venue action above.
+            </p>
+          ) : (
+            <div className="space-y-2">
+              {event.vendors.map((vendor, index) => (
+                <div
+                  key={vendor._id || vendor.id || `${vendor.name}-${index}`}
+                  className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-[var(--bhn-surface-2)] px-3 py-2"
+                >
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-medium text-[var(--bhn-text)]">{vendor.name}</p>
+                    <p className="text-xs text-[var(--bhn-text-muted)]">
+                      {vendor.category || "Uncategorised"}{" "}
+                      {vendor.status ? <span className="ml-1">· {vendor.status}</span> : null}
+                    </p>
+                  </div>
+                  <Button size="sm" variant="secondary" icon={<RefreshCw size={13} />} onClick={() => openReplace(vendor)}>
+                    Replace vendor
+                  </Button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="bhn-card p-6 space-y-4">
@@ -73,6 +150,57 @@ export default function EventOverview({ event, onEditField, onAddSuggestedServic
       <div className="lg:col-span-1">
         <BudgetRing spent={spent} total={total} />
       </div>
+
+      <Modal
+        open={Boolean(vendorToReplace)}
+        onClose={() => setVendorToReplace(null)}
+        title="Replace vendor"
+        footer={
+          <div className="flex justify-end gap-2">
+            <Button variant="secondary" onClick={() => setVendorToReplace(null)}>
+              Cancel
+            </Button>
+            <Button type="submit" form="replace-vendor-form" loading={replacing} icon={<Check size={14} />}>
+              Replace vendor
+            </Button>
+          </div>
+        }
+      >
+        <form id="replace-vendor-form" onSubmit={submitReplacement} className="space-y-3">
+          <p className="text-xs text-[var(--bhn-text-muted)]">
+            Replacing <span className="font-semibold text-[var(--bhn-text)]">{vendorToReplace?.name}</span>. This only
+            updates the event record; no payment is made.
+          </p>
+          <div>
+            <label className="mb-1 block text-xs font-semibold text-[var(--bhn-text)]">New vendor name *</label>
+            <input
+              className="bhn-input w-full"
+              value={replacement.name}
+              onChange={(e) => setReplacement((f) => ({ ...f, name: e.target.value }))}
+              required
+            />
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <label className="mb-1 block text-xs font-semibold text-[var(--bhn-text)]">Category</label>
+              <input
+                className="bhn-input w-full"
+                value={replacement.category}
+                onChange={(e) => setReplacement((f) => ({ ...f, category: e.target.value }))}
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-semibold text-[var(--bhn-text)]">Bandhan vendor ID</label>
+              <input
+                className="bhn-input w-full"
+                value={replacement.vendorId}
+                onChange={(e) => setReplacement((f) => ({ ...f, vendorId: e.target.value }))}
+                placeholder="Optional"
+              />
+            </div>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 }

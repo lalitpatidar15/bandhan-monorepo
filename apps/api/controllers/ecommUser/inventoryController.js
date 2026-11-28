@@ -39,7 +39,10 @@ exports.addProduct = async (req, res) => {
       sellerId: req.user.id,
       images,
       ...req.body,
-      ...shipping
+      ...shipping,
+      // Sellers cannot self-approve. An admin must review before the listing is public.
+      isApproved: false,
+      isPublished: false,
     });
 
     res.status(201).json({
@@ -116,7 +119,21 @@ exports.updateProduct = async (req, res) => {
     }
 
     const shipping = normalizeShippingFields(req.body);
-    const nextProduct = { ...existing.toObject(), ...req.body, ...shipping };
+    const updates = { ...req.body, ...shipping };
+
+    // Sellers can request publication but never grant their own approval.
+    delete updates.isApproved;
+    delete updates.sellerId;
+    delete updates.userId;
+    delete updates.sellerEmail;
+    delete updates._id;
+    if (updates.isPublished !== undefined) {
+      updates.isPublished = updates.isPublished === true || updates.isPublished === "true";
+    } else if (updates.status === "active" || updates.status === "draft") {
+      updates.isPublished = updates.status === "active";
+    }
+
+    const nextProduct = { ...existing.toObject(), ...updates };
     if (nextProduct.status === "active" && (req.body.status === "active" || Object.keys(shipping).length > 0)) {
       const shippingError = validateShippingForActive(nextProduct);
       if (shippingError) return res.status(400).json({ success: false, message: shippingError });
@@ -127,7 +144,7 @@ exports.updateProduct = async (req, res) => {
         _id: req.params.id,
         sellerId: req.user.id
       },
-      { ...req.body, ...shipping },
+      updates,
       { new: true }
     );
 
@@ -254,6 +271,9 @@ exports.addProductManagement = async (req, res) => {
       stockStatus: Number(req.body.stock || 0) > 0 ? "in_stock" : "out_of_stock",
       ...shipping,
       status,
+      // Sellers request publication; an admin decides approval.
+      isApproved: false,
+      isPublished: false,
     });
 
     res.status(201).json({

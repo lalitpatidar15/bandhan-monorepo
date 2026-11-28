@@ -6,6 +6,9 @@ import { Button } from "@/components/ui/Button";
 import { Award, CalendarDays, MapPin, Star } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useGetVendorByIdQuery } from "@/store/api/vendorApi";
+import { useGetVendorPackagesQuery } from "@/store/api/eventOsApi";
+import { extractItems } from "@/components/userDashboard/planner/eventOsUi";
+import type { VendorPackage } from "@/types/eventOs";
 
 const fallbackImage = "/Border.png";
 
@@ -17,6 +20,13 @@ export default function VendorProfileByIdPage() {
   });
 
   const vendor = data?.vendor;
+  const {
+    data: packagesData,
+    isLoading: packagesLoading,
+    isError: packagesError,
+    refetch: refetchPackages,
+  } = useGetVendorPackagesQuery(vendor?.id || "", { skip: !vendor?.id });
+  const vendorPackages = extractItems<VendorPackage>(packagesData, "packages");
   const priceValue = Number(vendor?.price || 0);
   const highlights = [
     { label: "Category", value: vendor?.category || "service" },
@@ -109,6 +119,66 @@ export default function VendorProfileByIdPage() {
             </aside>
           </div>
         )}
+
+        {!isLoading && vendor ? (
+          <section className="mt-6 rounded-xl border border-[var(--bhn-border)] bg-[var(--bhn-surface)] p-5">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h2 className="text-lg font-semibold text-[var(--bhn-text)]">Vendor packages</h2>
+                <p className="mt-1 text-xs text-[var(--bhn-text-muted)]">
+                  Live packages offered by this seller through Bandhan.
+                </p>
+              </div>
+              {packagesError ? (
+                <button
+                  type="button"
+                  onClick={() => refetchPackages()}
+                  className="rounded-lg border border-[var(--bhn-border)] px-3 py-1.5 text-xs font-semibold text-[var(--bhn-text)]"
+                >
+                  Try again
+                </button>
+              ) : null}
+            </div>
+
+            {packagesLoading ? (
+              <p className="mt-4 text-sm text-[var(--bhn-text-muted)]">Loading packages...</p>
+            ) : packagesError ? (
+              <p className="mt-4 text-sm text-[var(--bhn-error-700)]">
+                Packages could not be loaded right now. Please try again.
+              </p>
+            ) : vendorPackages.length === 0 ? (
+              <p className="mt-4 text-sm text-[var(--bhn-text-muted)]">
+                This seller has not published any packages yet.
+              </p>
+            ) : (
+              <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {vendorPackages.map((pkg, index) => (
+                  <div key={pkg._id || pkg.id || `${pkg.name}-${index}`} className="rounded-lg bg-[var(--bhn-surface-2)] p-4">
+                    <h3 className="font-semibold text-[var(--bhn-text)]">{pkg.name || pkg.title || "Package"}</h3>
+                    {pkg.description ? (
+                      <p className="mt-1 text-xs text-[var(--bhn-text-muted)]">{pkg.description}</p>
+                    ) : null}
+                    <p className="mt-3 font-semibold text-[var(--bhn-brand-700)]">
+                      ₹{Number(pkg.price || 0).toLocaleString("en-IN")}
+                      {pkg.billingCycle && pkg.billingCycle !== "one_time" ? (
+                        <span className="ml-1 text-xs font-normal text-[var(--bhn-text-muted)]">
+                          / {pkg.billingCycle}
+                        </span>
+                      ) : null}
+                    </p>
+                    {pkg.inclusions && pkg.inclusions.length > 0 ? (
+                      <ul className="mt-2 list-inside list-disc space-y-1 text-xs text-[var(--bhn-text-muted)]">
+                        {pkg.inclusions.map((inclusion, i) => (
+                          <li key={`${inclusion}-${i}`}>{inclusion}</li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+        ) : null}
       </section>
     </main>
   );

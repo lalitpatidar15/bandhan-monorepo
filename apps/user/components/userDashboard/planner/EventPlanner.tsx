@@ -3,19 +3,25 @@
 import { useEffect, useRef, useState } from "react";
 import {
   CalendarClock,
+  LayoutTemplate,
   Plus,
   RefreshCw,
+  RotateCcw,
   Save,
   Sparkles,
   AlertCircle,
 } from "lucide-react";
-import { Spinner, Tabs } from "@bandhan/ui";
+import { Modal, Spinner, Tabs } from "@bandhan/ui";
 import {
   useCreateEventMutation,
   useGetEventByIdQuery,
   useGetUserEventsQuery,
   useUpdateEventMutation,
 } from "@/store/api/eventApi";
+import {
+  useApplyEventTemplateMutation,
+  useRebookEventMutation,
+} from "@/store/api/eventOsApi";
 import {
   Event,
   EventBudget,
@@ -33,6 +39,15 @@ import BudgetPlanner from "./BudgetPlanner";
 import EventTimeline from "./EventTimeline";
 import HashtagTab from "./HashtagTab";
 import { AddVendorVenueModal } from "./AddVendorVenueModal";
+import GuestsTab from "./GuestsTab";
+import SeatingTab from "./SeatingTab";
+import CollaboratorsTab from "./CollaboratorsTab";
+import InvitationsTab from "./InvitationsTab";
+import WebsiteTab from "./WebsiteTab";
+import EventDayTab from "./EventDayTab";
+import MemoriesTab from "./MemoriesTab";
+import MilestonesTab from "./MilestonesTab";
+import { errorText } from "./eventOsUi";
 
 const EVENT_TYPE_OPTIONS = ["Wedding", "Engagement", "Birthday", "Corporate", "Anniversary", "Other"];
 
@@ -151,6 +166,7 @@ export default function EventPlanner() {
   const handleSelectEvent = (id: string) => {
     setSelectedEventId(id);
     setRefreshVersion((v) => v + 1);
+    refetchEvents();
   };
 
   const handleRefresh = () => {
@@ -305,6 +321,7 @@ export default function EventPlanner() {
       eventId={selectedEventId}
       sourceEvent={normalizeEvent(eventData.event)}
       onRefresh={handleRefresh}
+      onSelectEvent={handleSelectEvent}
     />
   );
 }
@@ -313,13 +330,19 @@ interface EventWorkspaceProps {
   eventId: string;
   sourceEvent: Event;
   onRefresh: () => void;
+  onSelectEvent: (id: string) => void;
 }
 
-function EventWorkspace({ eventId, sourceEvent, onRefresh }: EventWorkspaceProps) {
+function EventWorkspace({ eventId, sourceEvent, onRefresh, onSelectEvent }: EventWorkspaceProps) {
   const [workingEvent, setWorkingEvent] = useState<Event>(() => sourceEvent);
   const [updateEvent, { isLoading: isSaving }] = useUpdateEventMutation();
+  const [rebookEvent, { isLoading: rebooking }] = useRebookEventMutation();
+  const [applyTemplate, { isLoading: applyingTemplate }] = useApplyEventTemplateMutation();
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
+  const [rebookOpen, setRebookOpen] = useState(false);
+  const [templateOpen, setTemplateOpen] = useState(false);
+  const [templateId, setTemplateId] = useState("");
 
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const saveQueue = useRef<UpdateEventRequest | null>(null);
@@ -372,11 +395,56 @@ function EventWorkspace({ eventId, sourceEvent, onRefresh }: EventWorkspaceProps
     toast.success(venue.name + " added to event");
   };
 
+  const canRebook = workingEvent.status === "completed" || workingEvent.status === "cancelled";
+
+  const handleRebook = async () => {
+    try {
+      const result = await rebookEvent(eventId).unwrap();
+      const raw = result as unknown as Record<string, unknown>;
+      const created = (result.data || raw.event || raw) as Record<string, unknown>;
+      const newId = String(created?.id || created?._id || "");
+      if (!newId) {
+        toast.error("The event was rebooked but no new event ID was returned.");
+        return;
+      }
+      toast.success("Event rebooked. Opening the new event.");
+      setRebookOpen(false);
+      onSelectEvent(newId);
+    } catch (err) {
+      toast.error(errorText(err));
+    }
+  };
+
+  const handleApplyTemplate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!templateId.trim()) {
+      toast.error("Enter a template ID.");
+      return;
+    }
+    try {
+      await applyTemplate({ eventId, templateId: templateId.trim() }).unwrap();
+      toast.success("Template applied to this event.");
+      setTemplateOpen(false);
+      setTemplateId("");
+      onRefresh();
+    } catch (err) {
+      toast.error(errorText(err));
+    }
+  };
+
   const tabs = [
     { id: "overview", label: "Overview" },
     { id: "budget", label: "Budget Planner" },
     { id: "timeline", label: "Timeline" },
     { id: "hashtags", label: "Hashtags" },
+    { id: "guests", label: "Guests" },
+    { id: "seating", label: "Seating" },
+    { id: "collaborators", label: "Collaborators" },
+    { id: "invitations", label: "Invitations" },
+    { id: "website", label: "Website" },
+    { id: "event-day", label: "Event Day" },
+    { id: "memories", label: "Memories" },
+    { id: "milestones", label: "Milestone payments" },
   ];
 
   return (
@@ -387,7 +455,15 @@ function EventWorkspace({ eventId, sourceEvent, onRefresh }: EventWorkspaceProps
           <span className="font-semibold text-[var(--bhn-text)]">{workingEvent.title}</span>
           <span className="text-xs text-[var(--bhn-text-muted)]">({workingEvent.guestCount || 0} guests)</span>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {canRebook ? (
+            <button type="button" onClick={() => setRebookOpen(true)} className="bhn-btn bhn-btn-primary bhn-btn-sm gap-2">
+              <RotateCcw size={14} /> Rebook event
+            </button>
+          ) : null}
+          <button type="button" onClick={() => setTemplateOpen(true)} className="bhn-btn bhn-btn-secondary bhn-btn-sm gap-2">
+            <LayoutTemplate size={14} /> Apply template
+          </button>
           <button type="button" onClick={onRefresh} className="bhn-btn bhn-btn-secondary bhn-btn-sm gap-2">
             <RefreshCw size={14} /> Refresh
           </button>
@@ -404,11 +480,25 @@ function EventWorkspace({ eventId, sourceEvent, onRefresh }: EventWorkspaceProps
       <Tabs items={tabs} active={activeTab} onChange={setActiveTab} />
 
       {activeTab === "overview" && (
-        <EventOverview event={workingEvent} onEditField={commit} onAddSuggestedService={handleAddSuggestedService} />
+        <EventOverview
+          event={workingEvent}
+          eventId={eventId}
+          onRefresh={onRefresh}
+          onEditField={commit}
+          onAddSuggestedService={handleAddSuggestedService}
+        />
       )}
       {activeTab === "budget" && <BudgetPlanner event={workingEvent} onSaveBudget={commit} />}
       {activeTab === "timeline" && <EventTimeline event={workingEvent} onSaveTimeline={commit} />}
       {activeTab === "hashtags" && <HashtagTab event={workingEvent} />}
+      {activeTab === "guests" && <GuestsTab eventId={eventId} />}
+      {activeTab === "seating" && <SeatingTab eventId={eventId} />}
+      {activeTab === "collaborators" && <CollaboratorsTab eventId={eventId} />}
+      {activeTab === "invitations" && <InvitationsTab eventId={eventId} />}
+      {activeTab === "website" && <WebsiteTab eventId={eventId} />}
+      {activeTab === "event-day" && <EventDayTab eventId={eventId} />}
+      {activeTab === "memories" && <MemoriesTab eventId={eventId} />}
+      {activeTab === "milestones" && <MilestonesTab eventId={eventId} />}
 
       <AddVendorVenueModal
         open={addModalOpen}
@@ -417,6 +507,72 @@ function EventWorkspace({ eventId, sourceEvent, onRefresh }: EventWorkspaceProps
         onAddService={handleAddSuggestedService}
         onAddVenue={handleAddVenue}
       />
+
+      <Modal
+        open={rebookOpen}
+        onClose={() => setRebookOpen(false)}
+        title="Rebook this event"
+        footer={
+          <div className="flex justify-end gap-2">
+            <button type="button" onClick={() => setRebookOpen(false)} className="bhn-btn bhn-btn-secondary bhn-btn-sm">
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleRebook}
+              disabled={rebooking}
+              className="bhn-btn bhn-btn-primary bhn-btn-sm gap-2"
+            >
+              {rebooking ? <Spinner size="sm" /> : <RotateCcw size={14} />}
+              Rebook event
+            </button>
+          </div>
+        }
+      >
+        <p className="text-sm text-[var(--bhn-text-muted)]">
+          Create a new event from <span className="font-semibold text-[var(--bhn-text)]">{workingEvent.title}</span>?
+          You&apos;ll be switched to the newly created event. No payment is made by rebooking.
+        </p>
+      </Modal>
+
+      <Modal
+        open={templateOpen}
+        onClose={() => setTemplateOpen(false)}
+        title="Apply event template"
+        footer={
+          <div className="flex justify-end gap-2">
+            <button type="button" onClick={() => setTemplateOpen(false)} className="bhn-btn bhn-btn-secondary bhn-btn-sm">
+              Cancel
+            </button>
+            <button
+              type="submit"
+              form="apply-template-form"
+              disabled={applyingTemplate}
+              className="bhn-btn bhn-btn-primary bhn-btn-sm gap-2"
+            >
+              {applyingTemplate ? <Spinner size="sm" /> : <LayoutTemplate size={14} />}
+              Apply template
+            </button>
+          </div>
+        }
+      >
+        <form id="apply-template-form" onSubmit={handleApplyTemplate} className="space-y-3">
+          <p className="text-xs text-[var(--bhn-text-muted)]">
+            Enter a template ID supplied by your event manager. The admin template list is not available to buyer
+            accounts, so a simple ID field is provided instead.
+          </p>
+          <div>
+            <label className="mb-1 block text-xs font-semibold text-[var(--bhn-text)]">Template ID *</label>
+            <input
+              className="bhn-input w-full"
+              value={templateId}
+              onChange={(e) => setTemplateId(e.target.value)}
+              placeholder="Template ID"
+              required
+            />
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 }

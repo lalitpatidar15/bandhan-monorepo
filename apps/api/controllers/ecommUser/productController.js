@@ -15,7 +15,7 @@ const ALLOWED_PRODUCT_FIELDS = new Set([
   "specifications", "weight", "shippingWeight", "dimensions",
   "shippingRequired", "shippingCost", "freeShipping", "originPincode",
   "pickupLocation", "dispatchAddress", "courierPreference", "hsnCode",
-  "location", "returnPolicy", "warranty", "status"
+  "location", "returnPolicy", "warranty", "status", "isPublished"
 ]);
 
 function normalizeAvailability(value) {
@@ -41,6 +41,12 @@ function applyAvailabilityFilter(filter, value) {
   };
 }
 
+const PUBLIC_PRODUCT_VISIBILITY = {
+  status: "active",
+  $or: [{ isPublished: true }, { isPublished: { $exists: false } }],
+  $and: [{ $or: [{ isApproved: true }, { isApproved: { $exists: false } }] }],
+};
+
 // ======== GET PRODUCTS ============
 exports.getProducts = async (req, res) => {
   try {
@@ -52,7 +58,7 @@ exports.getProducts = async (req, res) => {
 
     const { sellerId: authSellerId } = getSellerFromReq(req);
 
-    let filter = { status: "active" };
+    let filter = { ...PUBLIC_PRODUCT_VISIBILITY };
 
     if (category) filter.category = category;
     if (subCategory) filter.subCategory = subCategory;
@@ -144,7 +150,7 @@ exports.getPublicProducts = async (req, res) => {
       q, exclude, page = 1, limit = 12,
     } = req.query;
 
-    let filter = { status: "active", isPublished: true, isApproved: true };
+    let filter = { ...PUBLIC_PRODUCT_VISIBILITY };
 
     if (category) filter.category = category;
     if (subCategory) filter.subCategory = subCategory;
@@ -221,9 +227,7 @@ exports.getProductById = async (req, res) => {
     }
     const product = await Product.findOne({
       _id: id,
-      status: "active",
-      isPublished: true,
-      isApproved: true,
+      ...PUBLIC_PRODUCT_VISIBILITY,
     });
     if (!product) {
       return res.status(404).json({ success: false, message: "Product not found" });
@@ -307,6 +311,8 @@ exports.createProduct = async (req, res) => {
       location: req.body.location,
       sellerName: req.body.sellerName,
       isFeatured: false,
+      isPublished: req.body.isPublished !== undefined ? Boolean(req.body.isPublished) : false,
+      isApproved: isAdmin(req) ? Boolean(req.body.isApproved) : false,
       returnPolicy: req.body.returnPolicy || "7-day return policy",
       warranty: req.body.warranty,
       status: req.body.status || "draft",
@@ -370,6 +376,15 @@ exports.updateProduct = async (req, res) => {
       const availability = normalizeAvailability(allowedUpdates.productType || allowedUpdates.type);
       allowedUpdates.productType = availability;
       allowedUpdates.type = availability;
+    }
+
+    if (allowedUpdates.isPublished !== undefined) {
+      allowedUpdates.isPublished = Boolean(allowedUpdates.isPublished);
+    } else if (allowedUpdates.status === "active" || allowedUpdates.status === "draft") {
+      allowedUpdates.isPublished = allowedUpdates.status === "active";
+    }
+    if (!isAdmin(req)) {
+      delete allowedUpdates.isApproved;
     }
 
     const updated = await Product.findByIdAndUpdate(req.params.id, allowedUpdates, { new: true, runValidators: true });

@@ -8,6 +8,8 @@ const Product = require("../../models/shared/Product.js");
 const Order = require("../../models/shared/Order.js");
 const Venue = require("../../models/shared/Venue.js");
 const Service = require("../../models/shared/Service.js");
+const Event = require("../../models/shared/Event.js");
+const EventTemplate = require("../../models/shared/EventTemplate.js");
 const Student = require("../../models/student/Student.js");
 const Instructor = require("../../models/instructor/Instructor.js");
 const Course = require("../../models/student/Course.js");
@@ -2871,6 +2873,59 @@ exports.deleteCommunity = async (req, res) => {
     res.json({ success: true, message: "Community deleted" });
   } catch (error) {
     console.error("Error in controllers/admin/adminController.js:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// ==================== EVENT TEMPLATES (ADMIN) ====================
+exports.getEventTemplates = async (_req, res) => {
+  try {
+    const data = await EventTemplate.find().sort({ createdAt: -1 });
+    res.json({ success: true, data });
+  } catch (error) {
+    console.error("Error in adminController.getEventTemplates:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+exports.createEventTemplate = async (req, res) => {
+  try {
+    const data = await EventTemplate.create(req.body || {});
+    res.status(201).json({ success: true, data });
+  } catch (error) {
+    console.error("Error in adminController.createEventTemplate:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+exports.updateEventTemplate = async (req, res) => {
+  try {
+    const data = await EventTemplate.findByIdAndUpdate(req.params.id, req.body || {}, { new: true, runValidators: true });
+    if (!data) return res.status(404).json({ success: false, message: "Template not found" });
+    res.json({ success: true, data });
+  } catch (error) {
+    console.error("Error in adminController.updateEventTemplate:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+exports.deleteEventTemplate = async (req, res) => {
+  try {
+    const data = await EventTemplate.findByIdAndDelete(req.params.id);
+    if (!data) return res.status(404).json({ success: false, message: "Template not found" });
+    res.json({ success: true, message: "Template deleted" });
+  } catch (error) {
+    console.error("Error in adminController.deleteEventTemplate:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+exports.getAdminEvents = async (_req, res) => {
+  try {
+    const data = await Event.find().populate("owner", "email fullName name").sort({ createdAt: -1 }).lean();
+    res.json({ success: true, data });
+  } catch (error) {
+    console.error("Error in adminController.getAdminEvents:", error);
     res.status(500).json({ success: false, message: "Server error" });
   }
 };

@@ -181,4 +181,11 @@ router.post("/plans", adminController.createPlan);
 router.put("/plans/:id", adminController.updatePlan);
 router.delete("/plans/:id", adminController.deletePlan);
 
+// Event templates & admin events
+router.get("/event-templates", adminController.getEventTemplates);
+router.post("/event-templates", adminController.createEventTemplate);
+router.put("/event-templates/:id", adminController.updateEventTemplate);
+router.delete("/event-templates/:id", adminController.deleteEventTemplate);
+router.get("/events", adminController.getAdminEvents);
+
 module.exports = router;

@@ -29,7 +29,10 @@ const rawBaseQuery = fetchBaseQuery({
 const baseQueryWithLogout: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => {
   const result = await rawBaseQuery(args, api, extraOptions);
   const url = typeof args === 'string' ? args : args.url;
-  const isAuthenticationRequest = /(?:^|\/)auth\/(?:login|register|forgot-password|reset-password)/.test(url);
+  // Public RSVP links must work without a login; a bad or expired token is
+  // handled by the RSVP page, not by redirecting the guest to /login.
+  const isAuthenticationRequest =
+    /(?:^|\/)auth\/(?:login|register|forgot-password|reset-password)/.test(url) || /(?:^|\/)rsvp\//.test(url);
 
   // Invalid login credentials are a normal form error, not an expired session.
   // Redirecting here creates /login?next=/login redirect loops.

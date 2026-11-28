@@ -410,6 +410,7 @@ function AddProductPageContent() {
       stockStatus,
       sku: sku.trim() || generateSku(),
       status,
+      isPublished: status === "active",
       images: images || [],
       ...buildShippingPayload(),
     };

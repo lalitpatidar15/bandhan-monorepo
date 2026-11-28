@@ -106,10 +106,18 @@ exports.getServices = async (req, res) => {
       serviceQuery.skip((pageNumber - 1) * limitNumber).limit(limitNumber),
       Service.countDocuments(query),
     ]);
+    const data = services.map((service) => {
+      const obj = service.toObject ? service.toObject() : service;
+      const seller = obj.sellerId && typeof obj.sellerId === "object" ? obj.sellerId : null;
+      return {
+        ...obj,
+        sellerName: seller?.fullName || seller?.name || seller?.nameEn || obj.sellerName || "Verified Seller",
+      };
+    });
     res.json({
       success: true,
-      data: services,
-      services,
+      data,
+      services: data,
       total,
       page: pageNumber,
       pagination: {
@@ -315,11 +323,19 @@ exports.getServiceById = async (req, res) => {
       _id: req.params.id,
       status: "active",
       isActive: true,
-    }).populate("sellerId", "fullName email profilePic role");
+    }).populate("sellerId", "fullName name nameEn email profilePic role");
     if (!service) {
       return res.status(404).json({ success: false, message: "Service not found" });
     }
-    res.json({ success: true, data: service });
+    const obj = service.toObject();
+    const seller = obj.sellerId && typeof obj.sellerId === "object" ? obj.sellerId : null;
+    res.json({
+      success: true,
+      data: {
+        ...obj,
+        sellerName: seller?.fullName || seller?.name || seller?.nameEn || obj.sellerName || "Verified Seller",
+      },
+    });
   } catch (err) {
     console.error("Error in controllers/ecommUser/serviceController.js:", err);
     res.status(500).json({ success: false, message: "Failed to fetch service" });

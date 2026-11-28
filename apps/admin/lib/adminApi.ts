@@ -607,6 +607,66 @@ export type AdminInspiration = {
   publishedAt: string;
 };
 
+export type AdminEventTemplatePhase = {
+  name: string;
+  status: string;
+  progress: number;
+};
+
+export type AdminEventTemplateTask = {
+  title: string;
+  priority: string;
+  status: string;
+  vendor: string;
+  phase: string;
+};
+
+export type AdminEventTemplate = {
+  _id: string;
+  name: string;
+  category: string;
+  description: string;
+  phases: AdminEventTemplatePhase[];
+  tasks: AdminEventTemplateTask[];
+  budgetCategories: string[];
+  checklist: string[];
+  invitationMessage: string;
+  isActive: boolean;
+  createdAt: string;
+};
+
+export type AdminEventTemplateInput = {
+  name: string;
+  category?: string;
+  description?: string;
+  phases: AdminEventTemplatePhase[];
+  tasks: AdminEventTemplateTask[];
+  budgetCategories: string[];
+  checklist: string[];
+  invitationMessage?: string;
+  isActive?: boolean;
+};
+
+export type AdminEventOwner = {
+  _id: string;
+  fullName: string;
+  email: string;
+};
+
+export type AdminEvent = {
+  _id: string;
+  title: string;
+  date: string;
+  location: string;
+  eventType: string;
+  status: string;
+  guestCount: number;
+  owner: AdminEventOwner;
+  createdAt: string;
+  /** Original record from the API, kept so the detail view can show every field and nested array. */
+  raw: Record<string, unknown>;
+};
+
 const normalizeUsers = (payload: unknown): AdminUser[] => {
   const records = Array.isArray((payload as { data?: unknown[] })?.data)
     ? (payload as { data: Array<Record<string, unknown>> }).data
@@ -1379,6 +1439,64 @@ const normalizeInspiration = (payload: unknown): AdminInspiration[] =>
     publishedAt: String(record.publishedAt || ''),
   }));
 
+const asRecord = (value: unknown): Record<string, unknown> =>
+  value && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : {};
+
+const normalizeStringList = (value: unknown): string[] =>
+  Array.isArray(value) ? value.map((item) => String(item ?? '')).filter(Boolean) : [];
+
+const normalizeEventTemplates = (payload: unknown): AdminEventTemplate[] =>
+  normalizeRecords(payload).map((record) => ({
+    _id: String(record._id || record.id || ''),
+    name: String(record.name || 'Untitled template'),
+    category: String(record.category || ''),
+    description: String(record.description || ''),
+    phases: Array.isArray(record.phases) ? record.phases.map((phase) => {
+      const value = asRecord(phase);
+      return {
+        name: String(value.name || ''),
+        status: String(value.status || ''),
+        progress: Number(value.progress || 0),
+      };
+    }) : [],
+    tasks: Array.isArray(record.tasks) ? record.tasks.map((task) => {
+      const value = asRecord(task);
+      return {
+        title: String(value.title || ''),
+        priority: String(value.priority || ''),
+        status: String(value.status || ''),
+        vendor: String(value.vendor || ''),
+        phase: String(value.phase || ''),
+      };
+    }) : [],
+    budgetCategories: normalizeStringList(record.budgetCategories),
+    checklist: normalizeStringList(record.checklist),
+    invitationMessage: String(record.invitationMessage || ''),
+    isActive: record.isActive !== false,
+    createdAt: String(record.createdAt || ''),
+  }));
+
+const normalizeEvents = (payload: unknown): AdminEvent[] =>
+  normalizeRecords(payload).map((record) => {
+    const owner = asRecord(record.owner);
+    return {
+      _id: String(record._id || record.id || ''),
+      title: String(record.title || 'Untitled event'),
+      date: String(record.date || ''),
+      location: String(record.location || ''),
+      eventType: String(record.eventType || ''),
+      status: String(record.status || ''),
+      guestCount: Number(record.guestCount || 0),
+      owner: {
+        _id: String(owner._id || ''),
+        fullName: String(owner.fullName || ''),
+        email: String(owner.email || ''),
+      },
+      createdAt: String(record.createdAt || ''),
+      raw: record,
+    };
+  });
+
 const normalizeSellerVerifications = (payload: unknown): AdminSellerVerification[] =>
   normalizeRecords(payload).map((record) => ({
     id: String(record.id || ''),
@@ -1430,6 +1548,8 @@ export const adminApi = createApi({
     'AdminModerationReviews',
     'AdminCommunities',
     'AdminInspiration',
+    'AdminEventTemplates',
+    'AdminEvents',
     'AdminContentModeration',
     'AdminCategories',
     'AdminCommissions',
@@ -1962,6 +2082,30 @@ export const adminApi = createApi({
       invalidatesTags: ['AdminInspiration'],
     }),
 
+    // Event OS
+    getEventTemplates: builder.query<AdminEventTemplate[], void>({
+      query: () => '/admin/event-templates',
+      transformResponse: (response: unknown) => normalizeEventTemplates(response),
+      providesTags: ['AdminEventTemplates'],
+    }),
+    createEventTemplate: builder.mutation<unknown, AdminEventTemplateInput>({
+      query: (body) => ({ url: '/admin/event-templates', method: 'POST', body }),
+      invalidatesTags: ['AdminEventTemplates'],
+    }),
+    updateEventTemplate: builder.mutation<unknown, AdminEventTemplateInput & { id: string }>({
+      query: ({ id, ...body }) => ({ url: `/admin/event-templates/${id}`, method: 'PUT', body }),
+      invalidatesTags: ['AdminEventTemplates'],
+    }),
+    deleteEventTemplate: builder.mutation<unknown, string>({
+      query: (id) => ({ url: `/admin/event-templates/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['AdminEventTemplates'],
+    }),
+    getEvents: builder.query<AdminEvent[], void>({
+      query: () => '/admin/events',
+      transformResponse: (response: unknown) => normalizeEvents(response),
+      providesTags: ['AdminEvents'],
+    }),
+
     // Rental Orders
     getRentalOrders: builder.query<AdminRentalOrder[], { status?: string }>({
       query: ({ status }) => {
@@ -2254,6 +2398,11 @@ export const {
   useCreateInspirationMutation,
   useUpdateInspirationMutation,
   useDeleteInspirationMutation,
+  useGetEventTemplatesQuery,
+  useCreateEventTemplateMutation,
+  useUpdateEventTemplateMutation,
+  useDeleteEventTemplateMutation,
+  useGetEventsQuery,
   useGetRentalOrdersQuery,
   useUpdateRentalOrderMutation,
   useGetCouponsQuery,

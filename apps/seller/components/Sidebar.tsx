@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { PortalSidebar, type PortalSidebarSection } from '@bandhan/ui';
 import { useRouter, usePathname } from 'next/navigation';
-import { LayoutDashboard, Package, RotateCcw, ShoppingCart, Handshake, MapPin, MessageSquare, ShieldCheck, Star, Truck, Wallet } from 'lucide-react';
+import { Boxes, CalendarDays, LayoutDashboard, Package, RotateCcw, ShoppingCart, Handshake, MapPin, MessageSquare, ShieldCheck, Star, Truck, UserRoundSearch, Wallet } from 'lucide-react';
 import { useGetSellerQuotesQuery } from '@/lib/store/api/chatApi';
 import { centralLoginUrl, clearSellerSession } from '@/lib/session';
 
@@ -25,12 +25,15 @@ export default function Sidebar() {
         { label: 'Shipping', href: '/shipping', icon: <Truck size={16} /> },
         { label: 'Services', href: '/services', icon: <Handshake size={16} /> },
         { label: 'Venues', href: '/venues', icon: <MapPin size={16} /> },
+        { label: 'Availability', href: '/availability', icon: <CalendarDays size={16} /> },
         { label: 'Verification', href: '/profile-setup/verification', icon: <ShieldCheck size={16} /> },
       ],
     },
     {
       title: 'Manage',
       items: [
+        { label: 'Packages', href: '/packages', icon: <Boxes size={16} /> },
+        { label: 'Leads', href: '/leads', icon: <UserRoundSearch size={16} /> },
         { label: 'Quotes', href: '/quotes', icon: <MessageSquare size={16} />, badge: pendingQuotesCount },
         { label: 'Earnings', href: '/earnings', icon: <Wallet size={16} /> },
         { label: 'Reviews', href: '/reviews', icon: <Star size={16} /> },

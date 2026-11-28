@@ -37,6 +37,8 @@ import Merchants from '@/components/Merchants';
 import SellerVerifications from '@/components/SellerVerifications';
 import Venues from '@/components/Venues';
 import Services from '@/components/Services';
+import EventTemplates from '@/components/EventTemplates';
+import Events from '@/components/Events';
 import Jobs from '@/components/Jobs';
 import Applications from '@/components/Applications';
 import AdminHeader from '@/components/AdminHeader';
@@ -155,6 +157,12 @@ export default function AdminDashboardPage() {
 
       case 'applications':
         return <Applications />;
+
+      case 'events':
+        return <Events />;
+
+      case 'event-templates':
+        return <EventTemplates />;
 
       default:
         return <Dashboard onNavigate={setCurrentPage} />;

@@ -33,6 +33,14 @@ Those documents override generic conventions. UI work must be modernization in p
 - API base URL is `NEXT_PUBLIC_API_URL` only. `NEXT_PUBLIC_BACKEND_URL` is unused dead config.
 - API requires `MONGO_URI` and `JWT_SECRET`. `apps/api/.env` contains live credentials — gitignored, never read out or commit.
 
+## Event Planning OS (apps/user)
+
+- Planner tabs live in `apps/user/components/userDashboard/planner/`; tab registry and content switch are in `EventPlanner.tsx`. OS-specific RTK Query endpoints are in `store/api/eventOsApi.ts` (reuses `baseApi` "Events" tags with resource-specific ids); types in `types/eventOs.ts`.
+- Additional OS tabs: Guests, Seating, Collaborators, Invitations (link-based only), Website (slug is a preview target), Event Day, Memories, Milestone payments (manual payment tracking, no escrow).
+- Public RSVP: `app/rsvp/[token]/page.tsx` awaits `params`, renders `components/rsvp/RsvpClient.tsx`; works without login. `baseApi` skips its 401 logout redirect for `/rsvp/` URLs.
+- Rebook (`POST /events/:id/rebook`) appears in the workspace only for `completed`/`cancelled` events and switches to the returned event id. Admin template listing (`GET /admin/event-templates`) requires admin role; buyer planner uses a template-ID input instead.
+- Vendor packages on `app/vendor/profile/[id]/page.tsx` come from `GET /vendor/packages/:sellerId` using the vendor `id`.
+
 ## Important memory
 
 - Structure, commands, conventions and gotchas: see parent `AGENTS.md` (authoritative quick reference).

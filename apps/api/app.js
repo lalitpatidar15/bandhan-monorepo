@@ -246,6 +246,8 @@ app.use("/api/users", ecommUserRoutes);
 
 app.use("/api/bookings", bookingRoutes);
 
+app.use("/api", eventOsRoutes);
+
 app.use("/api/events", eventRoutes);
 
 app.use("/api/notifications", notificationRoutes);

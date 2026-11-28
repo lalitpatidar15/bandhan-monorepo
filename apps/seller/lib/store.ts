@@ -9,6 +9,7 @@ import { inventoryApi } from "./store/api/inventoryApi";
 import { chatApi } from "./store/api/chatApi";
 import { serviceApi } from "./store/api/serviceApi";
 import { baseApi } from "./store/api/baseApi";
+import { vendorApi } from "./store/api/vendorApi";
 
 export const store = configureStore({
   reducer: {
@@ -21,6 +22,7 @@ export const store = configureStore({
     [chatApi.reducerPath]: chatApi.reducer,
     [serviceApi.reducerPath]: serviceApi.reducer,
     [baseApi.reducerPath]: baseApi.reducer,
+    [vendorApi.reducerPath]: vendorApi.reducer,
   },
   middleware: (getDefault) =>
     getDefault()
@@ -32,7 +34,8 @@ export const store = configureStore({
       .concat(inventoryApi.middleware)
       .concat(chatApi.middleware)
       .concat(serviceApi.middleware)
-      .concat(baseApi.middleware),
+      .concat(baseApi.middleware)
+      .concat(vendorApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
